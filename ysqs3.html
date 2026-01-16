@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YSQ-S3 | Bruno de Souza</title>
+    <style>
+        :root {
+            /* CORES - Baseadas num padrão profissional (ajuste conforme seu site) */
+            --primary-color: #2c3e50; /* Azul Escuro (Cabeçalhos) */
+            --accent-color: #3498db;  /* Azul Claro (Destaques) */
+            --bg-color: #f8f9fa;      /* Fundo suave */
+            --text-color: #333;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        /* Cabeçalho igual ao seu site */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 20px;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        p.subtitle {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Instruções */
+        .instructions {
+            background-color: #e8f4fd;
+            border-left: 4px solid var(--accent-color);
+            padding: 15px;
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+        }
+
+        /* Lista de Perguntas */
+        .question-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .question-item:nth-child(even) {
+            background-color: #fafafa;
+        }
+
+        .q-text {
+            flex: 1;
+            padding-right: 15px;
+            font-size: 0.95rem;
+        }
+
+        .q-input {
+            width: 60px;
+        }
+
+        input[type="number"] {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        /* Botões */
+        .btn-action {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: background 0.2s;
+        }
+
+        .btn-action:hover {
+            background-color: #1a252f;
+        }
+
+        /* Área de Resultados (Escondida inicialmente) */
+        #results-area {
+            display: none;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px dashed #ccc;
+        }
+
+        .schema-result {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .schema-result.high-score {
+            background-color: #ffebee;
+            color: #c0392b;
+            font-weight: bold;
+        }
+
+        /* Impressão */
+        @media print {
+            body { padding: 0; background: white; }
+            .container { box-shadow: none; border: none; width: 100%; }
+            .btn-action { display: none; }
+            input { border: none; text-align: right; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>YSQ - S3</h1>
+        <p class="subtitle">Questionário de Esquemas de Young - Versão Breve</p>
+        <p style="font-size: 0.8rem; margin-top: 5px;">Bruno de Souza - CRP 07/44472</p>
+    </header>
+
+    <div class="instructions">
+        <strong>Instruções:</strong> Leia cada afirmação e pontue de <strong>1 a 6</strong> conforme o quanto ela descreve você.<br>
+        1 = Completamente falso | 6 = Descreve-me perfeitamente
+    </div>
+
+    <div id="questions-container"></div>
+
+    <button class="btn-action" onclick="calcularResultados()">Calcular Resultados</button>
+    
+    <div id="results-area">
+        <h2>Perfil de Esquemas</h2>
+        <div id="score-list"></div>
+        <button class="btn-action" style="background-color: #7f8c8d; margin-top: 20px;" onclick="window.print()">Salvar PDF / Imprimir</button>
+    </div>
+</div>
+
+<script>
+    // --- CONFIGURAÇÃO ---
+    // Nomes dos 18 Esquemas (Na ordem oficial da pontuação)
+    const esquemas = [
+        "Privação Emocional", "Abandono", "Desconfiança/Abuso", "Isolamento Social",
+        "Defectividade/Vergonha", "Fracasso", "Dependência/Incompetência", 
+        "Vulnerabilidade ao Dano", "Emaranhamento", "Subjugação", "Auto-sacrifício",
+        "Inibição Emocional", "Padrões Inflexíveis", "Arrogo/Grandiosidade",
+        "Autocontrole Insuficiente", "Busca de Aprovação", "Negativismo/Pessimismo", 
+        "Postura Punitiva"
+    ];
+
+    // --- GERADOR DE PERGUNTAS ---
+    const container = document.getElementById('questions-container');
+
+    // Loop para criar as 90 linhas de entrada
+    for (let i = 1; i <= 90; i++) {
+        // Se você tiver o texto, pode criar um array e usar: textoPerguntas[i-1]
+        let textoPergunta = `Pergunta ${i} (Consulte o manual)`; 
+        
+        // CHTML da linha
+        let html = `
+            <div class="question-item">
+                <div class="q-text"><strong>${i}.</strong> ${textoPergunta}</div>
+                <input type="number" min="1" max="6" id="q${i}" class="q-input" placeholder="-">
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+    }
+
+    // --- LÓGICA DE CÁLCULO (YSQ-S3) ---
+    function calcularResultados() {
+        let scores = new Array(18).fill(0); // Soma dos pontos
+        let counts = new Array(18).fill(0); // Contagem para checar preenchimento (opcional)
+
+        // O YSQ-S3 segue um padrão cíclico:
+        // Esquema 1: Perguntas 1, 19, 37, 55, 73
+        // Esquema 2: Perguntas 2, 20, 38, 56, 74
+        // A lógica é: (NumeroDaPergunta - 1) % 18 = Índice do Esquema
+
+        for (let i = 1; i <= 90; i++) {
+            let val = parseInt(document.getElementById(`q${i}`).value) || 0;
+            let esquemaIndex = (i - 1) % 18;
+            
+            scores[esquemaIndex] += val;
+        }
+
+        // Gerar Relatório
+        let resultHtml = "";
+        scores.forEach((soma, index) => {
+            // Nota: No YSQ-S3 alguns usam Média, outros Soma. 
+            // Aqui mostramos a Soma. (Máx 30 pts por esquema).
+            // Destaque se pontuação for alta (ex: > 15, ajuste conforme sua prática)
+            let classeExtra = (soma >= 15) ? "high-score" : "";
+            
+            resultHtml += `
+                <div class="schema-result ${classeExtra}">
+                    <span>${esquemas[index]}</span>
+                    <span>${soma} pts</span>
+                </div>
+            `;
+        });
+
+        document.getElementById('score-list').innerHTML = resultHtml;
+        document.getElementById('results-area').style.display = 'block';
+        
+        // Rola a tela até o resultado
+        document.getElementById('results-area').scrollIntoView({behavior: 'smooth'});
+    }
+</script>
+
+</body>
+</html>
