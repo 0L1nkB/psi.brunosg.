@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Termômetro da Autoestima</title>
+    <style>
+        :root {
+            --primary: #FF9F43; /* Laranja vibrante */
+            --secondary: #54a0ff; /* Azul suave */
+            --bg: #feca57; /* Amarelo fundo */
+            --text: #222f3e;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif; /* Fonte lúdica */
+            background-color: var(--bg);
+            margin: 0;
+            padding: 20px;
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            background-color: var(--white);
+            max-width: 700px;
+            width: 100%;
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 10px 0 rgba(0,0,0,0.1);
+            border: 4px solid var(--text);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 { margin: 0; color: var(--primary); text-transform: uppercase; text-shadow: 2px 2px 0 #222; }
+        p { font-size: 1.1rem; margin-top: 10px; }
+
+        /* LISTA DE PERGUNTAS */
+        .question-item {
+            margin-bottom: 25px;
+            background: #f7f1e3;
+            padding: 15px;
+            border-radius: 15px;
+            border: 2px dashed #ccc;
+        }
+
+        .q-label {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* SLIDER (RANGE) */
+        input[type=range] {
+            width: 100%;
+            height: 15px;
+            border-radius: 5px;
+            background: #d3d3d3;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--secondary);
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .score-display {
+            text-align: right;
+            font-weight: bold;
+            color: var(--secondary);
+            font-size: 1.2rem;
+            margin-top: 5px;
+        }
+
+        /* RESULTADO */
+        #result-area {
+            display: none;
+            text-align: center;
+            margin-top: 30px;
+            background: #c8d6e5;
+            padding: 20px;
+            border-radius: 15px;
+            border: 3px solid var(--text);
+        }
+
+        .final-score {
+            font-size: 3rem;
+            color: var(--primary);
+            font-weight: 800;
+            text-shadow: 2px 2px 0 white;
+        }
+
+        .feedback-text {
+            font-size: 1.2rem;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        /* BOTÃO */
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.5rem;
+            font-family: inherit;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 0 #2e86de;
+            transition: transform 0.1s;
+            margin-top: 20px;
+        }
+
+        button:active {
+            transform: translateY(5px);
+            box-shadow: none;
+        }
+
+        /* ÍCONES DE ROSTINHO */
+        .faces-scale {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            padding: 0 10px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Termômetro da Autoestima</h1>
+            <p>Deslize a bolinha de 0 a 10 para mostrar o quanto você acredita em cada frase! 🌟</p>
+        </header>
+
+        <div id="quiz-container">
+            </div>
+
+        <button onclick="calcularResultado()">Ver Meu Resultado 🚀</button>
+
+        <div id="result-area">
+            <h2>Sua Pontuação Total:</h2>
+            <div class="final-score" id="score-number">0</div>
+            <p class="feedback-text" id="score-msg">...</p>
+            <p style="font-size: 0.9rem; margin-top: 20px;">
+                💡 Dica: Que tal escolher uma das frases onde a nota foi menor e pensar: "O que eu posso fazer para subir 1 ponto nela essa semana?"
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // PERGUNTAS DO PDF (Páginas 2 e 3)
+        const questions = [
+            "Eu fico feliz por ser eu mesmo(a)",
+            "Eu não tenho medo de cometer erros (sei que faz parte!)",
+            "Eu foco nos meus sucessos e não nos fracassos",
+            "Eu conheço minhas qualidades positivas",
+            "Eu me amo mesmo quando os outros me rejeitam",
+            "Eu gosto de como eu me vejo (aparência)",
+            "Eu me respeito",
+            "Eu adoro tentar coisas novas",
+            "Eu sou bom(a) em resolver problemas",
+            "Eu consigo lidar bem com críticas",
+            "Eu me sinto bem quando recebo elogios",
+            "Eu tenho orgulho das minhas conquistas",
+            "Eu prefiro ser eu do que ser outra pessoa",
+            "Eu sou tão valioso(a) quanto as outras pessoas",
+            "Eu acredito em mim mesmo(a)"
+        ];
+
+        const container = document.getElementById('quiz-container');
+
+        // Gerar HTML das perguntas
+        questions.forEach((q, index) => {
+            const html = `
+                <div class="question-item">
+                    <label class="q-label">${index + 1}. ${q}</label>
+                    
+                    <div class="faces-scale">
+                        <span>😞 0</span>
+                        <span>😐 5</span>
+                        <span>🤩 10</span>
+                    </div>
+
+                    <input type="range" min="0" max="10" value="5" class="slider" id="q-${index}" oninput="updateValue(${index})">
+                    <div class="score-display">Nota: <span id="val-${index}">5</span></div>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+        });
+
+        // Atualizar número ao mover o slider
+        function updateValue(id) {
+            const val = document.getElementById(`q-${id}`).value;
+            document.getElementById(`val-${id}`).innerText = val;
+        }
+
+        // Calcular
+        function calcularResultado() {
+            let total = 0;
+            const maxScore = questions.length * 10; // Pontuação máxima possível (150)
+
+            questions.forEach((_, index) => {
+                total += parseInt(document.getElementById(`q-${index}`).value);
+            });
+
+            const resultArea = document.getElementById('result-area');
+            const scoreNum = document.getElementById('score-number');
+            const scoreMsg = document.getElementById('score-msg');
+
+            resultArea.style.display = 'block';
+            scoreNum.innerText = total;
+
+            // Feedback baseado na pontuação
+            let percentage = (total / maxScore) * 100;
+            
+            if (percentage >= 80) {
+                scoreMsg.innerText = "Uau! Sua autoestima está super forte! Continue brilhando! ✨";
+                scoreMsg.style.color = "#27ae60";
+            } else if (percentage >= 50) {
+                scoreMsg.innerText = "Muito bem! Você gosta de si mesmo, mas tem alguns pontinhos para fortalecer. 💪";
+                scoreMsg.style.color = "#e67e22";
+            } else {
+                scoreMsg.innerText = "Ei, você é especial! Vamos trabalhar juntos para você ver o quão incrível você é? ❤️";
+                scoreMsg.style.color = "#c0392b";
+            }
+
+            // Rolar até o resultado
+            resultArea.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+
+</body>
+</html>termometro-autoestima.html
