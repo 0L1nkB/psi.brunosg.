@@ -8,20 +8,21 @@
     
     <style>
         :root {
-            --primary-color: #2c3e50; 
-            --accent-color: #3498db;
-            --bg-color: #f8f9fa;
-            --text-color: #333;
+            --primary: #2c3e50;
+            --accent: #3498db;
+            --bg: #f8f9fa;
+            --text: #333;
             --white: #ffffff;
-            --high-risk: #e74c3c; /* Vermelho para esquemas ativados */
+            --high-risk: #c0392b;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            background-color: var(--bg);
+            color: var(--text);
             margin: 0;
             padding: 20px;
+            line-height: 1.5;
         }
 
         .container {
@@ -29,67 +30,92 @@
             margin: 0 auto;
             background: var(--white);
             padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
         }
 
         header {
             text-align: center;
             margin-bottom: 30px;
-            border-bottom: 2px solid var(--primary-color);
+            border-bottom: 3px solid var(--primary);
             padding-bottom: 20px;
         }
 
-        h1 { color: var(--primary-color); margin: 0; font-size: 1.8rem; }
-        
-        /* Layout de Perguntas */
-        .question-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .question-item:nth-child(even) { background-color: #fafafa; }
+        h1 { color: var(--primary); margin: 0; font-size: 1.8rem; font-weight: 700; }
+        .crp { font-size: 0.9rem; color: #666; margin-top: 5px; }
 
-        input[type="number"] {
-            width: 50px;
-            padding: 5px;
-            text-align: center;
-            border: 1px solid #ccc;
+        .instructions {
+            background-color: #e8f4fd;
+            border-left: 5px solid var(--accent);
+            padding: 15px;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
             border-radius: 4px;
         }
 
-        .btn-action {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            margin-top: 20px;
+        .question-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 10px;
+            border-bottom: 1px solid #eee;
         }
 
-        /* ÁREA DE RESULTADOS */
+        .question-row:nth-child(even) { background-color: #fafafa; }
+
+        .q-text { flex: 1; padding-right: 20px; font-size: 0.95rem; }
+
+        input[type="number"] {
+            width: 60px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1rem;
+            color: var(--primary);
+        }
+        
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--accent);
+            background-color: #f0f8ff;
+        }
+
+        .btn-main {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: background 0.2s;
+        }
+
+        .btn-main:hover { background-color: #1a252f; }
+
         #results-area {
-            display: none; /* Escondido até calcular */
+            display: none;
             margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px dashed #ccc;
         }
 
         .results-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr; /* Metade texto, metade gráfico */
-            gap: 20px;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
         }
 
         .schema-item {
             display: flex;
             justify-content: space-between;
-            padding: 5px 10px;
+            padding: 8px 12px;
             border-bottom: 1px solid #eee;
             font-size: 0.9rem;
         }
@@ -101,14 +127,12 @@
             border-left: 4px solid var(--high-risk);
         }
 
-        /* Configuração de Impressão */
         @media print {
             body { background: white; padding: 0; }
-            .container { box-shadow: none; width: 100%; max-width: 100%; }
-            .btn-action, .instructions { display: none; }
-            #questions-container { display: none; } /* Esconde as perguntas para o PDF ficar limpo só com o gráfico? Se quiser as perguntas, remova essa linha */
-            #results-area { display: block !important; margin-top: 0; }
-            .results-grid { display: block; } /* No papel, um embaixo do outro */
+            .container { box-shadow: none; border: none; width: 100%; max-width: 100%; padding: 0; }
+            .btn-main, .instructions { display: none; }
+            input { border: none; text-align: right; }
+            #results-area { display: block !important; break-inside: avoid; }
             canvas { max-height: 500px; margin: 0 auto; }
         }
 
@@ -121,123 +145,5 @@
 
 <div class="container">
     <header>
-        <h1>Relatório YSQ-S3</h1>
-        <p>Bruno de Souza - CRP 07/44472</p>
-    </header>
-
-    <div class="instructions">
-        Preencha os valores de 1 a 6. (Deixe em branco se for 0/Não se aplica)
-    </div>
-
-    <div id="questions-container"></div>
-
-    <button class="btn-action" onclick="calcular()">Gerar Relatório Gráfico</button>
-
-    <div id="results-area">
-        <h2 style="text-align: center; color: var(--primary-color);">Perfil Esquemático</h2>
-        
-        <div class="results-grid">
-            <div id="text-results"></div>
-            
-            <div>
-                <canvas id="schemaChart"></canvas>
-            </div>
-        </div>
-
-        <div style="margin-top: 30px; border: 1px solid #ddd; padding: 15px; border-radius: 5px;">
-            <strong>Interpretação Rápida:</strong><br>
-            Itens destacados em <span style="color:red; font-weight:bold">Vermelho</span> indicam esquemas com pontuação elevada (neste exemplo, acima de 15 pontos). A análise clínica deve considerar o contexto de vida.
-        </div>
-
-        <button class="btn-action" style="background-color: #7f8c8d;" onclick="window.print()">Salvar PDF para Prontuário</button>
-    </div>
-</div>
-
-<script>
-    const esquemas = [
-        "Privação Emocional", "Abandono", "Desconfiança/Abuso", "Isolamento Social",
-        "Defectividade/Vergonha", "Fracasso", "Dependência", 
-        "Vulnerabilidade", "Emaranhamento", "Subjugação", "Auto-sacrifício",
-        "Inibição Emocional", "Padrões Inflexíveis", "Grandiosidade",
-        "Autocontrole Insuficiente", "Busca de Aprovação", "Negativismo", 
-        "Postura Punitiva"
-    ];
-
-    // Gerar campos de input
-    const container = document.getElementById('questions-container');
-    for (let i = 1; i <= 90; i++) {
-        container.insertAdjacentHTML('beforeend', `
-            <div class="question-item">
-                <span>Questão ${i}</span>
-                <input type="number" id="q${i}" min="1" max="6">
-            </div>
-        `);
-    }
-
-    let myChart = null; // Variável para guardar o gráfico
-
-    function calcular() {
-        let scores = new Array(18).fill(0);
-        
-        // Somatório (Lógica cíclica do YSQ-S3)
-        for (let i = 1; i <= 90; i++) {
-            let val = parseInt(document.getElementById(`q${i}`).value) || 0;
-            let index = (i - 1) % 18;
-            scores[index] += val;
-        }
-
-        // 1. Gerar Lista de Texto
-        let htmlList = "";
-        scores.forEach((pt, idx) => {
-            // CRITÉRIO DE CORTE: Exemplo > 12. Ajuste conforme sua preferência clínica.
-            let isHigh = pt >= 15; 
-            htmlList += `
-                <div class="schema-item ${isHigh ? 'activated' : ''}">
-                    <span>${esquemas[idx]}</span>
-                    <strong>${pt}</strong>
-                </div>
-            `;
-        });
-        document.getElementById('text-results').innerHTML = htmlList;
-
-        // 2. Gerar Gráfico (Radar Chart)
-        const ctx = document.getElementById('schemaChart').getContext('2d');
-        
-        if(myChart) myChart.destroy(); // Limpa gráfico anterior se houver
-
-        myChart = new Chart(ctx, {
-            type: 'radar',
-            data: {
-                labels: esquemas,
-                datasets: [{
-                    label: 'Pontuação do Paciente',
-                    data: scores,
-                    backgroundColor: 'rgba(52, 152, 219, 0.2)',
-                    borderColor: 'rgba(52, 152, 219, 1)',
-                    borderWidth: 2,
-                    pointBackgroundColor: 'rgba(44, 62, 80, 1)'
-                }]
-            },
-            options: {
-                scales: {
-                    r: {
-                        angleLines: { display: true },
-                        suggestedMin: 0,
-                        suggestedMax: 30 // Pontuação máxima possível (5 perguntas x 6)
-                    }
-                }
-            }
-        });
-
-        // Mostrar resultados
-        document.getElementById('results-area').style.display = 'block';
-        
-        // Rolar até o resultado
-        setTimeout(() => {
-            document.getElementById('results-area').scrollIntoView({ behavior: 'smooth' });
-        }, 100);
-    }
-</script>
-
-</body>
-</html>
+        <h1>YSQ - S3 (Questionário de Esquemas)</h1>
+        <div class="crp">Ps
