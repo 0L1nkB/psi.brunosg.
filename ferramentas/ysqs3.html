@@ -3,383 +3,401 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YSQ-S3 | Bruno de Souza</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
+    <title>YSQ-S3 | Caderno de Esquemas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #2c3e50;
-            --accent: #3498db;
-            --bg: #f8f9fa;
-            --text: #333;
-            --white: #ffffff;
-            --high-risk: #c0392b;
+            /* Paleta Lúdica */
+            --bg-color: #f0f8ff;
+            --paper: #ffffff;
+            --primary: #6c5ce7; /* Roxo */
+            --secondary: #00b894; /* Verde */
+            --accent: #fdcb6e; /* Amarelo */
+            --text: #2d3436;
+            --high-risk: #ff7675; /* Vermelho para esquemas altos */
+            --shadow: rgba(0,0,0,0.1);
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
+            background-size: 20px 20px;
             margin: 0;
             padding: 20px;
-            line-height: 1.5;
+            color: var(--text);
+            display: flex;
+            justify-content: center;
         }
 
         .container {
+            width: 100%;
             max-width: 900px;
-            margin: 0 auto;
-            background: var(--white);
+            background: var(--paper);
             padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border-radius: 25px;
+            box-shadow: 10px 10px 0 var(--shadow);
+            border: 3px solid var(--text);
+            position: relative;
         }
 
+        /* CABEÇALHO */
         header {
             text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 3px solid var(--primary);
-            padding-bottom: 20px;
+            margin-bottom: 40px;
+            position: relative;
         }
 
-        h1 { color: var(--primary); margin: 0; font-size: 1.8rem; font-weight: 700; }
-        .crp { font-size: 0.9rem; color: #666; margin-top: 5px; }
-
-        .instructions {
-            background-color: #e8f4fd;
-            border-left: 5px solid var(--accent);
-            padding: 15px;
-            margin-bottom: 30px;
-            font-size: 0.95rem;
-            border-radius: 4px;
+        /* Fita Decorativa */
+        header::before {
+            content: ""; position: absolute; top: -55px; left: 50%; transform: translateX(-50%) rotate(-1deg);
+            width: 250px; height: 45px; background-color: rgba(108, 92, 231, 0.8);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        .question-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 10px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .question-row:nth-child(even) { background-color: #fafafa; }
-
-        .q-text { flex: 1; padding-right: 20px; font-size: 0.95rem; }
-
-        input[type="number"] {
-            width: 60px;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 1rem;
-            color: var(--primary);
-        }
+        h1 { margin: 0; color: var(--primary); font-size: 2rem; text-transform: uppercase; }
+        .subtitle { font-size: 1.1rem; color: #636e72; font-weight: bold; margin-bottom: 10px; }
         
-        input[type="number"]:focus {
-            outline: none;
-            border-color: var(--accent);
-            background-color: #f0f8ff;
+        .instruction-box {
+            background: #fffce0;
+            padding: 15px;
+            border-radius: 15px;
+            border: 2px dashed var(--accent);
+            font-size: 0.95rem;
+            color: #555;
+            margin-bottom: 30px;
         }
 
-        .btn-main {
-            display: block;
-            width: 100%;
-            padding: 18px;
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 30px;
-            transition: background 0.2s;
+        /* CARTÃO DE PERGUNTA */
+        .question-card {
+            background: #fff;
+            margin-bottom: 20px;
+            padding: 25px 20px 20px 25px;
+            border-radius: 15px;
+            border: 2px dashed #b2bec3;
+            transition: all 0.2s;
+            position: relative;
         }
 
-        .btn-main:hover { background-color: #1a252f; }
+        .question-card:hover { border-color: var(--primary); background-color: #f8f9fa; }
 
-        #results-area {
-            display: none;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 2px dashed #ccc;
+        .q-number {
+            position: absolute; top: -12px; left: -12px;
+            background: var(--accent); color: var(--text);
+            width: 35px; height: 35px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; border: 2px solid var(--text);
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
         }
 
-        .results-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-        }
+        .q-text { font-size: 1.1rem; font-weight: bold; margin-bottom: 15px; line-height: 1.4; }
 
-        .schema-item {
+        /* ESCALA 1-6 */
+        .scale-container {
             display: flex;
-            justify-content: space-between;
-            padding: 8px 12px;
-            border-bottom: 1px solid #eee;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .scale-btn {
+            flex: 1;
+            min-width: 40px;
+            padding: 10px 5px;
+            border: 1px solid #dfe6e9;
+            background: #f1f2f6;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #636e72;
+            text-align: center;
+            transition: 0.2s;
             font-size: 0.9rem;
         }
 
-        .activated {
-            background-color: #ffebee;
-            color: var(--high-risk);
-            font-weight: bold;
-            border-left: 4px solid var(--high-risk);
+        .scale-btn:hover { background: #dfe6e9; border-color: #b2bec3; }
+
+        /* Botão Selecionado */
+        .scale-btn.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 0 #4834d4;
         }
 
-        /* Loading Indicator */
-        #loading { text-align: center; padding: 20px; font-size: 1.2rem; color: #666; }
+        /* BOTÃO CALCULAR */
+        .btn-action {
+            display: block; width: 100%;
+            margin-top: 40px; padding: 15px;
+            background-color: var(--secondary); color: white;
+            border: none; border-radius: 50px;
+            font-size: 1.3rem; font-weight: bold; font-family: inherit;
+            cursor: pointer; box-shadow: 0 6px 0 #0097e6;
+            transition: transform 0.1s;
+        }
+        .btn-action:hover { transform: translateY(-3px); }
+        .btn-action:active { transform: translateY(3px); box-shadow: none; }
+
+        /* ÁREA DE RESULTADOS */
+        .result-section {
+            display: none;
+            margin-top: 50px;
+            background: #fff;
+            padding: 30px;
+            border-radius: 20px;
+            border: 3px solid var(--text);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        .schema-row { margin-bottom: 15px; }
+        .schema-header { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 5px; font-size: 0.9rem; }
+        
+        .progress-bg {
+            background: #eee; height: 12px; border-radius: 10px; overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%; background: var(--secondary); width: 0%; transition: width 1s ease; border-radius: 10px;
+        }
+
+        /* Cor de alerta para pontuação alta */
+        .high-score .progress-bar { background: var(--high-risk); }
+        .high-score .schema-header { color: #d63031; }
 
         @media print {
             body { background: white; padding: 0; }
-            .container { box-shadow: none; border: none; width: 100%; max-width: 100%; padding: 0; }
-            .btn-main, .instructions { display: none; }
-            input { border: none; text-align: right; }
-            #results-area { display: block !important; break-inside: avoid; }
-            canvas { max-height: 500px; margin: 0 auto; }
-        }
-
-        @media (max-width: 768px) {
-            .results-grid { grid-template-columns: 1fr; }
+            .container { box-shadow: none; border: none; width: 100%; }
+            .btn-action { display: none; }
+            .question-card { break-inside: avoid; border: 1px solid #ccc; }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <h1>YSQ - S3 (Questionário de Esquemas)</h1>
-        <div class="crp">Psicólogo Bruno de Souza - CRP 07/44472</div>
-    </header>
+    <div class="container">
+        <header>
+            <h1>YSQ - S3</h1>
+            <div class="subtitle">Questionário de Esquemas de Young</div>
+        </header>
 
-    <div class="instructions">
-        <strong>Instruções:</strong> Leia as afirmações e pontue de <strong>1 a 6</strong> conforme o quanto ela descreve você no último ano.<br>
-        <small>1 = Completamente falso | 6 = Descreve-me perfeitamente</small>
-    </div>
+        <div class="instruction-box">
+            <i class="fa-solid fa-circle-info"></i> <strong>Como responder:</strong><br>
+            Leia cada frase e dê uma nota de <strong>1 a 6</strong> conforme ela descreve você.<br>
+            <strong>1</strong> = Completamente falso<br>
+            <strong>6</strong> = Descreve-me perfeitamente
+        </div>
 
-    <div id="loading">Carregando as perguntas...</div>
-    <div id="questions-container" style="display:none;"></div>
+        <form id="ysq-form">
+            <div id="questions-container"></div>
+        </form>
 
-    <button id="btn-calc" class="btn-main" onclick="calcularResultados()" style="display:none;">Calcular e Gerar Gráfico</button>
+        <button class="btn-action" type="button" onclick="calculateResults()">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> CALCULAR MEUS ESQUEMAS
+        </button>
 
-    <div id="results-area">
-        <h2 style="text-align: center; color: var(--primary);">Perfil Esquemático</h2>
-        
-        <div class="results-grid">
-            <div>
-                <h3 style="font-size: 1rem; color: #666;">Pontuação Detalhada</h3>
-                <div id="text-results"></div>
-            </div>
+        <div class="result-section" id="result-area">
+            <h2 style="text-align: center; color: var(--text); margin-bottom: 20px;">📊 Mapa de Esquemas</h2>
+            <p style="text-align:center; font-size:0.9rem; color:#666; margin-bottom:30px;">
+                Barras <span style="color:#ff7675; font-weight:bold;">Vermelhas</span> indicam esquemas que podem estar mais ativos.
+            </p>
+            <div id="charts-container"></div>
             
-            <div>
-                <canvas id="schemaChart"></canvas>
-            </div>
+            <button class="btn-action" style="background:var(--text); margin-top:30px;" onclick="window.print()">
+                <i class="fa-solid fa-print"></i> SALVAR RELATÓRIO (PDF)
+            </button>
         </div>
-
-        <div style="margin-top: 30px; padding: 15px; background: #f8f9fa; border-radius: 8px; font-size: 0.85rem; text-align: center; border: 1px solid #ddd;">
-            <strong>Legenda:</strong> Itens em <span style="color:var(--high-risk); font-weight:bold">Vermelho</span> indicam esquemas com pontuação elevada (Soma ≥ 15).<br>
-            A interpretação clínica deve considerar o contexto de vida do paciente.
-        </div>
-
-        <button class="btn-main" style="background-color: #7f8c8d; margin-top: 20px;" onclick="window.print()">Salvar PDF / Imprimir</button>
     </div>
-</div>
 
-<script>
-    // --- DADOS ---
-    const esquemas = [
-        "Privação Emocional", "Abandono", "Desconfiança/Abuso", "Isolamento Social",
-        "Defectividade/Vergonha", "Fracasso", "Dependência/Incompetência", 
-        "Vulnerabilidade ao Dano", "Emaranhamento", "Subjugação", "Auto-sacrifício",
-        "Inibição Emocional", "Padrões Inflexíveis", "Arrogo/Grandiosidade",
-        "Autocontrole Insuficiente", "Busca de Aprovação", "Negativismo/Pessimismo", 
-        "Postura Punitiva"
-    ];
+    <script>
+        // LISTA COMPLETA DAS 90 PERGUNTAS (Extraídas do PDF)
+        const questionsList = [
+            "Não tenho tido ninguém que cuide de mim, que partilhe comigo a sua vida ou que se preocupe realmente com tudo o que me acontece.",
+            "Costumo apegar-me demasiadamente às pessoas que me são mais próximas porque tenho medo que elas me abandonem.",
+            "Sinto que as pessoas vão se aproveitar de mim.",
+            "Sou um(a) desajustado(a).",
+            "Nenhum homem/mulher de quem eu goste pode gostar de mim depois de conhecer os meus defeitos ou fraquezas.",
+            "Quase nada do que faço no trabalho (ou na escola) é tão bom como o que os outros são capazes de fazer.",
+            "Não me sinto capaz de me virar sozinho(a) no dia-a-dia.",
+            "Não consigo deixar de sentir que alguma coisa de mal está para acontecer.",
+            "Não tenho sido capaz de me separar dos meus pais, tal como fazem as outras pessoas da minha idade.",
+            "Sinto que, se fizer o que quero, só vou arranjar problemas.",
+            "Sou sempre eu que acabo por tomar conta das pessoas que me são mais chegadas.",
+            "Sou demasiado controlado(a) para revelar os meus sentimentos positivos aos outros (por ex., afecto, mostrar que me preocupo).",
+            "Tenho que ser o(a) melhor em quase tudo o que faço; não aceito ficar em segundo lugar.",
+            "Tenho muita dificuldade em aceitar um \"não\" por resposta quando quero alguma coisa dos outros.",
+            "Não sou capaz de me forçar a ter disciplina suficiente para cumprir tarefas rotineiras ou entendiantes.",
+            "Ter dinheiro e conhecer pessoas importantes faz-me sentir uma pessoa com valor.",
+            "Mesmo quando as coisas parecem estar a correr bem, sinto que isso é apenas temporário.",
+            "Se cometer um erro, mereço ser castigado.",
+            "Não tenho pessoas que me dêm carinho, apoio e afeto.",
+            "Preciso tanto dos outros que me preocupo com o facto de os poder perder.",
+            "Sinto que tenho sempre que me defender na presença dos outros, caso contrário eles me magoarão intencionalmente.",
+            "Sou fundamentalmente diferente dos outros.",
+            "Ninguém que me agrade gostaria de ficar comigo depois de me conhecer tal como eu sou na realidade.",
+            "Sou um(a) incompetente quando se trata de atingir objetivos ou cumprir uma tarefa no trabalho (ou na escola).",
+            "Considero-me uma pessoa dependente relativamente ao que tenho que fazer no dia-a-dia.",
+            "Sinto que uma desgraça (natural, criminal, financeira ou médica) pode atingir-me a qualquer momento.",
+            "Eu e os meus pais temos tendência a envolvermo-nos demasiado na vida e nos problemas uns dos outros.",
+            "Sinto que não tenho outro remédio senão ceder à vontade dos outros, caso contrário, eles irão retaliar, zangar-se ou rejeitar-me de alguma maneira.",
+            "Sou uma boa pessoa porque penso mais nos outros do que em mim.",
+            "Considero embaraçoso exprimir os meus sentimentos aos outros.",
+            "Esforço-me por fazer o melhor; não me contento com ser suficientemente bom.",
+            "Sou especial e não devia ser obrigado(a) a aceitar muitas das restrições ou limitações que são impostas aos outros.",
+            "Se não consigo atingir um objetivo, fico facilmente frustrado(a) e desisto.",
+            "Aquilo que consigo alcançar tem mais valor para mim se for algo em que os outros reparem.",
+            "Se algo de bom acontecer, preocupa-me que esteja para acontecer algo de mau a seguir.",
+            "Se não me esforçar ao máximo, é de esperar que as coisas corram mal.",
+            "Tenho sentido que não sou uma pessoa especial para ninguém.",
+            "Preocupa-me que as pessoas a que estou ligado(a) me deixem ou me abandonem.",
+            "Mais tarde ou mais cedo, acabarei por ser traido(a) por alguém.",
+            "Sinto que não pertenço a grupo nenhum; sou um solitário.",
+            "Não tenho valor suficiente para merecer o amor, a atenção e o respeito dos outros.",
+            "A maioria das pessoas tem mais capacidades do que eu no que diz respeito ao trabalho (ou à escola).",
+            "Tenho falta de bom senso.",
+            "Preocupa-me poder ser fisicamente agredido por alguém.",
+            "É muito difícil, para mim e para os meus pais, termos segredos intimos que não contamos uns aos outros, sem nos sentirmos traídos ou culpados por isso.",
+            "Nas minhas relações com os outros deixo que eles me dominem.",
+            "Estou tão ocupado(a) a fazer coisas para as pessoas de quem gosto que tenho pouco tempo para mim.",
+            "Para mim é difícil ser caloroso(a) e espontâneo(a) com os outros.",
+            "Devo de estar à altura de todas as minhas responsabilidades e funções.",
+            "Detesto ser reprimido(a) ou impedido(a) de fazer o que quero.",
+            "Tenho muita dificuldade em abdicar de uma recompensa ou prazer imediato, a favor de um objectivo a longo prazo.",
+            "Sinto-me pouco importante, a não ser que receba muita atenção dos outros.",
+            "Todo o cuidado é pouco; quase sempre alguma coisa corre mal.",
+            "Se não fizer bem o que me compete, mereço sofrer as consequências.",
+            "Não tenho tido ninguém que me ouça atentamente, que me compreenda ou que perceba os meus verdadeiros sentimentos e necessidades.",
+            "Quando sinto que alguém de quem eu gosto se está a afastar de mim, sinto-me desesperado.",
+            "Sou bastante desconfiado quanto às intenções das outras pessoas.",
+            "Sinto-me afastado(a) ou desligado dos outros.",
+            "Sinto que nunca poderei ser amado por alguém.",
+            "Não sou tão talentoso(a) no trabalho como a maioria das pessoas.",
+            "Não se pode confiar no meu julgamento em situações do dia-a-dia.",
+            "Preocupa-me poder perder todo o dinheiro que tenho e ficar muito pobre ou na miséria.",
+            "Sinto frequentemente que é como se os meus pais vivessem através de mim – não tenho uma vida própria.",
+            "Sempre deixei que os outros escolhessem por mim; por isso, não sei realmente aquilo que quero para mim.",
+            "Tenho sido sempre eu quem ouve os problemas dos outros.",
+            "Controlo-me tanto que as pessoas pensam que não tenho sentimentos ou que tenho um coração de pedra.",
+            "Sinto sobre mim uma pressão constante para fazer coisas e atingir objetivos.",
+            "Sinto que não devia ter que seguir as regras e convenções habituais que as outras pessoas têm que seguir.",
+            "Não me consigo obrigar a fazer coisas de que não gosto, mesmo quando sei que é para o meu bem.",
+            "Quando faço uma intervenção numa reunião ou quando sou apresentado a alguém num grupo, é importante para mim obter reconhecimento e admiração.",
+            "Por muito que trabalhe, preocupa-me poder ficar na miséria e perder quase tudo o que possuo.",
+            "Não interessa porque é que cometi um erro; quando faço algo errado, há que pagar as consequências.",
+            "Não tenho tido uma pessoa forte ou sensata para me dar bons conselhos e me dizer o que fazer quando não tenho a certeza da atitude que devo tomar.",
+            "Por vezes, a preocupação que tenho com o facto de as pessoas me poderem deixar é tão grande, que acabo por as afastar.",
+            "Estou habitualmente à procura de segundas intenções ou do verdadeiro motivo por detrás do comportamento dos outros.",
+            "Em grupo, sinto sempre que estou de fora.",
+            "Sou demasiado inaceitável para me poder mostrar tal como sou às outras pessoas ou para deixar que me conheçam bem.",
+            "No que diz respeito ao trabalho (ou à escola) não sou tão inteligente como a maior parte das pessoas.",
+            "Não tenho confiança nas minhas capacidades para resolver problemas que surjam no dia-a-dia.",
+            "Preocupa-me poder estar a desenvolver uma doença grave, ainda que não tenha sido diagnosticado nada de grave pelo médico.",
+            "Sinto frequentemente que não tenho uma identidade separada da dos meus pais ou companheiro(a).",
+            "Tenho imenso trabalho para conseguir que os meus sentimentos sejam tidos em consideração e os meus direitos sejam respeitados.",
+            "As outras pessoas consideram que faço muito pelos outros e não faço o suficiente por mim.",
+            "As pessoas acham que tenho dificuldade em exprimir o que sinto.",
+            "Não posso descuidar as minhas obrigações de forma leviana, nem desculpar-me pelos meus erros.",
+            "Sinto que o que tenho para oferecer tem mais valor do que aquilo que os outros têm para dar.",
+            "Raramente tenho sido capaz de levar as minhas decisões até ao fim.",
+            "Receber muitos elogios dos outros faz-me sentir uma pessoa que tem valor.",
+            "Preocupa-me que uma decisão errada possa provocar uma catástrofe.",
+            "Sou uma pessoa má que merece ser castigada."
+        ];
 
-    // Perguntas Sanitizadas (Sem aspas duplas internas)
-    const perguntasTexto = [
-        "Não tenho tido ninguém que cuide de mim, que partilhe comigo a sua vida ou que se preocupe realmente com tudo o que me acontece.",
-        "Costumo apegar-me demasiadamente às pessoas que me são mais próximas porque tenho medo que elas me abandonem.",
-        "Sinto que as pessoas vão se aproveitar de mim.",
-        "Sou um(a) desajustado(a).",
-        "Nenhum homem/mulher de quem eu goste pode gostar de mim depois de conhecer os meus defeitos ou fraquezas.",
-        "Quase nada do que faço no trabalho (ou na escola) é tão bom como o que os outros são capazes de fazer.",
-        "Não me sinto capaz de me virar sozinho(a) no dia-a-dia.",
-        "Não consigo deixar de sentir que alguma coisa de mal está para acontecer.",
-        "Não tenho sido capaz de me separar dos meus pais, tal como fazem as outras pessoas da minha idade.",
-        "Sinto que, se fizer o que quero, só vou arranjar problemas.",
-        "Sou sempre eu que acabo por tomar conta das pessoas que me são mais chegadas.",
-        "Sou demasiado controlado(a) para revelar os meus sentimentos positivos aos outros (por ex., afecto, mostrar que me preocupo).",
-        "Tenho que ser o(a) melhor em quase tudo o que faço; não aceito ficar em segundo lugar.",
-        "Tenho muita dificuldade em aceitar um 'não' por resposta quando quero alguma coisa dos outros.",
-        "Não sou capaz de me forçar a ter disciplina suficiente para cumprir tarefas rotineiras ou entediantes.",
-        "Ter dinheiro e conhecer pessoas importantes faz-me sentir uma pessoa com valor.",
-        "Mesmo quando as coisas parecem estar a correr bem, sinto que isso é apenas temporário.",
-        "Se cometer um erro, mereço ser castigado.",
-        "Não tenho pessoas que me deem carinho, apoio e afeto.",
-        "Preciso tanto dos outros que me preocupo com o facto de os poder perder.",
-        "Sinto que tenho sempre que me defender na presença dos outros, caso contrário eles me magoarão intencionalmente.",
-        "Sou fundamentalmente diferente dos outros.",
-        "Ninguém que me agrade gostaria de ficar comigo depois de me conhecer tal como eu sou na realidade.",
-        "Sou um(a) incompetente quando se trata de atingir objetivos ou cumprir uma tarefa no trabalho (ou na escola).",
-        "Considero-me uma pessoa dependente relativamente ao que tenho que fazer no dia-a-dia.",
-        "Sinto que uma desgraça (natural, criminal, financeira ou médica) pode atingir-me a qualquer momento.",
-        "Eu e os meus pais temos tendência a envolvermo-nos demasiado na vida e nos problemas uns dos outros.",
-        "Sinto que não tenho outro remédio senão ceder à vontade dos outros, caso contrário, eles irão retaliar, zangar-se ou rejeitar-me de alguma maneira.",
-        "Sou uma boa pessoa porque penso mais nos outros do que em mim.",
-        "Considero embaraçoso exprimir os meus sentimentos aos outros.",
-        "Esforço-me por fazer o melhor não me contento com ser suficientemente bom.",
-        "Sou especial e não devia ser obrigado(a) a aceitar muitas das restrições ou limitações que são impostas aos outros.",
-        "Se não consigo atingir um objetivo, fico facilmente frustrado(a) e desisto.",
-        "Aquilo que consigo alcançar tem mais valor para mim se for algo em que os outros reparem.",
-        "Se algo de bom acontecer, preocupa-me que esteja para acontecer algo de mau a seguir.",
-        "Se não me esforçar ao máximo, é de esperar que as coisas corram mal.",
-        "Tenho sentido que não sou uma pessoa especial para ninguém.",
-        "Preocupa-me que as pessoas a que estou ligado(a) me deixem ou me abandonem.",
-        "Mais tarde ou mais cedo, acabarei por ser traido(a) por alguém.",
-        "Sinto que não pertenço a grupo nenhum; sou um solitário.",
-        "Não tenho valor suficiente para merecer o amor, a atenção e o respeito dos outros.",
-        "A maioria das pessoas tem mais capacidades do que eu no que diz respeito ao trabalho (ou à escola).",
-        "Tenho falta de bom senso.",
-        "Preocupa-me poder ser fisicamente agredido por alguém.",
-        "É muito difícil, para mim e para os meus pais, termos segredos intimos que não contamos uns aos outros, sem nos sentirmos traídos ou culpados por isso.",
-        "Nas minhas relações com os outros deixo que eles me dominem.",
-        "Estou tão ocupado(a) a fazer coisas para as pessoas de quem gosto que tenho pouco tempo para mim.",
-        "Para mim é difícil ser caloroso(a) e espontâneo(a) com os outros.",
-        "Devo de estar à altura de todas as minhas responsabilidades e funções.",
-        "Detesto ser reprimido(a) ou impedido(a) de fazer o que quero.",
-        "Tenho muita dificuldade em abdicar de uma recompensa ou prazer imediato, a favor de um objectivo a longo prazo.",
-        "Sinto-me pouco importante, a não ser que receba muita atenção dos outros.",
-        "Todo o cuidado é pouco; quase sempre alguma coisa corre mal.",
-        "Se não fizer bem o que me compete, mereço sofrer as consequências.",
-        "Não tenho tido ninguém que me ouça atentamente, que me compreenda ou que perceba os meus verdadeiros sentimentos e necessidades.",
-        "Quando sinto que alguém de quem eu gosto se está a afastar de mim, sinto-me desesperado.",
-        "Sou bastante desconfiado quanto às intenções das outras pessoas.",
-        "Sinto-me afastado(a) ou desligado dos outros.",
-        "Sinto que nunca poderei ser amado por alguém.",
-        "Não sou tão talentoso(a) no trabalho como a maioria das pessoas.",
-        "Não se pode confiar no meu julgamento em situações do dia-a-dia.",
-        "Preocupa-me poder perder todo o dinheiro que tenho e ficar muito pobre ou na miséria.",
-        "Sinto frequentemente que é como se os meus pais vivessem através de mim não tenho uma vida própria.",
-        "Sempre deixei que os outros escolhessem por mim; por isso, não sei realmente aquilo que quero para mim.",
-        "Tenho sido sempre eu quem ouve os problemas dos outros.",
-        "Controlo-me tanto que as pessoas pensam que não tenho sentimentos ou que tenho um coração de pedra.",
-        "Sinto sobre mim uma pressão constante para fazer coisas e atingir objetivos.",
-        "Sinto que não devia ter que seguir as regras e convenções habituais que as outras pessoas têm que seguir.",
-        "Não me consigo obrigar a fazer coisas de que não gosto, mesmo quando sei que é para o meu bem.",
-        "Quando faço uma intervenção numa reunião ou quando sou apresentado a alguém num grupo, é importante para mim obter reconhecimento e admiração.",
-        "Por muito que trabalhe, preocupa-me poder ficar na miséria e perder quase tudo o que possuo.",
-        "Não interessa porque é que cometi um erro; quando faço algo errado, há que pagar as consequências.",
-        "Não tenho tido uma pessoa forte ou sensata para me dar bons conselhos e me dizer o que fazer quando não tenho a certeza da atitude que devo tomar.",
-        "Por vezes, a preocupação que tenho com o facto de as pessoas me poderem deixar é tão grande, que acabo por as afastar.",
-        "Estou habitualmente à procura de segundas intenções ou do verdadeiro motivo por detrás do comportamento dos outros.",
-        "Em grupo, sinto sempre que estou de fora.",
-        "Sou demasiado inaceitável para me poder mostrar tal como sou às outras pessoas ou para deixar que me conheçam bem.",
-        "No que diz respeito ao trabalho (ou à escola) não sou tão inteligente como a maior parte das pessoas.",
-        "Não tenho confiança nas minhas capacidades para resolver problemas que surjam no dia-a-dia.",
-        "Preocupa-me poder estar a desenvolver uma doença grave, ainda que não tenha sido diagnosticado nada de grave pelo médico.",
-        "Sinto frequentemente que não tenho uma identidade separada da dos meus pais ou companheiro(a).",
-        "Tenho imenso trabalho para conseguir que os meus sentimentos sejam tidos em consideração e os meus direitos sejam respeitados.",
-        "As outras pessoas consideram que faço muito pelos outros e não faço o suficiente por mim.",
-        "As pessoas acham que tenho dificuldade em exprimir o que sinto.",
-        "Não posso descuidar as minhas obrigações de forma leviana, nem desculpar-me pelos meus erros",
-        "Sinto que o que tenho para oferecer tem mais valor do que aquilo que os outros têm para dar.",
-        "Raramente tenho sido capaz de levar as minhas decisões até ao fim.",
-        "Receber muitos elogios dos outros faz-me sentir uma pessoa que tem valor.",
-        "Preocupa-me que uma decisão errada possa provocar uma catástrofe.",
-        "Sou uma pessoa má que merece ser castigada."
-    ];
+        // NOMES DOS ESQUEMAS (Ordem Cíclica 1-18)
+        const schemaNames = [
+            "Privação Emocional", "Abandono/Instabilidade", "Desconfiança/Abuso", "Isolamento Social", "Defectividade/Vergonha",
+            "Fracasso", "Dependência/Incompetência", "Vulnerabilidade ao Dano", "Emaranhamento",
+            "Subjugação", "Auto-sacrifício", "Inibição Emocional",
+            "Padrões Inflexíveis", "Arrogo/Grandiosidade", "Autocontrole Insuficiente",
+            "Busca de Aprovação", "Negativismo/Pessimismo", "Postura Punitiva"
+        ];
 
-    // --- RENDERIZAÇÃO E CÁLCULO ---
-    const container = document.getElementById('questions-container');
-    const loadingDiv = document.getElementById('loading');
-    const btnCalc = document.getElementById('btn-calc');
+        const container = document.getElementById('questions-container');
 
-    try {
-        perguntasTexto.forEach((texto, index) => {
-            let num = index + 1;
-            let html = `
-                <div class="question-row">
-                    <div class="q-text"><strong>${num}.</strong> ${texto}</div>
-                    <input type="number" id="q${num}" min="1" max="6" placeholder="-">
+        // GERAR PERGUNTAS NA TELA
+        questionsList.forEach((text, index) => {
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            
+            // Botões de 1 a 6
+            let buttonsHTML = '';
+            for(let i=1; i<=6; i++) {
+                buttonsHTML += `<div class="scale-btn" onclick="selectOption(${index}, ${i}, this)">${i}</div>`;
+            }
+
+            card.innerHTML = `
+                <div class="q-number">${index + 1}</div>
+                <div class="q-text">${text}</div>
+                <div class="scale-container">
+                    ${buttonsHTML}
                 </div>
+                <input type="hidden" id="answer-${index}" value="0">
             `;
-            container.insertAdjacentHTML('beforeend', html);
+            container.appendChild(card);
         });
 
-        // Se chegou aqui, remove o loading e mostra o conteúdo
-        loadingDiv.style.display = 'none';
-        container.style.display = 'block';
-        btnCalc.style.display = 'block';
-    } catch (e) {
-        loadingDiv.innerText = "Erro ao carregar perguntas: " + e.message;
-        loadingDiv.style.color = "red";
-    }
-
-    let myChart = null;
-
-    function calcularResultados() {
-        let scores = new Array(18).fill(0);
-        
-        for (let i = 1; i <= 90; i++) {
-            let input = document.getElementById(`q${i}`);
-            let val = parseInt(input.value) || 0; 
+        // SELEÇÃO VISUAL
+        function selectOption(qIndex, value, btnElement) {
+            document.getElementById(`answer-${qIndex}`).value = value;
             
-            // Fórmula YSQ-S3: (Questão - 1) % 18 = Índice do Esquema
-            let esquemaIndex = (i - 1) % 18;
-            scores[esquemaIndex] += val;
+            const parent = btnElement.parentNode;
+            parent.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
+            btnElement.classList.add('selected');
         }
 
-        // 1. Lista de Texto
-        let htmlList = "";
-        scores.forEach((pt, idx) => {
-            let isHigh = pt >= 15; 
-            htmlList += `
-                <div class="schema-item ${isHigh ? 'activated' : ''}">
-                    <span>${esquemas[idx]}</span>
-                    <strong>${pt}</strong>
-                </div>
-            `;
-        });
-        document.getElementById('text-results').innerHTML = htmlList;
+        // CALCULAR RESULTADOS
+        function calculateResults() {
+            // 18 Esquemas, somas iniciam em 0
+            let scores = new Array(18).fill(0);
+            let answeredCount = 0;
 
-        // 2. Gráfico Radar
-        const ctx = document.getElementById('schemaChart').getContext('2d');
-        if(myChart) myChart.destroy();
-
-        myChart = new Chart(ctx, {
-            type: 'radar',
-            data: {
-                labels: esquemas,
-                datasets: [{
-                    label: 'Pontuação',
-                    data: scores,
-                    backgroundColor: 'rgba(52, 152, 219, 0.2)',
-                    borderColor: '#2c3e50',
-                    borderWidth: 2,
-                    pointBackgroundColor: '#e74c3c',
-                    pointRadius: 3
-                }]
-            },
-            options: {
-                scales: {
-                    r: {
-                        angleLines: { display: true },
-                        suggestedMin: 0,
-                        suggestedMax: 30, 
-                        ticks: { stepSize: 5 }
-                    }
-                },
-                plugins: { legend: { display: false } }
+            // Percorre as 90 perguntas
+            for(let i=0; i<90; i++) {
+                const val = parseInt(document.getElementById(`answer-${i}`).value);
+                if(val > 0) {
+                    answeredCount++;
+                    // Lógica Cíclica: Pergunta 1 é Esquema 0, Pergunta 19 é Esquema 0, etc.
+                    const schemaIndex = i % 18;
+                    scores[schemaIndex] += val;
+                }
             }
-        });
 
-        document.getElementById('results-area').style.display = 'block';
-        setTimeout(() => {
-            document.getElementById('results-area').scrollIntoView({ behavior: 'smooth' });
-        }, 100);
-    }
-</script>
+            if(answeredCount < 90) {
+                if(!confirm(`Você respondeu apenas ${answeredCount} de 90 perguntas. O resultado pode ser impreciso. Deseja continuar?`)) return;
+            }
+
+            // Renderizar Gráfico
+            const chartArea = document.getElementById('charts-container');
+            chartArea.innerHTML = '';
+
+            scores.forEach((score, index) => {
+                // Pontuação Máxima por esquema = 30 (5 perguntas * 6 pontos)
+                const percent = (score / 30) * 100;
+                
+                // Critério visual: Consideramos "Alto" se pontuação > 15 (aprox média 3)
+                // Isso é apenas visual, a interpretação clínica é do psicólogo.
+                const isHigh = score >= 15;
+
+                const row = document.createElement('div');
+                row.className = `schema-row ${isHigh ? 'high-score' : ''}`;
+                
+                row.innerHTML = `
+                    <div class="schema-header">
+                        <span>${schemaNames[index]}</span>
+                        <span>${score} pts</span>
+                    </div>
+                    <div class="progress-bg">
+                        <div class="progress-bar" style="width: ${percent}%"></div>
+                    </div>
+                `;
+                chartArea.appendChild(row);
+            });
+
+            document.getElementById('result-area').style.display = 'block';
+            document.getElementById('result-area').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
 
 </body>
 </html>
