@@ -3,242 +3,243 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Baralho do Autoconhecimento</title>
+    <title>Baralho Autoconhecimento | Caderno Incrível</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            /* Paleta Serena e Sofisticada */
-            --primary: #006266;   /* Azul Petróleo Profundo */
-            --secondary: #C4E538; /* Verde Lima Suave (Detalhes) */
-            --accent: #FFC312;    /* Dourado */
-            --bg-gradient: linear-gradient(135deg, #1289A7 0%, #0652DD 100%);
-            --card-back: linear-gradient(45deg, #1B1464, #5758BB);
-            --text-color: #2d3436;
+            /* Paleta Lúdica */
+            --bg-color: #f0f8ff;
+            --primary: #6c5ce7; /* Roxo */
+            --secondary: #00b894; /* Verde */
+            --accent: #fdcb6e; /* Amarelo */
+            --card-back: linear-gradient(135deg, #0984e3, #6c5ce7); /* Azul para Roxo */
+            --text: #2d3436;
+            --shadow: rgba(0,0,0,0.1);
         }
 
         body {
-            font-family: 'Georgia', 'Times New Roman', serif; /* Fonte mais clássica para reflexão */
-            background: var(--bg-gradient);
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
+            background-size: 20px 20px;
             margin: 0;
             padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             min-height: 100vh;
-            color: white;
-            overflow: hidden;
+            color: var(--text);
+            overflow-x: hidden;
         }
 
-        /* Efeito de partículas/luz ao fundo */
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-image: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1) 1px, transparent 1px);
-            background-size: 30px 30px;
-            opacity: 0.3;
-            pointer-events: none;
-        }
-
+        /* --- CABEÇALHO --- */
         header {
             text-align: center;
-            margin-bottom: 30px;
-            z-index: 10;
-            text-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
-
-        h1 {
-            font-size: 2.2rem;
-            margin: 0;
-            font-weight: normal;
-            letter-spacing: 2px;
-            border-bottom: 2px solid var(--accent);
-            padding-bottom: 10px;
-            display: inline-block;
-        }
-
-        .subtitle {
-            font-family: 'Segoe UI', sans-serif;
-            font-size: 0.9rem;
-            margin-top: 10px;
-            opacity: 0.9;
-            font-weight: 300;
-            letter-spacing: 1px;
-        }
-
-        /* ÁREA DO BARALHO */
-        .deck-container {
+            margin-bottom: 40px;
+            background: white;
+            padding: 20px 50px;
+            border-radius: 25px;
+            border: 3px dashed var(--primary);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
             position: relative;
+            max-width: 90%;
+        }
+
+        /* Fita Adesiva */
+        header::before {
+            content: ""; position: absolute; top: -15px; left: 50%; transform: translateX(-50%) rotate(-1deg);
+            width: 150px; height: 35px; background-color: rgba(255, 118, 117, 0.8);
+            border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        h1 { margin: 0; color: var(--primary); font-size: 1.8rem; text-transform: uppercase; }
+        .subtitle { margin-top: 5px; color: #636e72; font-weight: bold; }
+
+        /* --- ÁREA DA CARTA --- */
+        .card-container {
             width: 320px;
             height: 480px;
-            perspective: 1200px;
-            margin-bottom: 40px;
+            perspective: 1000px;
+            margin-bottom: 30px;
+            cursor: pointer;
         }
 
-        /* MONTE (Decoração de fundo) */
-        .stack {
-            position: absolute;
-            width: 100%; height: 100%;
-            background: var(--card-back);
-            border-radius: 20px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-            border: 2px solid rgba(255,255,255,0.1);
-        }
-        .s1 { top: 10px; transform: scale(0.95) rotate(-2deg); opacity: 0.6; }
-        .s2 { top: 5px; transform: scale(0.98) rotate(1deg); opacity: 0.8; }
-
-        /* CARTA ATIVA */
         .card {
             width: 100%;
             height: 100%;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            cursor: pointer;
-            z-index: 100;
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
         }
 
         .card.flipped {
             transform: rotateY(180deg);
         }
 
-        /* FACES */
-        .face {
+        /* LADOS DA CARTA */
+        .card-face {
             position: absolute;
             width: 100%; height: 100%;
             backface-visibility: hidden;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            border-radius: 25px;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
             padding: 30px;
             box-sizing: border-box;
             text-align: center;
+            border: 8px solid white;
+            background: white;
         }
 
-        /* VERSO (ESPELHO) */
+        /* VERSO (CAPA) */
         .face-back {
             background: var(--card-back);
             color: white;
-            border: 4px solid rgba(255,255,255,0.2);
+            /* Padrão sutil */
+            background-image: radial-gradient(circle at center, rgba(255,255,255,0.1) 2px, transparent 2px);
+            background-size: 25px 25px;
         }
 
-        .mirror-icon {
+        .icon-box {
             font-size: 5rem;
-            margin-bottom: 20px;
-            filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
+            margin-bottom: 15px;
+            filter: drop-shadow(0 4px 4px rgba(0,0,0,0.2));
+            background: rgba(255,255,255,0.2);
+            width: 100px; height: 100px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%;
         }
 
-        .back-title {
-            font-family: 'Segoe UI', sans-serif;
+        .deck-title {
+            font-size: 1.5rem;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 3px;
-            font-size: 1.2rem;
+            letter-spacing: 2px;
             margin-bottom: 5px;
+        }
+
+        .tap-hint {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            opacity: 0.9;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
         }
 
         /* FRENTE (PERGUNTA) */
         .face-front {
-            background-color: white;
-            color: var(--text-color);
             transform: rotateY(180deg);
-            border: 10px solid white;
-            /* Textura de papel sutil */
-            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%239C92AC' fill-opacity='0.05' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
+            background-color: #fffce0; /* Amarelo clarinho papel */
+            background-image: linear-gradient(#ffeaa7 1px, transparent 1px);
+            background-size: 100% 30px; /* Linhas de caderno */
+            align-items: center;
+            justify-content: center;
         }
 
         .question-text {
-            font-size: 1.4rem;
-            line-height: 1.6;
-            color: #2c3e50;
-            font-style: italic;
-        }
-
-        .decoration {
-            font-size: 2rem;
-            color: var(--primary);
-            margin-bottom: 20px;
-            opacity: 0.5;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2d3436;
+            line-height: 1.5;
+            transform: rotate(-1deg); /* Leve inclinação lúdica */
+            margin-top: 20px;
         }
 
         .card-number {
             position: absolute;
-            bottom: 20px;
-            font-size: 0.8rem;
-            color: #bdc3c7;
-            font-family: sans-serif;
+            top: 20px;
+            right: 20px;
+            font-size: 0.9rem;
+            color: #b2bec3;
+            font-weight: bold;
+            background: white;
+            padding: 5px 10px;
+            border-radius: 10px;
+            border: 1px dashed #ccc;
+        }
+
+        /* Decoração de "Clips" ou Adesivo */
+        .clip {
+            position: absolute;
+            top: -15px; left: 50%; transform: translateX(-50%);
+            width: 40px; height: 80px;
+            background: #b2bec3;
+            border-radius: 20px;
+            opacity: 0.5;
+            z-index: -1;
+        }
+
+        .decoration {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            filter: drop-shadow(2px 2px 0 rgba(0,0,0,0.1));
         }
 
         /* BOTÃO */
-        .btn-action {
-            background: rgba(255,255,255,0.2);
-            border: 1px solid rgba(255,255,255,0.4);
+        .btn-draw {
+            background-color: var(--secondary);
             color: white;
-            padding: 15px 40px;
-            font-size: 1.1rem;
+            border: none;
+            padding: 15px 50px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            font-family: inherit;
             border-radius: 50px;
             cursor: pointer;
-            backdrop-filter: blur(5px);
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: bold;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 6px 0 #00896f;
+            transition: transform 0.1s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .btn-action:hover {
-            background: white;
-            color: var(--primary);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-        }
+        .btn-draw:hover { transform: translateY(-3px); }
+        .btn-draw:active { transform: translateY(4px); box-shadow: none; }
 
-        /* Animação de entrada */
-        @keyframes deal {
-            0% { transform: translateY(-20px) scale(0.9); opacity: 0; }
-            100% { transform: translateY(0) scale(1); opacity: 1; }
+        /* Responsividade */
+        @media (max-width: 400px) {
+            .card-container { width: 90%; height: 420px; }
+            h1 { font-size: 1.5rem; }
+            .question-text { font-size: 1.3rem; }
         }
-        
-        .dealing { animation: deal 0.6s ease-out; }
-
     </style>
 </head>
 <body>
 
     <header>
         <h1>Autoconhecimento</h1>
-        <div class="subtitle">Olhe para dentro de si</div>
+        <div class="subtitle">O Espelho da Alma 🪞</div>
     </header>
 
-    <div class="deck-container">
-        <div class="stack s1"></div>
-        <div class="stack s2"></div>
-
-        <div class="card" id="active-card" onclick="flipCard()">
+    <div class="card-container" onclick="flipCard()">
+        <div class="card" id="card">
             
-            <div class="face face-back">
-                <div class="mirror-icon">🪞</div>
-                <div class="back-title">Reflexão</div>
-                <div style="font-size: 0.8rem; opacity: 0.7;">Toque para descobrir</div>
+            <div class="card-face face-back">
+                <div class="icon-box"><i class="fa-solid fa-mirror"></i></div> <div class="deck-title">QUEM<br>SOU EU?</div>
+                <div class="tap-hint">Toque para refletir</div>
             </div>
 
-            <div class="face face-front">
-                <div class="decoration">✦</div>
-                <div class="question-text" id="q-text">
-                    Clique no botão abaixo para retirar uma carta.
-                </div>
+            <div class="card-face face-front">
+                <div class="decoration">💡</div>
                 <div class="card-number" id="counter">∞</div>
+                <div class="question-text" id="q-text">
+                    Clique no botão para retirar uma carta!
+                </div>
             </div>
 
         </div>
     </div>
 
-    <button class="btn-action" onclick="drawCard()">Retirar Carta</button>
+    <button class="btn-draw" onclick="drawCard(event)">
+        <i class="fa-solid fa-wand-magic-sparkles"></i> TIRAR CARTA
+    </button>
 
     <script>
-        // BANCO DE DADOS (Extraído do PDF "Baralho do Auto Conhecimento")
+        // BANCO DE DADOS (Extraído do PDF Baralho do Auto Conhecimento)
         const questions = [
             "Como o mundo funciona e como viver melhor nele?",
             "O que eu tenho de melhor?",
@@ -333,44 +334,42 @@
         ];
 
         let availableCards = [...questions];
-        const cardElement = document.getElementById('active-card');
-        const qText = document.getElementById('q-text');
-        const counter = document.getElementById('counter');
+        const cardElement = document.getElementById('card');
+        const textElement = document.getElementById('q-text');
+        const counterElement = document.getElementById('counter');
 
-        function drawCard() {
-            // Reinicia se acabar
+        function drawCard(event) {
+            // Evita propagação do clique
+            if(event) event.stopPropagation();
+
+            // Se acabou, reinicia
             if (availableCards.length === 0) {
+                alert("Você percorreu todo o caminho do autoconhecimento! O baralho será reembaralhado.");
                 availableCards = [...questions];
-                alert("Todas as cartas foram lidas! O baralho foi reembaralhado.");
             }
 
-            // 1. Fecha a carta se estiver aberta
-            cardElement.classList.remove('flipped');
-            cardElement.classList.remove('dealing');
-
-            // Delay para animação de troca
-            setTimeout(() => {
-                // Sorteia
-                const randomIndex = Math.floor(Math.random() * availableCards.length);
-                const question = availableCards[randomIndex];
+            // Animação de troca
+            if (cardElement.classList.contains('flipped')) {
+                cardElement.classList.remove('flipped');
                 
-                // Remove do monte
-                availableCards.splice(randomIndex, 1);
-
-                // Atualiza texto (oculto)
-                qText.innerText = question;
-                counter.innerText = `Restam ${availableCards.length} cartas`;
-
-                // Animação de entrada
-                void cardElement.offsetWidth; // Trigger reflow
-                cardElement.classList.add('dealing');
-
-                // Vira automaticamente para revelar
                 setTimeout(() => {
+                    updateContent();
                     cardElement.classList.add('flipped');
-                }, 300);
+                }, 600);
+            } else {
+                updateContent();
+                cardElement.classList.add('flipped');
+            }
+        }
 
-            }, 400); // Tempo para a carta "voltar" pro monte visualmente
+        function updateContent() {
+            const randomIndex = Math.floor(Math.random() * availableCards.length);
+            const question = availableCards[randomIndex];
+            
+            availableCards.splice(randomIndex, 1);
+
+            textElement.innerText = question;
+            counterElement.innerText = `Restam: ${availableCards.length}`;
         }
 
         function flipCard() {
