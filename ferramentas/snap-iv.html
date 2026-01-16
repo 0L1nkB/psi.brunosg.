@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SNAP-IV - TDAH | Caderno Incrível</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            /* Paleta Lúdica */
+            --bg-color: #f0f8ff;
+            --paper: #ffffff;
+            --primary: #ff6b6b; /* Vermelho/Laranja Suave */
+            --secondary: #48dbfb; /* Azul Claro */
+            --accent: #feca57; /* Amarelo */
+            --text: #2d3436;
+            --option-hover: #dfe6e9;
+            --shadow: rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0;
+            padding: 20px;
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: var(--paper);
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 10px 10px 0 var(--shadow);
+            border: 3px solid var(--text);
+            position: relative;
+        }
+
+        /* CABEÇALHO */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        header::before {
+            content: ""; position: absolute; top: -55px; left: 50%; transform: translateX(-50%) rotate(-1deg);
+            width: 200px; height: 45px; background-color: rgba(255, 107, 107, 0.8);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        h1 { margin: 0; color: var(--primary); font-size: 2rem; text-transform: uppercase; }
+        .instruction { font-size: 1.1rem; color: #636e72; margin-top: 15px; }
+
+        /* SEÇÕES (Desatenção, Hiperatividade, TOD) */
+        .section-header {
+            background-color: var(--secondary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 15px;
+            margin: 30px 0 15px 0;
+            font-size: 1.2rem;
+            font-weight: bold;
+            display: inline-block;
+            box-shadow: 3px 3px 0 rgba(0,0,0,0.1);
+        }
+
+        /* LISTA DE PERGUNTAS */
+        .question-item {
+            background: #fff;
+            margin-bottom: 15px;
+            padding: 15px 20px;
+            border-radius: 15px;
+            border: 2px dashed #b2bec3;
+            transition: background 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .question-item:nth-child(even) { background-color: #fafafa; }
+        .question-item:hover { border-color: var(--primary); background-color: #fff0f0; }
+
+        .q-text { 
+            font-size: 1.1rem; 
+            font-weight: bold; 
+            display: flex; 
+            gap: 10px; 
+            align-items: center; 
+        }
+        
+        .q-number { 
+            background: var(--accent); 
+            color: var(--text); 
+            min-width: 30px; height: 30px; 
+            border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            font-size: 0.9rem; border: 2px solid var(--text);
+        }
+
+        /* OPÇÕES DE RESPOSTA */
+        .options-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .option-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            border-radius: 10px;
+            border: 2px solid #dfe6e9;
+            cursor: pointer;
+            font-size: 0.9rem;
+            text-align: center;
+            transition: all 0.2s;
+            background: white;
+        }
+
+        .option-label input { display: none; }
+
+        /* Estilos de Seleção */
+        .option-label:has(input:checked) {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 0 #c23616;
+            font-weight: bold;
+        }
+
+        .option-label span { font-size: 0.8rem; margin-top: 2px; opacity: 0.8; }
+
+        /* RODAPÉ E RESULTADO */
+        .result-box {
+            margin-top: 40px;
+            background: #fffce0;
+            padding: 30px;
+            border-radius: 20px;
+            border: 3px solid var(--text);
+            display: none;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px dashed #ccc;
+            padding: 10px 0;
+            font-size: 1.1rem;
+        }
+
+        .score-val { font-weight: bold; font-size: 1.5rem; color: var(--primary); }
+        .score-status { font-size: 0.9rem; font-weight: bold; padding: 5px 10px; border-radius: 10px; }
+        .status-risk { background: #ff7675; color: white; }
+        .status-ok { background: #55efc4; color: #2d3436; }
+
+        /* BOTÃO SALVAR */
+        .btn-action {
+            display: block; width: 100%;
+            margin-top: 30px; padding: 15px;
+            background-color: var(--secondary); color: white;
+            border: none; border-radius: 50px;
+            font-size: 1.3rem; font-weight: bold; font-family: inherit;
+            cursor: pointer; box-shadow: 0 6px 0 #0097e6;
+            transition: transform 0.1s;
+        }
+        .btn-action:hover { transform: translateY(-3px); }
+        .btn-action:active { transform: translateY(3px); box-shadow: none; }
+
+        @media (max-width: 600px) {
+            .options-row { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media print {
+            body { background: white; padding: 0; }
+            .container { box-shadow: none; border: none; width: 100%; }
+            .btn-action { display: none; }
+            .question-item { page-break-inside: avoid; border: 1px solid #ccc; background: none; }
+            .option-label { border: 1px solid #000; color: #000 !important; box-shadow: none !important; }
+            .option-label:has(input:checked) { background: #ddd !important; border: 2px solid black; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>SNAP-IV (TDAH)</h1>
+            <p class="instruction">
+                Marque o comportamento da criança/adolescente nos últimos 6 meses.
+            </p>
+        </header>
+
+        <form id="snap-form">
+            <div id="questions-container"></div>
+        </form>
+
+        <div class="result-box" id="result-area">
+            <h3 style="text-align: center; margin-top: 0;">📊 Resultado Preliminar</h3>
+            <p style="text-align: center; font-size: 0.9rem; color: #666; margin-bottom: 20px;">
+                Contagem de sintomas marcados como "Bastante" ou "Demais".
+            </p>
+
+            <div class="result-row">
+                <span>Desatenção (Itens 1-9)</span>
+                <div>
+                    <span class="score-val" id="score-inatt">0</span>/9
+                    <span id="status-inatt" class="score-status">...</span>
+                </div>
+            </div>
+
+            <div class="result-row">
+                <span>Hiperatividade/Impulsividade (Itens 10-18)</span>
+                <div>
+                    <span class="score-val" id="score-hyp">0</span>/9
+                    <span id="status-hyp" class="score-status">...</span>
+                </div>
+            </div>
+
+            <div class="result-row" style="border-bottom: none;">
+                <span>Opositor/Desafiador (Itens 19-26)</span>
+                <div>
+                    <span class="score-val" id="score-odd">0</span>/8
+                    <span id="status-odd" class="score-status">...</span>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-action" onclick="window.print()">
+            <i class="fa-solid fa-print"></i> IMPRIMIR / SALVAR PDF
+        </button>
+    </div>
+
+    <script>
+        // DADOS DO SNAP-IV
+        const items = [
+            // DESATENÇÃO (1-9)
+            "Não consegue prestar muita atenção a detalhes ou comete erros por descuido.",
+            "Tem dificuldade de manter a atenção em tarefas ou atividades de lazer.",
+            "Parece não estar ouvindo quando se fala diretamente com ele(a).",
+            "Não segue instruções até o fim e não termina deveres ou tarefas.",
+            "Tem dificuldade para organizar tarefas e atividades.",
+            "Evita ou não gosta de tarefas que exigem esforço mental prolongado.",
+            "Perde coisas necessárias para atividades (lápis, livros, brinquedos).",
+            "Distrai-se com estímulos externos.",
+            "É esquecido em atividades do dia-a-dia.",
+            
+            // HIPERATIVIDADE/IMPULSIVIDADE (10-18)
+            "Mexe com as mãos ou os pés ou se remexe na cadeira.",
+            "Sai do lugar na sala de aula ou onde se espera que fique sentado.",
+            "Corre de um lado para outro ou sobe nas coisas em situações inapropriadas.",
+            "Tem dificuldade em brincar ou envolver-se em lazer de forma calma.",
+            "Não para ou frequentemente está 'a mil por hora'.",
+            "Fala em excesso.",
+            "Responde as perguntas de forma precipitada antes de terminadas.",
+            "Tem dificuldade de esperar sua vez.",
+            "Interrompe os outros ou se intromete (conversas, jogos).",
+
+            // OPOSITOR/DESAFIADOR (19-26)
+            "Descontrola-se.",
+            "Discute com adultos.",
+            "Desafia ativamente ou se recusa a atender pedidos/regras.",
+            "Faz coisas de propósito que incomodam outras pessoas.",
+            "Culpa os outros pelos seus erros ou mau comportamento.",
+            "É irritável ou facilmente incomodado pelos outros.",
+            "É zangado e ressentido.",
+            "É maldoso ou vingativo."
+        ];
+
+        const options = [
+            { val: 0, text: "Nem um Pouco" },
+            { val: 1, text: "Só um Pouco" },
+            { val: 2, text: "Bastante" },
+            { val: 3, text: "Demais" }
+        ];
+
+        const container = document.getElementById('questions-container');
+
+        // GERAR PERGUNTAS
+        items.forEach((text, index) => {
+            // Adicionar Cabeçalhos de Seção
+            if(index === 0) container.innerHTML += `<div class='section-header'>🔹 Sintomas de Desatenção</div>`;
+            if(index === 9) container.innerHTML += `<div class='section-header'>⚡ Sintomas de Hiperatividade</div>`;
+            if(index === 18) container.innerHTML += `<div class='section-header'>😡 Sintomas de Oposição (TOD)</div>`;
+
+            const div = document.createElement('div');
+            div.className = 'question-item';
+            
+            let optionsHTML = '';
+            options.forEach(opt => {
+                optionsHTML += `
+                    <label class="option-label">
+                        <input type="radio" name="q${index}" value="${opt.val}" onchange="calculateScore()">
+                        <strong>${opt.val}</strong>
+                        <span>${opt.text}</span>
+                    </label>
+                `;
+            });
+
+            div.innerHTML = `
+                <div class="q-text">
+                    <span class="q-number">${index + 1}</span>
+                    ${text}
+                </div>
+                <div class="options-row">
+                    ${optionsHTML}
+                </div>
+            `;
+            container.appendChild(div);
+        });
+
+        // CALCULAR PONTUAÇÃO
+        function calculateScore() {
+            let countInatt = 0; // 1-9
+            let countHyp = 0;   // 10-18
+            let countODD = 0;   // 19-26
+            let answered = 0;
+
+            const form = document.getElementById('snap-form');
+            const formData = new FormData(form);
+
+            for (let pair of formData.entries()) {
+                const idx = parseInt(pair[0].substring(1)); // q0, q1...
+                const val = parseInt(pair[1]);
+                
+                answered++;
+
+                // Apenas valores 2 (Bastante) e 3 (Demais) contam como sintoma presente
+                if (val >= 2) {
+                    if (idx < 9) countInatt++;
+                    else if (idx < 18) countHyp++;
+                    else countODD++;
+                }
+            }
+
+            if (answered > 0) {
+                document.getElementById('result-area').style.display = 'block';
+                
+                // Atualiza contadores
+                updateStatus('score-inatt', 'status-inatt', countInatt, 6);
+                updateStatus('score-hyp', 'status-hyp', countHyp, 6);
+                updateStatus('score-odd', 'status-odd', countODD, 4); // Ponto de corte usual para TOD é 4
+            }
+        }
+
+        function updateStatus(scoreId, statusId, count, cutoff) {
+            document.getElementById(scoreId).innerText = count;
+            const statusEl = document.getElementById(statusId);
+            
+            if (count >= cutoff) {
+                statusEl.innerText = "RISCO ALTO";
+                statusEl.className = "score-status status-risk";
+            } else {
+                statusEl.innerText = "BAIXO";
+                statusEl.className = "score-status status-ok";
+            }
+        }
+    </script>
+</body>
+</html>
