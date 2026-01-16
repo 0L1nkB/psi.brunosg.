@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Afirmações de Enfrentamento</title>
+    <style>
+        :root {
+            --primary: #0984e3; /* Azul Forte */
+            --secondary: #00cec9; /* Turquesa */
+            --accent: #fdcb6e; /* Amarelo */
+            --bg: #dfe6e9;
+            --card-bg: #ffffff;
+            --text: #2d3436;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            background-image: linear-gradient(30deg, #dfe6e9 12%, transparent 12.5%, transparent 87%, #dfe6e9 87.5%, #dfe6e9),
+            linear-gradient(150deg, #dfe6e9 12%, transparent 12.5%, transparent 87%, #dfe6e9 87.5%, #dfe6e9),
+            linear-gradient(30deg, #dfe6e9 12%, transparent 12.5%, transparent 87%, #dfe6e9 87.5%, #dfe6e9),
+            linear-gradient(150deg, #dfe6e9 12%, transparent 12.5%, transparent 87%, #dfe6e9 87.5%, #dfe6e9),
+            linear-gradient(60deg, #b2bec3 25%, transparent 25.5%, transparent 75%, #b2bec3 75%, #b2bec3),
+            linear-gradient(60deg, #b2bec3 25%, transparent 25.5%, transparent 75%, #b2bec3 75%, #b2bec3);
+            background-size: 40px 70px;
+            background-position: 0 0, 0 0, 20px 35px, 20px 35px, 0 0, 20px 35px;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: white;
+            padding: 20px 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-bottom: 5px solid var(--primary);
+        }
+
+        h1 { margin: 0; color: var(--primary); font-size: 2rem; text-transform: uppercase; letter-spacing: 1px; }
+        .subtitle { color: #636e72; margin-top: 5px; font-weight: bold; }
+
+        /* MESA DE CARTAS */
+        .card-container {
+            position: relative;
+            width: 320px;
+            height: 480px;
+            perspective: 1000px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        /* LADOS DA CARTA */
+        .card-face {
+            position: absolute;
+            width: 100%; height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            box-sizing: border-box;
+            text-align: center;
+            border: 8px solid white;
+        }
+
+        /* VERSO (Capa "Escudo") */
+        .face-back {
+            background: linear-gradient(135deg, var(--primary) 0%, #74b9ff 100%);
+            color: white;
+        }
+
+        .shield-icon { font-size: 5rem; margin-bottom: 15px; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.2)); }
+        .back-text { font-size: 1.5rem; font-weight: 800; text-transform: uppercase; }
+
+        /* FRENTE (Afirmação) */
+        .face-front {
+            background: var(--card-bg);
+            color: var(--text);
+            transform: rotateY(180deg);
+        }
+
+        .category-badge {
+            background: var(--accent);
+            color: var(--text);
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .affirmation-text {
+            font-size: 1.6rem;
+            font-weight: 700;
+            line-height: 1.4;
+            color: var(--primary);
+        }
+
+        .quote-icon { font-size: 2rem; color: #dfe6e9; margin-bottom: 10px; }
+
+        .helper-text {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #b2bec3;
+            font-style: italic;
+        }
+
+        /* BOTÃO */
+        .btn-draw {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 0 #00b894;
+            transition: transform 0.1s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-draw:active { transform: translateY(4px); box-shadow: none; }
+        .btn-draw:hover { filter: brightness(1.1); }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Escudo da Autoestima</h1>
+        <div class="subtitle">Afirmações de Enfrentamento</div>
+    </header>
+
+    <div class="card-container">
+        <div class="card" id="card" onclick="flipCard()">
+            
+            <div class="card-face face-back">
+                <div class="shield-icon">🛡️</div>
+                <div class="back-text">Força<br>Interior</div>
+                <div style="font-size: 0.8rem; margin-top: 15px; opacity: 0.8;">Toque para receber proteção</div>
+            </div>
+
+            <div class="card-face face-front">
+                <div class="category-badge" id="cat-badge">Enfrentamento</div>
+                <div class="quote-icon">❝</div>
+                <div class="affirmation-text" id="aff-text">
+                    Clique no botão para tirar uma carta.
+                </div>
+                <div class="quote-icon" style="transform: rotate(180deg); margin-top: 10px;">❝</div>
+                <div class="helper-text">Repita esta frase em voz alta.</div>
+            </div>
+
+        </div>
+    </div>
+
+    <button class="btn-draw" onclick="drawCard()">💪 Tirar Nova Carta</button>
+
+    <script>
+        // BANCO DE DADOS (Baseado no PDF Bernardo_Sessao_18-12)
+        const affirmations = [
+            // Categoria: Valor Pessoal
+            { text: "Eu sou suficiente exatamente como sou hoje.", cat: "Meu Valor" },
+            { text: "Tudo bem sentir orgulho das minhas pequenas conquistas.", cat: "Meu Valor" },
+            { text: "Eu mereço ser tratado com respeito e carinho.", cat: "Meu Valor" },
+            { text: "Minha opinião importa e tenho o direito de expressá-la.", cat: "Meu Valor" },
+            { text: "Eu não preciso ser perfeito para ser incrível.", cat: "Meu Valor" },
+            { text: "Eu sou mais forte do que imagino.", cat: "Meu Valor" },
+            
+            // Categoria: Enfrentando Erros (Autoperdão)
+            { text: "Errar faz parte de aprender. Eu me perdoo.", cat: "Autoperdão" },
+            { text: "Eu aceito que sou humano e posso cometer falhas.", cat: "Autoperdão" },
+            { text: "Um erro não define quem eu sou por inteiro.", cat: "Autoperdão" },
+            { text: "Eu posso tentar de novo amanhã.", cat: "Esperança" },
+            { text: "Não adianta me culpar pelo passado. Foco no agora.", cat: "Autoperdão" },
+
+            // Categoria: Coragem e Futuro
+            { text: "Eu tenho capacidade de superar coisas difíceis.", cat: "Coragem" },
+            { text: "Eu consigo lidar com isso, um passo de cada vez.", cat: "Coragem" },
+            { text: "Eu escolho focar no que eu posso controlar.", cat: "Enfrentamento" },
+            { text: "Eu sou, eu posso, eu vou conseguir!", cat: "Mantra" },
+            { text: "Medo é apenas um sentimento, ele não me controla.", cat: "Coragem" },
+            { text: "Eu acredito no meu potencial de mudar.", cat: "Futuro" }
+        ];
+
+        const cardElement = document.getElementById('card');
+        const textElement = document.getElementById('aff-text');
+        const badgeElement = document.getElementById('cat-badge');
+
+        function drawCard() {
+            // Se carta estiver virada (lendo), desvira primeiro
+            if (cardElement.classList.contains('flipped')) {
+                cardElement.classList.remove('flipped');
+                
+                setTimeout(() => {
+                    updateContent();
+                    // Vira automaticamente de novo
+                    setTimeout(() => cardElement.classList.add('flipped'), 200);
+                }, 400); // Espera animação de fechar
+            } else {
+                updateContent();
+                setTimeout(() => cardElement.classList.add('flipped'), 200);
+            }
+        }
+
+        function updateContent() {
+            const randomIndex = Math.floor(Math.random() * affirmations.length);
+            const item = affirmations[randomIndex];
+            
+            textElement.innerText = item.text;
+            badgeElement.innerText = item.cat;
+            
+            // Muda cor do badge aleatoriamente para dar vida
+            const colors = ['#fdcb6e', '#55efc4', '#ff7675', '#a29bfe'];
+            badgeElement.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        function flipCard() {
+            cardElement.classList.toggle('flipped');
+        }
+
+    </script>
+
+</body>
+</html>
