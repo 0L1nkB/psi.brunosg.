@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minhas Conquistas</title>
+    <style>
+        :root {
+            --bg-color: #f0f8ff;
+            --paper: #ffffff;
+            --primary: #f1c40f; /* Dourado */
+            --secondary: #3498db; /* Azul */
+            --accent: #e67e22; /* Laranja */
+            --text: #2c3e50;
+            --shadow: rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#bdc3c7 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0;
+            padding: 30px;
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: var(--paper);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 10px 10px 0 var(--shadow);
+            border: 4px solid var(--text);
+            position: relative;
+        }
+
+        /* CABEÇALHO COM MEDALHA */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .medal-icon {
+            font-size: 5rem;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 5px 0 rgba(0,0,0,0.1));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        h1 {
+            color: var(--accent);
+            text-transform: uppercase;
+            margin: 0;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 0 #ffeaa7;
+        }
+
+        p.subtitle {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+            margin-top: 5px;
+        }
+
+        /* GRID DE PERGUNTAS */
+        .grid-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .box {
+            background: #fdf5e6;
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px dashed #f39c12;
+            position: relative;
+        }
+
+        .box-full {
+            grid-column: 1 / -1;
+            background: #e8f4fd;
+            border-color: #3498db;
+        }
+
+        .box-special {
+            background: #fff0f6;
+            border-color: #e84393;
+        }
+
+        h3 {
+            margin-top: 0;
+            color: var(--text);
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 i { color: var(--secondary); }
+
+        /* INPUTS ESTILIZADOS */
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border: none;
+            border-bottom: 2px dotted #bdc3c7;
+            background: transparent;
+            font-family: inherit;
+            font-size: 1rem;
+            color: var(--text);
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-bottom: 2px solid var(--secondary);
+            background: rgba(255,255,255,0.5);
+        }
+
+        textarea { resize: none; height: 60px; }
+
+        /* ÁREA DE DESENHO (SIMULADA) */
+        .draw-area {
+            width: 100%;
+            height: 200px;
+            border: 2px solid #bdc3c7;
+            border-radius: 10px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ccc;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        /* BOTÃO SALVAR */
+        .btn-print {
+            display: block;
+            width: 100%;
+            padding: 20px;
+            margin-top: 40px;
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            font-family: inherit;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #2980b9;
+            transition: transform 0.1s;
+        }
+
+        .btn-print:hover { transform: translateY(-3px); }
+        .btn-print:active { transform: translateY(3px); box-shadow: none; }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* RESPONSIVIDADE */
+        @media (max-width: 768px) {
+            .grid-section { grid-template-columns: 1fr; }
+            .container { padding: 20px; }
+            h1 { font-size: 1.8rem; }
+        }
+
+        /* IMPRESSÃO */
+        @media print {
+            body { background: white; padding: 0; }
+            .container { box-shadow: none; border: none; width: 100%; max-width: 100%; }
+            .btn-print { display: none; }
+            .medal-icon { animation: none; }
+            input, textarea { border-bottom: 1px solid #000; }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <div class="medal-icon">🥇</div>
+            <h1>Minhas Conquistas</h1>
+            <p class="subtitle">Celebrando tudo o que eu sou capaz de fazer!</p>
+            <input type="text" placeholder="Período (Ex: Este mês, Este ano...)" style="text-align: center; font-weight: bold; font-size: 1.2rem;">
+        </header>
+
+        <div class="grid-section">
+            
+            <div class="box">
+                <h3><i class="fa-solid fa-hand-holding-heart"></i> Eu ajudei alguém...</h3>
+                <input type="text" placeholder="Quem foi?">
+                <input type="text" placeholder="Como eu ajudei?">
+            </div>
+
+            <div class="box">
+                <h3><i class="fa-solid fa-dumbbell"></i> 3 Coisas difíceis que fiz:</h3>
+                <input type="text" placeholder="1.">
+                <input type="text" placeholder="2.">
+                <input type="text" placeholder="3.">
+            </div>
+
+            <div class="box">
+                <h3><i class="fa-solid fa-lightbulb"></i> 3 Coisas que aprendi:</h3>
+                <input type="text" placeholder="1.">
+                <input type="text" placeholder="2.">
+                <input type="text" placeholder="3.">
+            </div>
+
+            <div class="box">
+                <h3><i class="fa-solid fa-arrow-trend-up"></i> 3 Coisas que melhorei:</h3>
+                <input type="text" placeholder="1.">
+                <input type="text" placeholder="2.">
+                <input type="text" placeholder="3.">
+            </div>
+
+            <div class="box">
+                <h3><i class="fa-solid fa-mountain"></i> Um desafio que superei:</h3>
+                <textarea placeholder="Conte como foi..."></textarea>
+            </div>
+
+            <div class="box">
+                <h3><i class="fa-solid fa-heart"></i> Sou grato(a) por:</h3>
+                <input type="text" placeholder="1.">
+                <input type="text" placeholder="2.">
+            </div>
+
+            <div class="box box-full">
+                <h3><i class="fa-solid fa-star"></i> Pequenas conquistas diárias (que as vezes esqueço):</h3>
+                <textarea placeholder="Ex: Arrumei a cama, fui gentil, fiz a tarefa..."></textarea>
+            </div>
+
+            <div class="box box-special box-full">
+                <h3><i class="fa-solid fa-trophy"></i> A coisa que mais me orgulho:</h3>
+                <input type="text" placeholder="Escreva aqui sua grande vitória!">
+                
+                <div class="draw-area">
+                    (Espaço para desenhar sua conquista se imprimir!) 🎨
+                </div>
+            </div>
+
+            <div class="box">
+                <h3><i class="fa-solid fa-calendar-days"></i> Meta para Semana/Mês:</h3>
+                <input type="text" placeholder="Eu quero...">
+            </div>
+
+            <div class="box">
+                <h3><i class="fa-solid fa-telescope"></i> Metas para 3 a 6 meses:</h3>
+                <input type="text" placeholder="1.">
+                <input type="text" placeholder="2.">
+            </div>
+
+        </div>
+
+        <button class="btn-print" onclick="window.print()">
+            <i class="fa-solid fa-print"></i> IMPRIMIR MEU CERTIFICADO
+        </button>
+    </div>
+
+</body>
+</html>
