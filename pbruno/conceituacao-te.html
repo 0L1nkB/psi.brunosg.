@@ -3,241 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conceituação Esquema | Prontuário</title>
+    <title>Conceituação Esquema + IA | Caderno Incrível</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-color: #f4f7f6;
+            /* Paleta Esquema */
+            --bg-color: #f0f8ff;
             --paper: #ffffff;
-            --child: #f39c12; /* Laranja */
-            --parent: #c0392b; /* Vermelho */
-            --coping: #2980b9; /* Azul */
-            --adult: #27ae60; /* Verde */
-            --text: #2c3e50;
+            --child: #ffaf40; /* Criança (Laranja) */
+            --parent: #ff5252; /* Pais (Vermelho) */
+            --coping: #70a1ff; /* Enfrentamento (Azul) */
+            --adult: #33d9b2; /* Adulto (Verde) */
+            --text: #2d3436;
+            --ai-btn: #a29bfe; /* Cor do botão IA */
+            --shadow: rgba(0,0,0,0.1);
         }
 
         body {
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
             background-color: var(--bg-color);
-            margin: 0; padding: 40px; color: var(--text);
+            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0; padding: 20px; color: var(--text);
             display: flex; justify-content: center;
         }
 
         .container {
             width: 100%; max-width: 1100px;
-            background: var(--paper); padding: 50px;
-            border-radius: 5px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            border-top: 10px solid #8e44ad; /* Roxo Esquema */
+            background: var(--paper); padding: 40px;
+            border-radius: 25px; box-shadow: 10px 10px 0 var(--shadow);
+            border: 3px solid var(--text); position: relative;
         }
 
-        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
-        h1 { margin: 0; font-size: 1.8rem; color: #8e44ad; }
-        .info-field { border: none; border-bottom: 1px solid #ccc; padding: 5px; width: 200px; font-size: 1rem; }
+        /* CONFIGURAÇÃO IA */
+        .ai-settings {
+            position: absolute; top: 20px; right: 20px;
+        }
+        .btn-config {
+            background: #2d3436; color: white; border: none; padding: 8px 15px;
+            border-radius: 20px; cursor: pointer; font-size: 0.9rem; font-family: inherit;
+            display: flex; align-items: center; gap: 5px;
+        }
+        .status-dot { width: 10px; height: 10px; border-radius: 50%; background: #ff7675; }
+        .status-dot.active { background: #55efc4; box-shadow: 0 0 8px #55efc4; }
+
+        /* HEADER */
+        header { text-align: center; margin-bottom: 40px; }
+        h1 { margin: 0; color: #40407a; font-size: 2.2rem; text-transform: uppercase; }
+        .info-inputs { margin-top: 15px; display: flex; justify-content: center; gap: 20px; }
+        .info-field {
+            border: none; border-bottom: 2px dashed #ccc; background: transparent;
+            padding: 5px; font-family: inherit; font-size: 1rem; width: 200px; text-align: center;
+        }
 
         /* SEÇÕES */
-        .section {
-            border: 2px solid #ddd; border-radius: 10px; padding: 20px; margin-bottom: 25px;
-            position: relative; background: #fff;
+        .section-box {
+            border: 2px dashed #b2bec3; border-radius: 15px; padding: 20px;
+            margin-bottom: 30px; background: #fff; position: relative;
         }
         .sec-title {
-            background: #eee; padding: 5px 15px; border-radius: 20px; font-weight: bold;
-            display: inline-block; margin-bottom: 15px; color: #555;
+            font-size: 1.2rem; font-weight: 800; color: #2c2c54; text-transform: uppercase;
+            margin-bottom: 15px; display: flex; align-items: center; gap: 10px;
         }
 
-        /* TAGS CLICÁVEIS E EDITÁVEIS */
-        .tags-container { display: flex; flex-wrap: wrap; gap: 10px; }
-        
+        /* TAGS (NECESSIDADES/ESQUEMAS) */
+        .tags-container { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
         .tag {
-            padding: 8px 12px; border: 1px solid #ccc; border-radius: 20px; cursor: pointer;
-            font-size: 0.9rem; transition: 0.2s; background: white; user-select: none;
+            padding: 6px 12px; border: 1px solid #ccc; border-radius: 20px; font-size: 0.85rem;
+            cursor: pointer; background: white; transition: 0.2s; user-select: none;
         }
-        .tag:hover { background: #f0f0f0; }
-        .tag.selected { background: #8e44ad; color: white; border-color: #8e44ad; font-weight: bold; }
-        
-        /* Editável dentro da tag */
-        .tag span { outline: none; }
+        .tag:hover { border-color: var(--child); }
+        .tag.selected { background: var(--child); color: white; border-color: var(--child); font-weight: bold; }
+        .tag span { outline: none; } /* Editável */
 
-        /* CARDS DE MODOS */
+        /* INPUT WRAPPER E TEXTAREA */
+        .input-wrapper { position: relative; width: 100%; margin-top: 10px; }
+        
+        textarea {
+            width: 100%; border: none; background: rgba(240,240,240,0.5); border-bottom: 2px dashed #ccc;
+            font-family: inherit; font-size: 1rem; resize: vertical; padding: 10px; padding-bottom: 40px;
+            min-height: 80px; border-radius: 10px; box-sizing: border-box;
+        }
+        textarea:focus { outline: none; border-bottom-color: #40407a; background: #fff; }
+
+        /* BOTÃO MÁGICO (IA) */
+        .btn-magic {
+            position: absolute; bottom: 10px; right: 10px;
+            background: var(--ai-btn); color: white; border: none;
+            width: 30px; height: 30px; border-radius: 50%;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); transition: 0.3s; opacity: 0.7;
+        }
+        .btn-magic:hover { opacity: 1; transform: scale(1.1) rotate(15deg); background: var(--primary); }
+        .btn-magic.loading { animation: pulse 1s infinite; cursor: wait; background: #b2bec3; }
+        @keyframes pulse { 0% {transform: scale(0.9);} 50% {transform: scale(1.1);} 100% {transform: scale(0.9);} }
+
+        /* MODOS GRID */
         .modes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         
         .mode-card {
-            border: 2px solid; border-radius: 10px; padding: 20px; min-height: 150px;
-            background: rgba(255,255,255,0.8);
+            padding: 20px; border-radius: 15px; border: 3px solid; position: relative;
+            background: rgba(255,255,255,0.9);
         }
-        .child { border-color: var(--child); background: #fef5e7; }
-        .parent { border-color: var(--parent); background: #f9ebea; }
-        .coping { border-color: var(--coping); background: #ebf5fb; }
-        .adult { border-color: var(--adult); background: #e9f7ef; grid-column: span 2; }
+        .child { border-color: var(--child); background: #fff8e1; }
+        .parent { border-color: var(--parent); background: #ffebee; }
+        .coping { border-color: var(--coping); background: #e3f2fd; }
+        .adult { border-color: var(--adult); background: #e0f2f1; grid-column: span 2; }
 
-        .card-header { font-weight: 800; text-transform: uppercase; margin-bottom: 10px; display: flex; justify-content: space-between; }
-        .txt-child { color: var(--child); }
-        .txt-parent { color: var(--parent); }
-        .txt-coping { color: var(--coping); }
-        .txt-adult { color: var(--adult); }
+        .card-header { font-weight: 800; text-transform: uppercase; margin-bottom: 5px; display: flex; justify-content: space-between; font-size: 0.9rem; }
+        .card-desc { font-size: 0.8rem; color: #666; margin-bottom: 5px; font-style: italic; }
 
-        textarea {
-            width: 100%; border: none; background: transparent; font-family: inherit; font-size: 1rem;
-            resize: none; border-bottom: 1px dashed #aaa; padding: 5px;
-        }
-        textarea:focus { outline: none; border-bottom: 2px solid #333; }
-
-        /* BOTÕES FLUTUANTES */
+        /* RODAPÉ */
         .action-bar { position: fixed; bottom: 20px; right: 20px; display: flex; gap: 10px; }
-        .btn {
+        .btn-float {
             border: none; width: 50px; height: 50px; border-radius: 50%; color: white; font-size: 1.2rem;
             cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;
             transition: 0.2s;
         }
-        .btn:hover { transform: scale(1.1); }
-        .btn-print { background: #2c3e50; }
-        .btn-clear { background: #c0392b; }
+        .btn-float:hover { transform: translateY(-3px); }
+        .btn-print { background: #2d3436; }
+        .btn-clear { background: #d63031; }
 
-        #save-status { position: fixed; bottom: 80px; right: 30px; color: #8e44ad; font-weight: bold; opacity: 0; transition: opacity 0.5s; }
+        #save-status { position: fixed; bottom: 80px; right: 30px; color: #00b894; font-weight: bold; opacity: 0; transition: opacity 0.5s; }
 
         @media print {
-            .action-bar { display: none; }
-            .container { border: none; box-shadow: none; padding: 0; }
+            .ai-settings, .action-bar, .btn-magic { display: none !important; }
+            .container { box-shadow: none; border: none; padding: 0; }
             .tag { border: 1px solid #aaa; }
-            .tag.selected { background: #ddd !important; color: black !important; }
-        }
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        <header>
-            <h1>Terapia do Esquema</h1>
-            <div>
-                <input type="text" id="te-patient" class="info-field" placeholder="Paciente" oninput="autoSave()">
-                <input type="text" id="te-date" class="info-field" placeholder="Data" oninput="autoSave()">
-            </div>
-        </header>
-
-        <div class="section">
-            <div class="sec-title">1. Necessidades Não Atendidas</div>
-            <div class="tags-container" id="needs-list">
-                </div>
-            <textarea id="te-history" placeholder="Resumo da história de origem..." style="margin-top:15px; min-height:60px;" oninput="autoSave()"></textarea>
-        </div>
-
-        <div class="section">
-            <div class="sec-title">2. Esquemas Predominantes</div>
-            <p style="font-size:0.8rem; color:#666; margin-top:-10px;">Clique para selecionar. Clique no texto para editar o nome.</p>
-            <div class="tags-container" id="schemas-list">
-                </div>
-        </div>
-
-        <div class="section">
-            <div class="sec-title">3. Mapa dos Modos</div>
-            <div class="modes-grid">
-                
-                <div class="mode-card child">
-                    <div class="card-header txt-child">
-                        <span contenteditable="true">CRIANÇA VULNERÁVEL/ZANGADA</span>
-                        <i class="fa-solid fa-face-sad-tear"></i>
-                    </div>
-                    <textarea id="mode-child" placeholder="Sentimentos, medos, necessidades..." oninput="autoSave()"></textarea>
-                </div>
-
-                <div class="mode-card parent">
-                    <div class="card-header txt-parent">
-                        <span contenteditable="true">PAIS CRÍTICOS/EXIGENTES</span>
-                        <i class="fa-solid fa-gavel"></i>
-                    </div>
-                    <textarea id="mode-parent" placeholder="Mensagens internalizadas, cobranças..." oninput="autoSave()"></textarea>
-                </div>
-
-                <div class="mode-card coping">
-                    <div class="card-header txt-coping">
-                        <span contenteditable="true">ENFRENTAMENTO</span>
-                        <i class="fa-solid fa-shield-halved"></i>
-                    </div>
-                    <textarea id="mode-coping" placeholder="Rendição, Evitação ou Hipercompensação..." oninput="autoSave()"></textarea>
-                </div>
-
-                <div class="mode-card adult">
-                    <div class="card-header txt-adult">
-                        <span contenteditable="true">ADULTO SAUDÁVEL</span>
-                        <i class="fa-solid fa-spa"></i>
-                    </div>
-                    <textarea id="mode-adult" placeholder="Ações de cura, autocompaixão, limites..." oninput="autoSave()"></textarea>
-                </div>
-
-            </div>
-        </div>
-
-    </div>
-
-    <div id="save-status">Salvo!</div>
-    <div class="action-bar">
-        <button class="btn btn-clear" onclick="clearAll()" title="Limpar"><i class="fa-solid fa-trash"></i></button>
-        <button class="btn btn-print" onclick="window.print()" title="Imprimir"><i class="fa-solid fa-print"></i></button>
-    </div>
-
-    <script>
-        // LISTAS DE DADOS
-        const defaultNeeds = ["Segurança", "Estabilidade", "Afeto", "Aceitação", "Empatia", "Limites", "Autonomia", "Lazer", "Espontaneidade"];
-        const defaultSchemas = ["Abandono", "Desconfiança", "Privação Emocional", "Defectividade", "Isolamento", "Dependência", "Fracasso", "Arrogo", "Subjugação", "Auto-sacrifício", "Padrões Inflexíveis", "Punição"];
-
-        // INICIALIZAÇÃO
-        window.onload = function() {
-            loadTags('needs-list', defaultNeeds, 'need_');
-            loadTags('schemas-list', defaultSchemas, 'schema_');
-            loadTextAreas();
-        };
-
-        // GERA E CARREGA TAGS
-        function loadTags(containerId, list, prefix) {
-            const container = document.getElementById(containerId);
-            list.forEach((item, index) => {
-                const isSelected = localStorage.getItem('te_' + prefix + index) === 'true';
-                
-                const div = document.createElement('div');
-                div.className = isSelected ? 'tag selected' : 'tag';
-                div.onclick = function() { toggleTag(this, prefix + index); };
-                
-                // Texto editável dentro da tag
-                div.innerHTML = `<span contenteditable="true" onclick="event.stopPropagation()">${item}</span>`;
-                
-                container.appendChild(div);
-            });
-        }
-
-        function toggleTag(el, key) {
-            el.classList.toggle('selected');
-            const isSelected = el.classList.contains('selected');
-            localStorage.setItem('te_' + key, isSelected);
-            showSaved();
-        }
-
-        // CARREGA TEXTOS
-        function loadTextAreas() {
-            document.querySelectorAll('textarea, input[type="text"]').forEach(el => {
-                const saved = localStorage.getItem('te_' + el.id);
-                if (saved) el.value = saved;
-            });
-        }
-
-        // SALVA TEXTOS
-        function autoSave() {
-            const el = event.target;
-            localStorage.setItem('te_' + el.id, el.value);
-            showSaved();
-        }
-
-        function showSaved() {
-            const status = document.getElementById('save-status');
-            status.style.opacity = 1;
-            setTimeout(() => status.style.opacity = 0, 1000);
-        }
-
-        function clearAll() {
-            if(confirm("Deseja limpar todos os dados?")) {
-                localStorage.clear();
-                location.reload();
-            }
-        }
-    </script>
-
-</body>
-</html>
+            .tag.selected { background: #ddd !important; color: black
