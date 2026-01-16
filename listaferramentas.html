@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal do Terapeuta | Ferramentas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --bg: #f0f2f5;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* --- TELA DE LOGIN --- */
+        #login-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #2c3e50, #000000);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            width: 300px;
+        }
+
+        .login-box h2 { margin-top: 0; color: var(--primary); }
+        
+        .login-input {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        .btn-login {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            width: 100%;
+            transition: background 0.2s;
+        }
+
+        .btn-login:hover { background: #2980b9; }
+        .error-msg { color: red; font-size: 0.9rem; display: none; margin-top: 10px; }
+
+        /* --- DASHBOARD (ÁREA RESTRITA) --- */
+        #dashboard {
+            display: none; /* Escondido até logar */
+            width: 100%;
+            max-width: 1200px;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        header h1 { color: var(--primary); font-size: 2.5rem; margin-bottom: 10px; }
+        .crp { background: #dfe6e9; padding: 5px 15px; border-radius: 20px; font-size: 0.9rem; color: #636e72; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: #333;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: transform 0.2s, border 0.2s;
+            border-left: 5px solid transparent;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        /* Cores por Categoria */
+        .cat-escala { border-left-color: #e74c3c; } /* Vermelho */
+        .cat-baralho { border-left-color: #f1c40f; } /* Amarelo */
+        .cat-ludico { border-left-color: #9b59b6; } /* Roxo */
+        .cat-ferramenta { border-left-color: #2ecc71; } /* Verde */
+
+        .card-icon { font-size: 2rem; margin-bottom: 15px; color: #555; }
+        .card-title { font-weight: bold; font-size: 1.1rem; margin-bottom: 5px; }
+        .card-desc { font-size: 0.85rem; color: #777; }
+
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            color: #aaa;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="login-screen">
+        <div class="login-box">
+            <i class="fa-solid fa-lock" style="font-size: 3rem; color: var(--primary); margin-bottom: 20px;"></i>
+            <h2>Área Restrita</h2>
+            <p style="font-size: 0.9rem; color: #666;">Digite a senha para acessar as ferramentas.</p>
+            <input type="password" id="password" class="login-input" placeholder="Senha">
+            <button class="btn-login" onclick="checkLogin()">Entrar</button>
+            <p class="error-msg" id="error">Senha incorreta!</p>
+        </div>
+    </div>
+
+    <div id="dashboard">
+        <header>
+            <h1><i class="fa-solid fa-briefcase-medical"></i> Caixa de Ferramentas</h1>
+            <span class="crp">Psicólogo Bruno de Souza - CRP 07/44472</span>
+        </header>
+
+        <div class="grid">
+            
+            <a href="ysqs3.html" class="card cat-escala">
+                <i class="fa-solid fa-list-check card-icon" style="color:#e74c3c"></i>
+                <div class="card-title">YSQ - S3</div>
+                <div class="card-desc">Questionário de Esquemas de Young com correção automática.</div>
+            </a>
+
+            <a href="asrs18.html" class="card cat-escala">
+                <i class="fa-solid fa-brain card-icon" style="color:#e74c3c"></i>
+                <div class="card-title">ASRS-18 (TDAH)</div>
+                <div class="card-desc">Escala de rastreio para TDAH em adultos.</div>
+            </a>
+
+            <a href="bai.html" class="card cat-escala">
+                <i class="fa-solid fa-bolt card-icon" style="color:#e74c3c"></i>
+                <div class="card-title">BAI - Ansiedade</div>
+                <div class="card-desc">Inventário de Ansiedade de Beck.</div>
+            </a>
+
+            <a href="bdi.html" class="card cat-escala">
+                <i class="fa-solid fa-cloud-rain card-icon" style="color:#e74c3c"></i>
+                <div class="card-title">BDI - Depressão</div>
+                <div class="card-desc">Inventário de Depressão de Beck.</div>
+            </a>
+
+            <a href="termometro-autoestima.html" class="card cat-escala">
+                <i class="fa-solid fa-temperature-half card-icon" style="color:#e74c3c"></i>
+                <div class="card-title">Termômetro Autoestima</div>
+                <div class="card-desc">Avaliação lúdica de autoestima.</div>
+            </a>
+
+            <a href="baralhodistorcoescognitivas.html" class="card cat-baralho">
+                <i class="fa-solid fa-glasses card-icon" style="color:#f1c40f"></i>
+                <div class="card-title">Distorções Cognitivas</div>
+                <div class="card-desc">Baralho interativo para reestruturação cognitiva.</div>
+            </a>
+
+            <a href="baralhoconversa.html" class="card cat-baralho">
+                <i class="fa-solid fa-comments card-icon" style="color:#f1c40f"></i>
+                <div class="card-title">Puxa Conversa</div>
+                <div class="card-desc">Perguntas para quebra-gelo e aprofundamento.</div>
+            </a>
+
+            <a href="conversaadolescente.html" class="card cat-baralho">
+                <i class="fa-solid fa-user-graduate card-icon" style="color:#f1c40f"></i>
+                <div class="card-title">Puxa Conversa Teen</div>
+                <div class="card-desc">Versão focada em adolescentes e autoestima.</div>
+            </a>
+
+            <a href="baralho-autoconhecimento.html" class="card cat-baralho">
+                <i class="fa-solid fa-mirror card-icon" style="color:#f1c40f"></i>
+                <div class="card-title">Autoconhecimento</div>
+                <div class="card-desc
