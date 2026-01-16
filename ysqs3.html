@@ -256,4 +256,130 @@
         "Quando sinto que alguém de quem eu gosto se está a afastar de mim, sinto-me desesperado.",
         "Sou bastante desconfiado quanto às intenções das outras pessoas.",
         "Sinto-me afastado(a) ou desligado dos outros.",
-        "Sinto que nunca poderei ser amado
+        "Sinto que nunca poderei ser amado por alguém.",
+        "Não sou tão talentoso(a) no trabalho como a maioria das pessoas.",
+        "Não se pode confiar no meu julgamento em situações do dia-a-dia.",
+        "Preocupa-me poder perder todo o dinheiro que tenho e ficar muito pobre ou na miséria.",
+        "Sinto frequentemente que é como se os meus pais vivessem através de mim não tenho uma vida própria.",
+        "Sempre deixei que os outros escolhessem por mim; por isso, não sei realmente aquilo que quero para mim.",
+        "Tenho sido sempre eu quem ouve os problemas dos outros.",
+        "Controlo-me tanto que as pessoas pensam que não tenho sentimentos ou que tenho um coração de pedra.",
+        "Sinto sobre mim uma pressão constante para fazer coisas e atingir objetivos.",
+        "Sinto que não devia ter que seguir as regras e convenções habituais que as outras pessoas têm que seguir.",
+        "Não me consigo obrigar a fazer coisas de que não gosto, mesmo quando sei que é para o meu bem.",
+        "Quando faço uma intervenção numa reunião ou quando sou apresentado a alguém num grupo, é importante para mim obter reconhecimento e admiração.",
+        "Por muito que trabalhe, preocupa-me poder ficar na miséria e perder quase tudo o que possuo.",
+        "Não interessa porque é que cometi um erro; quando faço algo errado, há que pagar as consequências.",
+        "Não tenho tido uma pessoa forte ou sensata para me dar bons conselhos e me dizer o que fazer quando não tenho a certeza da atitude que devo tomar.",
+        "Por vezes, a preocupação que tenho com o facto de as pessoas me poderem deixar é tão grande, que acabo por as afastar.",
+        "Estou habitualmente à procura de segundas intenções ou do verdadeiro motivo por detrás do comportamento dos outros.",
+        "Em grupo, sinto sempre que estou de fora.",
+        "Sou demasiado inaceitável para me poder mostrar tal como sou às outras pessoas ou para deixar que me conheçam bem.",
+        "No que diz respeito ao trabalho (ou à escola) não sou tão inteligente como a maior parte das pessoas.",
+        "Não tenho confiança nas minhas capacidades para resolver problemas que surjam no dia-a-dia.",
+        "Preocupa-me poder estar a desenvolver uma doença grave, ainda que não tenha sido diagnosticado nada de grave pelo médico.",
+        "Sinto frequentemente que não tenho uma identidade separada da dos meus pais ou companheiro(a).",
+        "Tenho imenso trabalho para conseguir que os meus sentimentos sejam tidos em consideração e os meus direitos sejam respeitados.",
+        "As outras pessoas consideram que faço muito pelos outros e não faço o suficiente por mim.",
+        "As pessoas acham que tenho dificuldade em exprimir o que sinto.",
+        "Não posso descuidar as minhas obrigações de forma leviana, nem desculpar-me pelos meus erros",
+        "Sinto que o que tenho para oferecer tem mais valor do que aquilo que os outros têm para dar.",
+        "Raramente tenho sido capaz de levar as minhas decisões até ao fim.",
+        "Receber muitos elogios dos outros faz-me sentir uma pessoa que tem valor.",
+        "Preocupa-me que uma decisão errada possa provocar uma catástrofe.",
+        "Sou uma pessoa má que merece ser castigada."
+    ];
+
+    // --- RENDERIZAÇÃO E CÁLCULO ---
+    const container = document.getElementById('questions-container');
+    const loadingDiv = document.getElementById('loading');
+    const btnCalc = document.getElementById('btn-calc');
+
+    try {
+        perguntasTexto.forEach((texto, index) => {
+            let num = index + 1;
+            let html = `
+                <div class="question-row">
+                    <div class="q-text"><strong>${num}.</strong> ${texto}</div>
+                    <input type="number" id="q${num}" min="1" max="6" placeholder="-">
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+        });
+
+        // Se chegou aqui, remove o loading e mostra o conteúdo
+        loadingDiv.style.display = 'none';
+        container.style.display = 'block';
+        btnCalc.style.display = 'block';
+    } catch (e) {
+        loadingDiv.innerText = "Erro ao carregar perguntas: " + e.message;
+        loadingDiv.style.color = "red";
+    }
+
+    let myChart = null;
+
+    function calcularResultados() {
+        let scores = new Array(18).fill(0);
+        
+        for (let i = 1; i <= 90; i++) {
+            let input = document.getElementById(`q${i}`);
+            let val = parseInt(input.value) || 0; 
+            
+            // Fórmula YSQ-S3: (Questão - 1) % 18 = Índice do Esquema
+            let esquemaIndex = (i - 1) % 18;
+            scores[esquemaIndex] += val;
+        }
+
+        // 1. Lista de Texto
+        let htmlList = "";
+        scores.forEach((pt, idx) => {
+            let isHigh = pt >= 15; 
+            htmlList += `
+                <div class="schema-item ${isHigh ? 'activated' : ''}">
+                    <span>${esquemas[idx]}</span>
+                    <strong>${pt}</strong>
+                </div>
+            `;
+        });
+        document.getElementById('text-results').innerHTML = htmlList;
+
+        // 2. Gráfico Radar
+        const ctx = document.getElementById('schemaChart').getContext('2d');
+        if(myChart) myChart.destroy();
+
+        myChart = new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: esquemas,
+                datasets: [{
+                    label: 'Pontuação',
+                    data: scores,
+                    backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                    borderColor: '#2c3e50',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#e74c3c',
+                    pointRadius: 3
+                }]
+            },
+            options: {
+                scales: {
+                    r: {
+                        angleLines: { display: true },
+                        suggestedMin: 0,
+                        suggestedMax: 30, 
+                        ticks: { stepSize: 5 }
+                    }
+                },
+                plugins: { legend: { display: false } }
+            }
+        });
+
+        document.getElementById('results-area').style.display = 'block';
+        setTimeout(() => {
+            document.getElementById('results-area').scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+    }
+</script>
+
+</body>
+</html>
