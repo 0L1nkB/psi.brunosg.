@@ -3,364 +3,533 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minhas Ferramentas | Bruno de Souza</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Meu Caderno Incrível | Autoestima</title>
     <style>
         :root {
-            /* Paleta Lúdica */
             --bg-color: #f0f8ff;
             --paper: #ffffff;
-            --primary: #6c5ce7;
-            --secondary: #00b894;
-            --accent: #fdcb6e;
+            --primary: #6c5ce7; /* Roxo */
+            --secondary: #00b894; /* Verde */
+            --accent: #fdcb6e; /* Amarelo */
             --text: #2d3436;
-            --shadow: rgba(0, 0, 0, 0.1);
+            --input-border: #b2bec3;
+            --shadow: rgba(0,0,0,0.1);
         }
 
         body {
             font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
             background-color: var(--bg-color);
-            /* Padrão de papel pontilhado */
             background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
             background-size: 20px 20px;
             margin: 0;
-            padding: 20px;
+            display: flex;
+            height: 100vh;
             color: var(--text);
+            overflow: hidden;
+        }
+
+        /* --- MENU LATERAL (LÚDICO) --- */
+        .sidebar {
+            width: 280px;
+            background-color: #fffce0; /* Amarelo clarinho */
+            border-right: 4px dashed #ffeaa7;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+            padding: 20px;
+            box-shadow: 5px 0 15px var(--shadow);
+            overflow-y: auto;
+            z-index: 10;
         }
 
-        /* --- TELA DE LOGIN (Fofa) --- */
-        #login-screen {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(108, 92, 231, 0.9); /* Roxo translúcido */
-            backdrop-filter: blur(5px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .login-box {
-            background: white;
-            padding: 40px;
-            border-radius: 25px;
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
             text-align: center;
-            box-shadow: 0 10px 0 rgba(0,0,0,0.1);
-            width: 320px;
-            border: 4px solid var(--text);
-            position: relative;
+            color: var(--primary);
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.05);
+            border-bottom: 3px solid var(--secondary);
+            padding-bottom: 15px;
         }
 
-        /* Efeito de "adesivo" no topo */
-        .login-box::before {
-            content: "🔒";
-            font-size: 3rem;
-            position: absolute;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%);
+        .menu-btn {
             background: white;
-            border-radius: 50%;
-            padding: 10px;
-            border: 4px solid var(--text);
-        }
-
-        .login-input {
-            width: 100%;
-            padding: 15px;
-            margin: 20px 0;
-            border: 2px dashed #b2bec3;
-            border-radius: 10px;
-            font-size: 1.2rem;
-            text-align: center;
-            box-sizing: border-box;
+            border: 2px solid var(--input-border);
+            color: var(--text);
+            padding: 12px 15px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 1rem;
+            border-radius: 15px;
+            margin-bottom: 10px;
             font-family: inherit;
+            font-weight: bold;
+            transition: all 0.2s;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .menu-btn:hover {
+            transform: translateX(5px);
+            border-color: var(--primary);
             color: var(--primary);
         }
 
-        .login-input:focus { outline: none; border-color: var(--primary); background: #fdf5e6; }
-
-        .btn-login {
-            background: var(--secondary);
+        .menu-btn.active {
+            background-color: var(--primary);
             color: white;
-            border: none;
-            padding: 15px 40px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-size: 1.2rem;
-            font-family: inherit;
-            font-weight: bold;
-            box-shadow: 0 5px 0 #00896f;
-            transition: transform 0.1s;
-            width: 100%;
+            border-color: var(--primary);
+            box-shadow: 0 4px 0 #4834d4;
         }
 
-        .btn-login:active { transform: translateY(5px); box-shadow: none; }
-        .error-msg { color: #d63031; display: none; margin-top: 15px; font-weight: bold; }
+        /* --- ÁREA DE CONTEÚDO (FOLHA DE PAPEL) --- */
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+            display: flex;
+            justify-content: center;
+        }
 
-
-        /* --- ÁREA PRINCIPAL --- */
-        #dashboard {
+        .page {
             display: none;
             width: 100%;
-            max-width: 1100px;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-            background: white;
-            padding: 30px;
+            max-width: 800px;
+            background: var(--paper);
+            padding: 50px;
             border-radius: 20px;
-            border: 3px solid var(--text);
-            box-shadow: 8px 8px 0 var(--shadow);
+            box-shadow: 10px 10px 0 rgba(0,0,0,0.05);
+            border: 2px solid var(--text);
             position: relative;
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-bottom: 50px;
         }
 
-        /* Decoração de Washi Tape (Fita adesiva) */
-        header::after {
+        .page.active { display: block; }
+
+        /* Decoração de Washi Tape no topo da folha */
+        .page::before {
             content: "";
             position: absolute;
             top: -15px;
             left: 50%;
             transform: translateX(-50%);
-            width: 150px;
-            height: 30px;
-            background-color: rgba(255, 234, 167, 0.8);
-            border: 1px solid rgba(0,0,0,0.05);
+            width: 120px;
+            height: 35px;
+            background-color: rgba(255, 118, 117, 0.8); /* Fita vermelha */
+            opacity: 0.8;
+            transform: translateX(-50%) rotate(-2deg);
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        h1 { margin: 0; color: var(--primary); font-size: 2.2rem; }
-        .crp { display: inline-block; background: #dfe6e9; padding: 5px 15px; border-radius: 15px; font-size: 0.9rem; margin-top: 10px; font-weight: bold; color: #636e72; }
+        h2 {
+            color: var(--primary);
+            text-align: center;
+            font-size: 2rem;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
 
-        /* TÍTULOS DAS SEÇÕES */
-        .section-label {
-            font-size: 1.5rem;
-            color: var(--text);
-            margin: 40px 0 20px 0;
+        p.intro {
+            text-align: center;
+            color: #636e72;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+
+        /* --- FORMULÁRIOS DIVERTIDOS --- */
+        label {
+            display: block;
+            margin-top: 20px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #d63031; /* Vermelho escuro */
+        }
+
+        input[type="text"], textarea, select {
+            width: 100%;
+            padding: 15px;
+            margin-top: 8px;
+            border: 2px dashed var(--input-border);
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            background: #fafafa;
+            box-sizing: border-box;
+            color: var(--primary);
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--secondary);
+            background: #f0fff4;
+        }
+
+        textarea { resize: vertical; min-height: 100px; }
+
+        /* CHECKBOXES (FORÇAS) */
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .check-item {
+            background: #f1f2f6;
+            padding: 12px;
+            border-radius: 12px;
+            cursor: pointer;
             display: flex;
             align-items: center;
             gap: 10px;
-        }
-        .section-label i { color: var(--accent); }
-
-        /* GRID DE CARTÕES */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 25px;
-        }
-
-        /* ESTILO DO CARTÃO (POST-IT / ADESIVO) */
-        .card {
-            background: white;
-            border-radius: 20px;
-            padding: 20px;
-            text-decoration: none;
-            color: var(--text);
-            border: 3px solid transparent; /* Para hover */
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 2px solid transparent;
             transition: all 0.2s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
+        }
+
+        .check-item:hover { background: #ffeaa7; border-color: #fdcb6e; }
+        
+        input[type="checkbox"] {
+            width: 20px; height: 20px; accent-color: var(--primary);
+        }
+
+        /* ZONA DE CONFORTO (Lúdica) */
+        .zone-container {
             position: relative;
-            overflow: hidden;
-        }
-
-        /* Cores de borda/fundo por categoria */
-        .cat-escala { background: #fff0f0; border-bottom: 6px solid #ff7675; }
-        .cat-baralho { background: #fffce0; border-bottom: 6px solid #fdcb6e; }
-        .cat-ludico { background: #f0f3ff; border-bottom: 6px solid #6c5ce7; }
-        .cat-ferramenta { background: #eafff8; border-bottom: 6px solid #00b894; }
-
-        .card:hover {
-            transform: translateY(-5px) rotate(1deg);
-            box-shadow: 0 15px 25px rgba(0,0,0,0.1);
-        }
-
-        .card-icon {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-            background: white;
-            width: 60px;
-            height: 60px;
+            width: 100%;
+            height: 400px;
             display: flex;
-            align-items: center;
             justify-content: center;
-            border-radius: 50%;
-            box-shadow: 0 4px 0 rgba(0,0,0,0.1);
+            align-items: center;
+            margin-top: 30px;
         }
 
-        /* Cores dos ícones */
-        .cat-escala .card-icon { color: #d63031; }
-        .cat-baralho .card-icon { color: #f39c12; }
-        .cat-ludico .card-icon { color: #6c5ce7; }
-        .cat-ferramenta .card-icon { color: #00b894; }
-
-        .card-title {
-            font-weight: 800;
-            font-size: 1.1rem;
-            margin-bottom: 5px;
+        .circle-outer {
+            width: 360px; height: 360px; border-radius: 50%;
+            background-color: #ffeaa7; /* Amarelo */
+            border: 4px dashed #fdcb6e;
+            display: flex; flex-direction: column; align-items: center; padding: 20px;
+            text-align: center; position: relative;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
         }
 
-        .card-desc {
-            font-size: 0.85rem;
-            opacity: 0.8;
-            line-height: 1.4;
+        .circle-inner {
+            width: 180px; height: 180px; border-radius: 50%;
+            background-color: #55efc4; /* Verde */
+            border: 4px solid #00b894;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            z-index: 10; padding: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
-        footer {
-            margin-top: 60px;
-            text-align: center;
-            font-size: 0.8rem;
-            opacity: 0.6;
-            padding-bottom: 20px;
+        .zone-input {
+            background: transparent; border: none; border-bottom: 2px dotted #636e72;
+            text-align: center; width: 90%; margin: 5px; font-size: 0.9rem; font-weight: bold;
+        }
+        .zone-input::placeholder { color: rgba(0,0,0,0.4); }
+
+        /* BOTÕES DE AÇÃO */
+        .btn-action {
+            background-color: var(--secondary);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            font-family: inherit;
+            cursor: pointer;
+            margin-top: 40px;
+            display: block;
+            width: 100%;
+            box-shadow: 0 6px 0 #00896f;
+            transition: transform 0.1s;
         }
 
+        .btn-action:hover { transform: translateY(-2px); }
+        .btn-action:active { transform: translateY(4px); box-shadow: none; }
+
+        .btn-suggest {
+            background: var(--accent); color: var(--text);
+            border: 2px solid var(--text);
+            border-radius: 50%; width: 35px; height: 35px;
+            font-weight: bold; cursor: pointer; margin-left: 10px;
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+        }
+        .btn-suggest:active { transform: scale(0.9); }
+
+        @keyframes popIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* RESPONSIVIDADE */
+        @media (max-width: 800px) {
+            body { flex-direction: column; overflow-y: auto; }
+            .sidebar {
+                width: 100%; height: auto; flex-direction: row;
+                overflow-x: auto; padding: 10px; border-right: none; border-bottom: 4px dashed #ffeaa7;
+            }
+            .menu-btn { white-space: nowrap; margin-right: 10px; font-size: 0.9rem; }
+            .main-content { padding: 20px; }
+            .page { padding: 25px; }
+            .zone-container { transform: scale(0.85); }
+        }
+
+        @media print {
+            body { background: white; height: auto; overflow: visible; display: block; }
+            .sidebar, .btn-action, .btn-suggest { display: none; }
+            .main-content { padding: 0; display: block; }
+            .page {
+                box-shadow: none; border: 2px solid #000; display: block !important;
+                margin-bottom: 50px; page-break-after: always; width: 100%;
+            }
+            input, textarea { border: none; border-bottom: 1px solid #000; background: none; }
+        }
     </style>
 </head>
 <body>
 
-    <div id="login-screen">
-        <div class="login-box">
-            <h2 style="margin-top: 20px;">Olá! 👋</h2>
-            <p>Qual é a palavra-chave?</p>
-            <input type="password" id="password" class="login-input" placeholder="Digite aqui...">
-            <button type="button" class="btn-login" onclick="checkLogin()">ABRIR BAÚ 🔓</button>
-            <p class="error-msg" id="error">Ops! Tente de novo.</p>
-        </div>
+    <div class="sidebar">
+        <div class="logo">📒 Caderno Incrível</div>
+        <button class="menu-btn active" onclick="showPage('p1')">1. Quem é Você?</button>
+        <button class="menu-btn" onclick="showPage('p2')">2. Eu Sou Alguém...</button>
+        <button class="menu-btn" onclick="showPage('p3')">3. Afirmações A-Z</button>
+        <button class="menu-btn" onclick="showPage('p4')">4. Minhas Forças</button>
+        <button class="menu-btn" onclick="showPage('p5')">5. Super-Herói</button>
+        <button class="menu-btn" onclick="showPage('p6')">6. Eu Sou! (Provas)</button>
+        <button class="menu-btn" onclick="showPage('p7')">7. Zona de Conforto</button>
+        <button class="menu-btn" onclick="showPage('p8')">8. Minha Autoestima</button>
     </div>
 
-    <div id="dashboard">
-        <header>
-            <h1>🧩 Minha Caixa de Ferramentas</h1>
-            <div class="crp">Psicólogo Bruno de Souza • CRP 07/44472</div>
-        </header>
+    <div class="main-content">
 
-        <div class="section-label"><i class="fa-solid fa-star"></i> Jogos e Lúdico</div>
-        <div class="grid">
-            <a href="jogo-memoria-emocoes-completo.html" class="card cat-ludico">
-                <div class="card-icon"><i class="fa-solid fa-puzzle-piece"></i></div>
-                <div class="card-title">Memória das Emoções</div>
-                <div class="card-desc">Jogo divertido com os personagens de Divertida Mente.</div>
-            </a>
-            <a href="roleta-afirmacoes.html" class="card cat-ludico">
-                <div class="card-icon"><i class="fa-solid fa-dharmachakra"></i></div>
-                <div class="card-title">Roleta de Elogios</div>
-                <div class="card-desc">Gire a roda e descubra uma qualidade sua!</div>
-            </a>
-            <a href="baralho-emocoes-completo.html" class="card cat-ludico">
-                <div class="card-icon"><i class="fa-solid fa-face-smile-wink"></i></div>
-                <div class="card-title">O que são Emoções?</div>
-                <div class="card-desc">Cartas educativas para aprender sobre o que sentimos.</div>
-            </a>
-            <a href="baralho-tdah.html" class="card cat-ludico">
-                <div class="card-icon"><i class="fa-solid fa-bolt"></i></div>
-                <div class="card-title">Cartas TDAH</div>
-                <div class="card-desc">Identificação visual de sintomas de atenção.</div>
-            </a>
+        <div id="p1" class="page active">
+            <h2>❓ Quem é você?</h2>
+            <p class="intro">Complete as frases com a primeira coisa que vier à cabeça! 💭</p>
+            
+            <label>❤️ Eu amo...</label>
+            <input type="text" placeholder="Ex: Desenhar, meus amigos...">
+            
+            <label>🚀 Eu quero...</label>
+            <input type="text" placeholder="Ex: Viajar para a Disney...">
+            
+            <label>🎯 Tenho como objetivo...</label>
+            <input type="text">
+            
+            <label>😨 Antes tinha medo de...</label>
+            <input type="text">
+            
+            <label>🌟 Sou inspirado(a) por...</label>
+            <input type="text">
+            
+            <label>😁 Fico mais feliz quando...</label>
+            <input type="text">
+            
+            <label>🙏 Acredito em...</label>
+            <input type="text">
+            
+            <label>📅 Um dia eu vou...</label>
+            <input type="text">
         </div>
 
-        <div class="section-label"><i class="fa-solid fa-layer-group"></i> Baralhos Terapêuticos</div>
-        <div class="grid">
-            <a href="caderno-autoestima.html" class="card cat-baralho">
-                <div class="card-icon"><i class="fa-solid fa-book-journal-whills"></i></div>
-                <div class="card-title">Caderno de Autoestima</div>
-                <div class="card-desc">8 atividades digitais incríveis para se conhecer melhor.</div>
-            </a>
-            <a href="baralho-autoestima.html" class="card cat-baralho">
-                <div class="card-icon"><i class="fa-solid fa-gem"></i></div>
-                <div class="card-title">Autoestima Teen</div>
-                <div class="card-desc">Baralho de perguntas para adolescentes.</div>
-            </a>
-            <a href="baralho-puxa-conversa-completo.html" class="card cat-baralho">
-                <div class="card-icon"><i class="fa-solid fa-comments"></i></div>
-                <div class="card-title">Puxa Conversa</div>
-                <div class="card-desc">Perguntas para quebrar o gelo e conversar.</div>
-            </a>
-            <a href="baralho-grid-icones.html" class="card cat-baralho">
-                <div class="card-icon"><i class="fa-solid fa-glasses"></i></div>
-                <div class="card-title">Distorções Cognitivas</div>
-                <div class="card-desc">Ferramenta para mudar pensamentos ruins.</div>
-            </a>
-            <a href="baralho-autoconhecimento.html" class="card cat-baralho">
-                <div class="card-icon"><i class="fa-solid fa-mirror"></i></div>
-                <div class="card-title">Autoconhecimento</div>
-                <div class="card-desc">Reflexões profundas sobre a vida.</div>
-            </a>
+        <div id="p2" class="page">
+            <h2>😊 Eu sou alguém que...</h2>
+            <p class="intro">Vamos descobrir mais sobre a sua personalidade!</p>
+
+            <label>Eu sou alguém que ama...</label>
+            <input type="text">
+
+            <label>Eu sou alguém que odeia...</label>
+            <input type="text">
+
+            <label>Eu sou alguém que consegue...</label>
+            <input type="text">
+
+            <label>Eu sou alguém que deseja...</label>
+            <input type="text">
+
+            <label>Eu sou alguém que nunca esquece de...</label>
+            <input type="text">
+
+            <label>Eu sou alguém que é grato(a) por...</label>
+            <input type="text">
         </div>
 
-        <div class="section-label"><i class="fa-solid fa-pen-nib"></i> Atividades e Testes</div>
-        <div class="grid">
-            <a href="diario-gratidao.html" class="card cat-ferramenta">
-                <div class="card-icon"><i class="fa-solid fa-heart"></i></div>
-                <div class="card-title">Diário de Conquistas</div>
-                <div class="card-desc">Registre o que foi bom no seu dia!</div>
-            </a>
-            <a href="termometro-autoestima.html" class="card cat-ferramenta">
-                <div class="card-icon"><i class="fa-solid fa-temperature-half"></i></div>
-                <div class="card-title">Termômetro</div>
-                <div class="card-desc">Como está sua autoestima hoje?</div>
-            </a>
-            <a href="rpd.html" class="card cat-ferramenta">
-                <div class="card-icon"><i class="fa-solid fa-pen-to-square"></i></div>
-                <div class="card-title">RPD Digital</div>
-                <div class="card-desc">Registro de pensamentos (TCC).</div>
-            </a>
-            <a href="asrs18.html" class="card cat-escala">
-                <div class="card-icon"><i class="fa-solid fa-clipboard-list"></i></div>
-                <div class="card-title">Teste TDAH (ASRS)</div>
-                <div class="card-desc">Escala de rastreio para adultos.</div>
-            </a>
-            <a href="ysq-s3-oficial.html" class="card cat-escala">
-                <div class="card-icon"><i class="fa-solid fa-list-check"></i></div>
-                <div class="card-title">Esquemas (YSQ)</div>
-                <div class="card-desc">Questionário de Esquemas de Young.</div>
-            </a>
-            <a href="bai.html" class="card cat-escala">
-                <div class="card-icon"><i class="fa-solid fa-bolt"></i></div>
-                <div class="card-title">Escala Ansiedade</div>
-                <div class="card-desc">Inventário BAI.</div>
-            </a>
-            <a href="bdi.html" class="card cat-escala">
-                <div class="card-icon"><i class="fa-solid fa-cloud-rain"></i></div>
-                <div class="card-title">Escala Depressão</div>
-                <div class="card-desc">Inventário BDI.</div>
-            </a>
+        <div id="p3" class="page">
+            <h2>🔤 Minhas Afirmações A a Z</h2>
+            <p class="intro">Uma qualidade para cada letra do seu alfabeto! (Clique na 💡 se precisar de ajuda).</p>
+            
+            <div id="az-container"></div>
         </div>
 
-        <footer>
-            Feito com carinho ❤️ • Uso exclusivo do Psi Bruno
-        </footer>
+        <div id="p4" class="page">
+            <h2>💪 Minhas Forças</h2>
+            <p class="intro">Marque todas as qualidades que você tem (vale marcar tudo!).</p>
+            
+            <div class="checkbox-grid">
+                <label class="check-item"><input type="checkbox"> Gentil</label>
+                <label class="check-item"><input type="checkbox"> Honesto</label>
+                <label class="check-item"><input type="checkbox"> Leal</label>
+                <label class="check-item"><input type="checkbox"> Criativo</label>
+                <label class="check-item"><input type="checkbox"> Corajoso</label>
+                <label class="check-item"><input type="checkbox"> Paciente</label>
+                <label class="check-item"><input type="checkbox"> Engraçado</label>
+                <label class="check-item"><input type="checkbox"> Bom Amigo</label>
+                <label class="check-item"><input type="checkbox"> Inteligente</label>
+                <label class="check-item"><input type="checkbox"> Curioso</label>
+                <label class="check-item"><input type="checkbox"> Resiliente</label>
+                <label class="check-item"><input type="checkbox"> Otimista</label>
+                <label class="check-item"><input type="checkbox"> Trabalhador</label>
+                <label class="check-item"><input type="checkbox"> Grato</label>
+            </div>
+
+            <label style="margin-top:30px">🏆 Minhas 3 principais forças são:</label>
+            <input type="text" placeholder="1. Eu sou...">
+            <input type="text" placeholder="2. Eu sou...">
+            <input type="text" placeholder="3. Eu sou...">
+        </div>
+
+        <div id="p5" class="page">
+            <h2>🦸‍♂️ Se eu fosse um Super-Herói</h2>
+            <p class="intro">Hora de usar a imaginação! Como seria sua versão heróica?</p>
+            
+            <label>Meu nome de herói seria:</label>
+            <input type="text">
+
+            <label>Meus Superpoderes:</label>
+            <div class="checkbox-grid">
+                <label class="check-item"><input type="checkbox"> Voar</label>
+                <label class="check-item"><input type="checkbox"> Invisibilidade</label>
+                <label class="check-item"><input type="checkbox"> Ler Mentes</label>
+                <label class="check-item"><input type="checkbox"> Super Força</label>
+                <label class="check-item"><input type="checkbox"> Curar Pessoas</label>
+                <label class="check-item"><input type="checkbox"> Viajar no Tempo</label>
+            </div>
+
+            <label>Minha missão principal é ajudar as pessoas sendo...</label>
+            <textarea placeholder="Ex: Corajoso, justo, rápido..."></textarea>
+        </div>
+
+        <div id="p6" class="page">
+            <h2>⭐ Eu Sou! (A Prova)</h2>
+            <p class="intro">Não basta falar, vamos provar! Escreva a qualidade e uma evidência.</p>
+
+            <div style="background: #fffce0; padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 2px dashed #ffeaa7;">
+                <strong>Exemplo:</strong><br>
+                Eu sou: <em>Corajoso</em><br>
+                Eu sei disso porque: <em>Falei na frente da turma mesmo com vergonha.</em>
+            </div>
+
+            <label>1. Eu sou:</label>
+            <input type="text">
+            <label>Eu sei disso porque:</label>
+            <input type="text">
+            <hr style="border-top: 2px dashed #ccc; margin: 20px 0;">
+            
+            <label>2. Eu sou:</label>
+            <input type="text">
+            <label>Eu sei disso porque:</label>
+            <input type="text">
+            <hr style="border-top: 2px dashed #ccc; margin: 20px 0;">
+
+            <label>3. Eu sou:</label>
+            <input type="text">
+            <label>Eu sei disso porque:</label>
+            <input type="text">
+        </div>
+
+        <div id="p7" class="page">
+            <h2>🚧 Saindo da Zona de Conforto</h2>
+            <p class="intro">
+                <strong>Verde:</strong> O que eu já faço fácil.<br>
+                <strong>Amarelo:</strong> Desafios novos que quero tentar!
+            </p>
+
+            <div class="zone-container">
+                <div class="circle-outer">
+                    <strong style="color: #d35400;">FORA DA ZONA (Desafios)</strong>
+                    <input class="zone-input" placeholder="Novo desafio 1">
+                    <input class="zone-input" placeholder="Novo desafio 2">
+                    <input class="zone-input" placeholder="Novo desafio 3">
+                    
+                    <div class="circle-inner">
+                        <strong style="color: #2d3436;">ZONA DE CONFORTO</strong>
+                        <input class="zone-input" placeholder="O que já faço bem">
+                        <input class="zone-input" placeholder="Onde me sinto seguro">
+                    </div>
+                </div>
+            </div>
+            
+            <label>Como eu me sinto quando tento algo novo?</label>
+            <textarea></textarea>
+        </div>
+
+        <div id="p8" class="page">
+            <h2>💖 Minha Autoestima</h2>
+            <p class="intro">Vamos fechar com chave de ouro, valorizando quem você é!</p>
+            
+            <label>O que é único em mim?</label>
+            <textarea></textarea>
+
+            <label>O que eu amo em mim?</label>
+            <textarea></textarea>
+
+            <label>5 coisas que me fazem sentir orgulho de mim:</label>
+            <textarea placeholder="1... 2... 3... 4... 5..."></textarea>
+
+            <label>5 boas qualidades que estou desenvolvendo:</label>
+            <textarea placeholder="Estou aprendendo a ser..."></textarea>
+        </div>
+
+        <button class="btn-action" onclick="window.print()">🖨️ IMPRIMIR MEU CADERNO (PDF)</button>
+
     </div>
 
     <script>
-        const SENHA_CORRETA = "psi123"; // SENHA AQUI
-
-        function checkLogin() {
-            var input = document.getElementById('password');
-            var error = document.getElementById('error');
+        // Lógica de Abas
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
             
-            if (input.value === SENHA_CORRETA) {
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('dashboard').style.display = 'block';
-            } else {
-                error.style.display = 'block';
-                input.value = '';
-                input.focus();
-            }
+            document.getElementById(pageId).classList.add('active');
+            event.target.classList.add('active');
         }
 
-        document.getElementById('password').addEventListener("keypress", function(e) {
-            if (e.key === "Enter") checkLogin();
+        // Gerador A-Z
+        const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+        const suggestions = {
+            'A': 'Amigável', 'B': 'Bondoso', 'C': 'Corajoso', 'D': 'Dedicado',
+            'E': 'Especial', 'F': 'Feliz', 'G': 'Gentil', 'H': 'Honesto',
+            'I': 'Inteligente', 'J': 'Justo', 'K': 'Kawaii (Fofo)', 'L': 'Leal',
+            'M': 'Maravilhoso', 'N': 'Notável', 'O': 'Otimista', 'P': 'Paciente',
+            'Q': 'Querido', 'R': 'Resiliente', 'S': 'Sincero', 'T': 'Talentoso',
+            'U': 'Único', 'V': 'Valente', 'W': 'Wow', 'X': 'Xodó', 'Y': 'Yes', 'Z': 'Zeloso'
+        };
+
+        const azContainer = document.getElementById('az-container');
+        
+        alphabet.forEach(letter => {
+            const div = document.createElement('div');
+            div.style.marginBottom = "12px";
+            div.innerHTML = `
+                <div style="display:flex; align-items:center;">
+                    <strong style="width:30px; font-size:1.4rem; color:var(--primary);">${letter}</strong>
+                    <input type="text" id="input-${letter}" placeholder="Eu sou...">
+                    <button class="btn-suggest" onclick="fillSuggestion('${letter}')" title="Dica">💡</button>
+                </div>
+            `;
+            azContainer.appendChild(div);
         });
+
+        function fillSuggestion(letter) {
+            const input = document.getElementById(`input-${letter}`);
+            if(input.value === "") input.value = suggestions[letter] || "";
+            else alert("Sugestão: " + suggestions[letter]);
+        }
     </script>
 
 </body>
