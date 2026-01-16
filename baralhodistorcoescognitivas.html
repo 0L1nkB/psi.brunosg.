@@ -3,135 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Baralho das Distorções | Bruno de Souza</title>
+    <title>Mesa de Distorções | Bruno de Souza</title>
     <style>
         :root {
-            --primary: #e67e22; /* Laranja do PDF */
-            --secondary: #f1c40f; /* Amarelo do PDF */
+            --primary: #e67e22; /* Laranja */
+            --secondary: #f1c40f; /* Amarelo */
             --dark: #2c3e50;
             --light: #ecf0f1;
             --text: #34495e;
+            --bg-cards: #fff3e0;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #fdf5e6; /* Fundo creme suave */
+            background-color: #fcf3cf; 
+            margin: 0;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
         }
 
         header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
 
-        h1 { color: var(--primary); margin: 0; font-size: 1.5rem; }
-        .subtitle { font-size: 0.9rem; color: #7f8c8d; }
+        h1 { color: var(--primary); margin: 0; text-transform: uppercase; letter-spacing: 1px; }
+        .subtitle { color: #7f8c8d; font-size: 0.9rem; margin-top: 5px; }
 
-        /* CONTROLE DO BARALHO */
+        /* BOTÃO SORTEAR */
         .controls {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+            margin-bottom: 30px;
         }
 
-        button {
-            padding: 10px 20px;
+        .btn-sortear {
+            background-color: var(--dark);
+            color: white;
+            padding: 15px 40px;
+            font-size: 1.2rem;
             border: none;
-            border-radius: 25px;
+            border-radius: 50px;
             cursor: pointer;
-            font-weight: bold;
-            font-size: 1rem;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.2s, background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .btn-nav { background-color: var(--dark); color: white; }
-        .btn-random { background-color: var(--primary); color: white; }
-        
-        button:active { transform: scale(0.95); }
+        .btn-sortear:hover { transform: scale(1.05); background-color: #34495e; }
+        .btn-sortear:active { transform: scale(0.95); }
 
-        /* CENA 3D PARA O FLIP */
-        .scene {
-            width: 300px;
-            height: 450px;
+        /* GRID */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            width: 100%;
+            max-width: 1200px;
+            padding-bottom: 50px;
+        }
+
+        /* CARTA */
+        .card-container {
+            height: 400px; 
             perspective: 1000px;
-            margin-bottom: 20px;
-        }
-
-        .card {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transition: transform 0.8s;
-            transform-style: preserve-3d;
             cursor: pointer;
+            position: relative;
         }
 
-        .card.is-flipped {
-            transform: rotateY(180deg);
-        }
-
-        /* FACES DA CARTA */
-        .card-face {
+        /* CAPA (LARANJA) */
+        .card-cover {
             position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, #d35400 100%);
             border-radius: 15px;
-            padding: 20px;
-            box-sizing: border-box;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
             display: flex;
             flex-direction: column;
             justify-content: center;
-            border: 8px solid white;
+            align-items: center;
+            color: white;
+            z-index: 10;
+            transition: opacity 0.4s, transform 0.4s;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+            border: 4px solid white;
         }
 
-        /* FRENTE (DEFINIÇÃO) */
-        .card-front {
-            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+        .cover-icon { font-size: 5rem; margin-bottom: 10px; filter: drop-shadow(0 4px 4px rgba(0,0,0,0.2)); }
+        .cover-text { font-weight: bold; text-transform: uppercase; font-size: 1.1rem; opacity: 0.9; text-align: center; padding: 0 10px; }
+
+        .card-container.active .card-cover {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(1.1);
+        }
+
+        /* MIOLO */
+        .card-inner {
+            position: relative;
+            width: 100%; height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .card-container.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%; height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border: 4px solid white;
+        }
+
+        .face-front {
+            background-color: var(--bg-cards);
             color: var(--text);
             transform: rotateY(0deg);
         }
 
-        /* VERSO (INTERVENÇÃO) */
-        .card-back {
-            background: var(--dark);
+        .face-back {
+            background-color: var(--dark);
             color: white;
             transform: rotateY(180deg);
         }
 
-        /* TIPOGRAFIA DA CARTA */
-        .card-number {
-            position: absolute;
-            top: 10px;
-            left: 15px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: var(--primary);
-            opacity: 0.7;
-        }
-        
         .card-title {
-            font-size: 1.4rem;
-            text-align: center;
-            margin-bottom: 15px;
-            color: var(--primary);
-            text-transform: uppercase;
+            font-size: 1.3rem;
             font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 15px;
+            text-transform: uppercase;
         }
 
+        .face-back .card-title { color: var(--secondary); }
+
         .card-content {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             line-height: 1.5;
-            text-align: center;
+            text-align: justify;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
@@ -139,36 +163,42 @@
         }
 
         .section-label {
-            font-weight: bold;
-            margin-top: 10px;
-            color: #d35400;
             display: block;
-            font-size: 0.8rem;
+            font-weight: bold;
+            font-size: 0.75rem;
+            color: #d35400;
+            margin-top: 10px;
+            text-align: left;
         }
-
-        .card-back .section-label { color: #f1c40f; }
+        
+        .face-back .section-label { color: #f1c40f; }
 
         .examples {
-            font-style: italic;
-            background: rgba(255,255,255,0.5);
+            background: rgba(255,255,255,0.6);
             padding: 8px;
-            border-radius: 8px;
-            margin-top: 10px;
+            border-radius: 6px;
+            font-style: italic;
             font-size: 0.85rem;
+            margin-top: 5px;
+            text-align: left;
         }
 
-        .tap-hint {
-            text-align: center;
-            font-size: 0.8rem;
-            color: #999;
+        .hint {
+            font-size: 0.7rem;
+            opacity: 0.6;
             margin-top: 10px;
-            animation: pulse 2s infinite;
+            text-align: center;
         }
 
-        @keyframes pulse {
-            0% { opacity: 0.5; }
-            50% { opacity: 1; }
-            100% { opacity: 0.5; }
+        .highlight-effect {
+            animation: popUp 0.5s ease-out;
+            box-shadow: 0 0 20px var(--primary);
+        }
+
+        @keyframes popUp {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
 
     </style>
@@ -176,223 +206,204 @@
 <body>
 
     <header>
-        <h1>Baralho das Distorções</h1>
-        <div class="subtitle">Recurso Terapêutico Digital</div>
+        <h1>Mesa de Distorções</h1>
+        <div class="subtitle">Toque na carta para revelar</div>
     </header>
 
     <div class="controls">
-        <button class="btn-nav" onclick="prevCard()">❮ Anterior</button>
-        <button class="btn-random" onclick="randomCard()">🎲 Sortear</button>
-        <button class="btn-nav" onclick="nextCard()">Próxima ❯</button>
+        <button class="btn-sortear" onclick="sortearCarta()">🎲 Sortear Carta</button>
     </div>
 
-    <div class="scene">
-        <div class="card" onclick="flipCard()">
-            <div class="card-face card-front">
-                <div class="card-number" id="c-num">01</div>
-                <div class="card-title" id="c-title">Catastrofização</div>
-                <div class="card-content">
-                    <span class="section-label">DEFINIÇÃO:</span>
-                    <span id="c-def">Pensar que o pior de uma situação irá acontecer, sem levar em consideração outras possibilidades.</span>
-                    
-                    <span class="section-label">EXEMPLOS:</span>
-                    <div class="examples" id="c-ex">"Vai dar tudo errado", "Meu filho não chegou, deve ter acontecido algo ruim".</div>
-                </div>
-                <div style="text-align: center; margin-top: 10px; font-size: 0.7rem; color: #999;">Toque para ver a intervenção ↻</div>
-            </div>
-
-            <div class="card-face card-back">
-                <div class="card-title" style="color: #f1c40f;">Reestruturação</div>
-                <div class="card-content">
-                    <span class="section-label">ADAPTANDO O PENSAMENTO:</span>
-                    <p id="c-adapt">Considere todas as possibilidades. Pergunte a si mesmo: O que mais pode acontecer? Que outras possibilidades não estou considerando?</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="tap-hint">Toque na carta para virar</div>
+    <div class="grid-container" id="grid"></div>
 
     <script>
-        // BANCO DE DADOS DAS CARTAS (Extraído do PDF)
+        // DADOS COM ÍCONES TEMÁTICOS
         const cardsData = [
             {
-                id: "01",
+                icon: "🌋", // Vulcão (Explosão/Desastre)
                 title: "Catastrofização",
-                def: "Pensar que o pior de uma situação irá acontecer, sem levar em consideração a possibilidade de outros desfechos. Acreditar que um acontecimento é terrível e insuportável.",
-                ex: "\"Vai dar tudo errado\"; \"Meu filho ainda não chegou, deve ter acontecido algo ruim\"; \"Vou ser reprovado\".",
-                adapt: "Considere todas as possibilidades. Pergunte a si mesmo: O que mais pode acontecer? Que outras possibilidades não estou considerando?"
+                def: "Pensar que o pior de uma situação irá acontecer, sem levar em consideração a possibilidade de outros desfechos.",
+                ex: "\"Vai dar tudo errado\"; \"Meu filho ainda não chegou, deve ter acontecido algo ruim\".",
+                adapt: "Considere todas as possibilidades. O que mais pode acontecer? Que outras possibilidades não estou considerando?"
             },
             {
-                id: "02",
+                icon: "🧠", // Cérebro (Lendo mente)
                 title: "Leitura Mental",
                 def: "Achar que sabe o que os outros pensam, sem ter evidências.",
-                ex: "\"As pessoas me acham esquisita\"; \"Ele está pensando que falhei e que não sei fazer meu trabalho\".",
-                adapt: "Pergunte a si mesmo: \"Tenho realmente o poder de saber o que o outro está pensando sem que ele fale?\" Não! Peça esclarecimento e pare de adivinhar."
+                ex: "\"As pessoas me acham esquisita\"; \"Ele está pensando que falhei\".",
+                adapt: "Tenho realmente o poder de saber o que o outro pensa? Não! Peça esclarecimento e pare de adivinhar."
             },
             {
-                id: "03",
+                icon: "🔮", // Bola de Cristal
                 title: "Previsão do Futuro",
                 def: "Fazer previsões somente negativas para o futuro, prever problemas que acabam por não acontecer.",
-                ex: "\"Vai dar tudo errado\"; \"Eu não vou gostar da viagem\"; \"O trabalho que eu fiz não será aprovado\".",
-                adapt: "Atente-se aos fatos. Pergunte: \"Que fatos comprovam que minha conclusão é verídica?\". Compare os fatos para ver se sua suposição está correta."
+                ex: "\"Vai dar tudo errado\"; \"Eu não vou gostar da viagem\".",
+                adapt: "Que fatos comprovam que minha conclusão é verídica? Compare os fatos com a suposição."
             },
             {
-                id: "04",
+                icon: "🎢", // Montanha Russa (Emoções)
                 title: "Raciocínio Emocional",
-                def: "Acreditar que os sentimentos são fatos. É quando as emoções \"obscurecem\" os pensamentos.",
+                def: "Acreditar que os sentimentos são fatos. Quando as emoções \"obscurecem\" os pensamentos.",
                 ex: "\"Estou deprimida, por isso não consigo emagrecer\"; \"Sinto que não devo acreditar nele\".",
-                adapt: "Pense racionalmente. Pergunte: \"Quais as evidências de que meus julgamentos são 100% verdadeiros? Existe alguma outra explicação para o que estou sentindo?\""
+                adapt: "Quais as evidências de que meus julgamentos são fatos? Existe outra explicação para o que estou sentindo?"
             },
             {
-                id: "05",
+                icon: "🏷️", // Etiqueta
                 title: "Rotulação",
-                def: "Colocar um rótulo global e rígido em si mesmo, numa pessoa ou situação, em vez de rotular o comportamento específico.",
-                ex: "\"Sou incompetente\"; \"Ele é uma pessoa má\"; \"Sou infeliz\".",
-                adapt: "Lembre-se: rótulos foram feitos para objetos, não pessoas. As pessoas são dinâmicas. Pergunte: \"Estou sendo justo comigo ou com a situação?\""
+                def: "Colocar um rótulo global e rígido em si mesmo ou nos outros, em vez de rotular o comportamento.",
+                ex: "\"Sou incompetente\"; \"Ele é uma pessoa má\".",
+                adapt: "Rótulos são para objetos. Pessoas são dinâmicas. Estou sendo justo comigo ou com a situação?"
             },
             {
-                id: "06",
+                icon: "🕶️", // Óculos Escuros (Filtro)
                 title: "Filtro Mental Negativo",
                 def: "Enxergar somente a parte negativa da pessoa ou situação, ignorando o resto.",
-                ex: "\"Tirei uma boa nota mas isto não conta porque a prova foi fácil\"; \"Foi apenas sorte\".",
-                adapt: "Expanda seu foco! Pergunte: \"O que eu não estou considerando? O que está indo bem? O que está acontecendo que estou de acordo?\""
+                ex: "\"Tirei uma boa nota mas isto não conta porque a prova foi fácil\".",
+                adapt: "Expanda seu foco! O que eu não estou considerando? O que está indo bem?"
             },
             {
-                id: "07",
+                icon: "🚮", // Lixeira (Descartando o bom)
                 title: "Desqualificar o Positivo",
                 def: "Menosprezar aspectos positivos de si ou dos outros, insistindo que eles não contam.",
-                ex: "\"O sucesso obtido naquela tarefa não importa, foi fácil\"; \"Eles estão elogiando meu trabalho porque estão com pena\".",
-                adapt: "Coloque em perspectiva: \"Minha opinião está 100% acurada? Que outros aspectos não estou olhando? O que eu fiz que mereço parabéns?\""
+                ex: "\"O sucesso obtido naquela tarefa não importa, foi fácil\".",
+                adapt: "Minha opinião está 100% acurada? O que eu fiz que merece parabéns?"
             },
             {
-                id: "08",
+                icon: "🌍", // Globo (Tudo/Mundo)
                 title: "Supergeneralização",
                 def: "Criar um padrão global negativo baseando-se em um único evento.",
-                ex: "\"Eu nunca vou conseguir emagrecer\"; \"Isto sempre acontece comigo\"; \"Falho em tudo que tento\".",
-                adapt: "Seja específico! Evite termos como 'tudo', 'sempre', 'nunca'. Pergunte: \"É mesmo tão ruim quanto estou pensando?\""
+                ex: "\"Eu nunca vou conseguir\"; \"Isto sempre acontece comigo\".",
+                adapt: "Evite termos como 'tudo', 'sempre'. É mesmo tão ruim quanto estou pensando agora?"
             },
             {
-                id: "09",
+                icon: "☝️", // Dedo apontando (Cobrança)
                 title: "Afirmação \"Deveria\"",
-                def: "Enfatizar como as coisas deveriam ser em vez de perceber o que são. Forte autocobrança e padrões inflexíveis.",
-                ex: "\"Eu deveria me sair bem, caso contrário serei um fracasso\"; \"Eu tenho que brincar com meus filhos\".",
-                adapt: "Foque no presente. Busque reter seus ideais e preferências, mas abandone as exigências rígidas. Troque 'deveria' por 'gostaria'."
+                def: "Enfatizar como as coisas deveriam ser. Forte autocobrança e padrões inflexíveis.",
+                ex: "\"Eu deveria me sair bem, caso contrário serei um fracasso\".",
+                adapt: "Busque reter ideais, mas abandone exigências rígidas. Troque 'deveria' por 'gostaria'."
             },
             {
-                id: "10",
+                icon: "❓", // Interrogação
                 title: "E se...?",
-                def: "Fazer uma série de perguntas do tipo \"E se...\" sobre coisas ruins, gerando ansiedade, nunca ficando satisfeito com a resposta.",
-                ex: "\"E se eu cair?\"; \"E se eu perder o emprego?\"; \"E se eu ficar ansiosa?\".",
-                adapt: "Foque no presente. O 'E se' paralisa. Pergunte: \"O que eu aprendi com o passado? Tenho capacidade de resolver se acontecer?\""
+                def: "Fazer uma série de perguntas do tipo \"E se...\" sobre coisas ruins, gerando ansiedade.",
+                ex: "\"E se eu cair?\"; \"E se eu perder o emprego?\".",
+                adapt: "O 'E se' paralisa. Foque no presente: Tenho capacidade de resolver se acontecer?"
             },
             {
-                id: "11",
                 title: "Tudo ou Nada",
-                def: "Pensamento dicotômico. Avaliar fatos em extremos: 8 ou 80, preto ou branco, sem meio termo.",
-                ex: "\"Comi mais do que deveria, estraguei toda a dieta\"; \"Minha vida era perfeita, agora é um desastre\".",
-                adapt: "Enxergue os pontos intermediários (a zona cinza). Pergunte: \"As coisas são realmente 100% boas ou ruins?\" Elogie-se pelos pequenos esforços."
+                icon: "🌗", // Meia lua (Preto no Branco)
+                def: "Pensamento dicotômico. Avaliar fatos em extremos: 8 ou 80, sem meio termo.",
+                ex: "\"Comi mais do que deveria, estraguei toda a dieta\".",
+                adapt: "Enxergue os pontos intermediários (a zona cinza). As coisas são realmente 100% ruins?"
             },
             {
-                id: "12",
+                icon: "🤕", // Pessoa machucada
                 title: "Vitimização",
-                def: "Considerar somente outra pessoa como fonte de suas emoções negativas. Recusa-se a assumir responsabilidade.",
-                ex: "\"Estou me sentindo mal por culpa dele\"; \"Meus pais causaram todos os meus problemas\".",
-                adapt: "Você é responsável por você. Foque no que VOCÊ pode fazer hoje. Assuma a responsabilidade pela sua reação aos fatos."
+                def: "Considerar somente outra pessoa como fonte de suas emoções negativas.",
+                ex: "\"Estou me sentindo mal por culpa dele\".",
+                adapt: "Você é responsável por suas reações. O que VOCÊ pode fazer hoje sobre isso?"
             },
             {
-                id: "13",
+                icon: "🙉", // Não quer ouvir
                 title: "Incapacidade de Refutar",
                 def: "Rejeitar qualquer evidência ou argumento que possa contradizer seus pensamentos negativos.",
                 ex: "\"Não sou digna de amor\" (mesmo com pessoas demonstrando afeto).",
-                adapt: "Se fosse um amigo pensando assim, o que você diria? Se você considerar as evidências, o que muda na sua vida?"
+                adapt: "Se fosse um amigo pensando assim, o que você diria? Considere as evidências reais."
             },
             {
-                id: "14",
+                icon: "🫵", // Apontando para você
                 title: "Personalização",
                 def: "Atribuir somente a si a culpa por fatos negativos, mesmo sem ter controle sobre eles.",
-                ex: "\"Meu amigo não conseguiu emprego porque eu não ajudei o suficiente\"; \"É tudo culpa minha\".",
-                adapt: "Equilibre as responsabilidades. Pergunte: \"Sou mesmo 100% responsável? Quem mais é, pelo menos parcialmente, responsável?\""
+                ex: "\"Meu amigo não conseguiu emprego porque eu não ajudei o suficiente\".",
+                adapt: "Equilibre as responsabilidades. Sou mesmo 100% responsável por isso?"
             },
             {
-                id: "15",
+                icon: "⚖️", // Balança
                 title: "Foco no Julgamento",
-                def: "Avaliar a si, os outros e eventos em termos de bom/mau ou superior/inferior, em vez de aceitar e compreender.",
-                ex: "\"Não tive um bom desempenho\"; \"Ninguém me entende\"; \"Vou me sair mal\".",
-                adapt: "Livre-se dos julgamentos. Aceite que ninguém é igual. Aproveite o momento sem determinar como as coisas 'deveriam' ser."
+                def: "Avaliar a si e os outros em termos de bom/mau ou superior/inferior.",
+                ex: "\"Não tive um bom desempenho\"; \"Ninguém me entende\".",
+                adapt: "Livre-se dos julgamentos. Aceite que ninguém é igual e aproveite o momento."
             },
             {
-                id: "16",
+                icon: "📏", // Régua
                 title: "Comparações Injustas",
                 def: "Comparar sua vida com a de outros de forma irreal, sem avaliar os caminhos diferentes.",
-                ex: "\"Ela é mais bem sucedida que eu\"; \"A grama do vizinho é mais verde\".",
-                adapt: "Toda comparação é injusta. Avalie seu próprio caminho: \"O que EU já conquistei?\". Sua jornada é única."
+                ex: "\"Ela é mais bem sucedida que eu\".",
+                adapt: "Toda comparação é injusta. O que EU já conquistei? Minha jornada é única."
             },
             {
-                id: "18",
+                icon: "🕰️", // Relógio/Passado
                 title: "Lamentação",
                 def: "Focar na ideia de que poderia ter sido melhor no passado, em vez de focar no presente.",
                 ex: "\"Como seria minha vida se eu tivesse feito outras escolhas...\".",
-                adapt: "Foque no presente! O que passou, passou. O que você pode fazer para ser melhor AGORA? Admire o processo."
+                adapt: "O que passou, passou. O que você pode fazer para ser melhor AGORA?"
             }
         ];
 
-        let currentIndex = 0;
-        const cardElement = document.querySelector('.card');
-        
-        // ELEMENTOS DO DOM
-        const elNum = document.getElementById('c-num');
-        const elTitle = document.getElementById('c-title');
-        const elDef = document.getElementById('c-def');
-        const elEx = document.getElementById('c-ex');
-        const elAdapt = document.getElementById('c-adapt');
+        const grid = document.getElementById('grid');
 
-        function renderCard(index) {
-            const data = cardsData[index];
+        // Renderizar Cartas
+        cardsData.forEach((data, index) => {
+            const cardHTML = `
+                <div class="card-container" id="card-${index}" onclick="interactCard(${index})">
+                    <div class="card-cover">
+                        <div class="cover-icon">${data.icon}</div>
+                        <div class="cover-text">${data.title}</div>
+                    </div>
+
+                    <div class="card-inner">
+                        <div class="card-face face-front">
+                            <div class="card-title">${data.title}</div>
+                            <div class="card-content">
+                                <span class="section-label">DEFINIÇÃO:</span>
+                                <span>${data.def}</span>
+                                <span class="section-label">EXEMPLOS:</span>
+                                <div class="examples">${data.ex}</div>
+                            </div>
+                            <div class="hint">Toque para ver a intervenção ↻</div>
+                        </div>
+
+                        <div class="card-face face-back">
+                            <div class="card-title">Reestruturação</div>
+                            <div class="card-content">
+                                <span class="section-label">ADAPTANDO O PENSAMENTO:</span>
+                                <span>${data.adapt}</span>
+                            </div>
+                            <div class="hint">Toque para voltar</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            grid.insertAdjacentHTML('beforeend', cardHTML);
+        });
+
+        function interactCard(index) {
+            const card = document.getElementById(`card-${index}`);
             
-            // Se a carta estiver virada, desvirar primeiro
-            if (cardElement.classList.contains('is-flipped')) {
-                cardElement.classList.remove('is-flipped');
-                // Espera a animação para trocar o texto (300ms)
-                setTimeout(() => updateText(data), 300);
+            if (!card.classList.contains('active')) {
+                card.classList.add('active'); // Abre a carta (some a capa)
             } else {
-                updateText(data);
+                card.classList.toggle('flipped'); // Vira frente/verso
             }
         }
 
-        function updateText(data) {
-            elNum.innerText = data.id;
-            elTitle.innerText = data.title;
-            elDef.innerText = data.def;
-            elEx.innerText = data.ex;
-            elAdapt.innerText = data.adapt;
-        }
+        function sortearCarta() {
+            // Reset
+            document.querySelectorAll('.card-container').forEach(c => {
+                c.classList.remove('active', 'flipped', 'highlight-effect');
+            });
 
-        function flipCard() {
-            cardElement.classList.toggle('is-flipped');
-        }
+            // Sorteio
+            const randomIndex = Math.floor(Math.random() * cardsData.length);
+            const selectedCard = document.getElementById(`card-${randomIndex}`);
 
-        function nextCard() {
-            currentIndex = (currentIndex + 1) % cardsData.length;
-            renderCard(currentIndex);
+            selectedCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            setTimeout(() => {
+                selectedCard.classList.add('highlight-effect');
+                selectedCard.classList.add('active');
+            }, 600);
         }
-
-        function prevCard() {
-            currentIndex = (currentIndex - 1 + cardsData.length) % cardsData.length;
-            renderCard(currentIndex);
-        }
-
-        function randomCard() {
-            let newIndex;
-            do {
-                newIndex = Math.floor(Math.random() * cardsData.length);
-            } while (newIndex === currentIndex);
-            currentIndex = newIndex;
-            renderCard(currentIndex);
-        }
-
-        // Inicializar
-        renderCard(0);
 
     </script>
 
