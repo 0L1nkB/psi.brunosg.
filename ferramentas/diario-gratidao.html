@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Diário de Conquistas</title>
+    <style>
+        :root {
+            --paper: #fff;
+            --lines: #a29bfe;
+            --bg: #74b9ff;
+            --text: #2d3436;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+            background-color: var(--bg);
+            background-image: radial-gradient(#fff 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0;
+            padding: 20px;
+            color: var(--text);
+        }
+
+        .diary-page {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--paper);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 10px 10px 0 rgba(0,0,0,0.1);
+            position: relative;
+            /* Efeito de caderno */
+            border-left: 15px solid #fd79a8;
+        }
+
+        h1 {
+            text-align: center;
+            color: #6c5ce7;
+            text-decoration: underline wavy #fab1a0;
+            margin-bottom: 30px;
+        }
+
+        .prompt-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #e17055;
+        }
+
+        textarea {
+            width: 100%;
+            height: 60px;
+            border: 2px dashed var(--lines);
+            border-radius: 10px;
+            padding: 10px;
+            font-family: inherit;
+            font-size: 1.1rem;
+            resize: vertical;
+            background-color: #f8f9fa;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #6c5ce7;
+            background-color: #fff;
+        }
+
+        .date-section {
+            text-align: right;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #636e72;
+        }
+
+        /* BOTÃO DE IMPRESSÃO */
+        .btn-save {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #00b894;
+            color: white;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 30px;
+            box-shadow: 0 5px 0 #00896f;
+            transition: transform 0.1s;
+        }
+
+        .btn-save:hover { transform: translateY(-2px); }
+        .btn-save:active { transform: translateY(4px); box-shadow: none; }
+
+        /* ESTILO APENAS PARA IMPRESSÃO (PDF) */
+        @media print {
+            body { background: white; padding: 0; }
+            .diary-page { box-shadow: none; border: 2px solid #000; width: 100%; max-width: 100%; }
+            .btn-save { display: none; } /* Esconde o botão no papel */
+            textarea { border: none; border-bottom: 1px solid #000; resize: none; height: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="diary-page">
+        <h1>🌟 Meu Diário de Conquistas 🌟</h1>
+        
+        <div class="date-section">
+            Data: <script>document.write(new Date().toLocaleDateString())</script>
+        </div>
+
+        <div class="prompt-group">
+            <label>🤩 Hoje eu me diverti quando...</label>
+            <textarea placeholder="Escreva aqui..."></textarea>
+        </div>
+
+        <div class="prompt-group">
+            <label>💪 Uma coisa difícil que eu consegui fazer...</label>
+            <textarea placeholder="Você é forte! Conte aqui..."></textarea>
+        </div>
+
+        <div class="prompt-group">
+            <label>🧠 Algo novo que eu aprendi hoje...</label>
+            <textarea placeholder="Pode ser na escola ou na vida..."></textarea>
+        </div>
+
+        <div class="prompt-group">
+            <label>❤️ Eu ajudei alguém quando...</label>
+            <textarea placeholder="Ser gentil é um superpoder..."></textarea>
+        </div>
+
+        <div class="prompt-group">
+            <label>🏆 O que me deixou orgulhoso de mim mesmo?</label>
+            <textarea placeholder="Parabéns pra você!"></textarea>
+        </div>
+
+        <div class="prompt-group">
+            <label>🙏 Sou grato(a) por...</label>
+            <textarea placeholder="Família, brinquedo, comida gostosa..."></textarea>
+        </div>
+
+        <button class="btn-save" onclick="window.print()">🖨️ Salvar no Meu Caderno (PDF)</button>
+    </div>
+
+</body>
+</html>
