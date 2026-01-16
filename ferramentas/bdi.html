@@ -3,139 +3,427 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BDI - Depressão | Bruno de Souza</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>BDI - Escala de Humor | Caderno Incrível</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Mesmos estilos para consistência */
-        :root { --primary: #2c3e50; --green: #2ecc71; --yellow: #f1c40f; --orange: #e67e22; --red: #e74c3c; --bg: #f4f7f6; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #333; padding: 20px; }
-        .container { max-width: 800px; margin: 0 auto; background: white; padding: 40px; border-radius: 12px; }
-        header { text-align: center; border-bottom: 2px solid var(--primary); margin-bottom: 30px; padding-bottom: 20px;}
-        .item-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; }
-        .item-row:nth-child(even) { background: #fafafa; }
-        select { padding: 8px; border: 1px solid #ccc; width: 200px; }
-        button { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; margin-top: 20px; font-size: 1.1rem;}
-        
-        #result-area { display: none; margin-top: 30px; text-align: center; }
-        .score-display { font-size: 2.5rem; font-weight: bold; color: var(--primary); }
-        .classification { font-size: 1.5rem; font-weight: 500; margin-bottom: 20px; }
+        :root {
+            /* Paleta Lúdica */
+            --bg-color: #f0f8ff;
+            --paper: #ffffff;
+            --primary: #0984e3; /* Azul (Tema Humor/Depressão) */
+            --secondary: #00cec9; /* Turquesa */
+            --accent: #fdcb6e; /* Amarelo */
+            --text: #2d3436;
+            --option-hover: #dfe6e9;
+            --shadow: rgba(0,0,0,0.1);
+        }
 
+        body {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0;
+            padding: 20px;
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: var(--paper);
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 10px 10px 0 var(--shadow);
+            border: 3px solid var(--text);
+            position: relative;
+        }
+
+        /* CABEÇALHO COM FITA AZUL */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        header::before {
+            content: ""; position: absolute; top: -55px; left: 50%; transform: translateX(-50%) rotate(1deg);
+            width: 180px; height: 40px; background-color: rgba(116, 185, 255, 0.8);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        h1 { margin: 0; color: var(--primary); font-size: 2.2rem; text-transform: uppercase; }
+        .instruction { font-size: 1.1rem; color: #636e72; margin-top: 15px; line-height: 1.5; }
+
+        /* GRUPO DE PERGUNTAS */
+        .question-group {
+            background: #fff;
+            margin-bottom: 30px;
+            padding: 25px;
+            border-radius: 20px;
+            border: 2px dashed #b2bec3;
+            position: relative;
+            /* Fundo de papel pautado sutil */
+            background-image: linear-gradient(#f5f6fa 1px, transparent 1px);
+            background-size: 100% 30px;
+        }
+
+        .group-number {
+            position: absolute;
+            top: -15px; left: 20px;
+            background: var(--accent);
+            color: var(--text);
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-weight: bold;
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+            transform: rotate(-2deg);
+        }
+
+        /* OPÇÕES DE RESPOSTA (Lista Vertical) */
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center; /* Alinha o texto verticalmente com o rádio */
+            background: rgba(255,255,255,0.8);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 12px 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1rem;
+            line-height: 1.4;
+        }
+
+        /* Esconder o input original */
+        .option-label input { margin-right: 15px; accent-color: var(--primary); transform: scale(1.2); }
+
+        /* Estilo quando selecionado */
+        .option-label:has(input:checked) {
+            background-color: #e3f2fd;
+            border-color: var(--primary);
+            color: var(--primary);
+            font-weight: bold;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.05);
+        }
+
+        .option-label:hover:not(:has(input:checked)) { background-color: #f1f2f6; }
+
+        /* RODAPÉ E RESULTADO */
+        .result-box {
+            margin-top: 40px;
+            background: #fdf5e6; /* Papel antigo */
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            border: 3px solid var(--accent);
+            display: none;
+        }
+
+        .score-display { font-size: 3rem; color: var(--primary); font-weight: 800; margin: 10px 0; }
+        .score-title { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; color: #2d3436; }
+
+        /* BOTÃO SALVAR */
+        .btn-action {
+            display: block; width: 100%;
+            margin-top: 30px; padding: 15px;
+            background-color: var(--primary); color: white;
+            border: none; border-radius: 50px;
+            font-size: 1.3rem; font-weight: bold; font-family: inherit;
+            cursor: pointer; box-shadow: 0 6px 0 #074b83;
+            transition: transform 0.1s;
+        }
+        .btn-action:hover { transform: translateY(-3px); }
+        .btn-action:active { transform: translateY(3px); box-shadow: none; }
+
+        /* IMPRESSÃO */
         @media print {
             body { background: white; padding: 0; }
-            .container { box-shadow: none; width: 100%; }
-            #questions-list, button, .instructions { display: none; }
-            #result-area { display: block !important; }
+            .container { box-shadow: none; border: none; width: 100%; }
+            .btn-action { display: none; }
+            .question-group { page-break-inside: avoid; border: 1px solid #ccc; background: none; }
+            .option-label:has(input:checked) { background: #eee !important; color: black; border: 1px solid black; }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <h1>BDI - Escala de Depressão</h1>
-        <p>Bruno de Souza - CRP 07/44472</p>
-    </header>
+    <div class="container">
+        <header>
+            <h1>BDI - Escala de Humor</h1>
+            <p class="instruction">
+                Este questionário consiste em 21 grupos de afirmações.<br>
+                Leia com atenção e escolha a frase que <strong>melhor descreve como você se sentiu na última semana</strong> (incluindo hoje).
+            </p>
+        </header>
 
-    <div class="instructions">
-        <p>Selecione a afirmação que melhor descreve como você se sentiu na <strong>última semana, incluindo hoje</strong>.</p>
-    </div>
+        <form id="bdi-form">
+            <div id="questions-container"></div>
+        </form>
 
-    <div id="questions-list"></div>
-
-    <button onclick="calcularBDI()">Calcular Nível de Depressão</button>
-
-    <div id="result-area">
-        <hr>
-        <h2>Resultado Clínico</h2>
-        <div class="score-display" id="final-score">0</div>
-        <div class="classification" id="final-class">-</div>
-        
-        <div style="height: 150px; width: 100%; max-width: 500px; margin: 0 auto;">
-            <canvas id="bdiChart"></canvas>
+        <div class="result-box" id="result-area">
+            <div class="score-title">Pontuação Total</div>
+            <div class="score-display" id="total-score">0</div>
+            <p style="color: #666; font-size: 0.9rem;">(Interpretação clínica reservada ao psicólogo)</p>
         </div>
-        
-        <button onclick="window.print()" style="background: #95a5a6; margin-top: 30px;">Salvar PDF</button>
+
+        <button class="btn-action" onclick="window.print()">
+            <i class="fa-solid fa-print"></i> IMPRIMIR / SALVAR PDF
+        </button>
     </div>
-</div>
 
-<script>
-    // NOMES DAS CATEGORIAS DO BDI (O texto completo das opções 0,1,2,3 você deve consultar no manual)
-    const itens = [
-        "1. Tristeza", "2. Pessimismo", "3. Fracasso Passado", "4. Perda de Prazer",
-        "5. Culpa", "6. Sentimento de Punição", "7. Auto-aversão", "8. Auto-acusação",
-        "9. Pensamentos Suicidas", "10. Choro", "11. Agitação", "12. Perda de Interesse",
-        "13. Indecisão", "14. Desvalorização", "15. Perda de Energia", "16. Alteração no Sono",
-        "17. Irritabilidade", "18. Alteração no Apetite", "19. Dificuldade de Concentração", 
-        "20. Cansaço/Fadiga", "21. Perda de Libido"
-    ];
-
-    const container = document.getElementById('questions-list');
-
-    itens.forEach((item, index) => {
-        let html = `
-            <div class="item-row">
-                <span>${item}</span>
-                <select id="q${index}">
-                    <option value="0">0 - Não sinto isso</option>
-                    <option value="1">1 - Sinto um pouco</option>
-                    <option value="2">2 - Sinto moderadamente</option>
-                    <option value="3">3 - Sinto intensamente</option>
-                </select>
-            </div>
-        `;
-        container.insertAdjacentHTML('beforeend', html);
-    });
-
-    let myChart = null;
-
-    function calcularBDI() {
-        let total = 0;
-        for (let i = 0; i < 21; i++) {
-            total += parseInt(document.getElementById(`q${i}`).value);
-        }
-
-        // Classificação (Cunha, 2001 - População Clínica)
-        // Mínima: 0-13 | Leve: 14-19 | Moderada: 20-28 | Grave: 29-63
-        let classificacao = "";
-        let cor = "";
-
-        if (total <= 13) { classificacao = "Mínima"; cor = "#2ecc71"; }
-        else if (total <= 19) { classificacao = "Leve"; cor = "#f1c40f"; }
-        else if (total <= 28) { classificacao = "Moderada"; cor = "#e67e22"; }
-        else { classificacao = "Grave"; cor = "#e74c3c"; }
-
-        document.getElementById('final-score').innerText = total + " pontos";
-        const classElem = document.getElementById('final-class');
-        classElem.innerText = classificacao;
-        classElem.style.color = cor;
-        
-        document.getElementById('result-area').style.display = 'block';
-
-        const ctx = document.getElementById('bdiChart').getContext('2d');
-        if (myChart) myChart.destroy();
-
-        myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['Pontuação BDI'],
-                datasets: [{
-                    label: 'Gravidade da Depressão',
-                    data: [total],
-                    backgroundColor: cor,
-                    barThickness: 50
-                }]
+    <script>
+        // DADOS DO PDF (21 Grupos)
+        const questions = [
+            {
+                id: 1,
+                options: [
+                    "0 - Não me sinto triste.",
+                    "1 - Eu me sinto triste.",
+                    "2 - Estou sempre triste e não consigo sair disto.",
+                    "3 - Estou tão triste ou infeliz que não consigo suportar."
+                ]
             },
-            options: {
-                indexAxis: 'y',
-                scales: {
-                    x: { min: 0, max: 63 }
-                },
-                plugins: { legend: { display: false } }
+            {
+                id: 2,
+                options: [
+                    "0 - Não estou especialmente desanimado quanto ao futuro.",
+                    "1 - Eu me sinto desanimado quanto ao futuro.",
+                    "2 - Acho que nada tenho a esperar.",
+                    "3 - Acho o futuro sem esperança e tenho a impressão de que as coisas não podem melhorar."
+                ]
+            },
+            {
+                id: 3,
+                options: [
+                    "0 - Não me sinto um fracasso.",
+                    "1 - Acho que fracassei mais do que uma pessoa comum.",
+                    "2 - Quando olho para trás, na minha vida, tudo o que posso ver é um monte de fracassos.",
+                    "3 - Acho que, como pessoa, sou um completo fracasso."
+                ]
+            },
+            {
+                id: 4,
+                options: [
+                    "0 - Tenho tanto prazer em tudo como antes.",
+                    "1 - Não sinto mais prazer nas coisas como antes.",
+                    "2 - Não encontro um prazer real em mais nada.",
+                    "3 - Estou insatisfeito ou aborrecido com tudo."
+                ]
+            },
+            {
+                id: 5,
+                options: [
+                    "0 - Não me sinto especialmente culpado.",
+                    "1 - Eu me sinto culpado grande parte do tempo.",
+                    "2 - Eu me sinto culpado na maior parte do tempo.",
+                    "3 - Eu me sinto sempre culpado."
+                ]
+            },
+            {
+                id: 6,
+                options: [
+                    "0 - Não acho que esteja sendo punido.",
+                    "1 - Acho que posso ser punido.",
+                    "2 - Creio que vou ser punido.",
+                    "3 - Acho que estou sendo punido."
+                ]
+            },
+            {
+                id: 7,
+                options: [
+                    "0 - Não me sinto decepcionado comigo mesmo.",
+                    "1 - Estou decepcionado comigo mesmo.",
+                    "2 - Estou enojado de mim.",
+                    "3 - Eu me odeio."
+                ]
+            },
+            {
+                id: 8,
+                options: [
+                    "0 - Não me sinto de qualquer modo pior que os outros.",
+                    "1 - Sou crítico em relação a mim por minhas fraquezas ou erros.",
+                    "2 - Eu me culpo sempre por minhas falhas.",
+                    "3 - Eu me culpo por tudo de mal que acontece."
+                ]
+            },
+            {
+                id: 9,
+                options: [
+                    "0 - Não tenho quaisquer ideias de me matar.",
+                    "1 - Tenho ideias de me matar, mas não as executaria.",
+                    "2 - Gostaria de me matar.",
+                    "3 - Eu me mataria se tivesse oportunidade."
+                ]
+            },
+            {
+                id: 10,
+                options: [
+                    "0 - Não choro mais que o habitual.",
+                    "1 - Choro mais agora do que costumava.",
+                    "2 - Agora, choro o tempo todo.",
+                    "3 - Costumava ser capaz de chorar, mas agora não consigo, mesmo que o queira."
+                ]
+            },
+            {
+                id: 11,
+                options: [
+                    "0 - Não sou mais irritado agora do que já fui.",
+                    "1 - Fico aborrecido ou irritado mais facilmente do que costumava.",
+                    "2 - Agora, eu me sinto irritado o tempo todo.",
+                    "3 - Não me irrito mais com coisas que costumavam me irritar."
+                ]
+            },
+            {
+                id: 12,
+                options: [
+                    "0 - Não perdi o interesse pelas outras pessoas.",
+                    "1 - Estou menos interessado pelas outras pessoas do que costumava estar.",
+                    "2 - Perdi a maior parte do meu interesse pelas outras pessoas.",
+                    "3 - Perdi todo o interesse pelas outras pessoas."
+                ]
+            },
+            {
+                id: 13,
+                options: [
+                    "0 - Tomo decisões tão bem quanto antes.",
+                    "1 - Adio as tomadas de decisões mais do que costumava.",
+                    "2 - Tenho mais dificuldades de tomar decisões do que antes.",
+                    "3 - Absolutamente não consigo mais tomar decisões."
+                ]
+            },
+            {
+                id: 14,
+                options: [
+                    "0 - Não acho que de qualquer modo pareço pior do que antes.",
+                    "1 - Estou preocupado em estar parecendo velho ou sem atrativo.",
+                    "2 - Acho que há mudanças permanentes na minha aparência, que me fazem parecer sem atrativo.",
+                    "3 - Acredito que pareço feio."
+                ]
+            },
+            {
+                id: 15,
+                options: [
+                    "0 - Posso trabalhar tão bem quanto antes.",
+                    "1 - É preciso algum esforço extra para fazer alguma coisa.",
+                    "2 - Tenho que me esforçar muito para fazer alguma coisa.",
+                    "3 - Não consigo mais fazer qualquer trabalho."
+                ]
+            },
+            {
+                id: 16,
+                options: [
+                    "0 - Consigo dormir tão bem como o habitual.",
+                    "1 - Não durmo tão bem como costumava.",
+                    "2 - Acordo 1 a 2 horas mais cedo do que habitualmente e acho difícil voltar a dormir.",
+                    "3 - Acordo várias horas mais cedo do que costumava e não consigo voltar a dormir."
+                ]
+            },
+            {
+                id: 17,
+                options: [
+                    "0 - Não fico mais cansado do que o habitual.",
+                    "1 - Fico cansado mais facilmente do que costumava.",
+                    "2 - Fico cansado em fazer qualquer coisa.",
+                    "3 - Estou cansado demais para fazer qualquer coisa."
+                ]
+            },
+            {
+                id: 18,
+                options: [
+                    "0 - O meu apetite não está pior do que o habitual.",
+                    "1 - Meu apetite não é tão bom como costumava ser.",
+                    "2 - Meu apetite é muito pior agora.",
+                    "3 - Absolutamente não tenho mais apetite."
+                ]
+            },
+            {
+                id: 19,
+                options: [
+                    "0 - Não tenho perdido muito peso, se é que perdi algum recentemente.",
+                    "1 - Perdi mais do que 2,5 kg.",
+                    "2 - Perdi mais do que 5 kg.",
+                    "3 - Perdi mais do que 7 kg."
+                ]
+            },
+            {
+                id: 20,
+                options: [
+                    "0 - Não estou mais preocupado com a minha saúde do que o habitual.",
+                    "1 - Estou preocupado com problemas físicos (dores, estômago, etc.).",
+                    "2 - Estou muito preocupado com problemas físicos e é difícil pensar em outra coisa.",
+                    "3 - Estou tão preocupado com meus problemas físicos que não consigo pensar em qualquer outra coisa."
+                ]
+            },
+            {
+                id: 21,
+                options: [
+                    "0 - Não notei qualquer mudança recente no meu interesse por sexo.",
+                    "1 - Estou menos interessado por sexo do que costumava.",
+                    "2 - Estou muito menos interessado por sexo agora.",
+                    "3 - Perdi completamente o interesse por sexo."
+                ]
             }
+        ];
+
+        const container = document.getElementById('questions-container');
+
+        // GERAR HTML
+        questions.forEach((q) => {
+            const groupDiv = document.createElement('div');
+            groupDiv.className = 'question-group';
+            
+            // Badge do número
+            groupDiv.innerHTML = `<div class="group-number">Item ${q.id}</div>`;
+
+            const listDiv = document.createElement('div');
+            listDiv.className = 'options-list';
+
+            q.options.forEach((optText, optIndex) => {
+                // O valor é o índice (0, 1, 2, 3)
+                const val = optIndex; 
+                
+                listDiv.innerHTML += `
+                    <label class="option-label">
+                        <input type="radio" name="q${q.id}" value="${val}" onchange="calculateScore()">
+                        ${optText}
+                    </label>
+                `;
+            });
+
+            groupDiv.appendChild(listDiv);
+            container.appendChild(groupDiv);
         });
 
-        setTimeout(() => document.getElementById('result-area').scrollIntoView({behavior:'smooth'}), 100);
-    }
-</script>
+        // CÁLCULO
+        function calculateScore() {
+            let total = 0;
+            const form = document.getElementById('bdi-form');
+            const formData = new FormData(form);
+            let answeredCount = 0;
+
+            for (let pair of formData.entries()) {
+                total += parseInt(pair[1]);
+                answeredCount++;
+            }
+
+            // Exibir se começou a responder
+            const resultArea = document.getElementById('result-area');
+            const scoreDisplay = document.getElementById('total-score');
+            
+            if (answeredCount > 0) {
+                resultArea.style.display = 'block';
+                scoreDisplay.innerText = total;
+            }
+        }
+    </script>
 </body>
 </html>
