@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YPI - Estilos Parentais | Caderno Incrível</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            /* Paleta Lúdica */
+            --bg-color: #f0f8ff;
+            --paper: #ffffff;
+            --mother: #ff7675; /* Rosa para Mãe */
+            --father: #74b9ff; /* Azul para Pai */
+            --text: #2d3436;
+            --border: #dfe6e9;
+            --shadow: rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0;
+            padding: 20px;
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 950px;
+            background: var(--paper);
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 10px 10px 0 var(--shadow);
+            border: 3px solid var(--text);
+            position: relative;
+        }
+
+        /* CABEÇALHO */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        header::before {
+            content: ""; position: absolute; top: -55px; left: 50%; transform: translateX(-50%) rotate(-1deg);
+            width: 300px; height: 45px; background-color: rgba(253, 203, 110, 0.8); /* Fita Amarela */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        h1 { margin: 0; color: #6c5ce7; font-size: 2rem; text-transform: uppercase; }
+        .subtitle { font-size: 1.1rem; color: #636e72; font-weight: bold; margin-bottom: 10px; }
+
+        .instruction-box {
+            background: #fffce0;
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px dashed #fdcb6e;
+            font-size: 0.95rem;
+            color: #555;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        /* CARTÃO DE PERGUNTA */
+        .question-card {
+            background: #fff;
+            margin-bottom: 25px;
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid var(--border);
+            box-shadow: 0 4px 0 rgba(0,0,0,0.05);
+            break-inside: avoid;
+        }
+
+        .q-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .q-number {
+            background: #6c5ce7; color: white;
+            min-width: 30px; height: 30px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: 0.9rem;
+        }
+
+        .q-text { font-size: 1.1rem; font-weight: bold; line-height: 1.4; flex: 1; }
+
+        /* ÁREA DE RESPOSTA DUPLA (MÃE E PAI) */
+        .response-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            border-top: 1px dashed var(--border);
+            padding-top: 15px;
+        }
+
+        .parent-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .parent-label {
+            font-size: 0.9rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px;
+            display: flex; align-items: center; gap: 5px;
+        }
+        
+        .label-mom { color: var(--mother); }
+        .label-dad { color: var(--father); }
+
+        .scale-options {
+            display: flex;
+            gap: 5px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .scale-btn {
+            width: 35px; height: 35px;
+            border: 1px solid var(--border);
+            background: #fdfdfd;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #b2bec3;
+            display: flex; align-items: center; justify-content: center;
+            transition: 0.2s;
+            font-size: 0.9rem;
+        }
+
+        /* Estilos de Seleção */
+        .mom-select .scale-btn:hover { border-color: var(--mother); color: var(--mother); }
+        .mom-select .scale-btn.selected { background: var(--mother); color: white; border-color: var(--mother); transform: scale(1.1); }
+
+        .dad-select .scale-btn:hover { border-color: var(--father); color: var(--father); }
+        .dad-select .scale-btn.selected { background: var(--father); color: white; border-color: var(--father); transform: scale(1.1); }
+
+        /* BOTÃO CALCULAR */
+        .btn-action {
+            display: block; width: 100%;
+            margin-top: 40px; padding: 15px;
+            background-color: #00b894; color: white;
+            border: none; border-radius: 50px;
+            font-size: 1.3rem; font-weight: bold; font-family: inherit;
+            cursor: pointer; box-shadow: 0 6px 0 #00896f;
+            transition: transform 0.1s;
+        }
+        .btn-action:hover { transform: translateY(-3px); }
+
+        /* RESULTADOS */
+        .result-section {
+            display: none;
+            margin-top: 50px;
+            background: #fff;
+            padding: 30px;
+            border-radius: 20px;
+            border: 3px solid var(--text);
+        }
+
+        .schema-result { margin-bottom: 25px; }
+        .schema-title { font-weight: 800; font-size: 1rem; margin-bottom: 8px; color: #2d3436; }
+        
+        .bars-container { display: flex; flex-direction: column; gap: 5px; }
+        
+        .bar-row { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: bold; }
+        .bar-label { width: 40px; text-align: right; }
+        
+        .track { flex: 1; background: #eee; height: 12px; border-radius: 10px; overflow: hidden; }
+        .fill { height: 100%; width: 0%; transition: width 1s ease; border-radius: 10px; }
+        
+        .fill-mom { background: var(--mother); }
+        .fill-dad { background: var(--father); }
+
+        .val-display { width: 30px; text-align: left; }
+
+        @media (max-width: 600px) {
+            .response-area { grid-template-columns: 1fr; gap: 10px; }
+            .scale-btn { width: 40px; height: 40px; }
+        }
+
+        @media print {
+            body { background: white; padding: 0; }
+            .container { box-shadow: none; border: none; width: 100%; }
+            .btn-action { display: none; }
+            .question-card { break-inside: avoid; border: 1px solid #ccc; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>YPI - Estilos Parentais</h1>
+            <div class="subtitle">Origem dos Esquemas</div>
+        </header>
+
+        <div class="instruction-box">
+            <i class="fa-solid fa-circle-info"></i> <strong>Instruções:</strong><br>
+            Avalie o pai e a mãe separadamente em cada frase, pensando em quando você era criança.<br>
+            <strong>1</strong> = Completamente falso | <strong>6</strong> = Descreve perfeitamente
+        </div>
+
+        <form id="ypi-form">
+            <div id="questions-container"></div>
+        </form>
+
+        <button class="btn-action" type="button" onclick="calculateResults()">
+            <i class="fa-solid fa-users-viewfinder"></i> CALCULAR PERFIL PARENTAL
+        </button>
+
+        <div class="result-section" id="result-area">
+            <h2 style="text-align: center; margin-bottom: 10px;">📊 Análise dos Pais</h2>
+            <div style="text-align: center; margin-bottom: 30px; font-size: 0.9rem; color: #666;">
+                <span style="color:var(--mother); font-weight:bold;">█ MÃE</span> &nbsp; | &nbsp; 
+                <span style="color:var(--father); font-weight:bold;">█ PAI</span><br>
+                (Barras maiores indicam maior presença do padrão negativo)
+            </div>
+            
+            <div id="charts-container"></div>
+            
+            <button class="btn-action" style="background:var(--text); margin-top:30px;" onclick="window.print()">
+                <i class="fa-solid fa-print"></i> SALVAR RELATÓRIO
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // DADOS DO YPI (Extraídos do PDF)
+        // 's' = Schema code
+        const questions = [
+            { t: "1. Gostava de mim e tratava-me como uma pessoa especial.", s: "pe" },
+            { t: "2. Prestava-me atenção, passando bastante tempo comigo.", s: "pe" },
+            { t: "3. Dava-me conselhos e orientações úteis.", s: "pe" },
+            { t: "4. Ouvia-me, compreendia-me e partilhava sentimentos comigo.", s: "pe" },
+            { t: "5. Era calorosa(o) e fisicamente afectuosa(o).", s: "pe" },
+            { t: "6. Morreu ou abandonou a casa permanentemente quando eu era criança.", s: "ab" },
+            { t: "7. Tinha mau humor, era imprevisível ou era alcoólica(o).", s: "ab" },
+            { t: "8. Preferia os meus irmãos a mim.", s: "ab" },
+            { t: "9. Isolava-se ou deixava-me sozinho(a) por longos períodos de tempo.", s: "ab" },
+            { t: "10. Mentia-me, enganava-me ou traía-me.", s: "da" },
+            { t: "11. Abusava fisica, emocional ou sexualmente de mim.", s: "da" },
+            { t: "12. Usava-me para satisfazer as suas necessidades emocionais.", s: "da" },
+            { t: "13. Parecia ter prazer em magoar os outros.", s: "da" },
+            { t: "14. Preocupava-se excessivamente com o fato de eu me poder magoar.", s: "vu" },
+            { t: "15. Preocupava-se excessivamente com o fato de eu poder ficar doente.", s: "vu" },
+            { t: "16. Era uma pessoa medrosa ou fóbica.", s: "vu" },
+            { t: "17. Sobreprotegia-me.", s: "vu" },
+            { t: "18. Fazia-me sentir que eu não podia confiar nas minhas decisões nem opiniões.", s: "di" },
+            { t: "19. Fazia as coisas por mim em vez de me deixar tentar fazê-las sozinho(a).", s: "di" },
+            { t: "20. Tratava-me como se eu fosse mais novo(a) do que realmente era.", s: "di" },
+            { t: "21. Criticava-me bastante.", s: "dv" },
+            { t: "22. Não me fazia sentir amado(a) ou fazia-me sentir rejeitado(a).", s: "dv" },
+            { t: "23. Tratava-me como se houvesse algo de errado comigo.", s: "dv" },
+            { t: "24. Fazia-me ter vergonha de mim próprio(a) em aspectos importantes.", s: "dv" },
+            { t: "25. Nunca me ensinou a ter a disciplina suficiente para ser bem sucedido(a) na escola.", s: "fr" },
+            { t: "26. Tratava-me como se eu fosse estúpido(a) ou não tivesse jeito para nada.", s: "fr" },
+            { t: "27. No fundo, não queria que eu fosse bem sucedido(a).", s: "fr" },
+            { t: "28. Esperava que eu fosse um fracasso na vida.", s: "fr" },
+            { t: "29. Tratava-me como se as minhas opiniões ou desejos não contassem.", s: "sb" },
+            { t: "30. Fazia o que queria, independentemente das minhas necessidades.", s: "sb" },
+            { t: "31. Controlava tanto a minha vida que eu tinha pouca liberdade de escolha.", s: "sb" },
+            { t: "32. Tudo tinha que ser como ela(e) queria.", s: "sb" },
+            { t: "33. Sacrificava as suas necessidades para o bem da família.", s: "as" },
+            { t: "34. Era incapaz de lidar com a maior parte das responsabilidades diárias, de maneira que eu tinha que fazer mais que a minha parte.", s: "as" },
+            { t: "35. Era bastante infeliz e apoiava-se em mim para a(o) confortar e compreender.", s: "as" },
+            { t: "36. Fazia-me sentir que eu era forte e que devia cuidar dos outros.", s: "as" },
+            { t: "37. Tinha expectativas muito elevadas em relação a si própria(o).", s: "pr" },
+            { t: "38. Esperava que eu fizesse sempre o meu melhor.", s: "pr" },
+            { t: "39. Era perfeccionista em muitas áreas; as coisas tinham que ser daquela maneira e não doutra.", s: "pr" },
+            { t: "40. Fazia-me sentir que quase nada do que eu fazia era suficientemente bom.", s: "pr" },
+            { t: "41. Tinha regras rígidas e estrictas acerca do que era correcto e do que era errado.", s: "pr" },
+            { t: "42. Ficava impaciente se as coisas não fossem feitas da forma adequada ou suficientemente rápida.", s: "pr" },
+            { t: "43. Dava mais importância ao fazer as coisas bem do que ao divertir-se ou relaxar.", s: "pr" },
+            { t: "44. Estragou-me com mimos ou era demasiado indulgente em muitos aspectos.", s: "gr" },
+            { t: "45. Fazia-me sentir que eu era especial, melhor que a maioria das outras pessoas.", s: "gr" },
+            { t: "46. Era exigente; esperava que as coisas corressem à sua maneira.", s: "gr" },
+            { t: "47. Não me ensinou que eu tinha responsabilidades para com os outros.", s: "gr" },
+            { t: "48. Forneceu-me muito pouca disciplina ou limites.", s: "ai" },
+            { t: "49. Estabeleceu-me poucas regras ou responsabilidades.", s: "ai" },
+            { t: "50. Permitia-me ficar muito zangado(a) ou perder o controlo.", s: "ai" },
+            { t: "51. Era uma pessoa indisciplinada.", s: "ai" },
+            { t: "52. Éramos tão chegados que nos compreendíamos um ao outro de uma maneira quase perfeita.", s: "ei" },
+            { t: "53. Eu sentia que não tinha individualidade suficiente, não me sentindo eu próprio separado dela(e).", s: "ei" },
+            { t: "54. Ao longo do meu crescimento, tinha a sensação que não tinha o meu próprio sentido de orientação de tal forma estava ligado a ela(e).", s: "ei" },
+            { t: "55. Eu sentia que nos magoaríamos um ao outro se algum de nós se afastasse do outro.", s: "ei" },
+            { t: "56. Preocupava-se muito com os problemas financeiros da família.", s: "ei" }, // Mantido conforme PDF
+            { t: "57. Fazia-me sentir que se eu cometesse um erro, mesmo que pequeno, algo de mal poderia acontecer.", s: "nve" },
+            { t: "58. Tinha uma perspectiva pessimista; esperava frequentemente o pior resultado.", s: "nve" },
+            { t: "59. Focava-se nos aspectos negativos da vida ou nas coisas que estavam a correr mal.", s: "nve" },
+            { t: "60. Tinha que ter tudo sob controlo.", s: "nve" },
+            { t: "61. Sentia-se desconfortável ao exprimir afecto ou vulnerabilidade.", s: "nve" },
+            { t: "62. Era estruturada(o) e organizada(o); preferia o que era habitual à mudança.", s: "ie" },
+            { t: "63. Raramente expressava raiva.", s: "ie" },
+            { t: "64. Era reservada(o); raramente discutia os seus sentimentos.", s: "ie" },
+            { t: "65. Zangar-se-ia ou seria bastante crítica(o) se eu fizesse algo errado.", s: "pu" },
+            { t: "66. Punir-me-ia se eu fizesse algo errado.", s: "pu" },
+            { t: "67. Chamar-me-ia nomes (como por exemplo \"estúpido\" ou \"idiota\") se eu cometesse algum erro.", s: "pu" },
+            { t: "68. Culpava as pessoas quando as coisas corriam mal.", s: "pu" },
+            { t: "69. Preocupava-se com as aparências e o estatuto social.", s: "par" },
+            { t: "70. Dava muita importância ao sucesso e à competição.", s: "par" },
+            { t: "71. Preocupava-se com o que os outros pensariam dela(e) por causa do meu comportamento.", s: "par" },
+            { t: "72. Parecia dar-me mais atenção quando eu me sobressaía.", s: "par" }
+        ];
+
+        const schemaNames = {
+            "pe": "Privação Emocional",
+            "ab": "Abandono",
+            "da": "Desconfiança/Abuso",
+            "vu": "Vulnerabilidade",
+            "di": "Dependência/Incompetência",
+            "dv": "Defectividade/Vergonha",
+            "fr": "Fracasso",
+            "sb": "Subjugação",
+            "as": "Auto-sacrifício",
+            "pr": "Padrões Inflexíveis",
+            "gr": "Grandiosidade",
+            "ai": "Autodisciplina Insuficiente",
+            "ei": "Emaranhamento",
+            "nve": "Negativismo",
+            "ie": "Inibição Emocional",
+            "pu": "Postura Punitiva",
+            "par": "Busca de Aprovação"
+        };
+
+        const container = document.getElementById('questions-container');
+
+        // GERAR PERGUNTAS
+        questions.forEach((q, index) => {
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            
+            // Título da Pergunta
+            card.innerHTML = `
+                <div class="q-header">
+                    <div class="q-number">${index + 1}</div>
+                    <div class="q-text">${q.t}</div>
+                </div>
+            `;
+
+            // Área de Resposta (Mãe e Pai)
+            const responseArea = document.createElement('div');
+            responseArea.className = 'response-area';
+
+            // Coluna Mãe
+            responseArea.innerHTML += createParentColumn('mom', index, 'Mãe', 'fa-female');
+            // Coluna Pai
+            responseArea.innerHTML += createParentColumn('dad', index, 'Pai', 'fa-male');
+
+            card.appendChild(responseArea);
+            container.appendChild(card);
+        });
+
+        function createParentColumn(role, index, label, icon) {
+            let html = `
+                <div class="parent-col ${role}-select">
+                    <div class="parent-label label-${role}">
+                        <i class="fa-solid ${icon}"></i> ${label}
+                    </div>
+                    <div class="scale-options">
+            `;
+            for(let i=1; i<=6; i++) {
+                html += `<div class="scale-btn" onclick="selectOption('${role}', ${index}, ${i}, this)">${i}</div>`;
+            }
+            html += `</div>
+                    <input type="hidden" id="${role}-ans-${index}" value="0">
+                </div>`;
+            return html;
+        }
+
+        // SELEÇÃO VISUAL
+        function selectOption(role, index, value, btn) {
+            document.getElementById(`${role}-ans-${index}`).value = value;
+            const parent = btn.parentNode;
+            parent.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+        }
+
+        // CALCULAR RESULTADOS
+        function calculateResults() {
+            let results = {
+                mom: {}, dad: {}
+            };
+            let counts = {};
+
+            // Inicializar
+            for(let key in schemaNames) {
+                results.mom[key] = 0;
+                results.dad[key] = 0;
+                counts[key] = 0;
+            }
+
+            // Somar
+            questions.forEach((q, index) => {
+                let mVal = parseInt(document.getElementById(`mom-ans-${index}`).value) || 0;
+                let dVal = parseInt(document.getElementById(`dad-ans-${index}`).value) || 0;
+
+                // Lógica de Inversão para "Privação Emocional" (pe)
+                // Se a nota for baixa (1), significa alta privação (6).
+                // Fórmula: Pontos = 7 - Nota
+                if (q.s === 'pe') {
+                    if (mVal > 0) mVal = 7 - mVal;
+                    if (dVal > 0) dVal = 7 - dVal;
+                }
+
+                if(mVal > 0) results.mom[q.s] += mVal;
+                if(dVal > 0) results.dad[q.s] += dVal;
+                counts[q.s]++;
+            });
+
+            // Renderizar Gráficos
+            const container = document.getElementById('charts-container');
+            container.innerHTML = '';
+
+            for(let key in schemaNames) {
+                const count = counts[key];
+                const maxScore = count * 6; // Pontuação máxima possível para aquele esquema
+
+                // Porcentagens para as barras
+                const momPct = (results.mom[key] / maxScore) * 100;
+                const dadPct = (results.dad[key] / maxScore) * 100;
+
+                const row = document.createElement('div');
+                row.className = 'schema-result';
+                
+                row.innerHTML = `
+                    <div class="schema-title">${schemaNames[key]}</div>
+                    <div class="bars-container">
+                        <div class="bar-row">
+                            <span class="bar-label" style="color:var(--mother)">Mãe</span>
+                            <div class="track"><div class="fill fill-mom" style="width: ${momPct}%"></div></div>
+                            <span class="val-display">${results.mom[key]}</span>
+                        </div>
+                        <div class="bar-row">
+                            <span class="bar-label" style="color:var(--father)">Pai</span>
+                            <div class="track"><div class="fill fill-dad" style="width: ${dadPct}%"></div></div>
+                            <span class="val-display">${results.dad[key]}</span>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(row);
+            }
+
+            document.getElementById('result-area').style.display = 'block';
+            document.getElementById('result-area').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+
+</body>
+</html>
