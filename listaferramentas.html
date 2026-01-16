@@ -40,7 +40,7 @@
             border-radius: 10px;
             text-align: center;
             box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            width: 300px;
+            width: 320px;
         }
 
         .login-box h2 { margin-top: 0; color: var(--primary); }
@@ -53,6 +53,7 @@
             border-radius: 5px;
             font-size: 1rem;
             box-sizing: border-box;
+            text-align: center;
         }
 
         .btn-login {
@@ -65,10 +66,11 @@
             font-size: 1rem;
             width: 100%;
             transition: background 0.2s;
+            font-weight: bold;
         }
 
         .btn-login:hover { background: #2980b9; }
-        .error-msg { color: red; font-size: 0.9rem; display: none; margin-top: 10px; }
+        .error-msg { color: #c0392b; font-size: 0.9rem; display: none; margin-top: 15px; font-weight: bold; }
 
         /* --- DASHBOARD (ÁREA RESTRITA) --- */
         #dashboard {
@@ -86,6 +88,15 @@
         header h1 { color: var(--primary); font-size: 2.5rem; margin-bottom: 10px; }
         .crp { background: #dfe6e9; padding: 5px 15px; border-radius: 20px; font-size: 0.9rem; color: #636e72; }
 
+        .section-label {
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin: 40px 0 20px 0;
+            border-bottom: 2px solid #dfe6e9;
+            padding-bottom: 10px;
+            font-weight: bold;
+        }
+
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -99,11 +110,10 @@
             text-decoration: none;
             color: #333;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            transition: transform 0.2s, border 0.2s;
+            transition: transform 0.2s;
             border-left: 5px solid transparent;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
         }
 
         .card:hover {
@@ -112,10 +122,10 @@
         }
 
         /* Cores por Categoria */
-        .cat-escala { border-left-color: #e74c3c; } /* Vermelho */
-        .cat-baralho { border-left-color: #f1c40f; } /* Amarelo */
-        .cat-ludico { border-left-color: #9b59b6; } /* Roxo */
-        .cat-ferramenta { border-left-color: #2ecc71; } /* Verde */
+        .cat-escala { border-left-color: #e74c3c; } 
+        .cat-baralho { border-left-color: #f1c40f; } 
+        .cat-ludico { border-left-color: #9b59b6; } 
+        .cat-ferramenta { border-left-color: #2ecc71; } 
 
         .card-icon { font-size: 2rem; margin-bottom: 15px; color: #555; }
         .card-title { font-weight: bold; font-size: 1.1rem; margin-bottom: 5px; }
@@ -126,6 +136,7 @@
             text-align: center;
             color: #aaa;
             font-size: 0.8rem;
+            padding-bottom: 20px;
         }
     </style>
 </head>
@@ -135,9 +146,12 @@
         <div class="login-box">
             <i class="fa-solid fa-lock" style="font-size: 3rem; color: var(--primary); margin-bottom: 20px;"></i>
             <h2>Área Restrita</h2>
-            <p style="font-size: 0.9rem; color: #666;">Digite a senha para acessar as ferramentas.</p>
+            <p style="font-size: 0.9rem; color: #666;">Digite a senha para acessar.</p>
+            
             <input type="password" id="password" class="login-input" placeholder="Senha">
-            <button class="btn-login" onclick="checkLogin()">Entrar</button>
+            
+            <button type="button" class="btn-login" onclick="checkLogin()">ACESSAR</button>
+            
             <p class="error-msg" id="error">Senha incorreta!</p>
         </div>
     </div>
@@ -148,57 +162,129 @@
             <span class="crp">Psicólogo Bruno de Souza - CRP 07/44472</span>
         </header>
 
+        <div class="section-label">📊 Testes e Escalas</div>
         <div class="grid">
-            
             <a href="ysqs3.html" class="card cat-escala">
                 <i class="fa-solid fa-list-check card-icon" style="color:#e74c3c"></i>
                 <div class="card-title">YSQ - S3</div>
-                <div class="card-desc">Questionário de Esquemas de Young com correção automática.</div>
+                <div class="card-desc">Esquemas de Young.</div>
             </a>
-
             <a href="asrs18.html" class="card cat-escala">
                 <i class="fa-solid fa-brain card-icon" style="color:#e74c3c"></i>
                 <div class="card-title">ASRS-18 (TDAH)</div>
-                <div class="card-desc">Escala de rastreio para TDAH em adultos.</div>
+                <div class="card-desc">Rastreio de TDAH Adulto.</div>
             </a>
-
             <a href="bai.html" class="card cat-escala">
                 <i class="fa-solid fa-bolt card-icon" style="color:#e74c3c"></i>
                 <div class="card-title">BAI - Ansiedade</div>
-                <div class="card-desc">Inventário de Ansiedade de Beck.</div>
+                <div class="card-desc">Inventário de Ansiedade.</div>
             </a>
-
             <a href="bdi.html" class="card cat-escala">
                 <i class="fa-solid fa-cloud-rain card-icon" style="color:#e74c3c"></i>
                 <div class="card-title">BDI - Depressão</div>
-                <div class="card-desc">Inventário de Depressão de Beck.</div>
+                <div class="card-desc">Inventário de Depressão.</div>
             </a>
-
             <a href="termometro-autoestima.html" class="card cat-escala">
                 <i class="fa-solid fa-temperature-half card-icon" style="color:#e74c3c"></i>
                 <div class="card-title">Termômetro Autoestima</div>
-                <div class="card-desc">Avaliação lúdica de autoestima.</div>
+                <div class="card-desc">Avaliação lúdica (Infanto-Juvenil).</div>
             </a>
+        </div>
 
+        <div class="section-label">🃏 Baralhos Terapêuticos</div>
+        <div class="grid">
             <a href="baralhodistorcoescognitivas.html" class="card cat-baralho">
                 <i class="fa-solid fa-glasses card-icon" style="color:#f1c40f"></i>
                 <div class="card-title">Distorções Cognitivas</div>
-                <div class="card-desc">Baralho interativo para reestruturação cognitiva.</div>
+                <div class="card-desc">Reestruturação de pensamentos.</div>
             </a>
-
             <a href="baralhoconversa.html" class="card cat-baralho">
                 <i class="fa-solid fa-comments card-icon" style="color:#f1c40f"></i>
-                <div class="card-title">Puxa Conversa</div>
-                <div class="card-desc">Perguntas para quebra-gelo e aprofundamento.</div>
+                <div class="card-title">Puxa Conversa (Geral)</div>
+                <div class="card-desc">Quebra-gelo e temas diversos.</div>
             </a>
-
             <a href="conversaadolescente.html" class="card cat-baralho">
                 <i class="fa-solid fa-user-graduate card-icon" style="color:#f1c40f"></i>
                 <div class="card-title">Puxa Conversa Teen</div>
-                <div class="card-desc">Versão focada em adolescentes e autoestima.</div>
+                <div class="card-desc">Focado em adolescentes.</div>
             </a>
-
             <a href="baralho-autoconhecimento.html" class="card cat-baralho">
                 <i class="fa-solid fa-mirror card-icon" style="color:#f1c40f"></i>
                 <div class="card-title">Autoconhecimento</div>
-                <div class="card-desc
+                <div class="card-desc">Reflexões profundas.</div>
+            </a>
+        </div>
+
+        <div class="section-label">🧩 Lúdico e Psicoeducação</div>
+        <div class="grid">
+            <a href="baralho-emocoes.html" class="card cat-ludico">
+                <i class="fa-solid fa-face-smile card-icon" style="color:#9b59b6"></i>
+                <div class="card-title">Psicoeducação Emoções</div>
+                <div class="card-desc">Conceitos das emoções básicas.</div>
+            </a>
+            <a href="baralhotdah.html" class="card cat-ludico">
+                <i class="fa-solid fa-rocket card-icon" style="color:#9b59b6"></i>
+                <div class="card-title">Sintomas TDAH</div>
+                <div class="card-desc">Cartas visuais sobre TDAH.</div>
+            </a>
+            <a href="jogo-memoria-emocoes.html" class="card cat-ludico">
+                <i class="fa-solid fa-puzzle-piece card-icon" style="color:#3498db"></i>
+                <div class="card-title">Memória das Emoções</div>
+                <div class="card-desc">Jogo interativo (Divertida Mente).</div>
+            </a>
+            <a href="roleta-afirmacoes.html" class="card cat-ludico">
+                <i class="fa-solid fa-dharmachakra card-icon" style="color:#3498db"></i>
+                <div class="card-title">Roleta de Elogios</div>
+                <div class="card-desc">Sorteador de qualidades.</div>
+            </a>
+        </div>
+
+        <div class="section-label">📝 Ferramentas Clínicas</div>
+        <div class="grid">
+            <a href="rpd.html" class="card cat-ferramenta">
+                <i class="fa-solid fa-pen-to-square card-icon" style="color:#2ecc71"></i>
+                <div class="card-title">RPD Digital</div>
+                <div class="card-desc">Registro de Pensamentos.</div>
+            </a>
+            <a href="diario-gratidao.html" class="card cat-ferramenta">
+                <i class="fa-solid fa-book-open card-icon" style="color:#2ecc71"></i>
+                <div class="card-title">Diário de Gratidão</div>
+                <div class="card-desc">Registro de conquistas diárias.</div>
+            </a>
+        </div>
+
+        <footer>
+            &copy; 2026 Bruno de Souza Gonçalves
+        </footer>
+    </div>
+
+    <script>
+        // --- CONFIGURAÇÃO DA SENHA ---
+        const SENHA_CORRETA = "psi123"; // A senha é psi123
+
+        function checkLogin() {
+            var inputSenha = document.getElementById('password');
+            var erro = document.getElementById('error');
+            
+            if (inputSenha.value === SENHA_CORRETA) {
+                // Senha correta: esconde login, mostra dashboard
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+            } else {
+                // Senha errada
+                erro.style.display = 'block';
+                inputSenha.value = '';
+                inputSenha.focus();
+            }
+        }
+
+        // Permitir entrar apertando a tecla Enter
+        document.getElementById('password').addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                checkLogin();
+            }
+        });
+    </script>
+
+</body>
+</html>
