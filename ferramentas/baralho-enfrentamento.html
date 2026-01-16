@@ -3,57 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Afirmações de Enfrentamento</title>
+    <title>Escudo da Autoestima | Caderno Incrível</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
+            /* Paleta Lúdica */
+            --bg-color: #f0f8ff;
             --primary: #0984e3; /* Azul Forte */
-            --secondary: #00cec9; /* Turquesa */
+            --secondary: #ff7675; /* Rosa Salmão */
             --accent: #fdcb6e; /* Amarelo */
-            --bg: #dfe6e9;
-            --card-bg: #ffffff;
+            --card-back: linear-gradient(135deg, #74b9ff, #0984e3); /* Degradê Azul */
             --text: #2d3436;
+            --shadow: rgba(0,0,0,0.1);
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg);
-            background-image: linear-gradient(30deg, #dfe6e9 12%, transparent 12.5%, transparent 87%, #dfe6e9 87.5%, #dfe6e9),
-            linear-gradient(150deg, #dfe6e9 12%, transparent 12.5%, transparent 87%, #dfe6e9 87.5%, #dfe6e9),
-            linear-gradient(30deg, #dfe6e9 12%, transparent 12.5%, transparent 87%, #dfe6e9 87.5%, #dfe6e9),
-            linear-gradient(150deg, #dfe6e9 12%, transparent 12.5%, transparent 87%, #dfe6e9 87.5%, #dfe6e9),
-            linear-gradient(60deg, #b2bec3 25%, transparent 25.5%, transparent 75%, #b2bec3 75%, #b2bec3),
-            linear-gradient(60deg, #b2bec3 25%, transparent 25.5%, transparent 75%, #b2bec3 75%, #b2bec3);
-            background-size: 40px 70px;
-            background-position: 0 0, 0 0, 20px 35px, 20px 35px, 0 0, 20px 35px;
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
+            background-size: 20px 20px;
             margin: 0;
             padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             min-height: 100vh;
+            color: var(--text);
+            overflow-x: hidden;
         }
 
+        /* --- CABEÇALHO --- */
         header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             background: white;
-            padding: 20px 40px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            border-bottom: 5px solid var(--primary);
+            padding: 20px 50px;
+            border-radius: 25px;
+            border: 3px dashed var(--primary);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            position: relative;
+            max-width: 90%;
         }
 
-        h1 { margin: 0; color: var(--primary); font-size: 2rem; text-transform: uppercase; letter-spacing: 1px; }
-        .subtitle { color: #636e72; margin-top: 5px; font-weight: bold; }
+        /* Fita Adesiva */
+        header::before {
+            content: ""; position: absolute; top: -15px; left: 50%; transform: translateX(-50%) rotate(-1deg);
+            width: 150px; height: 35px; background-color: rgba(85, 239, 196, 0.8); /* Fita Verde Água */
+            border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
 
-        /* MESA DE CARTAS */
+        h1 { margin: 0; color: var(--primary); font-size: 1.8rem; text-transform: uppercase; }
+        .subtitle { margin-top: 5px; color: #636e72; font-weight: bold; }
+
+        /* --- ÁREA DA CARTA --- */
         .card-container {
-            position: relative;
             width: 320px;
             height: 480px;
             perspective: 1000px;
             margin-bottom: 30px;
+            cursor: pointer;
         }
 
         .card {
@@ -61,10 +69,9 @@
             height: 100%;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            cursor: pointer;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
         }
 
         .card.flipped {
@@ -76,112 +83,152 @@
             position: absolute;
             width: 100%; height: 100%;
             backface-visibility: hidden;
-            border-radius: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            border-radius: 25px;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
             padding: 30px;
             box-sizing: border-box;
             text-align: center;
             border: 8px solid white;
+            background: white;
         }
 
-        /* VERSO (Capa "Escudo") */
+        /* VERSO (CAPA) */
         .face-back {
-            background: linear-gradient(135deg, var(--primary) 0%, #74b9ff 100%);
+            background: var(--card-back);
             color: white;
+            /* Padrão sutil */
+            background-image: radial-gradient(circle at center, rgba(255,255,255,0.1) 2px, transparent 2px);
+            background-size: 25px 25px;
         }
 
-        .shield-icon { font-size: 5rem; margin-bottom: 15px; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.2)); }
-        .back-text { font-size: 1.5rem; font-weight: 800; text-transform: uppercase; }
+        .icon-box {
+            font-size: 5rem;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 4px 4px rgba(0,0,0,0.2));
+            background: rgba(255,255,255,0.2);
+            width: 110px; height: 110px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%;
+            border: 4px solid rgba(255,255,255,0.3);
+        }
 
-        /* FRENTE (Afirmação) */
+        .deck-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+
+        .tap-hint {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            opacity: 0.9;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        /* FRENTE (CONTEÚDO) */
         .face-front {
-            background: var(--card-bg);
-            color: var(--text);
             transform: rotateY(180deg);
+            background-color: #fffce0; /* Amarelo clarinho papel */
+            background-image: linear-gradient(#ffeaa7 1px, transparent 1px);
+            background-size: 100% 30px; /* Linhas de caderno */
+            align-items: center;
+            justify-content: center;
         }
 
         .category-badge {
-            background: var(--accent);
-            color: var(--text);
+            background: var(--secondary);
+            color: white;
             padding: 5px 15px;
-            border-radius: 50px;
+            border-radius: 15px;
             font-size: 0.8rem;
             font-weight: bold;
             text-transform: uppercase;
             margin-bottom: 20px;
+            transform: rotate(-2deg);
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
         }
 
         .affirmation-text {
-            font-size: 1.6rem;
-            font-weight: 700;
-            line-height: 1.4;
-            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2d3436;
+            line-height: 1.5;
+            margin-bottom: 20px;
         }
 
-        .quote-icon { font-size: 2rem; color: #dfe6e9; margin-bottom: 10px; }
-
-        .helper-text {
-            margin-top: 30px;
-            font-size: 0.9rem;
+        /* Ícone de Citação */
+        .quote-icon {
+            font-size: 2rem;
             color: #b2bec3;
-            font-style: italic;
+            margin-bottom: 10px;
         }
 
         /* BOTÃO */
         .btn-draw {
-            background-color: var(--secondary);
+            background-color: var(--primary);
             color: white;
             border: none;
-            padding: 15px 40px;
-            font-size: 1.2rem;
+            padding: 15px 50px;
+            font-size: 1.3rem;
             font-weight: bold;
+            font-family: inherit;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 5px 0 #00b894;
+            box-shadow: 0 6px 0 #074b83;
             transition: transform 0.1s;
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
+        .btn-draw:hover { transform: translateY(-3px); }
         .btn-draw:active { transform: translateY(4px); box-shadow: none; }
-        .btn-draw:hover { filter: brightness(1.1); }
 
+        /* Responsividade */
+        @media (max-width: 400px) {
+            .card-container { width: 90%; height: 420px; }
+            h1 { font-size: 1.5rem; }
+            .affirmation-text { font-size: 1.3rem; }
+        }
     </style>
 </head>
 <body>
 
     <header>
         <h1>Escudo da Autoestima</h1>
-        <div class="subtitle">Afirmações de Enfrentamento</div>
+        <div class="subtitle">Afirmações de Enfrentamento 🛡️</div>
     </header>
 
-    <div class="card-container">
-        <div class="card" id="card" onclick="flipCard()">
+    <div class="card-container" onclick="flipCard()">
+        <div class="card" id="card">
             
             <div class="card-face face-back">
-                <div class="shield-icon">🛡️</div>
-                <div class="back-text">Força<br>Interior</div>
-                <div style="font-size: 0.8rem; margin-top: 15px; opacity: 0.8;">Toque para receber proteção</div>
+                <div class="icon-box"><i class="fa-solid fa-shield-heart"></i></div>
+                <div class="deck-title">FORÇA<br>INTERIOR</div>
+                <div class="tap-hint">Toque para se proteger</div>
             </div>
 
             <div class="card-face face-front">
                 <div class="category-badge" id="cat-badge">Enfrentamento</div>
-                <div class="quote-icon">❝</div>
+                <div class="quote-icon"><i class="fa-solid fa-quote-left"></i></div>
                 <div class="affirmation-text" id="aff-text">
-                    Clique no botão para tirar uma carta.
+                    Clique no botão para ativar seu escudo!
                 </div>
-                <div class="quote-icon" style="transform: rotate(180deg); margin-top: 10px;">❝</div>
-                <div class="helper-text">Repita esta frase em voz alta.</div>
+                <div class="quote-icon"><i class="fa-solid fa-quote-right"></i></div>
             </div>
 
         </div>
     </div>
 
-    <button class="btn-draw" onclick="drawCard()">💪 Tirar Nova Carta</button>
+    <button class="btn-draw" onclick="drawCard(event)">
+        <i class="fa-solid fa-bolt"></i> ATIVAR ESCUDO
+    </button>
 
     <script>
         // BANCO DE DADOS (Baseado no PDF Bernardo_Sessao_18-12)
@@ -214,19 +261,20 @@
         const textElement = document.getElementById('aff-text');
         const badgeElement = document.getElementById('cat-badge');
 
-        function drawCard() {
-            // Se carta estiver virada (lendo), desvira primeiro
+        function drawCard(event) {
+            // Evita propagação
+            if(event) event.stopPropagation();
+
+            // Animação de troca
             if (cardElement.classList.contains('flipped')) {
                 cardElement.classList.remove('flipped');
-                
                 setTimeout(() => {
                     updateContent();
-                    // Vira automaticamente de novo
-                    setTimeout(() => cardElement.classList.add('flipped'), 200);
-                }, 400); // Espera animação de fechar
+                    cardElement.classList.add('flipped');
+                }, 600);
             } else {
                 updateContent();
-                setTimeout(() => cardElement.classList.add('flipped'), 200);
+                cardElement.classList.add('flipped');
             }
         }
 
@@ -237,8 +285,8 @@
             textElement.innerText = item.text;
             badgeElement.innerText = item.cat;
             
-            // Muda cor do badge aleatoriamente para dar vida
-            const colors = ['#fdcb6e', '#55efc4', '#ff7675', '#a29bfe'];
+            // Cores aleatórias para o badge para ficar divertido
+            const colors = ['#ff7675', '#00b894', '#fdcb6e', '#a29bfe'];
             badgeElement.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
         }
 
