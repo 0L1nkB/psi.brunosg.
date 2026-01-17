@@ -30,6 +30,7 @@
             width: 100%;
             max-width: 600px;
             position: relative;
+            padding: 20px;
         }
 
         /* --- TELA INICIAL --- */
@@ -61,21 +62,41 @@
             width: 100%;
         }
 
+        .text-container {
+            min-height: 120px; /* Garante espaço fixo para o texto não pular */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+
         .instruction-text {
             font-size: 1.8rem;
-            margin-bottom: 20px;
-            min-height: 80px;
+            margin-bottom: 10px;
             font-weight: bold;
             opacity: 0;
             transition: opacity 1s;
+            text-align: center;
         }
 
         .sub-text {
             font-size: 1.2rem;
             color: #666;
-            margin-bottom: 40px;
             opacity: 0;
             transition: opacity 1s;
+            text-align: center;
+        }
+
+        /* --- CORREÇÃO DO ERRO: CONTAINER VISUAL --- */
+        /* Este container reserva espaço para a animação não bater no texto */
+        .visual-container {
+            height: 300px; /* Altura fixa suficiente para o círculo expandido */
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
         }
 
         /* ANIMAÇÃO DE RESPIRAÇÃO (CÍRCULO) */
@@ -85,7 +106,8 @@
             border-radius: 50%;
             box-shadow: 0 0 40px rgba(77, 208, 225, 0.6);
             transform: scale(1);
-            display: none; /* Só aparece na hora de respirar */
+            display: none;
+            position: absolute; /* Garante que fique no centro do container visual */
         }
 
         .breathing-circle.inhale { animation: breatheIn 4s ease-in-out forwards; }
@@ -99,6 +121,7 @@
             font-size: 8rem;
             color: var(--accent);
             display: none;
+            position: absolute; /* Garante que fique no centro do container visual */
             animation: float 3s infinite ease-in-out;
         }
 
@@ -107,7 +130,7 @@
         /* BARRA DE PROGRESSO (30s) */
         .progress-container {
             width: 80%; height: 10px; background: #b2ebf2;
-            border-radius: 10px; margin-top: 50px; overflow: hidden;
+            border-radius: 10px; margin-top: 20px; overflow: hidden;
             display: none;
         }
         .progress-bar {
@@ -134,44 +157,39 @@
     </div>
 
     <div id="exercise-screen">
-        <div class="instruction-text" id="main-text">Prepare-se...</div>
-        <div class="sub-text" id="sub-text">Relaxe os ombros</div>
+        <div class="text-container">
+            <div class="instruction-text" id="main-text">Prepare-se...</div>
+            <div class="sub-text" id="sub-text">Relaxe os ombros</div>
+        </div>
         
-        <div class="breathing-circle" id="circle"></div>
-        <div class="sense-icon" id="icon"></div>
+        <div class="visual-container">
+            <div class="breathing-circle" id="circle"></div>
+            <div class="sense-icon" id="icon"></div>
+        </div>
 
         <div class="progress-container" id="prog-cont">
             <div class="progress-bar" id="prog-bar"></div>
         </div>
     </div>
 
-    <div id="end-screen">
+    <div id="end-screen" class="container">
         <div class="final-msg">Mente Tranquila</div>
-        <p style="font-size:1.5rem; margin-top:20px;">Faça 2x ao dia!</p>
+        <p style="font-size:1.5rem; margin-top:20px;">Parabéns pela prática!</p>
         <button class="btn-start" style="margin-top:40px; font-size:1rem;" onclick="location.reload()">Repetir</button>
     </div>
 
     <script>
-        // ROTEIRO BASEADO NO PDF
+        // ROTEIRO
         const sequence = [
             { type: 'breathe', text: "Respire Fundo (3x)", sub: "Inspire... e expire lentamente." },
-            
             { type: 'sense', text: "Visão", sub: "Encontre algo que você VÊ e acha bom.", icon: "fa-eye", duration: 30 },
-            
             { type: 'breathe', text: "Respire Fundo (3x)", sub: "Conecte-se com o agora." },
-            
             { type: 'sense', text: "Tato", sub: "Encontre algo que você TOCA e acha bom.", icon: "fa-hand-holding-heart", duration: 30 },
-            
             { type: 'breathe', text: "Respire Fundo (3x)", sub: "Sinta o ar entrando e saindo." },
-            
-            { type: 'sense', text: "Olfato", sub: "Encontre algo que você CHEIRA e acha bom.", icon: "fa-wind", duration: 30 }, // Ícone adaptado para cheiro/ar
-            
+            { type: 'sense', text: "Olfato", sub: "Encontre algo que você CHEIRA e acha bom.", icon: "fa-wind", duration: 30 },
             { type: 'breathe', text: "Respire Fundo (3x)", sub: "Mantenha a calma." },
-            
             { type: 'sense', text: "Audição", sub: "Encontre algo que você OUVE e acha bom.", icon: "fa-ear-listen", duration: 30 },
-            
             { type: 'breathe', text: "Respire Fundo (3x)", sub: "Quase lá..." },
-            
             { type: 'sense', text: "Paladar", sub: "Encontre algo que você DEGUSTA e acha bom.", icon: "fa-utensils", duration: 30 }
         ];
 
@@ -189,7 +207,8 @@
         function startExercise() {
             startScreen.style.display = 'none';
             exerciseScreen.style.display = 'flex';
-            runSequence(0);
+            // Pequeno delay para a tela carregar antes de começar
+            setTimeout(() => runSequence(0), 500);
         }
 
         async function runSequence(index) {
@@ -201,11 +220,14 @@
             const step = sequence[index];
             resetUI();
 
-            // Atualiza Textos
+            // Atualiza Textos com efeito de fade
+            mainText.classList.remove('fade-in');
+            subText.classList.remove('fade-in');
+            
+            await new Promise(r => setTimeout(r, 500)); // Espera o fade out
+
             mainText.innerText = step.text;
             subText.innerText = step.sub;
-            
-            // Fade In Texto
             mainText.classList.add('fade-in');
             subText.classList.add('fade-in');
 
@@ -215,11 +237,8 @@
                 await doSensing(step.icon, step.duration);
             }
 
-            // Próximo passo
-            mainText.classList.remove('fade-in');
-            subText.classList.remove('fade-in');
-            
-            setTimeout(() => runSequence(index + 1), 1000); // Pausa leve entre passos
+            // Pausa entre passos
+            setTimeout(() => runSequence(index + 1), 1000);
         }
 
         function resetUI() {
@@ -229,7 +248,7 @@
             circle.className = 'breathing-circle';
         }
 
-        // Lógica de Respiração (3x de 8 segundos = 24s)
+        // Lógica de Respiração (3x)
         function doBreathing() {
             return new Promise(resolve => {
                 circle.style.display = 'block';
@@ -256,7 +275,8 @@
                         }, 4000);
                     }, 4000);
                 }
-                breathCycle();
+                // Pequeno delay inicial para o usuário se preparar
+                setTimeout(breathCycle, 1000);
             });
         }
 
@@ -269,12 +289,12 @@
                 progBar.style.width = '0%';
                 progBar.style.transition = `width ${durationSeconds}s linear`;
 
-                // Forçar reflow para a transição funcionar
+                // Forçar reflow
                 setTimeout(() => {
                     progBar.style.width = '100%';
                 }, 100);
 
-                // Timer visual decrescente (opcional, aqui usamos a barra)
+                // Timer
                 let timeLeft = durationSeconds;
                 const timer = setInterval(() => {
                     timeLeft--;
