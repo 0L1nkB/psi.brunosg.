@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autocontrole Insuficiente - Caderno Terapêutico</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Paleta "Agora ou Depois?" */
+            --paper-line: #fce7f3;    /* Linhas rosa claro */
+            --paper-bg: #fffbfd;      
+            --ink-color: #831843;
+            
+            /* Cores do Esquema (Impulso -> Disciplina) */
+            --primary: #db2777;       /* Magenta Vibrante (O Impulso) */
+            --primary-hover: #be185d;
+            --structure: #1e3a8a;     /* Azul Marinho (A Estrutura) */
+            
+            /* Tags de Personas */
+            --tag-davi-bg: #fbcfe8; --tag-davi-text: #9d174d; /* Rosa (Impulsivo) */
+            --tag-ju-bg: #e0f2fe; --tag-ju-text: #0369a1; /* Azul (Procrastinadora) */
+
+            --radius: 16px;
+            --shadow-paper: 3px 3px 10px rgba(0,0,0,0.06);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            color: var(--ink-color);
+            line-height: 1.6;
+            background-color: var(--paper-bg);
+            /* Efeito Papel Pautado */
+            background-image: linear-gradient(var(--paper-line) 1px, transparent 1px);
+            background-size: 100% 2rem;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Patrick Hand', cursive;
+            color: #881337;
+        }
+
+        /* --- HEADER --- */
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-bottom: 2px dashed #f9a8d4;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);
+        }
+
+        .header-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .header-title {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 0px #fce7f3;
+        }
+
+        .header-subtitle {
+            font-size: 1.2rem;
+            color: #be185d;
+            font-family: 'Patrick Hand', cursive;
+        }
+
+        /* --- CONTAINER --- */
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+            display: grid;
+            gap: 35px;
+            margin-bottom: 60px;
+        }
+
+        /* --- CARDS (PAPEL) --- */
+        .paper-card {
+            background-color: #ffffff;
+            border-radius: 2px;
+            box-shadow: var(--shadow-paper);
+            border: 1px solid #fce7f3;
+            padding: 2rem;
+            position: relative;
+            transform: rotate(-0.5deg);
+            transition: transform 0.3s;
+        }
+        
+        .paper-card:hover { transform: rotate(0deg) translateY(-3px); }
+        
+        /* Fita Adesiva (Washi Tape) */
+        .paper-card::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 30px;
+            background-color: rgba(219, 39, 119, 0.15); /* Magenta translúcido */
+            border: 1px solid #f9a8d4;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            opacity: 0.9;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--paper-line);
+            padding-bottom: 10px;
+        }
+
+        .card-icon { font-size: 1.8rem; color: var(--primary); }
+        .card-title { font-size: 1.8rem; margin: 0; }
+
+        /* --- POST-IT (DEFINIÇÃO) --- */
+        .post-it {
+            background-color: #fce7f3; /* Rosa Bebê */
+            padding: 1.5rem;
+            border-radius: 2px 2px 16px 2px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+            font-family: 'Patrick Hand', cursive;
+            font-size: 1.3rem;
+            color: #831843;
+            transform: rotate(1deg);
+            margin: 20px 0;
+            border-left: 5px solid #db2777;
+        }
+
+        /* --- PERSONAS --- */
+        .persona-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .persona-card {
+            background: #fff;
+            padding: 20px;
+            border: 2px dashed #f9a8d4;
+            border-radius: 12px;
+        }
+        
+        .persona-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .persona-name { font-size: 1.4rem; font-weight: 700; color: #831843; }
+        .persona-tag { font-family: 'Nunito', sans-serif; font-size: 0.8rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; }
+        
+        .tag-davi { background: var(--tag-davi-bg); color: var(--tag-davi-text); }
+        .tag-ju { background: var(--tag-ju-bg); color: var(--tag-ju-text); }
+
+        /* --- STICKERS (3 DIMENSÕES) --- */
+        .sticker-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;
+        }
+        
+        .sticker-box {
+            background: white; padding: 1.5rem; border-radius: 12px;
+            border: 2px solid #fff1f2; text-align: center;
+            transition: all 0.3s;
+        }
+        .sticker-box:hover { border-color: var(--primary); transform: scale(1.02); }
+        .sticker-icon { font-size: 2rem; margin-bottom: 10px; display: block; }
+
+        /* --- TRADUTOR INTERATIVO --- */
+        .translator-area {
+            background-color: #fff1f2; /* Rosa muito claro */
+            padding: 2rem; border-radius: 20px;
+            border: 2px dashed #f472b6; text-align: center;
+        }
+
+        .btn-translate {
+            background: white; border: 2px solid #fbcfe8;
+            padding: 10px 20px; margin: 5px; border-radius: 30px;
+            font-family: 'Nunito', sans-serif; font-weight: 700; color: #db2777;
+            cursor: pointer; transition: all 0.2s;
+            box-shadow: 0 4px 0 #fbcfe8;
+        }
+        
+        .btn-translate:active { box-shadow: 0 0 0 #fbcfe8; transform: translateY(4px); }
+        .btn-translate:hover { background: #fff; border-color: var(--primary); color: var(--primary); }
+
+        .result-bubble {
+            background: white; padding: 20px; border-radius: 20px;
+            margin-top: 20px; border: 2px solid #f9a8d4;
+            font-family: 'Patrick Hand', cursive; font-size: 1.3rem;
+            color: #831843; min-height: 100px; display: flex; align-items: center; justify-content: center;
+        }
+
+        /* --- ACCORDIONS --- */
+        details {
+            background: #fff5f9; border-radius: 12px; margin-bottom: 10px;
+            border: 1px solid #fbcfe8;
+        }
+        summary {
+            padding: 15px; font-weight: 700; cursor: pointer; list-style: none;
+            display: flex; justify-content: space-between; color: #9d174d;
+        }
+        summary:hover { background: #fce7f3; border-radius: 12px; }
+        .details-content { padding: 20px; border-top: 1px dashed #fbcfe8; color: #831843; }
+
+        /* --- FLASHCARD (FLIP) --- */
+        .flashcard-container { perspective: 1000px; width: 100%; height: 280px; cursor: pointer; }
+        .flashcard-inner {
+            position: relative; width: 100%; height: 100%; text-align: center;
+            transition: transform 0.6s; transform-style: preserve-3d;
+        }
+        .flashcard-container.flipped .flashcard-inner { transform: rotateY(180deg); }
+        
+        .flashcard-front, .flashcard-back {
+            position: absolute; width: 100%; height: 100%;
+            -webkit-backface-visibility: hidden; backface-visibility: hidden;
+            border-radius: 16px; padding: 2rem;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            box-shadow: var(--shadow-paper); border: 2px solid;
+        }
+        
+        .flashcard-front {
+            background: #fff1f2; border-color: #fbcfe8; color: #be185d;
+        }
+        .flashcard-back {
+            background: #eff6ff; border-color: #bfdbfe; color: #1e3a8a;
+            transform: rotateY(180deg);
+        }
+
+        /* --- FOOTER PADRÃO --- */
+        footer {
+            background-color: #ffffff;
+            border-top: 1px solid #e5e7eb;
+            padding: 2rem 0;
+            margin-top: auto;
+        }
+        .footer-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .footer-brand { color: #64748b; font-size: 0.9rem; font-weight: 600; }
+        .social-links { display: flex; gap: 1.5rem; }
+        .social-links a { color: #94a3b8; font-size: 1.2rem; transition: color 0.2s; }
+        .social-links a:hover { color: var(--primary); }
+
+        @media (max-width: 640px) {
+            .footer-container { flex-direction: column; gap: 1rem; }
+            .persona-grid, .sticker-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-content">
+            <h1 class="header-title">Autodisciplina</h1>
+            <p class="header-subtitle">Caderno de Psicoeducação</p>
+        </div>
+    </header>
+
+    <div class="main-container">
+
+        <div class="paper-card">
+            <div class="card-header">
+                <i class="fas fa-gamepad card-icon"></i>
+                <h2 class="card-title">O Esquema do "Eu Quero Agora"</h2>
+            </div>
+            <p>O Esquema de Autocontrole Insuficiente é a dificuldade em tolerar o desconforto ou o tédio para alcançar um objetivo maior. É o conflito eterno entre "o que eu devo fazer" e "o que eu tenho vontade de fazer".</p>
+            
+            <div class="post-it">
+                <i class="fas fa-thumbtack" style="color:#db2777; margin-right:10px;"></i>
+                "Eu sei que preciso fazer, mas não consigo começar. É muito chato. Vou fazer só mais tarde... (e o 'mais tarde' nunca chega)."
+            </div>
+        </div>
+
+        <div class="paper-card" style="transform: rotate(0.5deg);">
+            <div class="card-header">
+                <i class="fas fa-users card-icon"></i>
+                <h2 class="card-title">Espelhos da Vida Real</h2>
+            </div>
+            <p>Como a falta de freio ou foco se manifesta:</p>
+            
+            <div class="persona-grid">
+                <div class="persona-card">
+                    <div class="persona-header">
+                        <span class="persona-name">Davi</span>
+                        <span class="persona-tag tag-davi">O Impulsivo</span>
+                    </div>
+                    <p>Davi age por impulso. Compra coisas que não pode pagar, come até passar mal e fala sem pensar. Ele tem muita dificuldade em dizer "não" para os próprios desejos momentâneos.</p>
+                    <p style="font-size:0.85rem; color:#be185d;"><strong>Comportamento:</strong> Rendição (Impulsividade)</p>
+                </div>
+
+                <div class="persona-card">
+                    <div class="persona-header">
+                        <span class="persona-name">Juliana</span>
+                        <span class="persona-tag tag-ju">A Procrastinadora</span>
+                    </div>
+                    <p>Juliana evita qualquer tarefa chata ou difícil. Ela acumula louça, contas e prazos. Ela vive fugindo do desconforto, buscando alívio imediato no celular ou dormindo.</p>
+                    <p style="font-size:0.85rem; color:#0369a1;"><strong>Comportamento:</strong> Evitação (Fuga)</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="paper-card">
+            <div class="card-header">
+                <i class="fas fa-shapes card-icon"></i>
+                <h2 class="card-title">Sintomas da Falta de Limites</h2>
+            </div>
+            <div class="sticker-grid">
+                <div class="sticker-box">
+                    <span class="sticker-icon">💥</span>
+                    <h4>Impulsividade</h4>
+                    <p>Agir no calor do momento, sem pensar nas consequências futuras.</p>
+                </div>
+                <div class="sticker-box">
+                    <span class="sticker-icon">🥱</span>
+                    <h4>Baixa Tolerância</h4>
+                    <p>Desistir rapidamente assim que a tarefa fica difícil, chata ou frustrante.</p>
+                </div>
+                <div class="sticker-box">
+                    <span class="sticker-icon">🐌</span>
+                    <h4>Procrastinação</h4>
+                    <p>O hábito crônico de adiar o esforço, trocando o importante pelo prazeroso.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="paper-card" style="transform: rotate(-0.5deg);">
+            <div class="card-header">
+                <i class="fas fa-sync card-icon"></i>
+                <h2 class="card-title">Tradutor de Desculpas</h2>
+            </div>
+            <p>Seu cérebro inventa desculpas para fugir. Vamos traduzi-las para a realidade:</p>
+            
+            <div class="translator-area">
+                <p style="margin-bottom:15px; font-weight:700;">Qual é a desculpa hoje?</p>
+                <div>
+                    <button class="btn-translate" onclick="translateNeed('amanha')">"Faço amanhã, hoje estou cansado."</button>
+                    <button class="btn-translate" onclick="translateNeed('chato')">"Isso é muito chato, não aguento!"</button>
+                    <button class="btn-translate" onclick="translateNeed('mereco')">"Eu mereço um descanso agora."</button>
+                </div>
+                
+                <div id="translator-bubble" class="result-bubble">
+                    Toque em uma desculpa para traduzir...
+                </div>
+            </div>
+        </div>
+
+        <div class="paper-card">
+            <div class="card-header">
+                <i class="fas fa-brain card-icon"></i>
+                <h2 class="card-title">Conceitos Clínicos</h2>
+            </div>
+            
+            <details>
+                <summary>🧠 Neurobiologia: O Freio Fraco <i class="fas fa-chevron-down"></i></summary>
+                <div class="details-content">
+                    <p>O seu Córtex Pré-Frontal (responsável pelo planejamento e freio) perde a batalha para o Sistema Límbico (responsável pelo prazer imediato). É como ter um carro com motor de Ferrari e freio de bicicleta.</p>
+                </div>
+            </details>
+
+            <details>
+                <summary>🌱 Como a Terapia Ajuda? <i class="fas fa-chevron-down"></i></summary>
+                <div class="details-content">
+                    <p>O foco é o <strong>Treino de Tolerância ao Desconforto</strong>. Não se trata de ter "força de vontade" mágica, mas de aprender técnicas para suportar o tédio e quebrar tarefas grandes em pedaços pequenos.</p>
+                </div>
+            </details>
+
+            <details>
+                <summary>⚠️ A Ilusão do "Amanhã" <i class="fas fa-chevron-down"></i></summary>
+                <div class="details-content">
+                    <p>Você acredita que amanhã terá mais vontade ou energia. Isso é mentira. Amanhã a tarefa será tão chata quanto hoje. A disciplina é fazer <em>sem</em> vontade.</p>
+                </div>
+            </details>
+        </div>
+
+        <div class="paper-card">
+            <div class="card-header">
+                <i class="fas fa-adjust card-icon"></i>
+                <h2 class="card-title">Vire o Pensamento</h2>
+            </div>
+            <p>Toque no cartão quando sentir vontade de desistir:</p>
+            
+            <div class="flashcard-container" onclick="this.classList.toggle('flipped')">
+                <div class="flashcard-inner">
+                    <div class="flashcard-front">
+                        <h3 style="font-family:'Patrick Hand'; font-size:1.5rem;">Voz da Criança Impulsiva</h3>
+                        <p style="margin-top:10px;">"Não quero fazer isso! É muito difícil. Quero ver TV. Ninguém pode me obrigar. Vou parar agora!"</p>
+                        <i class="fas fa-hand-pointer" style="margin-top:20px; color:#db2777; font-size:1.5rem;"></i>
+                    </div>
+                    <div class="flashcard-back">
+                        <h3 style="font-family:'Patrick Hand'; font-size:1.5rem;">Voz do Adulto Saudável</h3>
+                        <p style="margin-top:10px;">"Eu sei que é chato, mas é necessário. O desconforto é temporário, mas o orgulho de ter feito dura muito mais. Vou fazer só por 10 minutos."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-brand">
+                &copy; 2026 Bruno de Souza
+            </div>
+            <div class="social-links">
+                <a href="https://www.instagram.com/psi.brunosg/" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://wa.me/5553991898309" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.linkedin.com/in/psi-bsouza/" target="_blank"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function translateNeed(type) {
+            const bubble = document.getElementById('translator-bubble');
+            let text = "";
+            
+            if (type === 'amanha') {
+                text = "✨ Tradução: 'Amanhã eu não terei mais vontade. Procrastinar só aumenta minha ansiedade e culpa. Vou fazer 5 minutos agora.'";
+            } else if (type === 'chato') {
+                text = "✨ Tradução: 'A vida tem partes chatas. Eu sou adulto e consigo tolerar o tédio para alcançar meus objetivos.'";
+            } else if (type === 'mereco') {
+                text = "✨ Tradução: 'Eu mereço o resultado de ter a tarefa cumprida, não o alívio passageiro de fugir dela.'";
+            }
+            
+            bubble.style.opacity = 0;
+            setTimeout(() => {
+                bubble.innerHTML = text;
+                bubble.style.opacity = 1;
+                bubble.style.transition = "opacity 0.3s";
+            }, 200);
+        }
+    </script>
+
+</body>
+</html>
