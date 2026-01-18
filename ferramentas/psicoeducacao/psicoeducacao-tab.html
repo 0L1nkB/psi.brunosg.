@@ -1,242 +1,484 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Psicoeducação: Transtorno Afetivo Bipolar</title>
+    <title>Transtorno Bipolar - Bruno de Souza</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
-    
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
     <style>
         :root {
-            --primary: #7DB9B6; 
-            --secondary: #E9EDC9; 
-            --accent: #E29578; 
-            --dark-green: #2D5A58;
-            --text-color: #444;
-            --bg-body: #FBFBFB;
+            /* Paleta "Balance & Rhythm" */
+            --bg-paper: #fffcf2;      /* Creme Quente */
+            --text-primary: #37474f;  
+            --text-serif: #263238;    
+            
+            /* Cores dos Polos */
+            --accent-mania: #ffb74d;  /* Laranja/Dourado (Energia) */
+            --accent-depr: #546e7a;   /* Azul Acinzentado (Baixa) */
+            --accent-stab: #a5d6a7;   /* Verde (Estabilidade) */
+            --accent-royal: #5e35b1;  /* Roxo (Neurobiologia) */
+            
+            --btn-color: #00695c;     
+            --radius: 16px;
+            --shadow: 0 8px 30px rgba(0,0,0,0.06);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            font-family: 'Open Sans', sans-serif;
-            background-color: var(--bg-body);
-            color: var(--text-color);
+            font-family: 'Lato', sans-serif;
+            background-color: var(--bg-paper);
+            color: var(--text-primary);
             line-height: 1.8;
+            overflow-x: hidden;
         }
 
-        h1, h2, h3 { font-family: 'Quicksand', sans-serif; color: var(--dark-green); }
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            color: var(--text-serif);
+        }
 
-        .container { max-width: 900px; margin: 0 auto; padding: 0 25px; }
+        /* --- LAYOUT --- */
+        .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+        .section { padding: 80px 0; border-bottom: 1px dashed #cfd8dc; }
+        .section:nth-child(even) { background-color: white; }
+        .section-title { text-align: center; font-size: 2.5rem; margin-bottom: 15px; }
+        .section-subtitle { text-align: center; color: #78909c; margin-bottom: 50px; font-style: italic; max-width: 700px; margin-left: auto; margin-right: auto; }
 
-        /* --- Header / Hero --- */
+        /* --- HEADER --- */
         header {
-            height: 60vh;
-            background: linear-gradient(135deg, var(--primary) 0%, #A2D2FF 100%);
-            display: flex; align-items: center; justify-content: center;
-            text-align: center; color: white; border-radius: 0 0 60px 60px;
-            padding: 20px;
+            text-align: center; padding: 100px 20px 80px;
+            background: linear-gradient(180deg, #fff 0%, var(--bg-paper) 100%);
+        }
+        header h1 { font-size: 3.5rem; margin-bottom: 20px; letter-spacing: -1px; }
+        .badge {
+            background: var(--text-serif); color: white; padding: 5px 15px;
+            border-radius: 50px; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase;
         }
 
-        header h1 { font-size: 3rem; color: white; margin-bottom: 20px; }
-        header p { font-size: 1.2rem; max-width: 650px; opacity: 0.95; }
-
-        /* --- Seções --- */
-        section { padding: 80px 0; border-bottom: 1px solid #eee; }
-        .section-title { text-align: center; margin-bottom: 50px; }
-        .section-title h2 { font-size: 2.2rem; position: relative; display: inline-block; }
-        .section-title h2::after { content: ''; width: 60%; height: 4px; background: var(--secondary); position: absolute; bottom: -10px; left: 20%; border-radius: 2px; }
-
-        /* --- Cards e Boxes --- */
-        .info-card {
-            background: white; padding: 35px; border-radius: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.04); margin-bottom: 30px;
-            border: 1px solid #f0f0f0;
+        /* --- CRITÉRIOS (BALANCE BOX) --- */
+        .criteria-box {
+            background: white; border: 2px solid var(--accent-mania); border-radius: var(--radius);
+            padding: 30px; display: flex; align-items: center; gap: 20px; box-shadow: var(--shadow);
+            position: relative; overflow: hidden;
+        }
+        /* Efeito visual de dois polos */
+        .criteria-box::before {
+            content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 6px;
+            background: linear-gradient(to bottom, var(--accent-mania), var(--accent-depr));
         }
 
-        .highlight-box {
-            background: var(--secondary); padding: 25px; border-left: 6px solid var(--primary);
-            border-radius: 10px; margin: 30px 0;
+        .info-badge {
+            background: var(--bg-paper); color: #bf360c; padding: 15px; border-radius: 50%;
+            width: 90px; height: 90px; display: flex; flex-direction: column; align-items: center;
+            justify-content: center; font-weight: bold; line-height: 1.2; text-align: center; flex-shrink: 0;
+            border: 3px solid var(--accent-mania); box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
-        .grid-two { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
-
-        /* --- Neurobiologia --- */
-        .neuro-list { list-style: none; }
-        .neuro-list li { margin-bottom: 20px; padding-left: 30px; position: relative; }
-        .neuro-list li::before { content: '•'; color: var(--primary); font-size: 2rem; position: absolute; left: 0; top: -10px; }
-
-        /* --- Tabela --- */
-        .table-wrap { overflow-x: auto; margin-top: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        table { width: 100%; border-collapse: collapse; background: white; }
-        th, td { padding: 18px; text-align: left; border-bottom: 1px solid #f0f0f0; }
-        th { background: var(--primary); color: white; }
-
-        /* --- Exercício de Estabilidade --- */
-        .stability-container {
-            background: var(--dark-green); color: white;
-            padding: 60px 20px; border-radius: 40px; text-align: center;
-            margin: 50px 0; display: flex; flex-direction: column; align-items: center;
+        /* --- SINTOMAS (DUAL GRID) --- */
+        .symptoms-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 40px; }
+        
+        /* Polo Maníaco */
+        .check-item-mania {
+            display: flex; align-items: flex-start; margin-bottom: 15px;
+            background: #fff8e1; padding: 15px; border-radius: 12px;
+            border-left: 4px solid var(--accent-mania);
         }
+        .check-item-mania i { color: #f57c00; margin-right: 15px; margin-top: 5px; font-size: 1.2rem; }
 
-        .balance-visual {
-            width: 200px; height: 100px;
-            display: flex; align-items: center; justify-content: center;
-            position: relative; margin: 40px 0;
+        /* Polo Depressivo */
+        .check-item-depr {
+            display: flex; align-items: flex-start; margin-bottom: 15px;
+            background: #eceff1; padding: 15px; border-radius: 12px;
+            border-left: 4px solid var(--accent-depr);
         }
+        .check-item-depr i { color: #455a64; margin-right: 15px; margin-top: 5px; font-size: 1.2rem; }
 
-        .balance-beam {
-            width: 100%; height: 4px; background: rgba(255,255,255,0.2);
-            position: relative; border-radius: 2px;
+        /* --- NEUROBIOLOGIA --- */
+        .brain-box {
+            background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
+            display: flex; flex-direction: column; align-items: center;
         }
-
-        .balance-ball {
-            width: 25px; height: 25px; background: var(--primary);
-            border-radius: 50%; position: absolute; top: -11px;
-            animation: balanceMove 6s infinite ease-in-out;
-            box-shadow: 0 0 15px var(--primary);
+        .hotspot-btn {
+            background: #5e35b1; color: white; border: none; padding: 10px 20px;
+            border-radius: 20px; cursor: pointer; margin: 5px; transition: opacity 0.3s;
+            font-size: 0.9rem; font-weight: bold;
         }
+        #brain-desc { margin-top: 30px; padding: 25px; border-radius: 10px; width: 100%; font-size: 1rem; }
 
-        @keyframes balanceMove {
-            0%, 100% { left: 10%; }
-            50% { left: 80%; }
+        /* --- CICLO BIPOLAR (WAVE) --- */
+        .cycle-container {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px;
+            margin-top: 40px; justify-items: center;
         }
+        .cycle-step {
+            background: white; padding: 20px; border-radius: 50%; width: 200px; height: 200px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; box-shadow: var(--shadow); border: 2px solid transparent; font-size: 0.95rem;
+            transition: transform 0.3s;
+        }
+        .cycle-step:hover { transform: scale(1.05); }
+        
+        .step-mania { background: #fff3e0; border-color: #ffb74d; } 
+        .step-stab { background: #e8f5e9; border-color: #81c784; } 
+        .step-depr { background: #eceff1; border-color: #90a4ae; }
 
-        footer { background: #f4f4f4; padding: 60px 0; font-size: 0.9rem; color: #666; }
-        .ref-list { list-style: none; padding-top: 15px; }
-        .ref-list li { margin-bottom: 10px; }
+        /* --- BARALHO --- */
+        .cards-deck { display: flex; justify-content: center; gap: 25px; flex-wrap: wrap; }
+        .distortion-card { width: 220px; height: 360px; perspective: 1000px; cursor: pointer; }
+        .card-inner {
+            position: relative; width: 100%; height: 100%; text-align: center;
+            transition: transform 0.8s; transform-style: preserve-3d;
+            box-shadow: var(--shadow); border-radius: 15px;
+        }
+        .distortion-card.flipped .card-inner { transform: rotateY(180deg); }
+        .card-front, .card-back {
+            position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+            border-radius: 15px; display: flex; flex-direction: column; align-items: center;
+            justify-content: center; padding: 20px;
+        }
+        .card-front {
+            background: white; border: 8px solid var(--bg-paper);
+            background-image: radial-gradient(#ffe0b2 15%, transparent 16%); background-size: 10px 10px;
+        }
+        .card-back { background-color: #263238; color: white; transform: rotateY(180deg); font-size: 0.9rem; }
+        .card-back h3 { color: #ffcc80; margin-bottom: 10px; font-size: 1.1rem; }
 
-        @media (max-width: 768px) { header h1 { font-size: 2.2rem; } }
+        /* --- WIDGET: TERMÔMETRO DE HUMOR (NOVO) --- */
+        .mood-widget {
+            background: linear-gradient(135deg, #fff8e1 0%, #ffe0b2 100%);
+            padding: 50px; border-radius: var(--radius); text-align: center;
+            margin: 40px auto; max-width: 650px; box-shadow: var(--shadow);
+            position: relative;
+        }
+        .mood-display {
+            background: white; padding: 30px; border-radius: 10px; margin: 20px auto;
+            min-height: 140px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .btn-mood {
+            border: none; padding: 12px 25px; border-radius: 50px; font-weight: bold; cursor: pointer;
+            transition: transform 0.2s; font-size: 0.9rem; margin: 5px; color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+        .btn-mood:hover { transform: translateY(-2px); }
+        
+        .btn-high { background: #f57c00; }
+        .btn-stable { background: #43a047; }
+        .btn-low { background: #546e7a; }
+
+        /* --- TRATAMENTO --- */
+        .treatment-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        .treat-card { background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow); border-top: 6px solid; }
+        .treat-tcc { border-color: #7cb342; } /* Verde para Ritmo */
+        .treat-med { border-color: #0288d1; } /* Azul para Estabilizadores */
+        .treat-list { margin-top: 20px; padding-left: 20px; list-style-type: disc; }
+        .treat-list li { margin-bottom: 12px; font-size: 0.95rem; }
+
+        /* Footer */
+        .ref-section { font-size: 0.85rem; color: #666; background: #f5f5f5; padding: 40px 0; }
+        
+        @media (max-width: 768px) {
+            .symptoms-grid, .treatment-grid { grid-template-columns: 1fr; }
+            .criteria-box { flex-direction: column; text-align: center; }
+        }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="container" data-aos="fade-up">
-            <h1>Transtorno Afetivo Bipolar</h1>
-            <p>Compreendendo a dinâmica do humor e a busca pela estabilidade neurobiológica.</p>
+        <div class="container">
+            <span class="badge">Psicoeducação Clínica</span>
+            <h1>Transtorno Bipolar</h1>
+            <p style="font-size: 1.3rem; color: #78909c;">(TAB Tipo I e II)</p>
+            <p style="margin-top: 10px; font-style: italic;">"A busca não é por felicidade constante, mas por estabilidade."</p>
         </div>
     </header>
 
-    <main class="container">
-
-        <section data-aos="fade-up">
-            <div class="section-title"><h2>O que é o TAB?</h2></div>
-            <p>O Transtorno Afetivo Bipolar (TAB) é uma condição crônica caracterizada por variações acentuadas no humor, na energia e na capacidade de funcionamento. Diferente das mudanças de humor comuns, o TAB envolve episódios distintos de <strong>Mania</strong> ou <strong>Hipomania</strong> (exaltação) e <strong>Depressão</strong>.</p>
-            
-            <div class="highlight-box">
-                <strong>Hereditariedade e Genética:</strong> O TAB é um dos transtornos com maior base genética na psiquiatria (hereditariedade estimada em até 80%). Não se trata de uma oscilação emocional voluntária, mas de uma desregulação nos sistemas cerebrais que controlam o tônus vital.
-            </div>
-        </section>
-
-        <section data-aos="fade-up">
-            <div class="section-title"><h2>A Neurobiologia da Ciclicidade</h2></div>
-            <p>O cérebro no TAB apresenta uma dificuldade em manter o equilíbrio (homeostase) diante de estímulos externos e ritmos biológicos.</p>
-            
-            
-
-            <div class="info-card">
-                <ul class="neuro-list">
-                    <li><strong>Disfunção do Córtex Pré-Frontal:</strong> Durante as fases de mania, há uma redução na atividade desta área, o que explica a perda de julgamento crítico e a impulsividade.</li>
-                    <li><strong>Hiperatividade da Amígdala:</strong> O sistema emocional reage de forma desproporcional, intensificando tanto a euforia quanto a dor depressiva.</li>
-                    <li><strong>Dopamina em Fluxo:</strong> A mania está associada a picos de dopamina (busca de recompensa e energia), enquanto a depressão está ligada à sua redução drástica.</li>
-                    <li><strong>Ritmos Circadianos:</strong> O "relógio biológico" interno é extremamente sensível. Alterações no sono podem ser tanto sintomas quanto gatilhos para novos episódios.</li>
-                </ul>
-            </div>
-        </section>
-
-        <section data-aos="fade-up">
-            <div class="section-title"><h2>As Faces do Humor</h2></div>
-            <div class="grid-two">
-                <div class="card info-card">
-                    <h3>Mania / Hipomania</h3>
-                    <p>Aumento da energia, redução da necessidade de sono, fala acelerada (pressão de fala), grandiosidade, gastos excessivos e envolvimento em atividades de risco.</p>
-                </div>
-                <div class="card info-card">
-                    <h3>Depressão Bipolar</h3>
-                    <p>Tristeza profunda, apatia extrema, cansaço físico, sentimentos de desesperança e, frequentemente, lentificação intensa dos movimentos.</p>
-                </div>
-            </div>
-            <p style="text-align: center; font-style: italic; margin-top: 15px;">*Existem também os <strong>Estados Mistos</strong>, onde sintomas de mania e depressão ocorrem simultaneamente.</p>
-        </section>
-
-        <section data-aos="fade-up">
-            <div class="section-title"><h2>O Pilar do Tratamento</h2></div>
-            <p>O tratamento do TAB é essencialmente medicamentoso para estabilização biológica, apoiado pela psicoterapia para gestão de vida.</p>
-            
-            
-
-            <div class="info-card">
-                <h3>Terapia Cognitivo-Comportamental (TCC)</h3>
-                <ul>
-                    <li><strong>Identificação de Pródromos:</strong> Aprender a reconhecer os primeiros sinais de que o humor está virando (ex: dormir menos e sentir-se muito disposto).</li>
-                    <li><strong>Terapia de Ritmo Social (IPSRT):</strong> Estabelecer rotinas rígidas de sono, alimentação e atividade física para estabilizar o relógio biológico.</li>
-                    <li><strong>Regulação Emocional:</strong> Lidar com as consequências interpessoais e sociais dos episódios passados.</li>
-                </ul>
-            </div>
-
-            <div class="table-wrap">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Classe Farmacológica</th>
-                            <th>Função no TAB</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Estabilizadores (ex: Lítio)</strong></td>
-                            <td>O "padrão-ouro". Previne tanto a mania quanto a depressão e reduz o risco de suicídio.</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Anticonvulsivantes (ex: Valproato)</strong></td>
-                            <td>Ajudam a controlar a irritabilidade e a ciclicidade rápida.</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Antipsicóticos Atípicos</strong></td>
-                            <td>Utilizados para controlar sintomas agudos de mania e estabilizar o humor.</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <section class="stability-container" data-aos="zoom-in">
-            <h2>Buscando o Centro</h2>
-            <p>No TAB, a vida pode parecer um balanço constante. O objetivo do tratamento não é "parar de sentir", mas diminuir a amplitude dessas oscilações.</p>
-            
-            <div class="balance-visual">
-                <div class="balance-beam">
-                    <div class="balance-ball"></div>
-                </div>
-            </div>
-            
-            <p style="max-width: 500px; font-size: 0.9rem; opacity: 0.9;"><strong>Dica de Estabilidade:</strong> Mantenha uma rotina de sono consistente. O sono é o maior regulador natural do seu humor.</p>
-        </section>
-
-    </main>
-
-    <footer>
+    <section class="section">
         <div class="container">
-            <p style="font-weight: 700; color: var(--dark-green);">Referências Técnicas:</p>
-            <ul class="ref-list">
-                <li><strong>Miklowitz, D. J. (2011).</strong> Bipolar Disorder Survival Guide.</li>
-                <li><strong>Goodwin, F. K. & Jamison, K. R. (2007).</strong> Manic-Depressive Illness. Oxford University Press.</li>
-                <li><strong>American Psychiatric Association (2022).</strong> DSM-5-TR.</li>
-                <li><strong>Stahl, S. M. (2014).</strong> Psicofarmacologia: Bases Neurocientíficas.</li>
-                <li><strong>Vieta, E. (2014).</strong> Managing Bipolar Disorder in Clinical Practice.</li>
+            <h2 class="section-title">O que Define o TAB?</h2>
+            <p class="section-subtitle">Não é "mudança de humor repentina". É uma alternância cíclica de energia.</p>
+
+            <div class="criteria-box">
+                <div class="info-badge">
+                    <span>2</span>
+                    <span style="font-size:0.7rem;">POLOS</span>
+                </div>
+                <div>
+                    <h3>Oscilação de Energia</h3>
+                    <p>Caracteriza-se pela alternância entre episódios de <strong>Mania/Hipomania</strong> (energia excessiva, euforia ou irritabilidade) e episódios de <strong>Depressão</strong>. O diferencial não é a rapidez da mudança, mas a intensidade e duração dos episódios (que podem durar semanas ou meses).</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Os Dois Lados da Moeda</h2>
+            <p class="section-subtitle">Sintomas opostos que exigem tratamentos diferentes.</p>
+
+            <div class="symptoms-grid">
+                <div>
+                    <h3 style="color: #e65100; margin-bottom: 20px; border-bottom: 2px solid #ffcc80; display:inline-block;"><i class="fas fa-sun"></i> Polo Maníaco (Alto)</h3>
+                    <div class="check-item-mania">
+                        <i class="fas fa-bolt"></i>
+                        <div><strong>Energia Excessiva:</strong> Sentir-se "ligado no 220v", falar muito rápido (logorreia), pensamentos acelerados.</div>
+                    </div>
+                    <div class="check-item-mania">
+                        <i class="fas fa-bed"></i>
+                        <div><strong>Menor necessidade de sono:</strong> Dormir 3 horas e acordar sentindo-se totalmente descansado.</div>
+                    </div>
+                    <div class="check-item-mania">
+                        <i class="fas fa-crown"></i>
+                        <div><strong>Grandiosidade:</strong> Sentir-se invencível, fazer planos irreais ou gastar dinheiro impulsivamente.</div>
+                    </div>
+                    <div class="check-item-mania">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div><strong>Irritabilidade:</strong> Pavio curto extremo (não é sempre felicidade, muitas vezes é fúria).</div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 style="color: #37474f; margin-bottom: 20px; border-bottom: 2px solid #90a4ae; display:inline-block;"><i class="fas fa-moon"></i> Polo Depressivo (Baixo)</h3>
+                    <div class="check-item-depr">
+                        <i class="fas fa-battery-empty"></i>
+                        <div><strong>Lentificação:</strong> Sensação de corpo pesado, raciocínio lento e fadiga extrema.</div>
+                    </div>
+                    <div class="check-item-depr">
+                        <i class="fas fa-heart-broken"></i>
+                        <div><strong>Anedonia:</strong> Incapacidade de sentir prazer em qualquer coisa.</div>
+                    </div>
+                    <div class="check-item-depr">
+                        <i class="fas fa-bed"></i>
+                        <div><strong>Hipersonia:</strong> Vontade de dormir o dia todo (fuga da realidade).</div>
+                    </div>
+                    <div class="check-item-depr">
+                        <i class="fas fa-cloud"></i>
+                        <div><strong>Desesperança:</strong> Visão de futuro negativa e pensamentos de morte.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Ferramenta: Termômetro</h2>
+            <p class="section-subtitle">O segredo do tratamento é identificar o início da oscilação. Como você está hoje?</p>
+
+            <div class="mood-widget">
+                <h3 style="color: #e65100; margin-bottom:10px;">Check-in de Estabilidade</h3>
+                <p style="font-size:0.9rem; margin-bottom:20px;">Selecione seu nível de energia atual:</p>
+                
+                <div>
+                    <button class="btn-mood btn-high" onclick="checkMood('high')">⚡ Acelerado / Irritado</button>
+                    <button class="btn-mood btn-stable" onclick="checkMood('stable')">🌱 Estável / Bem</button>
+                    <button class="btn-mood btn-low" onclick="checkMood('low')">☁️ Lento / Triste</button>
+                </div>
+
+                <div class="mood-display" id="mood-result">
+                    <span style="color:#78909c; font-style:italic;">O resultado aparecerá aqui...</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Neurobiologia do TAB</h2>
+            <p class="section-subtitle">Por que o humor oscila tanto?</p>
+
+            <div class="brain-box">
+                <i class="fas fa-wave-square" style="font-size: 5rem; color: #b39ddb; margin-bottom: 20px;"></i>
+                
+                <div style="margin: 20px 0; display:flex; flex-wrap:wrap; justify-content:center;">
+                    <button class="hotspot-btn" onclick="explain('clock')">1. Ritmo Circadiano</button>
+                    <button class="hotspot-btn" onclick="explain('dopa')">2. Sensibilidade à Dopamina</button>
+                    <button class="hotspot-btn" onclick="explain('mit')">3. Mitocôndrias</button>
+                </div>
+
+                <div id="brain-desc" style="background: #f3e5f5; display: block;">
+                    <p style="text-align:center;">Selecione um tópico acima para ver a explicação.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">O Ciclo da Oscilação</h2>
+            <p class="section-subtitle">Entendendo as fases da doença.</p>
+            
+            <div class="cycle-container">
+                <div class="cycle-step step-mania">
+                    <h4 style="margin-bottom:10px;">1. Mania/Hipomania</h4>
+                    <p>O pico. Muita energia, risco alto, pouca crítica.</p>
+                </div>
+                <div class="cycle-step step-depr">
+                    <h4 style="margin-bottom:10px;">2. Depressão</h4>
+                    <p>O vale. Queda brusca de energia, muitas vezes pós-mania.</p>
+                </div>
+                <div class="cycle-step step-stab">
+                    <h4 style="margin-bottom:10px;">3. Eutimia</h4>
+                    <p>O objetivo. Humor estável, com variações normais da vida.</p>
+                </div>
+                <div class="cycle-step step-stab" style="border: 2px dashed #90a4ae;">
+                    <h4 style="margin-bottom:10px;">4. Pródromo</h4>
+                    <p>Sinais de aviso antes da crise (ex: insônia inicial).</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Baralho da Verdade</h2>
+            <p class="section-subtitle">Desconstruindo estigmas comuns sobre a bipolaridade.</p>
+
+            <div class="cards-deck">
+                <div class="distortion-card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <i class="fas fa-random fa-3x" style="color:#ffcc80; margin-bottom:15px;"></i>
+                            <h3>"Muda de humor toda hora"</h3>
+                            <p style="font-size:0.8rem; color:#888;">Toque para virar</p>
+                        </div>
+                        <div class="card-back">
+                            <h3>Mito da Instabilidade</h3>
+                            <p>Quem muda de humor várias vezes ao dia geralmente tem oscilação emocional normal ou traços borderline. No TAB, os episódios (mania/depressão) costumam durar semanas ou meses.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="distortion-card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <i class="fas fa-capsules fa-3x" style="color:#ffcc80; margin-bottom:15px;"></i>
+                            <h3>"Remédio me apaga"</h3>
+                            <p style="font-size:0.8rem; color:#888;">Toque para virar</p>
+                        </div>
+                        <div class="card-back">
+                            <h3>Estabilidade não é tédio</h3>
+                            <p>Muitos pacientes sentem falta da euforia da mania e acham a estabilidade "sem graça". Mas o remédio não apaga sua personalidade, ele protege seu cérebro da neurotoxicidade das crises.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="distortion-card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <i class="fas fa-laugh-squint fa-3x" style="color:#ffcc80; margin-bottom:15px;"></i>
+                            <h3>"Mania é Felicidade"</h3>
+                            <p style="font-size:0.8rem; color:#888;">Toque para virar</p>
+                        </div>
+                        <div class="card-back">
+                            <h3>Mania é Perigosa</h3>
+                            <p>A mania pode começar gostosa, mas logo vira irritabilidade, paranoia, gastos excessivos e destruição de relacionamentos. É uma emergência médica, não apenas alegria.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" style="background-color: #fcfbf9;">
+        <div class="container">
+            <h2 class="section-title">Como Tratar?</h2>
+            <p class="section-subtitle">O tripé: Medicação, Rotina e Terapia.</p>
+
+            <div class="treatment-grid">
+                <div class="treat-card treat-tcc">
+                    <h3 style="color: #33691e;"><i class="fas fa-clock"></i> Rotina (IPSRT)</h3>
+                    <p>A Terapia de Ritmo Social (IPSRT) é fundamental:</p>
+                    <ul class="treat-list">
+                        <li><strong>Sono Sagrado:</strong> Dormir e acordar na mesma hora é o maior estabilizador natural.</li>
+                        <li><strong>Monitoramento:</strong> Usar diários de humor para pegar a crise no início.</li>
+                        <li><strong>Evitar Estimulantes:</strong> Café, energético e álcool são gatilhos poderosos para crises.</li>
+                    </ul>
+                </div>
+
+                <div class="treat-card treat-med">
+                    <h3 style="color: #01579b;"><i class="fas fa-pills"></i> Farmacologia</h3>
+                    <p>O TAB é biológico e exige medicação contínua:</p>
+                    <ul class="treat-list">
+                        <li><strong>Estabilizadores de Humor:</strong> (Ex: Lítio, Valproato). A base do tratamento.</li>
+                        <li><strong>Antipsicóticos Atípicos:</strong> (Ex: Quetiapina, Aripiprazol). Ajudam na mania e na depressão bipolar.</li>
+                        <li><strong>Cuidado com Antidepressivos:</strong> Podem causar "virada maníaca" se usados sem estabilizador.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="ref-section">
+        <div class="container">
+            <h4>Referências Bibliográficas</h4>
+            <ul class="ref-list" style="list-style-type: decimal; margin-left: 20px;">
+                <li>American Psychiatric Association. (2014). <em>DSM-5</em>.</li>
+                <li>Goodwin, F. K., & Jamison, K. R. (2007). <em>Manic-Depressive Illness</em>. Oxford University Press.</li>
+                <li>Stahl, S. M. (2014). <em>Psicofarmacologia Essencial de Stahl</em>.</li>
             </ul>
-            <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
-            <p>© 2026 Guia de Psicoeducação Clínica - Bruno de Souza (CRP 07/44472)</p>
+        </div>
+    </section>
+
+    <footer style="background: #263238; color: white; padding: 40px 0; text-align: center;">
+        <div class="container">
+            <h3>Bruno de Souza</h3>
+            <p>Psicólogo Clínico | CRP 07/44472</p>
+            <p style="font-size: 0.9rem; color: #b0bec5; margin-top: 10px;">Especialista em TCC e Transtornos do Humor.</p>
         </div>
     </footer>
 
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        AOS.init({ duration: 1000, once: true });
-    </script>
-</body>
-</html>
+        // --- Neurobiologia ---
+        function explain(topic) {
+            const descBox = document.getElementById('brain-desc');
+            
+            if (topic === 'clock') {
+                descBox.style.backgroundColor = "#e8f5e9"; // Verde Claro
+                descBox.innerHTML = `
+                    <h4 style='color:#1b5e20; margin-bottom:10px;'>Relógio Biológico Quebrado</h4>
+                    <p>Pessoas com TAB têm uma vulnerabilidade genética no <strong>Ritmo Circadiano</strong>. Mudanças no sono, estações do ano ou fuso horário podem desregular todo o sistema, disparando crises. Por isso, a rotina é remédio.</p>
+                `;
+            } 
+            else if (topic === 'dopa') {
+                descBox.style.backgroundColor = "#fff3e0"; // Laranja Claro
+                descBox.innerHTML = `
+                    <h4 style='color:#e65100; margin-bottom:10px;'>Sensibilidade à Dopamina</h4>
+                    <p>Na mania, há um excesso de atividade dopaminérgica (recompensa/energia). Na depressão, uma queda brusca. O tratamento visa manter essa química dentro de uma "faixa de segurança" no meio.</p>
+                `;
+            } 
+            else if (topic === 'mit') {
+                descBox.style.backgroundColor = "#f3e5f5"; // Roxo Claro
+                descBox.innerHTML = `
+                    <h4 style='color:#4a148c; margin-bottom:10px;'>Energia Celular</h4>
+                    <p>Estudos recentes mostram alterações nas <strong>mitocôndrias</strong> (usinas de energia das células) em pacientes bipolares, o que explicaria a flutuação drástica entre "super-energia" e "exaustão total".</p>
+                `;
+            }
+        }
+
+        // --- Termômetro de Humor ---
+        function checkMood(state) {
+            const screen = document.getElementById('mood-result');
+            let title = "", text = "", color = "";
+
+            if (state === 'high') {
+                title = "Alerta: Pródromo de Mania";
+                text = "Você está acelerando. <strong>Ação Imediata:</strong> Reduza estímulos (telas, luzes), evite cafeína e álcool, e priorize o sono hoje. Se persistir, contate seu médico.";
+                color = "#ffe0b2"; // Fundo laranja
+            } else if (state === 'stable') {
+                title = "Zona de Eutimia";
+                text = "Ótimo! Você está na zona de estabilidade. Mantenha a rotina de sono e a medicação. Aproveite o dia com equilíbrio.";
+                color = "#c8e6c9"; // Fundo verde
+            } else if (state === 'low') {
+                title = "Alerta: Pródromo Depressivo";
+                text = "Sua energia está caindo. <strong>Ação Imediata:</strong> Ativação Comportamental suave (faça uma pequena caminhada ou tome sol) e evite o isolamento total.";
+                color = "#cfd8dc"; // Fundo cinza
+            }
+
+            screen.style.backgroundColor = color;
+            screen
