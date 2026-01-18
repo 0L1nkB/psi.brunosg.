@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Como Funciona a Terapia do Esquema - Guia Central</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Paleta Base "Fichário" */
+            --paper-line: #e2e8f0;
+            --paper-bg: #f8fafc;
+            --ink-color: #334155;
+            
+            /* Cores dos Domínios (Categorias) */
+            --domain-1: #f43f5e; /* Desconexão (Vermelho/Rosa) */
+            --domain-2: #3b82f6; /* Autonomia (Azul) */
+            --domain-3: #eab308; /* Limites (Amarelo) */
+            --domain-4: #10b981; /* Direcionamento (Verde) */
+            --domain-5: #6366f1; /* Supervigilância (Roxo) */
+
+            --radius: 12px;
+            --shadow-paper: 4px 4px 0px rgba(0,0,0,0.1); /* Sombra dura estilo Sticker */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            color: var(--ink-color);
+            line-height: 1.6;
+            background-color: var(--paper-bg);
+            /* Efeito Papel Pautado */
+            background-image: linear-gradient(var(--paper-line) 1px, transparent 1px);
+            background-size: 100% 2rem;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Patrick Hand', cursive;
+            color: #1e293b;
+        }
+
+        /* --- HEADER --- */
+        header {
+            background-color: #fff;
+            border-bottom: 3px solid #cbd5e1;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Efeito de "Rasgo" no papel do header */
+        header::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: linear-gradient(45deg, transparent 33.333%, #f8fafc 33.333%, #f8fafc 66.667%, transparent 66.667%), 
+                        linear-gradient(-45deg, transparent 33.333%, #f8fafc 33.333%, #f8fafc 66.667%, transparent 66.667%);
+            background-size: 20px 40px;
+        }
+
+        .header-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .header-title {
+            font-size: 3rem;
+            color: #0f172a;
+            margin-bottom: 0.5rem;
+        }
+
+        .header-subtitle {
+            font-size: 1.3rem;
+            color: #64748b;
+            font-family: 'Patrick Hand', cursive;
+            background: #f1f5f9;
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            transform: rotate(-2deg);
+        }
+
+        /* --- CONTAINER --- */
+        .main-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+            display: grid;
+            gap: 40px;
+            margin-bottom: 80px;
+        }
+
+        /* --- CARD DE INTRODUÇÃO (MANUAL) --- */
+        .intro-card {
+            background: #fff;
+            padding: 2rem;
+            border: 2px solid #cbd5e1;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-paper);
+            position: relative;
+        }
+
+        .intro-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .concept-box {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            border-left: 5px solid #3b82f6;
+        }
+
+        /* --- FLUXO DA TERAPIA (STICKERS) --- */
+        .process-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            margin-top: 40px;
+        }
+
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            text-align: center;
+        }
+
+        .step-card {
+            background: white;
+            padding: 20px;
+            border: 2px dashed #94a3b8;
+            border-radius: 50% 50% 50% 50% / 12% 12% 12% 12%; /* Formato orgânico */
+            transition: transform 0.3s;
+        }
+        .step-card:hover { transform: scale(1.05) rotate(2deg); border-color: var(--domain-2); }
+
+        .step-icon { font-size: 2.5rem; margin-bottom: 10px; display: block; }
+        .step-title { font-weight: 800; font-family: 'Patrick Hand'; font-size: 1.4rem; color: #334155; }
+
+        /* --- DIRETÓRIO DE ESQUEMAS --- */
+        .directory-container {
+            margin-top: 20px;
+        }
+
+        .domain-group {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: var(--radius);
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            position: relative;
+        }
+
+        /* Etiqueta do Domínio */
+        .domain-label {
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            padding: 5px 15px;
+            border-radius: 20px;
+            color: white;
+            font-weight: 700;
+            font-family: 'Patrick Hand';
+            font-size: 1.1rem;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        /* Botões dos Esquemas */
+        .schema-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f1f5f9;
+            padding: 12px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #475569;
+            font-weight: 600;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .schema-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+        }
+
+        /* Cores Específicas por Domínio no Hover */
+        .d1 .schema-btn:hover { border-color: var(--domain-1); color: var(--domain-1); }
+        .d2 .schema-btn:hover { border-color: var(--domain-2); color: var(--domain-2); }
+        .d3 .schema-btn:hover { border-color: var(--domain-3); color: var(--domain-3); }
+        .d4 .schema-btn:hover { border-color: var(--domain-4); color: var(--domain-4); }
+        .d5 .schema-btn:hover { border-color: var(--domain-5); color: var(--domain-5); }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: #fff;
+            border-top: 1px solid #e2e8f0;
+            padding: 3rem 0;
+            margin-top: auto;
+        }
+        .footer-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .footer-brand { color: #64748b; font-size: 0.9rem; font-weight: 600; }
+        .social-links { display: flex; gap: 1.5rem; }
+        .social-links a { color: #94a3b8; font-size: 1.2rem; transition: color 0.2s; }
+        .social-links a:hover { color: #3b82f6; }
+
+        @media (max-width: 768px) {
+            .footer-container { flex-direction: column; gap: 1rem; }
+            .intro-grid { grid-template-columns: 1fr; }
+            .header-title { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-content">
+            <h1 class="header-title">O Mapa da Mente</h1>
+            <p class="header-subtitle">Guia Interativo da Terapia do Esquema</p>
+        </div>
+    </header>
+
+    <div class="main-container">
+
+        <div class="intro-card">
+            <h2 style="margin-bottom: 15px;"><i class="fas fa-book-open"></i> O que é isso tudo?</h2>
+            <p>Imagine que sua mente é uma casa. Os <strong>Esquemas</strong> são os alicerces construídos na infância. Se o alicerce ficou torto (por falta de amor, proteção ou limites), a casa fica instável hoje.</p>
+            
+            <div class="intro-grid">
+                <div class="concept-box">
+                    <h4 style="color:#2563eb;">🕶️ O Esquema (A Lente)</h4>
+                    <p style="font-size:0.9rem; margin-top:5px;">É como usar óculos coloridos. Se você tem o esquema de Abandono, você usa "óculos do abandono": qualquer silêncio parece uma despedida.</p>
+                </div>
+                <div class="concept-box" style="border-left-color: #f59e0b;">
+                    <h4 style="color:#d97706;">🎭 O Modo (A Reação)</h4>
+                    <p style="font-size:0.9rem; margin-top:5px;">É como você age quando o esquema é ativado. Você pode chorar (Criança), atacar (Hipercompensação) ou fugir (Evitação).</p>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="process-title">A Jornada de Cura</h2>
+        <div class="process-steps">
+            <div class="step-card">
+                <span class="step-icon">🕵️</span>
+                <div class="step-title">1. Identificar</div>
+                <p style="font-size:0.9rem;">Dar nome aos bois. "Ah, isso que estou sentindo é o meu esquema de Privação ativado."</p>
+            </div>
+            <div class="step-card">
+                <span class="step-icon">👶</span>
+                <div class="step-title">2. Acolher</div>
+                <p style="font-size:0.9rem;">Acalmar a Criança Vulnerável. Entender que a dor vem do passado, não do presente.</p>
+            </div>
+            <div class="step-card">
+                <span class="step-icon">🛑</span>
+                <div class="step-title">3. Limitar</div>
+                <p style="font-size:0.9rem;">Parar o Crítico Interno (aquela voz que diz que você não presta) e os modos de defesa.</p>
+            </div>
+            <div class="step-card">
+                <span class="step-icon">🌱</span>
+                <div class="step-title">4. Fortalecer</div>
+                <p style="font-size:0.9rem;">Desenvolver o <strong>Adulto Saudável</strong>, que cuida de você e toma decisões sábias.</p>
+            </div>
+        </div>
+
+        <h2 class="process-title" style="margin-top:60px;">Seus Arquivos Pessoais</h2>
+        <p style="text-align:center; color:#64748b; margin-bottom:30px;">Clique em um esquema para abrir seu caderno terapêutico.</p>
+
+        <div class="directory-container">
+            
+            <div class="domain-group d1">
+                <div class="domain-label" style="background:var(--domain-1);">❤️ Conexão & Afeto</div>
+                <p style="font-size:0.9rem; color:#64748b; margin-top:10px;">Dificuldade em criar vínculos seguros e satisfatórios.</p>
+                <div class="links-grid">
+                    <a href="esquema-abandono.html" class="schema-btn">Abandono <i class="fas fa-arrow-right" style="font-size:0.8rem;"></i></a>
+                    <a href="esquema-desconfianca.html" class="schema-btn">Desconfiança/Abuso <i class="fas fa-arrow-right" style="font-size:0.8rem;"></i></a>
+                    <a href="esquema-privacao.html" class="schema-btn">Privação Emocional <i class="fas fa-arrow-right" style="font-size:0.8rem;"></i></a>
+                    <a href="esquema-defectividade.html" class="schema-btn">Defectividade/Vergonha <i class="fas fa-arrow-right" style="font-size:0.8rem;"></i></a>
+                    <a href="esquema-isolamento.html" class="schema-btn">Isolamento Social <i class="fas fa-arrow-right" style="font-size:0.8rem;"></i></a>
+                </div>
+            </div>
+
+            <div class="domain-group d2">
+                <div class="domain-label" style="background:var(--domain-2);">🚀 Autonomia & Desempenho</div>
+                <p style="font-size:0.9rem; color:#64748b; margin-top:10px;">Dificuldade em se sentir capaz de viver e sobreviver sozinho.</p>
+                <div class="links-grid">
+                    <a href="esquema-dependencia.html" class="schema-btn">Dependência <i class="fas fa-arrow-right" style="font-size:0.8rem;"></i></a>
+                    <a href="esquema-vulnerabilidade.html" class="schema-btn">Vulnerabilidade <i class="fas fa-arrow-right" style="font-size:0.8rem;"></i></a>
+                    <a href="esquema-emaranhamento.html" class="schema-btn">Emaranhamento <i class="fas fa-arrow-right" style="font-size:0.8rem;"></i></a>
+                    <a href="esquema-fracasso.html" class="schema-btn">Fracasso <i class="fas fa-arrow-right" style="font-size:0.8rem;"></i></a>
+                </div>
+            </div>
+
+            <div class="domain-group d3">
+                <div class="domain-label" style="background:var(--domain-3);">🚧 Limites Realistas</div>
+                <p style="font-size:0.9rem; color:#64748b; margin-top:10px;">Dificuldade em respeitar os direitos dos outros ou ter autodisciplina.</p>
+                <div class="links-grid">
+                    <a href="esquema-merecimento.html" class="schema-btn">Merecimento/Grandiosidade <i class="fas fa-arrow-right" style="font-size:0.8rem;"></i></a>
+                    <a href="esquema-autocontrole.html" class="schema-btn">Autocontrole Insuficiente <i class="fas fa-arrow-right" style="font-size:0.8rem;"></i></a>
+                </div>
+            </div>
+
+            <div class="domain-group d4">
+                <div class="domain-label" style="background:var(--domain-4);">🤝 Foco no Outro</div>
+                <p style="font-size:0.9rem; color:#64748b; margin-top:10px;">Colocar as necessidades alheias acima das suas.</p>
+                <div class="links-grid">
+                    <a href="esquema-subjugacao.html" class="schema-btn">Subjugação <i class="fas fa-arrow-right" style="font-size:0.8rem;"></i></a>
+                    <a href="esquema-autossacrificio.html" class="schema-btn">Autossacrifício <i class="fas fa-arrow-right" style="font-size:0.8rem;"></i></a>
+                    <a href="esquema-aprovacao.html" class="schema-btn">Busca de Aprovação <i class="fas fa-arrow-right" style="font-size:0.8rem;"></i></a>
+                </div>
+            </div>
+
+            <div class="domain-group d5">
+                <div class="domain-label" style="background:var(--domain-5);">🛡️ Supervigilância</div>
+                <p style="font-size:0.9rem; color:#64748b; margin-top:10px;">Suprimir sentimentos espontâneos e seguir regras rígidas.</p>
+                <div class="links-grid">
+                    <a href="esquema-negativismo.html" class="schema-btn">Negativismo/Pessimismo <i class="fas fa-arrow-right" style="font-size:0.8rem;"></i></a>
+                    <a href="esquema-inibicao.html" class="schema-btn">Inibição Emocional <i class="fas fa-arrow-right" style="font-size:0.8rem;"></i></a>
+                    <a href="esquema-padroes.html" class="schema-btn">Padrões Inflexíveis <i class="fas fa-arrow-right" style="font-size:0.8rem;"></i></a>
+                    <a href="esquema-punicao.html" class="schema-btn">Punição <i class="fas fa-arrow-right" style="font-size:0.8rem;"></i></a>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-brand">
+                &copy; 2026 Bruno de Souza
+            </div>
+            <div class="social-links">
+                <a href="https://www.instagram.com/psi.brunosg/" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://wa.me/5553991898309" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.linkedin.com/in/psi-bsouza/" target="_blank"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
