@@ -3,58 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Esquema de Abandono - Guia Interativo</title>
+    <title>Esquema de Abandono - Guia Terapêutico</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
     <style>
         :root {
-            /* Cores do Sistema */
-            --primary: #f59e0b;       /* Âmbar/Laranja (Instabilidade/Alerta) */
+            /* Design System Lúdico & Clean */
+            --primary: #f59e0b;       /* Âmbar (Cor do Esquema) */
+            --primary-light: #fffbeb;
             --primary-hover: #d97706;
+            --secondary: #64748b;     
+            --bg-body: #f8fafc;       
             --bg-card: #ffffff;
-            --text-main: #1f2937;
-            --text-muted: #6b7280;
-            --border-color: #e5e7eb;
+            --text-main: #1e293b;     
+            --text-muted: #64748b;
             
-            /* Cores do Esquema */
-            --schema-bg: #fffbeb;
-            --schema-icon: #f59e0b;
+            /* Cores Semânticas */
+            --schema-icon-bg: #fef3c7;
+            --schema-icon-color: #d97706;
+            --child-mode: #fda4af;    /* Rosa (Criança) */
+            --adult-mode: #34d399;    /* Verde (Adulto) */
             
-            --radius: 12px;
-            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --radius: 16px; /* Bordas mais arredondadas (Lúdico) */
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --transition: all 0.3s ease;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
             color: var(--text-main);
             line-height: 1.6;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
             
-            /* Fundo Gradiente Suave (Aprovado anteriormente) */
-            background-color: #f3f4f6;
+            /* Fundo Gradiente Suave */
             background-image: 
-                radial-gradient(at 0% 0%, hsla(37, 100%, 94%, 1) 0px, transparent 50%),
-                radial-gradient(at 100% 0%, hsla(28, 100%, 93%, 1) 0px, transparent 50%);
+                radial-gradient(at 0% 0%, hsla(37, 100%, 96%, 1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, hsla(28, 100%, 96%, 1) 0px, transparent 50%);
             background-attachment: fixed;
-            background-size: cover;
         }
 
         /* --- HEADER --- */
         header {
-            background-color: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border-color);
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid #e2e8f0;
             padding: 1.5rem 0;
-            margin-bottom: 2rem;
             position: sticky;
             top: 0;
-            z-index: 10;
+            z-index: 100;
         }
 
         .header-content {
@@ -66,21 +69,25 @@
 
         .header-title {
             font-size: 1.5rem;
-            font-weight: 700;
+            font-weight: 800;
             color: var(--text-main);
-            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
         }
 
-        .header-subtitle { color: var(--text-muted); font-size: 0.95rem; }
+        .header-subtitle {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-top: 5px;
+        }
 
-        /* --- CONTAINER PRINCIPAL --- */
+        /* --- CONTAINER --- */
         .main-container {
             max-width: 1000px;
-            margin: 0 auto;
+            margin: 40px auto;
             padding: 0 20px;
             width: 100%;
             display: grid;
-            gap: 24px;
+            gap: 30px;
             margin-bottom: 60px;
         }
 
@@ -89,123 +96,189 @@
             background-color: var(--bg-card);
             border-radius: var(--radius);
             box-shadow: var(--shadow);
-            border: 1px solid var(--border-color);
-            padding: 1.5rem;
+            border: 1px solid rgba(0,0,0,0.05);
+            padding: 2rem;
+            transition: var(--transition);
         }
+
+        .card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
 
         .card-header {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
             margin-bottom: 1.5rem;
             padding-bottom: 1rem;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid #f1f5f9;
         }
 
         .card-icon {
-            width: 32px; height: 32px;
-            background-color: var(--schema-bg);
-            color: var(--schema-icon);
-            border-radius: 6px;
+            width: 45px; height: 45px;
+            background-color: var(--schema-icon-bg);
+            color: var(--schema-icon-color);
+            border-radius: 12px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 1rem;
+            font-size: 1.25rem;
         }
 
-        .card-title { font-size: 1.1rem; font-weight: 600; color: var(--text-main); }
-
-        /* --- CONTEÚDO --- */
-        p { margin-bottom: 1rem; color: #4b5563; font-size: 0.95rem; }
-        
-        .highlight {
-            background-color: #fff7ed;
-            border-left: 3px solid var(--primary);
-            padding: 1rem;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            color: #9a3412;
-            margin-bottom: 1rem;
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
         }
 
-        /* --- PERSONAS (STORIES) --- */
-        .persona-grid {
+        /* --- GRIDS --- */
+        .grid-3 {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 20px;
         }
 
-        .persona-card {
-            background: #f9fafb;
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
+        /* --- BOXES INFORMATIVOS (AS 3 DIMENSÕES) --- */
+        .info-box {
+            background-color: #ffffff;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
         }
         
-        .persona-name { font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
-        .persona-tag { font-size: 0.75rem; text-transform: uppercase; padding: 2px 8px; border-radius: 4px; font-weight: 600; }
-        .tag-anxious { background: #fee2e2; color: #991b1b; } /* Vermelho suave */
-        .tag-avoidant { background: #e0f2fe; color: #075985; } /* Azul suave */
-
-        /* --- ORIGENS LIST --- */
-        .origins-list { list-style: none; padding: 0; }
-        .origins-list li {
-            padding: 10px 0;
-            border-bottom: 1px solid #f3f4f6;
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            font-size: 0.95rem;
-            color: #4b5563;
+        .info-box:hover { border-color: var(--primary); }
+        
+        .info-box h4 { 
+            font-size: 1rem; font-weight: 700; margin-bottom: 0.8rem; color: var(--text-main); 
+            display: flex; align-items: center; gap: 8px;
         }
-        .origins-list li:last-child { border-bottom: none; }
-        .check-icon { color: var(--primary); margin-top: 3px; }
+        
+        .info-box p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin: 0; }
 
-        /* --- ACCORDIONS --- */
+        /* --- FERRAMENTAS INTERATIVAS (TRADUTOR) --- */
+        .interactive-area {
+            background-color: #fffbeb;
+            padding: 2rem;
+            border-radius: 16px;
+            border: 2px dashed #fcd34d;
+            text-align: center;
+        }
+
+        .btn-option {
+            background-color: white;
+            border: 1px solid #e2e8f0;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: var(--transition);
+            margin: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .btn-option:hover, .btn-option.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .result-display {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 12px;
+            min-height: 100px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            opacity: 0; /* Animação */
+            transition: opacity 0.3s ease;
+        }
+        .result-display.show { opacity: 1; }
+
+        /* --- ACCORDIONS (CONCEITOS CLÍNICOS) --- */
         details {
             background-color: white;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            margin-bottom: 8px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            margin-bottom: 12px;
             overflow: hidden;
         }
         summary {
-            padding: 12px 16px;
-            font-size: 0.95rem;
-            font-weight: 500;
-            background-color: #f9fafb;
+            padding: 16px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            background-color: #f8fafc;
             cursor: pointer;
             list-style: none;
-            display: flex; justify-content: space-between;
-            align-items: center;
+            display: flex; justify-content: space-between; align-items: center;
+            transition: background 0.2s;
         }
-        summary:hover { background-color: #f3f4f6; }
-        .details-body { padding: 16px; font-size: 0.9rem; color: #4b5563; border-top: 1px solid var(--border-color); }
+        summary:hover { background-color: #f1f5f9; }
+        summary::-webkit-details-marker { display: none; }
+        
+        .details-body { 
+            padding: 20px; 
+            font-size: 0.95rem; 
+            color: #475569; 
+            border-top: 1px solid #e2e8f0;
+            line-height: 1.7;
+        }
 
-        /* --- FERRAMENTA PRÁTICA --- */
-        .exercise-area {
-            background: #fff8f1;
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px dashed #fdba74;
-            text-align: center;
-        }
-        .btn-exercise {
-            background-color: white;
-            border: 1px solid #fdba74;
-            color: #c2410c;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: 500;
+        /* --- FLASHCARD LÚDICO (SEM ALERT) --- */
+        .flashcard-container {
+            perspective: 1000px;
+            width: 100%;
+            height: 250px;
             cursor: pointer;
-            margin-top: 10px;
-            transition: all 0.2s;
         }
-        .btn-exercise:hover { background-color: #fff7ed; transform: translateY(-1px); }
+        
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        
+        .flashcard-container.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .flashcard-front {
+            background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+            color: #9a3412;
+        }
+        
+        .flashcard-back {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            color: #065f46;
+            transform: rotateY(180deg);
+        }
 
         /* --- FOOTER (SEU PADRÃO) --- */
         footer {
             background-color: #ffffff;
-            border-top: 1px solid var(--border-color);
-            padding: 2rem 0;
+            border-top: 1px solid #e2e8f0;
+            padding: 2.5rem 0;
             margin-top: auto;
         }
 
@@ -220,27 +293,20 @@
 
         .footer-brand {
             color: var(--text-muted);
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: 500;
         }
 
-        .social-links {
-            display: flex;
-            gap: 1.5rem;
-        }
-
+        .social-links { display: flex; gap: 1.5rem; }
         .social-links a {
-            color: #9ca3af;
-            font-size: 1.1rem;
-            text-decoration: none;
-            transition: color 0.2s ease;
+            color: #94a3b8; font-size: 1.2rem; text-decoration: none; transition: color 0.2s ease;
         }
-
         .social-links a:hover { color: var(--primary); }
 
         @media (max-width: 640px) {
             .footer-container { flex-direction: column; gap: 1rem; }
-            .persona-grid { grid-template-columns: 1fr; }
+            .grid-3 { grid-template-columns: 1fr; }
+            .flashcard-container { height: 300px; }
         }
     </style>
 </head>
@@ -249,7 +315,7 @@
     <header>
         <div class="header-content">
             <h1 class="header-title">Esquema de Abandono</h1>
-            <p class="header-subtitle">Compreendendo a instabilidade dos vínculos[cite: 1, 2].</p>
+            <p class="header-subtitle">Guia de psicoeducação e ferramentas práticas.</p>
         </div>
     </header>
 
@@ -260,85 +326,110 @@
                 <div class="card-icon"><i class="fas fa-heart-broken"></i></div>
                 <div class="card-title">O Que é Esse Esquema?</div>
             </div>
-            <p>O Esquema de Abandono é a sensação persistente de que as pessoas importantes da sua vida vão te deixar, morrer ou se tornar imprevisíveis a qualquer momento.</p>
-            <div class="highlight">
-                <strong>O Pensamento Central:</strong> "Por favor, não vá. Se você for, eu ficarei sozinho para sempre e não vou sobreviver." [cite: 31]
+            <p>O Esquema de Abandono é a sensação profunda e persistente de que as pessoas importantes da sua vida são instáveis e, eventualmente, deixarão você. É o medo crônico da perda.</p>
+            <div style="background:#fff7ed; border-radius:8px; padding:15px; color:#c2410c; font-weight:500; font-size:0.95rem;">
+                <i class="fas fa-quote-left" style="margin-right:8px;"></i>
+                "Por favor, não vá. Se você for, eu ficarei sozinho para sempre e não vou sobreviver."
             </div>
         </div>
 
         <div class="card">
             <div class="card-header">
-                <div class="card-icon"><i class="fas fa-user-friends"></i></div>
-                <div class="card-title">Como isso se manifesta na vida?</div>
+                <div class="card-icon"><i class="fas fa-cubes"></i></div>
+                <div class="card-title">As 3 Dimensões do Abandono</div>
             </div>
-            <p>Este esquema costuma gerar dois tipos opostos de comportamento nos relacionamentos:</p>
+            <div class="grid-3">
+                <div class="info-box">
+                    <h4><i class="fas fa-wind" style="color:#f59e0b;"></i> Instabilidade</h4>
+                    <p>A percepção de que o outro é imprevisível. "Uma hora ele me ama, na outra ele some." O vínculo parece piscar como uma lâmpada falhando.</p>
+                </div>
+                <div class="info-box">
+                    <h4><i class="fas fa-user-slash" style="color:#ef4444;"></i> Perda de Conexão</h4>
+                    <p>O medo não é apenas físico, é de perder a conexão emocional. "Se ele não responde, é porque parou de gostar de mim."</p>
+                </div>
+                <div class="info-box">
+                    <h4><i class="fas fa-baby" style="color:#ec4899;"></i> Dependência</h4>
+                    <p>A crença infantil de que "eu não consigo viver sem ele". Uma fusão onde a sua sobrevivência emocional depende da presença do outro.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon"><i class="fas fa-language"></i></div>
+                <div class="card-title">Tradutor de Necessidades</div>
+            </div>
+            <p>Quando o esquema ativa, tendemos a cobrar ou atacar. Use esta ferramenta para traduzir o "Pânico" em "Pedido Saudável".</p>
             
-            <div class="persona-grid">
-                <div class="persona-card">
-                    <div class="persona-name">
-                        Mariana <span class="persona-tag tag-anxious">Apegada</span>
-                    </div>
-                    <p>Mariana entra em pânico se o namorado demora 30 minutos para responder. Ela manda mensagem atrás de mensagem ("Você está bravo?"). Ela se agarra a parceiros, mesmo os frios, pois a ideia de término parece insuportável[cite: 47, 51].</p>
-                    <p style="font-size:0.85rem; color:#6b7280;"><em>Comportamento: Rendição (Clinging)</em></p>
+            <div class="interactive-area">
+                <p style="margin-bottom:15px; font-weight:600; color:#4b5563;">O que você tem vontade de dizer?</p>
+                <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:10px;">
+                    <button class="btn-option" onclick="translateNeed('sumiu')">"Você sumiu! Não se importa comigo?"</button>
+                    <button class="btn-option" onclick="translateNeed('amor')">"Você ainda me ama? Tem certeza?"</button>
+                    <button class="btn-option" onclick="translateNeed('terminar')">"É melhor terminar logo então!"</button>
                 </div>
-
-                <div class="persona-card">
-                    <div class="persona-name">
-                        Pedro <span class="persona-tag tag-avoidant">Evitativo</span>
-                    </div>
-                    <p>Pedro aprendeu que "quem ama, sofre". Para não ser abandonado, ele abandona primeiro. Quando uma relação começa a ficar séria, ele sente um aperto no peito e termina abruptamente, ou se mantém distante emocionalmente para se proteger[cite: 56, 60].</p>
-                    <p style="font-size:0.85rem; color:#6b7280;"><em>Comportamento: Evitação (Escape)</em></p>
+                
+                <div id="translator-result" class="result-display">
+                    <span style="color:#94a3b8; font-style:italic;">Selecione uma frase acima para traduzir.</span>
                 </div>
             </div>
         </div>
 
         <div class="card">
             <div class="card-header">
-                <div class="card-icon"><i class="fas fa-seedling"></i></div>
-                <div class="card-title">De Onde Isso Vem?</div>
+                <div class="card-icon"><i class="fas fa-brain"></i></div>
+                <div class="card-title">Aprofundamento Clínico</div>
             </div>
-            <p>O esquema de abandono se forma na infância através de quebras no vínculo seguro[cite: 39]:</p>
-            <ul class="origins-list">
-                <li><i class="fas fa-check check-icon"></i> <strong>Instabilidade:</strong> Pais que eram carinhosos num dia e frios/explosivos no outro[cite: 74].</li>
-                <li><i class="fas fa-check check-icon"></i> <strong>Perda Real:</strong> Morte de um cuidador, divórcio traumático ou hospitalização prolongada[cite: 73].</li>
-                <li><i class="fas fa-check check-icon"></i> <strong>Ausência Emocional:</strong> Pais presentes fisicamente, mas que "sumiam" emocionalmente (depressão, trabalho)[cite: 40].</li>
-            </ul>
+            
+            <details>
+                <summary>Neurobiologia: O Pânico de Separação <i class="fas fa-chevron-down" style="color:#cbd5e1;"></i></summary>
+                <div class="details-body">
+                    <p><strong>A Amígdala:</strong> Em pessoas com este esquema, a amígdala (centro do medo) é hipersensível a sinais de separação. O silêncio do outro é processado pelo cérebro primitivo como <strong>risco de morte</strong>, disparando adrenalina antes que você possa pensar racionalmente.</p>
+                    <p><strong>Ocitocina:</strong> A instabilidade na infância pode ter desregulado o sistema de ocitocina (hormônio do vínculo), tornando difícil sentir-se "preenchido" ou seguro no afeto, exigindo "doses" constantes de reasseguramento.</p>
+                </div>
+            </details>
+
+            <details>
+                <summary>Como a Terapia do Esquema Ajuda? <i class="fas fa-chevron-down" style="color:#cbd5e1;"></i></summary>
+                <div class="details-body">
+                    <p>A TE trabalha com <strong>Reparentalização Limitada</strong>. O terapeuta ajuda a suprir (dentro dos limites éticos) as necessidades que faltaram na infância (estabilidade, segurança), ajudando o paciente a internalizar a figura do "Adulto Saudável" que acalma a "Criança Vulnerável".</p>
+                </div>
+            </details>
+
+            <details>
+                <summary>Técnicas para o Paciente Usar <i class="fas fa-chevron-down" style="color:#cbd5e1;"></i></summary>
+                <div class="details-body">
+                    <ul style="padding-left:20px;">
+                        <li><strong>Cartão de Enfrentamento (Flashcard):</strong> Ler uma mensagem racional durante a crise (veja abaixo).</li>
+                        <li><strong>Objeto de Transição:</strong> Ter um objeto que simbolize a conexão com o terapeuta ou uma figura segura para segurar em momentos de solidão.</li>
+                        <li><strong>Diário de Evidências:</strong> Anotar fatos que provem que a pessoa <em>não</em> está indo embora (ex: "Ele mandou mensagem de bom dia hoje").</li>
+                    </ul>
+                </div>
+            </details>
         </div>
 
         <div class="card">
             <div class="card-header">
                 <div class="card-icon"><i class="fas fa-sync-alt"></i></div>
-                <div class="card-title">Quebrando o Ciclo</div>
+                <div class="card-title">Exercício: Vire o Jogo</div>
             </div>
+            <p>Toque no cartão abaixo quando sentir o pânico do abandono. Veja a transformação do pensamento.</p>
             
-            <details>
-                <summary>A Armadilha dos Relacionamentos <i class="fas fa-chevron-down"></i></summary>
-                <div class="details-body">
-                    <p>Sem perceber, pessoas com este esquema tendem a escolher parceiros <strong>instáveis ou indisponíveis</strong> (porque a instabilidade parece "familiar") ou agem com tanto ciúme e controle que acabam afastando parceiros saudáveis, confirmando o medo de que "todos vão embora"[cite: 93, 96].</p>
+            <div class="flashcard-container" onclick="this.classList.toggle('flipped')">
+                <div class="flashcard-inner">
+                    <div class="flashcard-front">
+                        <i class="fas fa-exclamation-triangle" style="font-size:2rem; margin-bottom:15px;"></i>
+                        <h3 style="font-size:1.1rem; margin-bottom:10px;">Voz do Esquema (Pânico)</h3>
+                        <p style="font-style:italic;">"Ele não respondeu há 2 horas. Ele cansou de mim. Vai embora. Eu vou ficar sozinho de novo. Preciso ligar agora!"</p>
+                        <span style="margin-top:auto; font-size:0.8rem; opacity:0.7;">(Toque para ver a Realidade)</span>
+                    </div>
+                    
+                    <div class="flashcard-back">
+                        <i class="fas fa-shield-alt" style="font-size:2rem; margin-bottom:15px;"></i>
+                        <h3 style="font-size:1.1rem; margin-bottom:10px;">Voz do Adulto Saudável</h3>
+                        <p>Eu sinto o medo da minha Criança, mas a realidade é: ele provavelmente está ocupado. O silêncio não é abandono. Eu sou adulto e seguro. Posso esperar.</p>
+                    </div>
                 </div>
-            </details>
-
-            <details>
-                <summary>Passos para a Cura <i class="fas fa-chevron-down"></i></summary>
-                <div class="details-body">
-                    <ol style="padding-left:20px; color:#4b5563;">
-                        <li><strong>Reconheça a Criança Ferida:</strong> Entenda que o pânico que você sente hoje vem da memória da criança, não necessariamente da realidade atual[cite: 139].</li>
-                        <li><strong>Teste de Realidade:</strong> Pergunte-se: "Existe evidência real de que ele vai me deixar ou ele só está ocupado?"[cite: 137].</li>
-                        <li><strong>Treine a Autonomia:</strong> Aprenda a ficar sozinho e se sentir bem. Você é um adulto capaz de cuidar de si mesmo, não é mais aquela criança dependente[cite: 141].</li>
-                    </ol>
-                </div>
-            </details>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <div class="card-icon"><i class="fas fa-pencil-alt"></i></div>
-                <div class="card-title">Exercício: Cartão de Enfrentamento</div>
-            </div>
-            <div class="exercise-area">
-                <p>Quando a ansiedade bater (ex: ele não respondeu a mensagem), leia isto para si mesmo:</p>
-                <p style="font-style:italic; font-weight:500;">"Minha ansiedade está disparada porque meu esquema de abandono foi ativado. Isso é uma memória antiga. A realidade é que [Pessoa] provavelmente está ocupada. Eu posso esperar. Eu sou seguro."</p>
-                <button class="btn-exercise" onclick="alert('Dica: Tire um print desta tela e guarde no celular para momentos de crise!')">Salvar Lembrete</button>
             </div>
         </div>
 
@@ -356,6 +447,47 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        function translateNeed(type) {
+            const display = document.getElementById('translator-result');
+            let content = "";
+            
+            // Remove class para reiniciar animação
+            display.classList.remove('show');
+            
+            setTimeout(() => {
+                if (type === 'sumiu') {
+                    content = `
+                        <div style="text-align:center;">
+                            <strong style="color:#ef4444; display:block; margin-bottom:5px;">A Queixa (Ataque):</strong> 
+                            "Você sumiu! Não se importa comigo?"<br><br>
+                            <strong style="color:#10b981; display:block; margin-bottom:5px;">A Necessidade Real (Vulnerabilidade):</strong>
+                            <span style="background:#d1fae5; color:#065f46; padding:5px 10px; border-radius:4px;">"Estou me sentindo inseguro e preciso de um pouco de atenção para me acalmar."</span>
+                        </div>`;
+                } else if (type === 'amor') {
+                    content = `
+                        <div style="text-align:center;">
+                            <strong style="color:#ef4444; display:block; margin-bottom:5px;">A Queixa (Checagem):</strong> 
+                            "Você ainda me ama? Tem certeza?"<br><br>
+                            <strong style="color:#10b981; display:block; margin-bottom:5px;">A Necessidade Real (Vulnerabilidade):</strong>
+                            <span style="background:#d1fae5; color:#065f46; padding:5px 10px; border-radius:4px;">"Meu esquema de abandono ativou. Preciso de um abraço ou uma palavra de carinho."</span>
+                        </div>`;
+                } else if (type === 'terminar') {
+                    content = `
+                        <div style="text-align:center;">
+                            <strong style="color:#ef4444; display:block; margin-bottom:5px;">A Queixa (Defesa):</strong> 
+                            "É melhor terminar logo então!"<br><br>
+                            <strong style="color:#10b981; display:block; margin-bottom:5px;">A Necessidade Real (Vulnerabilidade):</strong>
+                            <span style="background:#d1fae5; color:#065f46; padding:5px 10px; border-radius:4px;">"Estou com tanto medo de você me deixar que prefiro sair antes para não doer. Mas eu quero ficar."</span>
+                        </div>`;
+                }
+                
+                display.innerHTML = content;
+                display.classList.add('show');
+            }, 50);
+        }
+    </script>
 
 </body>
 </html>
