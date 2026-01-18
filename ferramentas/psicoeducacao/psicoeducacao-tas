@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Psicoeducação: Transtorno de Ansiedade Social</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #7DB9B6; 
+            --secondary: #E9EDC9; 
+            --accent: #E29578; 
+            --dark-green: #2D5A58;
+            --text-color: #444;
+            --bg-body: #FBFBFB;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-color);
+            line-height: 1.8;
+        }
+
+        h1, h2, h3 { font-family: 'Quicksand', sans-serif; color: var(--dark-green); }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 0 25px; }
+
+        /* --- Header / Hero --- */
+        header {
+            height: 60vh;
+            background: linear-gradient(135deg, var(--primary) 0%, #A2D2FF 100%);
+            display: flex; align-items: center; justify-content: center;
+            text-align: center; color: white; border-radius: 0 0 60px 60px;
+            padding: 20px;
+        }
+
+        header h1 { font-size: 3rem; color: white; margin-bottom: 20px; }
+        header p { font-size: 1.2rem; max-width: 650px; opacity: 0.95; }
+
+        /* --- Seções --- */
+        section { padding: 80px 0; border-bottom: 1px solid #eee; }
+        .section-title { text-align: center; margin-bottom: 50px; }
+        .section-title h2 { font-size: 2.2rem; position: relative; display: inline-block; }
+        .section-title h2::after { content: ''; width: 60%; height: 4px; background: var(--secondary); position: absolute; bottom: -10px; left: 20%; border-radius: 2px; }
+
+        /* --- Cards e Boxes --- */
+        .info-card {
+            background: white; padding: 35px; border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04); margin-bottom: 30px;
+            border: 1px solid #f0f0f0;
+        }
+
+        .highlight-box {
+            background: var(--secondary); padding: 25px; border-left: 6px solid var(--primary);
+            border-radius: 10px; margin: 30px 0;
+        }
+
+        .grid-two { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
+
+        /* --- Neurobiologia --- */
+        .neuro-list { list-style: none; }
+        .neuro-list li { margin-bottom: 20px; padding-left: 30px; position: relative; }
+        .neuro-list li::before { content: '•'; color: var(--primary); font-size: 2rem; position: absolute; left: 0; top: -10px; }
+
+        /* --- Tabela --- */
+        .table-wrap { overflow-x: auto; margin-top: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; background: white; }
+        th, td { padding: 18px; text-align: left; border-bottom: 1px solid #f0f0f0; }
+        th { background: var(--primary); color: white; }
+
+        /* --- Exercício de Atenção Externa --- */
+        .exercise-container {
+            background: var(--dark-green); color: white;
+            padding: 60px 20px; border-radius: 40px; text-align: center;
+            margin: 50px 0; display: flex; flex-direction: column; align-items: center;
+        }
+
+        .focus-guide {
+            width: 250px; height: 100px;
+            display: flex; align-items: center; justify-content: center;
+            position: relative; margin: 30px 0;
+            border: 1px dashed rgba(255,255,255,0.3);
+            border-radius: 15px;
+        }
+
+        .scanner-bar {
+            width: 4px; height: 80%; background: var(--accent);
+            position: absolute; left: 10%;
+            animation: scanMove 4s infinite ease-in-out;
+            box-shadow: 0 0 15px var(--accent);
+        }
+
+        @keyframes scanMove {
+            0%, 100% { left: 10%; }
+            50% { left: 85%; }
+        }
+
+        footer { background: #f4f4f4; padding: 60px 0; font-size: 0.9rem; color: #666; }
+        .ref-list { list-style: none; padding-top: 15px; }
+        .ref-list li { margin-bottom: 10px; }
+
+        @media (max-width: 768px) { header h1 { font-size: 2.2rem; } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container" data-aos="fade-up">
+            <h1>Ansiedade Social</h1>
+            <p>Compreendendo o medo do julgamento e os circuitos da interação humana.</p>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <section data-aos="fade-up">
+            <div class="section-title"><h2>O que é a Ansiedade Social?</h2></div>
+            <p>O Transtorno de Ansiedade Social (TAS) vai muito além da timidez. É um medo persistente e intenso de situações em que a pessoa possa ser <strong>avaliada, julgada ou humilhada</strong> por outros. O indivíduo teme que suas reações de ansiedade (como tremer ou corar) sejam percebidas e criticadas.</p>
+            
+            <div class="highlight-box">
+                <strong>Origens Evolutivas:</strong> Do ponto de vista evolutivo, ser excluído de um grupo social significava morte certa na antiguidade. O TAS é uma versão hiperativa desse sistema de sobrevivência: o cérebro trata a possibilidade de uma crítica social como se fosse um predador físico.
+            </div>
+        </section>
+
+        <section data-aos="fade-up">
+            <div class="section-title"><h2>O Cérebro Social</h2></div>
+            <p>A neurobiologia do TAS envolve áreas responsáveis pelo reconhecimento de faces e monitorização de erros.</p>
+            
+            
+
+            <div class="info-card">
+                <ul class="neuro-list">
+                    <li><strong>Hiper-responsividade da Amígdala:</strong> Pacientes com TAS mostram uma ativação exagerada da amígdala ao verem faces com expressões neutras ou levemente negativas.</li>
+                    <li><strong>Córtex Cingulado Anterior (CCA):</strong> Esta área monitora conflitos e "erros" sociais. No TAS, ela está em alerta máximo, gerando a sensação de "fiz algo errado" em conversas simples.</li>
+                    <li><strong>A Ínsula:</strong> Relacionada à consciência visceral (sentir o próprio corpo). A ínsula hiperativa faz com que o paciente sinta seus batimentos e suor de forma amplificada, aumentando o pânico social.</li>
+                    <li><strong>Dopamina e Ocitocina:</strong> Observa-se frequentemente uma menor sensibilidade nos receptores de dopamina no estriado, o que reduz a sensação de "recompensa" nas interações sociais.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section data-aos="fade-up">
+            <div class="section-title"><h2>Sintomas e Comportamentos</h2></div>
+            <div class="grid-two">
+                <div class="card info-card">
+                    <h3>Sintomas Físicos Marcantes</h3>
+                    <p>Eritema facial (corar), sudorese excessiva, voz trêmula, tensão muscular e urgência urinária ou desconforto abdominal antes de eventos sociais.</p>
+                </div>
+                <div class="card info-card">
+                    <h3>Processamento Pós-Evento</h3>
+                    <p>A "autópsia social": após uma interação, o indivíduo passa horas ou dias revisando o que disse, focando apenas nos momentos que considerou "inadequados".</p>
+                </div>
+            </div>
+        </section>
+
+        <section data-aos="fade-up">
+            <div class="section-title"><h2>Tratamento e Reabilitação</h2></div>
+            <p>O foco clínico é retirar o foco da atenção do "eu" e devolvê-lo ao ambiente externo.</p>
+            
+            
+
+            <div class="info-card">
+                <h3>Abordagem da TCC</h3>
+                <ul>
+                    <li><strong>Treino de Foco Atencional:</strong> Aprender a focar no que a outra pessoa está dizendo, em vez de focar nos próprios sintomas internos.</li>
+                    <li><strong>Experimentos Comportamentais:</strong> Testar na vida real se as pessoas realmente julgam tão severamente quanto o paciente imagina (ex: deixar cair uma caneta de propósito).</li>
+                    <li><strong>Reestruturação de Imagem:</strong> Trabalhar a autoimagem distorcida que o paciente tem de si mesmo (o "self" como um objeto ridículo).</li>
+                </ul>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Recursos Farmacológicos</th>
+                            <th>Ação Esperada</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ISRS (ex: Escitalopram)</strong></td>
+                            <td>Reduz a reatividade da amígdala a estímulos sociais a longo prazo.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Beta-bloqueadores (ex: Propranolol)</strong></td>
+                            <td>Usados para ansiedade de desempenho (palestras/apresentações), bloqueando sintomas físicos como tremor e taquicardia.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="exercise-container" data-aos="zoom-in">
+            <h2>Treino de Foco Externo</h2>
+            <p>Na ansiedade social, nossa mente vira um "scanner" voltado para dentro. Vamos praticar o movimento contrário.</p>
+            
+            <div class="focus-guide">
+                <div class="scanner-bar"></div>
+            </div>
+            
+            <p style="max-width: 500px; font-size: 0.9rem; opacity: 0.9;">Prática: Olhe ao seu redor agora e identifique 3 objetos verdes, 2 sons distantes e 1 textura próxima. <br><strong>Sair do "Self" é o caminho para a calma social.</strong></p>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <p style="font-weight: 700; color: var(--dark-green);">Referências Técnicas:</p>
+            <ul class="ref-list">
+                <li><strong>Hofmann, S. G. (2014).</strong> Terapia Cognitivo-Comportamental Baseada em Processos.</li>
+                <li><strong>Clark, D. M. & Wells, A. (1995).</strong> A Cognitive Model of Social Phobia.</li>
+                <li><strong>American Psychiatric Association (2022).</strong> DSM-5-TR.</li>
+                <li><strong>Leahy, R. L. (2011).</strong> Livre de Ansiedade. Artmed.</li>
+            </ul>
+            <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
+            <p>© 2026 Guia de Psicoeducação Clínica - Bruno de Souza (CRP 07/44472)</p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 1000, once: true });
+    </script>
+</body>
+</html>
