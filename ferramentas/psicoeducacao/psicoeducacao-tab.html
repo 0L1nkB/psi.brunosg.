@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Psicoeducação: Transtorno Afetivo Bipolar</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #7DB9B6; 
+            --secondary: #E9EDC9; 
+            --accent: #E29578; 
+            --dark-green: #2D5A58;
+            --text-color: #444;
+            --bg-body: #FBFBFB;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-color);
+            line-height: 1.8;
+        }
+
+        h1, h2, h3 { font-family: 'Quicksand', sans-serif; color: var(--dark-green); }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 0 25px; }
+
+        /* --- Header / Hero --- */
+        header {
+            height: 60vh;
+            background: linear-gradient(135deg, var(--primary) 0%, #A2D2FF 100%);
+            display: flex; align-items: center; justify-content: center;
+            text-align: center; color: white; border-radius: 0 0 60px 60px;
+            padding: 20px;
+        }
+
+        header h1 { font-size: 3rem; color: white; margin-bottom: 20px; }
+        header p { font-size: 1.2rem; max-width: 650px; opacity: 0.95; }
+
+        /* --- Seções --- */
+        section { padding: 80px 0; border-bottom: 1px solid #eee; }
+        .section-title { text-align: center; margin-bottom: 50px; }
+        .section-title h2 { font-size: 2.2rem; position: relative; display: inline-block; }
+        .section-title h2::after { content: ''; width: 60%; height: 4px; background: var(--secondary); position: absolute; bottom: -10px; left: 20%; border-radius: 2px; }
+
+        /* --- Cards e Boxes --- */
+        .info-card {
+            background: white; padding: 35px; border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04); margin-bottom: 30px;
+            border: 1px solid #f0f0f0;
+        }
+
+        .highlight-box {
+            background: var(--secondary); padding: 25px; border-left: 6px solid var(--primary);
+            border-radius: 10px; margin: 30px 0;
+        }
+
+        .grid-two { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
+
+        /* --- Neurobiologia --- */
+        .neuro-list { list-style: none; }
+        .neuro-list li { margin-bottom: 20px; padding-left: 30px; position: relative; }
+        .neuro-list li::before { content: '•'; color: var(--primary); font-size: 2rem; position: absolute; left: 0; top: -10px; }
+
+        /* --- Tabela --- */
+        .table-wrap { overflow-x: auto; margin-top: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; background: white; }
+        th, td { padding: 18px; text-align: left; border-bottom: 1px solid #f0f0f0; }
+        th { background: var(--primary); color: white; }
+
+        /* --- Exercício de Estabilidade --- */
+        .stability-container {
+            background: var(--dark-green); color: white;
+            padding: 60px 20px; border-radius: 40px; text-align: center;
+            margin: 50px 0; display: flex; flex-direction: column; align-items: center;
+        }
+
+        .balance-visual {
+            width: 200px; height: 100px;
+            display: flex; align-items: center; justify-content: center;
+            position: relative; margin: 40px 0;
+        }
+
+        .balance-beam {
+            width: 100%; height: 4px; background: rgba(255,255,255,0.2);
+            position: relative; border-radius: 2px;
+        }
+
+        .balance-ball {
+            width: 25px; height: 25px; background: var(--primary);
+            border-radius: 50%; position: absolute; top: -11px;
+            animation: balanceMove 6s infinite ease-in-out;
+            box-shadow: 0 0 15px var(--primary);
+        }
+
+        @keyframes balanceMove {
+            0%, 100% { left: 10%; }
+            50% { left: 80%; }
+        }
+
+        footer { background: #f4f4f4; padding: 60px 0; font-size: 0.9rem; color: #666; }
+        .ref-list { list-style: none; padding-top: 15px; }
+        .ref-list li { margin-bottom: 10px; }
+
+        @media (max-width: 768px) { header h1 { font-size: 2.2rem; } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container" data-aos="fade-up">
+            <h1>Transtorno Afetivo Bipolar</h1>
+            <p>Compreendendo a dinâmica do humor e a busca pela estabilidade neurobiológica.</p>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <section data-aos="fade-up">
+            <div class="section-title"><h2>O que é o TAB?</h2></div>
+            <p>O Transtorno Afetivo Bipolar (TAB) é uma condição crônica caracterizada por variações acentuadas no humor, na energia e na capacidade de funcionamento. Diferente das mudanças de humor comuns, o TAB envolve episódios distintos de <strong>Mania</strong> ou <strong>Hipomania</strong> (exaltação) e <strong>Depressão</strong>.</p>
+            
+            <div class="highlight-box">
+                <strong>Hereditariedade e Genética:</strong> O TAB é um dos transtornos com maior base genética na psiquiatria (hereditariedade estimada em até 80%). Não se trata de uma oscilação emocional voluntária, mas de uma desregulação nos sistemas cerebrais que controlam o tônus vital.
+            </div>
+        </section>
+
+        <section data-aos="fade-up">
+            <div class="section-title"><h2>A Neurobiologia da Ciclicidade</h2></div>
+            <p>O cérebro no TAB apresenta uma dificuldade em manter o equilíbrio (homeostase) diante de estímulos externos e ritmos biológicos.</p>
+            
+            
+
+            <div class="info-card">
+                <ul class="neuro-list">
+                    <li><strong>Disfunção do Córtex Pré-Frontal:</strong> Durante as fases de mania, há uma redução na atividade desta área, o que explica a perda de julgamento crítico e a impulsividade.</li>
+                    <li><strong>Hiperatividade da Amígdala:</strong> O sistema emocional reage de forma desproporcional, intensificando tanto a euforia quanto a dor depressiva.</li>
+                    <li><strong>Dopamina em Fluxo:</strong> A mania está associada a picos de dopamina (busca de recompensa e energia), enquanto a depressão está ligada à sua redução drástica.</li>
+                    <li><strong>Ritmos Circadianos:</strong> O "relógio biológico" interno é extremamente sensível. Alterações no sono podem ser tanto sintomas quanto gatilhos para novos episódios.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section data-aos="fade-up">
+            <div class="section-title"><h2>As Faces do Humor</h2></div>
+            <div class="grid-two">
+                <div class="card info-card">
+                    <h3>Mania / Hipomania</h3>
+                    <p>Aumento da energia, redução da necessidade de sono, fala acelerada (pressão de fala), grandiosidade, gastos excessivos e envolvimento em atividades de risco.</p>
+                </div>
+                <div class="card info-card">
+                    <h3>Depressão Bipolar</h3>
+                    <p>Tristeza profunda, apatia extrema, cansaço físico, sentimentos de desesperança e, frequentemente, lentificação intensa dos movimentos.</p>
+                </div>
+            </div>
+            <p style="text-align: center; font-style: italic; margin-top: 15px;">*Existem também os <strong>Estados Mistos</strong>, onde sintomas de mania e depressão ocorrem simultaneamente.</p>
+        </section>
+
+        <section data-aos="fade-up">
+            <div class="section-title"><h2>O Pilar do Tratamento</h2></div>
+            <p>O tratamento do TAB é essencialmente medicamentoso para estabilização biológica, apoiado pela psicoterapia para gestão de vida.</p>
+            
+            
+
+            <div class="info-card">
+                <h3>Terapia Cognitivo-Comportamental (TCC)</h3>
+                <ul>
+                    <li><strong>Identificação de Pródromos:</strong> Aprender a reconhecer os primeiros sinais de que o humor está virando (ex: dormir menos e sentir-se muito disposto).</li>
+                    <li><strong>Terapia de Ritmo Social (IPSRT):</strong> Estabelecer rotinas rígidas de sono, alimentação e atividade física para estabilizar o relógio biológico.</li>
+                    <li><strong>Regulação Emocional:</strong> Lidar com as consequências interpessoais e sociais dos episódios passados.</li>
+                </ul>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Classe Farmacológica</th>
+                            <th>Função no TAB</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Estabilizadores (ex: Lítio)</strong></td>
+                            <td>O "padrão-ouro". Previne tanto a mania quanto a depressão e reduz o risco de suicídio.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Anticonvulsivantes (ex: Valproato)</strong></td>
+                            <td>Ajudam a controlar a irritabilidade e a ciclicidade rápida.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Antipsicóticos Atípicos</strong></td>
+                            <td>Utilizados para controlar sintomas agudos de mania e estabilizar o humor.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="stability-container" data-aos="zoom-in">
+            <h2>Buscando o Centro</h2>
+            <p>No TAB, a vida pode parecer um balanço constante. O objetivo do tratamento não é "parar de sentir", mas diminuir a amplitude dessas oscilações.</p>
+            
+            <div class="balance-visual">
+                <div class="balance-beam">
+                    <div class="balance-ball"></div>
+                </div>
+            </div>
+            
+            <p style="max-width: 500px; font-size: 0.9rem; opacity: 0.9;"><strong>Dica de Estabilidade:</strong> Mantenha uma rotina de sono consistente. O sono é o maior regulador natural do seu humor.</p>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <p style="font-weight: 700; color: var(--dark-green);">Referências Técnicas:</p>
+            <ul class="ref-list">
+                <li><strong>Miklowitz, D. J. (2011).</strong> Bipolar Disorder Survival Guide.</li>
+                <li><strong>Goodwin, F. K. & Jamison, K. R. (2007).</strong> Manic-Depressive Illness. Oxford University Press.</li>
+                <li><strong>American Psychiatric Association (2022).</strong> DSM-5-TR.</li>
+                <li><strong>Stahl, S. M. (2014).</strong> Psicofarmacologia: Bases Neurocientíficas.</li>
+                <li><strong>Vieta, E. (2014).</strong> Managing Bipolar Disorder in Clinical Practice.</li>
+            </ul>
+            <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
+            <p>© 2026 Guia de Psicoeducação Clínica - Bruno de Souza (CRP 07/44472)</p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 1000, once: true });
+    </script>
+</body>
+</html>
