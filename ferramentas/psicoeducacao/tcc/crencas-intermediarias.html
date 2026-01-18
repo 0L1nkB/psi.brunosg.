@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crenças Intermediárias - As Regras do Jogo</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Paleta "Engenharia Mental" */
+            --paper-line: #f0f9ff;
+            --paper-bg: #f8fcff;      
+            --ink-color: #0c4a6e;
+            
+            /* Cores Específicas */
+            --rule: #0369a1;          /* Azul Forte (A Regra) */
+            --condition: #d97706;     /* Laranja (A Condição "Se") */
+            --consequence: #be123c;   /* Vermelho (A Consequência "Então") */
+            --flex: #10b981;          /* Verde (A Flexibilidade) */
+            
+            --radius: 16px;
+            --shadow-paper: 3px 3px 10px rgba(0,0,0,0.06);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            color: var(--ink-color);
+            line-height: 1.6;
+            background-color: var(--paper-bg);
+            /* Efeito Papel Milimetrado */
+            background-image: 
+                linear-gradient(var(--paper-line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--paper-line) 1px, transparent 1px);
+            background-size: 1.5rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Patrick Hand', cursive;
+            color: #075985;
+        }
+
+        /* --- HEADER --- */
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-bottom: 2px dashed #7dd3fc;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);
+        }
+
+        .header-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .header-title {
+            font-size: 2.8rem;
+            color: var(--rule);
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 0px #e0f2fe;
+        }
+
+        .header-subtitle {
+            font-size: 1.2rem;
+            color: #0284c7;
+            font-family: 'Patrick Hand', cursive;
+            background: #e0f2fe;
+            padding: 5px 15px;
+            border-radius: 20px;
+            transform: rotate(-1deg);
+            display: inline-block;
+        }
+
+        /* --- CONTAINER --- */
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+            display: grid;
+            gap: 35px;
+            margin-bottom: 60px;
+        }
+
+        /* --- CARDS (PAPEL) --- */
+        .paper-card {
+            background-color: #ffffff;
+            border-radius: 2px;
+            box-shadow: var(--shadow-paper);
+            border: 1px solid #bae6fd;
+            padding: 2.5rem;
+            position: relative;
+            transform: rotate(-0.5deg);
+            transition: transform 0.3s;
+        }
+        
+        .paper-card:hover { transform: rotate(0deg) translateY(-3px); }
+        
+        /* Ícone de Livro de Leis */
+        .paper-card::before {
+            content: '📜';
+            position: absolute;
+            top: -20px;
+            right: 20px;
+            font-size: 2.5rem;
+            z-index: 2;
+            filter: drop-shadow(2px 2px 0 rgba(0,0,0,0.1));
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #e0f2fe;
+            padding-bottom: 10px;
+        }
+
+        .card-icon { font-size: 1.8rem; color: var(--rule); }
+        .card-title { font-size: 1.8rem; margin: 0; }
+
+        /* --- DIAGRAMA "SE... ENTÃO..." --- */
+        .logic-bridge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: #f0f9ff;
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px dashed #bae6fd;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .logic-box {
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 700;
+            color: white;
+            flex: 1;
+            min-width: 120px;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.1);
+        }
+
+        .box-if { background: var(--condition); }
+        .box-then { background: var(--consequence); }
+        
+        .logic-arrow { font-size: 1.5rem; color: #94a3b8; }
+
+        /* --- STICKERS (TIPOS) --- */
+        .sticker-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;
+        }
+        
+        .sticker-box {
+            background: white; padding: 1.5rem; border-radius: 12px;
+            border: 2px solid #f0f9ff; text-align: center;
+            transition: all 0.3s;
+        }
+        .sticker-box:hover { border-color: var(--rule); transform: scale(1.02); }
+        .sticker-icon { font-size: 2rem; margin-bottom: 10px; display: block; }
+
+        /* --- O FLEXIBILIZADOR (INTERATIVO) --- */
+        .flex-area {
+            background-color: #f0fdf4; /* Verde muito claro */
+            padding: 2rem; border-radius: 20px;
+            border: 2px dashed #86efac; text-align: center;
+        }
+
+        .btn-flex {
+            background: white; border: 2px solid #bbf7d0;
+            padding: 10px 20px; margin: 5px; border-radius: 30px;
+            font-family: 'Nunito', sans-serif; font-weight: 700; color: #15803d;
+            cursor: pointer; transition: all 0.2s;
+            box-shadow: 0 4px 0 #bbf7d0;
+        }
+        
+        .btn-flex:active { box-shadow: 0 0 0 #bbf7d0; transform: translateY(4px); }
+        .btn-flex:hover { background: #16a34a; color: white; border-color: #16a34a; }
+
+        .result-bubble {
+            background: white; padding: 20px; border-radius: 20px;
+            margin-top: 20px; border: 2px solid #bbf7d0;
+            font-family: 'Patrick Hand', cursive; font-size: 1.2rem;
+            color: #14532d; min-height: 100px; display: flex; align-items: center; justify-content: center;
+        }
+
+        /* --- POST-IT (DEFINIÇÃO) --- */
+        .post-it {
+            background-color: #fff7ed; /* Laranja Pálido */
+            padding: 1.5rem;
+            border-radius: 2px 2px 16px 2px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+            font-family: 'Patrick Hand', cursive;
+            font-size: 1.3rem;
+            color: #9a3412;
+            transform: rotate(1deg);
+            margin: 20px 0;
+            border-left: 5px solid #f97316;
+        }
+
+        /* --- FOOTER PADRÃO --- */
+        footer {
+            background-color: #ffffff;
+            border-top: 1px solid #e5e7eb;
+            padding: 2rem 0;
+            margin-top: auto;
+        }
+        .footer-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .footer-brand { color: #64748b; font-size: 0.9rem; font-weight: 600; }
+        .social-links { display: flex; gap: 1.5rem; }
+        .social-links a { color: #94a3b8; font-size: 1.2rem; transition: color 0.2s; }
+        .social-links a:hover { color: var(--rule); }
+
+        @media (max-width: 640px) {
+            .footer-container { flex-direction: column; gap: 1rem; }
+            .logic-bridge { flex-direction: column; }
+            .logic-arrow { transform: rotate(90deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-content">
+            <h1 class="header-title">Crenças Intermediárias</h1>
+            <p class="header-subtitle">As Regras do Seu Jogo</p>
+        </div>
+    </header>
+
+    <div class="main-container">
+
+        <div class="paper-card">
+            <div class="card-header">
+                <i class="fas fa-book card-icon"></i>
+                <h2 class="card-title">O Código Penal Interno</h2>
+            </div>
+            <p>Se as <strong>Crenças Nucleares</strong> são as raízes da árvore, as <strong>Crenças Intermediárias</strong> são o tronco. Elas são as regras, suposições e atitudes que criamos para <em>sobreviver</em> e tentar lidar com nossas crenças mais profundas.</p>
+            
+            <div class="post-it">
+                <i class="fas fa-thumbtack" style="color:#f97316; margin-right:10px;"></i>
+                "Eu criei essas regras para me proteger da dor, mas agora elas são uma prisão."
+            </div>
+        </div>
+
+        <div class="paper-card" style="transform: rotate(0.5deg);">
+            <div class="card-header">
+                <i class="fas fa-project-diagram card-icon"></i>
+                <h2 class="card-title">A Fórmula Condicional</h2>
+            </div>
+            <p>A maioria dessas crenças funciona com uma lógica de "Se... Então...". Veja como sua mente tenta negociar com a realidade:</p>
+            
+            <div class="logic-bridge">
+                <div class="logic-box box-if">
+                    <div style="font-size:0.8rem; opacity:0.8;">SUPOSIÇÃO (SE...)</div>
+                    "Se eu agradar a todos..."
+                </div>
+                
+                <i class="fas fa-arrow-right logic-arrow"></i>
+
+                <div class="logic-box box-then">
+                    <div style="font-size:0.8rem; opacity:0.8;">CONSEQUÊNCIA (ENTÃO...)</div>
+                    "...então serei amado."
+                </div>
+            </div>
+
+            <div class="logic-bridge" style="margin-top:10px;">
+                <div class="logic-box box-if" style="background:#ef4444;">
+                    <div style="font-size:0.8rem; opacity:0.8;">MEDO (SE...)</div>
+                    "Se eu falhar..."
+                </div>
+                
+                <i class="fas fa-arrow-right logic-arrow"></i>
+
+                <div class="logic-box box-then" style="background:#7f1d1d;">
+                    <div style="font-size:0.8rem; opacity:0.8;">DESASTRE (ENTÃO...)</div>
+                    "...então serei rejeitado."
+                </div>
+            </div>
+        </div>
+
+        <div class="paper-card" style="transform: rotate(-0.5deg);">
+            <div class="card-header">
+                <i class="fas fa-layer-group card-icon"></i>
+                <h2 class="card-title">As 3 Formas</h2>
+            </div>
+            <p>Elas não aparecem sempre do mesmo jeito. Identifique qual você usa mais:</p>
+            
+            <div class="sticker-grid">
+                <div class="sticker-box">
+                    <span class="sticker-icon">⚖️</span>
+                    <h4>Regras (Imperativos)</h4>
+                    <p>Ordens rígidas. "Eu <strong>devo</strong> ser perfeito." "Eu <strong>tenho que</strong> trabalhar mais que os outros."</p>
+                </div>
+                <div class="sticker-box">
+                    <span class="sticker-icon">💭</span>
+                    <h4>Suposições</h4>
+                    <p>Previsões condicionais. "Se eu pedir ajuda, vão achar que sou fraco."</p>
+                </div>
+                <div class="sticker-box">
+                    <span class="sticker-icon">😤</span>
+                    <h4>Atitudes</h4>
+                    <p>Julgamentos de valor. "Ser vulnerável é perigoso." "Chorar é coisa de gente fraca."</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="paper-card" style="transform: rotate(0.5deg);">
+            <div class="card-header">
+                <i class="fas fa-tools card-icon"></i>
+                <h2 class="card-title">Reescrevendo as Leis</h2>
+            </div>
+            <p>O objetivo não é não ter regras, é ter regras flexíveis. Vamos trocar o <strong>"Tenho que"</strong> pelo <strong>"Prefiro"</strong>:</p>
+            
+            <div class="flex-area">
+                <p style="margin-bottom:15px; font-weight:700;">Escolha uma regra rígida:</p>
+                <div>
+                    <button class="btn-flex" onclick="rewriteRule('perfeito')">"Eu DEVO fazer tudo perfeito."</button>
+                    <button class="btn-flex" onclick="rewriteRule('agradar')">"Eu TENHO QUE agradar todo mundo."</button>
+                    <button class="btn-flex" onclick="rewriteRule('forte')">"Eu NUNCA posso chorar."</button>
+                </div>
+                
+                <div id="flex-bubble" class="result-bubble">
+                    Toque em uma regra para flexibilizá-la...
+                </div>
+            </div>
+        </div>
+
+        <div class="paper-card">
+            <div class="card-header">
+                <i class="fas fa-brain card-icon"></i>
+                <h2 class="card-title">Conceitos Clínicos</h2>
+            </div>
+            
+            <details>
+                <summary>🛡️ Função Protetora <i class="fas fa-chevron-down"></i></summary>
+                <div class="details-content" style="padding:15px; color:#475569;">
+                    <p>Você não criou essas regras por mal. Elas foram estratégias brilhantes da sua infância para lidar com a dor. "Se eu for bonzinho (Regra), mamãe não grita (Proteção)". O problema é que a regra continua ativa mesmo quando a ameaça já passou.</p>
+                </div>
+            </details>
+
+            <details>
+                <summary>🚧 A Rigidez <i class="fas fa-chevron-down"></i></summary>
+                <div class="details-content" style="padding:15px; color:#475569;">
+                    <p>Crenças intermediárias disfuncionais são <strong>rígidas</strong>. Elas não aceitam exceções. "Eu devo ser produtivo <em>sempre</em>". Isso gera culpa constante, porque é impossível seguir uma regra absoluta 100% do tempo.</p>
+                </div>
+            </details>
+        </div>
+
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-brand">
+                &copy; 2026 Bruno de Souza
+            </div>
+            <div class="social-links">
+                <a href="https://www.instagram.com/psi.brunosg/" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://wa.me/5553991898309" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.linkedin.com/in/psi-bsouza/" target="_blank"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function rewriteRule(type) {
+            const bubble = document.getElementById('flex-bubble');
+            let text = "";
+            
+            if (type === 'perfeito') {
+                text = "🌱 <strong>Nova Regra Flexível:</strong> 'Eu PREFIRO fazer bem feito, mas se eu cometer um erro, ainda sou uma pessoa competente e digna.'";
+            } else if (type === 'agradar') {
+                text = "🌱 <strong>Nova Regra Flexível:</strong> 'Eu GOSTARIA que todos gostassem de mim, mas é impossível agradar a todos. Eu posso sobreviver à desaprovação de alguns.'";
+            } else if (type === 'forte') {
+                text = "🌱 <strong>Nova Regra Flexível:</strong> 'É bom ser forte, mas também é saudável expressar emoções. Chorar não me torna fraco, me torna humano.'";
+            }
+            
+            bubble.style.opacity = 0;
+            setTimeout(() => {
+                bubble.innerHTML = text;
+                bubble.style.opacity = 1;
+                bubble.style.transition = "opacity 0.3s";
+            }, 200);
+        }
+    </script>
+
+</body>
+</html>
