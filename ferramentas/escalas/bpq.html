@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BPQ - Questionário Borderline | Caderno Incrível</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #f0f8ff;
+            --paper: #ffffff;
+            --primary: #6c5ce7; /* Roxo */
+            --secondary: #00b894; /* Verde */
+            --accent: #fdcb6e; /* Amarelo */
+            --text: #2d3436;
+            --risk: #ff7675; /* Vermelho */
+            --shadow: rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0; padding: 20px; color: var(--text);
+            display: flex; justify-content: center;
+        }
+
+        .container {
+            width: 100%; max-width: 900px;
+            background: var(--paper); padding: 40px;
+            border-radius: 25px; box-shadow: 10px 10px 0 var(--shadow);
+            border: 3px solid var(--text);
+        }
+
+        header { text-align: center; margin-bottom: 30px; }
+        h1 { margin: 0; color: var(--primary); font-size: 2.5rem; text-transform: uppercase; }
+        .subtitle { font-size: 1.1rem; color: #636e72; }
+
+        .instruction-box {
+            background: #fffce0; padding: 15px; border-radius: 10px;
+            border: 2px dashed var(--accent); margin-bottom: 25px; font-size: 0.9rem;
+        }
+
+        /* LISTA DE QUESTÕES */
+        .question-list { display: flex; flex-direction: column; gap: 10px; }
+        
+        .q-row {
+            display: flex; align-items: center; justify-content: space-between;
+            background: #f8f9fa; padding: 10px 15px; border-radius: 10px;
+            border: 1px solid #eee; transition: 0.2s;
+        }
+        .q-row:hover { background: #f1f2f6; }
+
+        .q-text { flex: 1; margin-right: 15px; font-size: 0.95rem; }
+        .q-num { font-weight: bold; color: var(--primary); margin-right: 10px; width: 25px; }
+
+        /* BOTÕES V/F */
+        .btn-group { display: flex; gap: 5px; }
+        .q-btn {
+            width: 40px; height: 40px; border-radius: 50%; border: 2px solid #ccc;
+            background: white; cursor: pointer; font-weight: bold; color: #ccc;
+            transition: all 0.2s; display: flex; align-items: center; justify-content: center;
+        }
+
+        /* ESTADOS DOS BOTÕES */
+        .q-btn.true-btn:hover { border-color: var(--secondary); color: var(--secondary); }
+        .q-btn.false-btn:hover { border-color: var(--risk); color: var(--risk); }
+
+        .q-btn.selected.true-btn { background: var(--secondary); border-color: var(--secondary); color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .q-btn.selected.false-btn { background: var(--risk); border-color: var(--risk); color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+
+        /* RESULTADOS */
+        .results-section {
+            display: none; margin-top: 40px; border-top: 3px dashed #ccc; padding-top: 30px;
+        }
+        .total-score {
+            text-align: center; background: var(--primary); color: white;
+            padding: 20px; border-radius: 15px; margin-bottom: 20px;
+        }
+        .score-val { font-size: 3rem; font-weight: 800; line-height: 1; }
+        
+        .subs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .sub-card {
+            background: white; border: 2px solid #eee; border-radius: 10px; padding: 15px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .sub-val { font-weight: 800; color: var(--primary); font-size: 1.2rem; }
+
+        .btn-action {
+            display: block; width: 100%; padding: 15px; margin-top: 30px;
+            background-color: var(--text); color: white; border: none; border-radius: 50px;
+            font-size: 1.2rem; font-weight: bold; cursor: pointer; box-shadow: 0 5px 0 #000;
+            transition: transform 0.1s;
+        }
+        .btn-action:hover { transform: translateY(-3px); }
+        .btn-action:active { transform: translateY(3px); box-shadow: none; }
+
+        @media print {
+            .btn-action, .instruction-box { display: none; }
+            .container { box-shadow: none; border: none; width: 100%; }
+            .q-btn { border: 1px solid #000; color: black; }
+            .q-btn.selected { background: #ddd !important; color: black !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>BPQ</h1>
+            <div class="subtitle">Borderline Personality Questionnaire</div>
+        </header>
+
+        <div class="instruction-box">
+            <i class="fa-solid fa-pen"></i> <strong>Instruções:</strong> Leia cada afirmação e marque <strong>V (Verdadeiro)</strong> ou <strong>F (Falso)</strong> conforme descreve como você se sente na maior parte do tempo (nos últimos 2 anos).
+        </div>
+
+        <div class="question-list" id="q-list">
+            </div>
+
+        <button class="btn-action" onclick="calculate()">
+            <i class="fa-solid fa-calculator"></i> CALCULAR RESULTADO
+        </button>
+
+        <div id="results" class="results-section">
+            <div class="total-score">
+                <div style="font-size:1.1rem; text-transform:uppercase;">Escore Total</div>
+                <div class="score-val" id="total-val">0</div>
+                <div id="total-class" style="background:rgba(0,0,0,0.2); padding:5px 15px; border-radius:20px; display:inline-block; margin-top:10px;">--</div>
+            </div>
+
+            <h3>Subescalas</h3>
+            <div class="subs-grid" id="subs-container"></div>
+
+            <button class="btn-action" style="background:var(--secondary); margin-top:30px;" onclick="window.print()">
+                <i class="fa-solid fa-print"></i> IMPRIMIR / PDF
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // 80 ITENS (Transcrição do PDF)
+        const questionsDB = [
+            "Por vezes, faço coisas sem pensar muito nelas.",
+            "Por vezes, fico subitamente deprimido(a) ou ansioso(a).",
+            "Por vezes, sinto-me abandonado pelas pessoas.",
+            "Fico raramente desapontado(a) com os meus amigos.",
+            "Sinto-me inferior aos outros.",
+            "No passado, já ameacei ferir-me a mim próprio.",
+            "Não acredito ser capaz de fazer alguma coisa de interessante com a minha vida.",
+            "Raramente me zango com outras pessoas.",
+            "Por vezes, sinto-me como se não fosse real.",
+            "Não tenho relações sexuais com uma pessoa, a menos que a conheça há algum tempo.",
+            "Por vezes, depois de me sentir ansioso(a) ou irritado(a) fico triste.",
+            "Quando as pessoas que me são próximas morrem ou me deixam, sinto-me abandonado(a).",
+            "Exagero frequentemente o valor das amizades e acabo por descobrir depois que, afinal, elas não têm esse valor.",
+            "Se eu fosse mais parecido(a) com outras pessoas, sentir-me-ia melhor comigo próprio(a).",
+            "Já tentei ferir-me voluntariamente, embora não me quisesse matar.",
+            "No geral, a minha vida é bastante aborrecida.",
+            "Entro com alguma frequência em 'cenas de pancadaria'.",
+            "Por vezes, as pessoas estão longe de me compreender.",
+            "Os meus amigos dizem-me que o meu humor se altera muito rapidamente.",
+            "Ficar sozinho assusta-me.",
+            "As pessoas que parecem honestas muitas vezes acabam por me desiludir.",
+            "Já tentei suicidar-me.",
+            "Por vezes, sinto-me como se não tivesse nada para oferecer aos outros.",
+            "Tenho problemas em controlar o meu temperamento.",
+            "Consigo perceber aquilo que vai na cabeça dos outros.",
+            "Já experimentei drogas 'duras' (por exemplo, cocaína, heroína).",
+            "O meu humor alterna frequentemente ao longo do dia entre estados de felicidade, cólera, ansiedade e depressão.",
+            "Quando os meus amigos se vão embora, fico confiante de que os voltarei a ver.",
+            "Sinto-me frequentemente desapontado pelos meus amigos.",
+            "Já me cortei propositadamente.",
+            "Muitas vezes, sinto-me sozinho(a) e abandonado(a).",
+            "Não tenho grandes dificuldades em controlar o meu temperamento.",
+            "Por vezes, vejo ou ouço coisas que as outras pessoas não conseguem ver ou ouvir.",
+            "Na minha opinião, é natural ter relações sexuais num primeiro encontro.",
+            "Por vezes, sinto-me muito triste, mas este sentimento pode mudar rapidamente.",
+            "As pessoas deixam-me frequentemente ficar mal, ou 'empurram-me' para baixo.",
+            "Gostava de ser mais parecido(a) com alguns dos meus amigos.",
+            "Costumava tentar ferir-me para obter alguma atenção.",
+            "Sou, com grande frequência, diferente com diferentes pessoas em diferentes situações de tal forma que, às vezes, já não sei verdadeiramente quem sou.",
+            "Irrito-me facilmente com os outros.",
+            "Por vezes, consigo ouvir aquilo que as outras pessoas estão a pensar.",
+            "Fico 'pedrado' (com drogas) sempre que me apetece.",
+            "Raramente me sinto triste ou ansioso(a).",
+            "Ninguém gosta de mim.",
+            "Quando confio nas pessoas, elas raramente me desiludem.",
+            "Sinto que as pessoas não gostariam de mim se me conhecessem verdadeiramente.",
+            "Irrito-me facilmente.",
+            "É impossível 'ler' a mente dos outros.",
+            "Por vezes, sinto-me muito feliz, mas este sentimento pode mudar rapidamente.",
+            "Acho difícil depender dos outros porque eles nunca estão presentes quando preciso.",
+            "As amizades com as pessoas que me interessam têm muitos altos e baixos.",
+            "Sinto-me à-vontade com a minha maneira de ser.",
+            "Nunca tentei ferir-me.",
+            "Raramente me sinto sozinho(a).",
+            "Por vezes, acho que as mais pequenas coisas me irritam.",
+            "Por vezes, não consigo distinguir entre o real e o imaginário.",
+            "Quando bebo, bebo muito.",
+            "Considero-me uma pessoa mal-humorada.",
+            "Tenho dificuldades em desenvolver relações de amizades próximas, porque as pessoas frequentemente me abandonam.",
+            "Os meus amigos estão sempre presentes quando preciso deles.",
+            "Gostaria de ser outra pessoa.",
+            "Acho que a minha vida não é muito interessante.",
+            "Quando estou irritado(a), por vezes, atiro e bato em objectos partindo-os.",
+            "Nos últimos tempos apanhei várias multas por excesso de velocidade.",
+            "Por vezes, sinto-me como se estivesse numa 'montanha-russa' emocional.",
+            "Sinto-me como se a minha família me tivesse abandonado.",
+            "Sinto-me à-vontade com a pessoa que sinto ser.",
+            "Por vezes, faço coisas impulsivamente.",
+            "A minha vida não tem sentido.",
+            "Não tenho a certeza sobre aquilo que quero fazer no futuro.",
+            "Por vezes, como tanto que fico com dores de barriga ou tenho mesmo de vomitar.",
+            "As pessoas já me disseram que sou uma pessoa temperamental.",
+            "Por vezes, as pessoas de quem gosto abandonam-me.",
+            "Muitas vezes, em situações sociais, sinto que as outras pessoas podem ver através de mim e perceber que não tenho muito para dar.",
+            "Já fui hospitalizado por me ter ferido propositadamente.",
+            "Muitas vezes, sinto uma espécie de vazio dentro de mim.",
+            "Muitas vezes, os outros irritam-me.",
+            "Muitas vezes, fico irrequieto apenas por pensar que alguém de quem eu gosto verdadeiramente me pode deixar.",
+            "Por vezes, sinto-me confuso(a) com os meus objectivos a longo prazo.",
+            "Os outros dizem que me irrito facilmente."
+        ];
+
+        // LÓGICA DE CORREÇÃO (Poreh et al.)
+        const subscales = {
+            "Impulsividade": { items: [1, 10, 26, 34, 42, 57, 64, 68, 71], reverse: [10] },
+            "Instabilidade Afetiva": { items: [2, 11, 19, 27, 35, 43, 49, 58, 65, 72], reverse: [43] },
+            "Abandono": { items: [3, 12, 20, 28, 44, 50, 59, 66, 73, 78], reverse: [28] },
+            "Relacionamentos": { items: [4, 13, 21, 29, 36, 45, 51, 60], reverse: [4, 45, 60] },
+            "Autoimagem": { items: [5, 14, 37, 46, 52, 61, 67, 70, 74], reverse: [52, 67] },
+            "Suicídio/Automutilação": { items: [6, 15, 22, 30, 38, 53, 75], reverse: [53] },
+            "Vazio": { items: [7, 16, 23, 31, 39, 54, 62, 69, 76, 79], reverse: [54] },
+            "Raiva Intensa": { items: [8, 17, 24, 32, 40, 47, 55, 63, 77, 80], reverse: [8, 32] },
+            "Estados Quase-Psicóticos": { items: [9, 18, 25, 33, 41, 48, 56], reverse: [48] }
+        };
+
+        const answers = new Array(81).fill(null); // Index 1 a 80
+
+        // GERA HTML
+        window.onload = function() {
+            const list = document.getElementById('q-list');
+            questionsDB.forEach((text, index) => {
+                const i = index + 1;
+                const row = document.createElement('div');
+                row.className = 'q-row';
+                row.innerHTML = `
+                    <div style="display:flex; align-items:center; flex:1;">
+                        <span class="q-num">${i}.</span>
+                        <span class="q-text">${text}</span>
+                    </div>
+                    <div class="btn-group">
+                        <div class="q-btn true-btn" id="btn-t-${i}" onclick="setAnswer(${i}, true)">V</div>
+                        <div class="q-btn false-btn" id="btn-f-${i}" onclick="setAnswer(${i}, false)">F</div>
+                    </div>
+                `;
+                list.appendChild(row);
+            });
+        }
+
+        // INTERAÇÃO
+        function setAnswer(id, value) {
+            answers[id] = value;
+            
+            // UI Update
+            const btnT = document.getElementById(`btn-t-${id}`);
+            const btnF = document.getElementById(`btn-f-${id}`);
+            
+            btnT.classList.remove('selected');
+            btnF.classList.remove('selected');
+            
+            if (value === true) btnT.classList.add('selected');
+            else btnF.classList.add('selected');
+        }
+
+        // CÁLCULO
+        function calculate() {
+            let total = 0;
+            let subResults = {};
+            let missing = false;
+
+            // Verificar preenchimento
+            for(let i=1; i<=80; i++) {
+                if(answers[i] === null) missing = true;
+            }
+
+            if(missing) {
+                if(!confirm("Algumas questões não foram respondidas. O cálculo pode ser impreciso. Deseja continuar?")) return;
+            }
+
+            // Calcular Subescalas
+            for (const [name, data] of Object.entries(subscales)) {
+                let subScore = 0;
+                data.items.forEach(idx => {
+                    const ans = answers[idx];
+                    const isReverse = data.reverse.includes(idx);
+                    
+                    // Se Verdadeiro e Normal -> +1
+                    // Se Falso e Inverso -> +1
+                    if ((ans === true && !isReverse) || (ans === false && isReverse)) {
+                        subScore++;
+                    }
+                });
+                subResults[name] = subScore;
+                total += subScore;
+            }
+
+            // Exibir Total
+            document.getElementById('total-val').innerText = total;
+            
+            // Classificação Simples (Sugestão Clínica baseada em cortes comuns)
+            const classElem = document.getElementById('total-class');
+            if(total < 30) {
+                classElem.innerText = "Baixo Risco / Subclínico";
+                classElem.style.background = "#00b894"; 
+            } else if (total < 43) {
+                classElem.innerText = "Moderado / Sugestivo";
+                classElem.style.background = "#fdcb6e"; color="#333";
+            } else {
+                classElem.innerText = "Elevado / Clínico";
+                classElem.style.background = "#ff7675";
+            }
+
+            // Exibir Subescalas
+            const subContainer = document.getElementById('subs-container');
+            subContainer.innerHTML = '';
+            for (const [name, score] of Object.entries(subResults)) {
+                const max = subscales[name].items.length;
+                const percent = (score / max) * 100;
+                let color = percent > 50 ? 'var(--risk)' : 'var(--text)';
+                if (percent < 30) color = 'var(--secondary)';
+
+                subContainer.innerHTML += `
+                    <div class="sub-card">
+                        <span style="font-size:0.9rem; font-weight:bold; color:#555;">${name}</span>
+                        <span class="sub-val" style="color:${color}">${score} <span style="font-size:0.7rem; color:#ccc;">/${max}</span></span>
+                    </div>
+                `;
+            }
+
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('results').scrollIntoView({behavior: 'smooth'});
+        }
+    </script>
+
+</body>
+</html>
