@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Psicoeducação: Transtorno de Pânico</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #7DB9B6; 
+            --secondary: #E9EDC9; 
+            --accent: #E29578; 
+            --dark-green: #2D5A58;
+            --text-color: #444;
+            --bg-body: #FBFBFB;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-color);
+            line-height: 1.8;
+        }
+
+        h1, h2, h3 { font-family: 'Quicksand', sans-serif; color: var(--dark-green); }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 0 25px; }
+
+        /* --- Hero Section --- */
+        header {
+            height: 60vh;
+            background: linear-gradient(135deg, var(--primary) 0%, #A2D2FF 100%);
+            display: flex; align-items: center; justify-content: center;
+            text-align: center; color: white; border-radius: 0 0 60px 60px;
+            padding: 20px;
+        }
+
+        header h1 { font-size: 3rem; color: white; margin-bottom: 20px; }
+        header p { font-size: 1.2rem; max-width: 650px; opacity: 0.95; }
+
+        /* --- Seções --- */
+        section { padding: 80px 0; border-bottom: 1px solid #eee; }
+        .section-title { text-align: center; margin-bottom: 50px; }
+        .section-title h2 { font-size: 2.2rem; position: relative; display: inline-block; }
+        .section-title h2::after { content: ''; width: 60%; height: 4px; background: var(--secondary); position: absolute; bottom: -10px; left: 20%; border-radius: 2px; }
+
+        /* --- Cards e Boxes --- */
+        .info-card {
+            background: white; padding: 35px; border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04); margin-bottom: 30px;
+            border: 1px solid #f0f0f0;
+        }
+
+        .highlight-box {
+            background: var(--secondary); padding: 25px; border-left: 6px solid var(--primary);
+            border-radius: 10px; margin: 30px 0;
+        }
+
+        .grid-two { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
+
+        /* --- Neurobiologia --- */
+        .neuro-list { list-style: none; }
+        .neuro-list li { margin-bottom: 20px; padding-left: 30px; position: relative; }
+        .neuro-list li::before { content: '•'; color: var(--primary); font-size: 2rem; position: absolute; left: 0; top: -10px; }
+
+        /* --- Tabela --- */
+        .table-wrap { overflow-x: auto; margin-top: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; background: white; }
+        th, td { padding: 18px; text-align: left; border-bottom: 1px solid #f0f0f0; }
+        th { background: var(--primary); color: white; }
+
+        /* --- Exercício de Aterramento (Grounding) --- */
+        .grounding-container {
+            background: var(--dark-green); color: white;
+            padding: 60px 20px; border-radius: 40px; text-align: center;
+            margin: 50px 0; display: flex; flex-direction: column; align-items: center;
+        }
+
+        .pulse-guide {
+            width: 200px; height: 200px; border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.1);
+            display: flex; align-items: center; justify-content: center;
+            position: relative; margin: 40px 0;
+        }
+
+        .pulse-circle {
+            width: 80px; height: 80px; background: var(--primary);
+            border-radius: 50%; box-shadow: 0 0 50px rgba(125, 185, 182, 0.6);
+            animation: pulseAnimation 4s infinite ease-in-out;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        #pulse-text { font-weight: 700; font-size: 0.9rem; text-transform: uppercase; }
+
+        @keyframes pulseAnimation {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.6); opacity: 1; }
+        }
+
+        footer { background: #f4f4f4; padding: 60px 0; font-size: 0.9rem; color: #666; }
+        .ref-list { list-style: none; padding-top: 15px; }
+        .ref-list li { margin-bottom: 10px; }
+
+        @media (max-width: 768px) { header h1 { font-size: 2.2rem; } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container" data-aos="fade-up">
+            <h1>Transtorno de Pânico</h1>
+            <p>Compreendendo o "alarme falso" do corpo e retomando o senso de segurança.</p>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <section data-aos="fade-up">
+            <div class="section-title"><h2>O que é o Ataque de Pânico?</h2></div>
+            <p>O Transtorno de Pânico é definido pela presença de ataques de pânico <strong>inesperados e recorrentes</strong>, seguidos por pelo menos um mês de preocupação persistente sobre novos ataques ou suas consequências (medo de morrer, enlouquecer ou perder o controle).</p>
+            
+            <div class="highlight-box">
+                <strong>A Teoria do Alarme Falso:</strong> O ataque de pânico é uma ativação abrupta do sistema de "luta ou fuga" em um momento onde não há perigo real. O cérebro interpreta sensações físicas normais (como um batimento acelerado) como sinais de uma catástrofe iminente.
+            </div>
+        </section>
+
+        <section data-aos="fade-up">
+            <div class="section-title"><h2>Neurobiologia do Medo</h2></div>
+            <p>O pânico ocorre devido a uma hipersensibilidade no "circuito do medo" do cérebro.</p>
+            
+            
+
+            <div class="info-card">
+                <ul class="neuro-list">
+                    <li><strong>Amígdala e Tronco Encefálico:</strong> No pânico, a amígdala reage de forma explosiva, ativando centros no tronco encefálico que controlam a respiração e os batimentos cardíacos.</li>
+                    <li><strong>Locus Coeruleus (Norepinefrina):</strong> Esta área funciona como o interruptor de adrenalina do cérebro. No transtorno de pânico, ele dispara com muita facilidade, inundando o corpo com sinais de alerta.</li>
+                    <li><strong>Substância Cinzenta Periaquedutal (SGP):</strong> Responsável pelas respostas defensivas de "congelamento" ou "fuga". Sua ativação explica a sensação de urgência em escapar do local onde se está.</li>
+                    <li><strong>Hipersensibilidade ao CO₂:</strong> Pesquisas sugerem que pacientes com pânico possuem um "sensor de sufocamento" cerebral mais sensível, reagindo precocemente a variações nos níveis de gás carbônico.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section data-aos="fade-up">
+            <div class="section-title"><h2>Manifestações Físicas e Cognitivas</h2></div>
+            <div class="grid-two">
+                <div class="card info-card">
+                    <h3>Sintomas Físicos</h3>
+                    <p>Palpitações, falta de ar (dispneia), tremores, sudorese, náusea, calafrios ou ondas de calor e sensação de desrealização (sentir que o ambiente não é real).</p>
+                </div>
+                <div class="card info-card">
+                    <h3>O Ciclo do Pensamento</h3>
+                    <p>Interpretação catastrófica: "Vou enfartar", "Vou desmaiar", "Vou perder o juízo". Esse pensamento gera mais medo, que gera mais sintomas físicos, fechando o ciclo.</p>
+                </div>
+            </div>
+        </section>
+
+        <section data-aos="fade-up">
+            <div class="section-title"><h2>Tratamento Baseado em Evidências</h2></div>
+            <p>O objetivo do tratamento é ensinar o cérebro que as sensações físicas do pânico são <strong>desconfortáveis, mas não perigosas</strong>.</p>
+            
+            
+
+            <div class="info-card">
+                <h3>Terapia Cognitivo-Comportamental (TCC)</h3>
+                <ul>
+                    <li><strong>Reestruturação Cognitiva:</strong> Desafiar as previsões de morte ou desmaio com fatos fisiológicos.</li>
+                    <li><strong>Exposição Interoceptiva:</strong> O paciente aprende a induzir voluntariamente pequenas sensações (como girar para sentir tontura) para perder o medo delas.</li>
+                    <li><strong>Eliminação de Comportamentos de Segurança:</strong> Parar de carregar remédios "por precaução" ou evitar lugares, para que o cérebro aprenda a se autorregular.</li>
+                </ul>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Farmacologia</th>
+                            <th>Mecanismo no Pânico</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ISRS (ex: Paroxetina)</strong></td>
+                            <td>Reduz a sensibilidade do circuito do medo a longo prazo.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Benzodiazepínicos</strong></td>
+                            <td>Usados apenas em crises agudas para frear a resposta de adrenalina (uso cauteloso).</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="grounding-container" data-aos="zoom-in">
+            <h2>Âncora de Segurança</h2>
+            <p>Em um momento de pânico, o objetivo não é "parar" o ataque à força, mas flutuar através dele. Sincronize sua atenção com este pulso constante.</p>
+            
+            <div class="pulse-guide">
+                <div class="pulse-circle">
+                    <span id="pulse-text">Seguro</span>
+                </div>
+            </div>
+            
+            <p style="max-width: 500px; font-size: 0.9rem; opacity: 0.8;">Lembre-se: O pânico é um sistema de proteção agindo na hora errada. Ele tem um pico de 10 minutos e depois o corpo naturalmente inicia o processo de relaxamento.</p>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <p style="font-weight: 700; color: var(--dark-green);">Referências Técnicas:</p>
+            <ul class="ref-list">
+                <li><strong>Barlow, D. H. (2016).</strong> Manual de Transtornos Psicológicos: Tratamento passo a passo.</li>
+                <li><strong>Clark, D. M. (1986).</strong> A cognitive approach to panic. Behaviour Research and Therapy.</li>
+                <li><strong>American Psychiatric Association (2022).</strong> DSM-5-TR.</li>
+                <li><strong>Stahl, S. M. (2014).</strong> Psicofarmacologia: Bases Neurocientíficas.</li>
+            </ul>
+            <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
+            <p>© 2026 Guia de Psicoeducação Clínica - Bruno de Souza (CRP 07/44472)</p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 1000, once: true });
+    </script>
+</body>
+</html>
