@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inibição Emocional - Caderno Terapêutico</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Paleta "O Homem de Gelo" */
+            --paper-line: #f1f5f9;    /* Linhas cinza azulado */
+            --paper-bg: #f8fafc;      
+            --ink-color: #334155;
+            
+            /* Cores do Esquema (Controle -> Expressão) */
+            --primary: #475569;       /* Cinza Ardósia (O Controle Rígido) */
+            --primary-hover: #1e293b;
+            --warmth: #ea580c;        /* Laranja Queimado (O Sentir) */
+            
+            /* Tags de Personas */
+            --tag-arthur-bg: #e2e8f0; --tag-arthur-text: #1e293b; /* Cinza (Lógico) */
+            --tag-claudia-bg: #ffedd5; --tag-claudia-text: #9a3412; /* Laranja (Educada) */
+
+            --radius: 16px;
+            --shadow-paper: 3px 3px 10px rgba(0,0,0,0.06);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            color: var(--ink-color);
+            line-height: 1.6;
+            background-color: var(--paper-bg);
+            /* Efeito Papel Pautado */
+            background-image: linear-gradient(var(--paper-line) 1px, transparent 1px);
+            background-size: 100% 2rem;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Patrick Hand', cursive;
+            color: #1e293b;
+        }
+
+        /* --- HEADER --- */
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-bottom: 2px dashed #94a3b8;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);
+        }
+
+        .header-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .header-title {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 0px #cbd5e1;
+        }
+
+        .header-subtitle {
+            font-size: 1.2rem;
+            color: #64748b;
+            font-family: 'Patrick Hand', cursive;
+        }
+
+        /* --- CONTAINER --- */
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+            display: grid;
+            gap: 35px;
+            margin-bottom: 60px;
+        }
+
+        /* --- CARDS (PAPEL) --- */
+        .paper-card {
+            background-color: #ffffff;
+            border-radius: 2px;
+            box-shadow: var(--shadow-paper);
+            border: 1px solid #cbd5e1;
+            padding: 2rem;
+            position: relative;
+            transform: rotate(-0.5deg);
+            transition: transform 0.3s;
+        }
+        
+        .paper-card:hover { transform: rotate(0deg) translateY(-3px); }
+        
+        /* Clipe de Metal Decorativo */
+        .paper-card::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            right: 30px;
+            width: 15px;
+            height: 45px;
+            border: 4px solid #94a3b8;
+            border-bottom: none;
+            border-radius: 10px 10px 0 0;
+            z-index: 2;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--paper-line);
+            padding-bottom: 10px;
+        }
+
+        .card-icon { font-size: 1.8rem; color: var(--warmth); }
+        .card-title { font-size: 1.8rem; margin: 0; }
+
+        /* --- POST-IT (DEFINIÇÃO) --- */
+        .post-it {
+            background-color: #f1f5f9; /* Cinza Gelo */
+            padding: 1.5rem;
+            border-radius: 2px 2px 16px 2px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+            font-family: 'Patrick Hand', cursive;
+            font-size: 1.3rem;
+            color: #334155;
+            transform: rotate(1deg);
+            margin: 20px 0;
+            border-left: 5px solid #475569;
+        }
+
+        /* --- PERSONAS --- */
+        .persona-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .persona-card {
+            background: #fff;
+            padding: 20px;
+            border: 2px dashed #94a3b8;
+            border-radius: 12px;
+        }
+        
+        .persona-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .persona-name { font-size: 1.4rem; font-weight: 700; color: #0f172a; }
+        .persona-tag { font-family: 'Nunito', sans-serif; font-size: 0.8rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; }
+        
+        .tag-arthur { background: var(--tag-arthur-bg); color: var(--tag-arthur-text); }
+        .tag-claudia { background: var(--tag-claudia-bg); color: var(--tag-claudia-text); }
+
+        /* --- STICKERS (3 DIMENSÕES) --- */
+        .sticker-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;
+        }
+        
+        .sticker-box {
+            background: white; padding: 1.5rem; border-radius: 12px;
+            border: 2px solid #f8fafc; text-align: center;
+            transition: all 0.3s;
+        }
+        .sticker-box:hover { border-color: var(--warmth); transform: scale(1.02); }
+        .sticker-icon { font-size: 2rem; margin-bottom: 10px; display: block; }
+
+        /* --- TRADUTOR INTERATIVO --- */
+        .translator-area {
+            background-color: #fff7ed; /* Laranja muito claro */
+            padding: 2rem; border-radius: 20px;
+            border: 2px dashed #fdba74; text-align: center;
+        }
+
+        .btn-translate {
+            background: white; border: 2px solid #fed7aa;
+            padding: 10px 20px; margin: 5px; border-radius: 30px;
+            font-family: 'Nunito', sans-serif; font-weight: 700; color: #9a3412;
+            cursor: pointer; transition: all 0.2s;
+            box-shadow: 0 4px 0 #fed7aa;
+        }
+        
+        .btn-translate:active { box-shadow: 0 0 0 #fed7aa; transform: translateY(4px); }
+        .btn-translate:hover { background: #fff; border-color: var(--warmth); color: var(--warmth); }
+
+        .result-bubble {
+            background: white; padding: 20px; border-radius: 20px;
+            margin-top: 20px; border: 2px solid #cbd5e1;
+            font-family: 'Patrick Hand', cursive; font-size: 1.3rem;
+            color: #334155; min-height: 100px; display: flex; align-items: center; justify-content: center;
+        }
+
+        /* --- ACCORDIONS --- */
+        details {
+            background: #f8fafc; border-radius: 12px; margin-bottom: 10px;
+            border: 1px solid #cbd5e1;
+        }
+        summary {
+            padding: 15px; font-weight: 700; cursor: pointer; list-style: none;
+            display: flex; justify-content: space-between; color: #475569;
+        }
+        summary:hover { background: #f1f5f9; border-radius: 12px; }
+        .details-content { padding: 20px; border-top: 1px dashed #cbd5e1; color: #475569; }
+
+        /* --- FLASHCARD (FLIP) --- */
+        .flashcard-container { perspective: 1000px; width: 100%; height: 280px; cursor: pointer; }
+        .flashcard-inner {
+            position: relative; width: 100%; height: 100%; text-align: center;
+            transition: transform 0.6s; transform-style: preserve-3d;
+        }
+        .flashcard-container.flipped .flashcard-inner { transform: rotateY(180deg); }
+        
+        .flashcard-front, .flashcard-back {
+            position: absolute; width: 100%; height: 100%;
+            -webkit-backface-visibility: hidden; backface-visibility: hidden;
+            border-radius: 16px; padding: 2rem;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            box-shadow: var(--shadow-paper); border: 2px solid;
+        }
+        
+        .flashcard-front {
+            background: #f1f5f9; border-color: #cbd5e1; color: #334155;
+        }
+        .flashcard-back {
+            background: #ffedd5; border-color: #fdba74; color: #9a3412;
+            transform: rotateY(180deg);
+        }
+
+        /* --- FOOTER PADRÃO --- */
+        footer {
+            background-color: #ffffff;
+            border-top: 1px solid #e5e7eb;
+            padding: 2rem 0;
+            margin-top: auto;
+        }
+        .footer-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .footer-brand { color: #64748b; font-size: 0.9rem; font-weight: 600; }
+        .social-links { display: flex; gap: 1.5rem; }
+        .social-links a { color: #94a3b8; font-size: 1.2rem; transition: color 0.2s; }
+        .social-links a:hover { color: var(--primary); }
+
+        @media (max-width: 640px) {
+            .footer-container { flex-direction: column; gap: 1rem; }
+            .persona-grid, .sticker-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-content">
+            <h1 class="header-title">Inibição Emocional</h1>
+            <p class="header-subtitle">Caderno de Psicoeducação</p>
+        </div>
+    </header>
+
+    <div class="main-container">
+
+        <div class="paper-card">
+            <div class="card-header">
+                <i class="fas fa-snowflake card-icon"></i>
+                <h2 class="card-title">O Freio de Mão</h2>
+            </div>
+            <p>O Esquema de Inibição Emocional é o bloqueio da espontaneidade. É a crença de que você deve suprimir suas emoções (boas ou ruins) para evitar vergonha, críticas ou perda de controle.</p>
+            
+            <div class="post-it">
+                <i class="fas fa-thumbtack" style="color:#475569; margin-right:10px;"></i>
+                "Mantenha a postura. Chorar é fraqueza. Rir alto é vulgar. Se eu demonstrar o que sinto, algo ruim vai acontecer."
+            </div>
+        </div>
+
+        <div class="paper-card" style="transform: rotate(0.5deg);">
+            <div class="card-header">
+                <i class="fas fa-users card-icon"></i>
+                <h2 class="card-title">Espelhos da Vida Real</h2>
+            </div>
+            <p>Como o congelamento emocional se apresenta:</p>
+            
+            <div class="persona-grid">
+                <div class="persona-card">
+                    <div class="persona-header">
+                        <span class="persona-name">Arthur</span>
+                        <span class="persona-tag tag-arthur">O Robô</span>
+                    </div>
+                    <p>Arthur analisa tudo logicamente. Ele não chora em funerais e não gargalha em festas. Para ele, emoção é "ineficiência" ou "drama". As pessoas o acham frio e distante, mas ele diz que é "apenas racional".</p>
+                    <p style="font-size:0.85rem; color:#334155;"><strong>Comportamento:</strong> Racionalização Excessiva</p>
+                </div>
+
+                <div class="persona-card">
+                    <div class="persona-header">
+                        <span class="persona-name">Cláudia</span>
+                        <span class="persona-tag tag-claudia">A "Educada"</span>
+                    </div>
+                    <p>Cláudia sente muita raiva, mas engole tudo. Ela sorri mesmo quando é ofendida para manter a imagem de "profissional" e "civilizada". Ela vive com dores musculares e gastrite.</p>
+                    <p style="font-size:0.85rem; color:#9a3412;"><strong>Comportamento:</strong> Supressão da Raiva</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="paper-card">
+            <div class="card-header">
+                <i class="fas fa-shapes card-icon"></i>
+                <h2 class="card-title">O que está travado?</h2>
+            </div>
+            <div class="sticker-grid">
+                <div class="sticker-box">
+                    <span class="sticker-icon">😶</span>
+                    <h4>Agressividade</h4>
+                    <p>Dificuldade em expressar raiva ou desagrado de forma saudável. "Engolir sapo".</p>
+                </div>
+                <div class="sticker-box">
+                    <span class="sticker-icon">🎉</span>
+                    <h4>Alegria</h4>
+                    <p>Vergonha de ser espontâneo, brincar, dançar ou demonstrar afeto e entusiasmo.</p>
+                </div>
+                <div class="sticker-box">
+                    <span class="sticker-icon">💬</span>
+                    <h4>Vulnerabilidade</h4>
+                    <p>Bloqueio em falar sobre medos, tristezas ou necessidades. Ênfase total na lógica.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="paper-card" style="transform: rotate(-0.5deg);">
+            <div class="card-header">
+                <i class="fas fa-sync card-icon"></i>
+                <h2 class="card-title">Tradutor de Emoções</h2>
+            </div>
+            <p>Seu cérebro racionaliza tudo. Vamos traduzir a "Lógica" em "Sentimento":</p>
+            
+            <div class="translator-area">
+                <p style="margin-bottom:15px; font-weight:700;">O que você diz?</p>
+                <div>
+                    <button class="btn-translate" onclick="translateNeed('logico')">"Não faz sentido chorar por isso."</button>
+                    <button class="btn-translate" onclick="translateNeed('drama')">"Isso é drama desnecessário."</button>
+                    <button class="btn-translate" onclick="translateNeed('bem')">"Está tudo bem." (Com o rosto rígido)</button>
+                </div>
+                
+                <div id="translator-bubble" class="result-bubble">
+                    Toque em uma frase para traduzir...
+                </div>
+            </div>
+        </div>
+
+        <div class="paper-card">
+            <div class="card-header">
+                <i class="fas fa-brain card-icon"></i>
+                <h2 class="card-title">Conceitos Clínicos</h2>
+            </div>
+            
+            <details>
+                <summary>🧠 Neurobiologia: O Córtex Hiperativo <i class="fas fa-chevron-down"></i></summary>
+                <div class="details-content">
+                    <p>Seu Córtex Pré-Frontal (razão) trabalha em excesso para "abafar" a Amígdala (emoção). Você gasta uma energia enorme para manter essa barreira, o que gera exaustão e doenças psicossomáticas.</p>
+                </div>
+            </details>
+
+            <details>
+                <summary>🌱 Como a Terapia Ajuda? <i class="fas fa-chevron-down"></i></summary>
+                <div class="details-content">
+                    <p>O objetivo não é explodir, mas <strong>Fluir</strong>. Usamos técnicas vivenciais (como falar com a cadeira vazia) para ajudar você a sentir no corpo e expressar na fala, conectando cabeça e coração.</p>
+                </div>
+            </details>
+
+            <details>
+                <summary>⚠️ A Panela de Pressão <i class="fas fa-chevron-down"></i></summary>
+                <div class="details-content">
+                    <p>Inibir não faz a emoção sumir, ela apenas fica pressurizada. Muitas vezes, o inibido explode de forma desproporcional por um motivo pequeno ("A Gota D'água") ou o corpo adoece para expressar a dor.</p>
+                </div>
+            </details>
+        </div>
+
+        <div class="paper-card">
+            <div class="card-header">
+                <i class="fas fa-adjust card-icon"></i>
+                <h2 class="card-title">Vire o Pensamento</h2>
+            </div>
+            <p>Toque no cartão quando sentir vergonha de chorar ou rir:</p>
+            
+            <div class="flashcard-container" onclick="this.classList.toggle('flipped')">
+                <div class="flashcard-inner">
+                    <div class="flashcard-front">
+                        <h3 style="font-family:'Patrick Hand'; font-size:1.5rem;">Voz da Inibição</h3>
+                        <p style="margin-top:10px;">"Controle-se! Pare com isso. Todo mundo está olhando. Seja adulto. Emoção é coisa de gente fraca. Mantenha a cara de paisagem."</p>
+                        <i class="fas fa-hand-pointer" style="margin-top:20px; color:#475569; font-size:1.5rem;"></i>
+                    </div>
+                    <div class="flashcard-back">
+                        <h3 style="font-family:'Patrick Hand'; font-size:1.5rem;">Voz do Adulto Saudável</h3>
+                        <p style="margin-top:10px;">"Sentir é humano. Minhas emoções são dados importantes sobre o que eu preciso. Eu posso expressar o que sinto de forma adequada sem perder a dignidade. Chorar ou rir alivia e conecta."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-brand">
+                &copy; 2026 Bruno de Souza
+            </div>
+            <div class="social-links">
+                <a href="https://www.instagram.com/psi.brunosg/" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://wa.me/5553991898309" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.linkedin.com/in/psi-bsouza/" target="_blank"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function translateNeed(type) {
+            const bubble = document.getElementById('translator-bubble');
+            let text = "";
+            
+            if (type === 'logico') {
+                text = "✨ Tradução: 'A situação me deixou triste. Mesmo que não resolva o problema, chorar me ajuda a processar a dor.'";
+            } else if (type === 'drama') {
+                text = "✨ Tradução: 'Estou minimizando meu sentimento para não incomodar. Eu tenho direito de estar chateado.'";
+            } else if (type === 'bem') {
+                text = "✨ Tradução: 'Na verdade, estou com muita raiva. Preciso dizer que não gostei disso, em vez de fingir que não me afetou.'";
+            }
+            
+            bubble.style.opacity = 0;
+            setTimeout(() => {
+                bubble.innerHTML = text;
+                bubble.style.opacity = 1;
+                bubble.style.transition = "opacity 0.3s";
+            }, 200);
+        }
+    </script>
+
+</body>
+</html>
