@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Padrões Inflexíveis - Caderno Terapêutico</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Paleta "O Peso da Perfeição" */
+            --paper-line: #f1f5f9;    /* Linhas cinza azulado */
+            --paper-bg: #ffffff;      
+            --ink-color: #334155;
+            
+            /* Cores do Esquema (Rigidez -> Flexibilidade) */
+            --primary: #334155;       /* Azul Ardósia (A Regra Dura) */
+            --primary-hover: #1e293b;
+            --flow: #2dd4bf;          /* Verde Água (O Relaxamento) */
+            
+            /* Tags de Personas */
+            --tag-vitor-bg: #e2e8f0; --tag-vitor-text: #1e293b; /* Cinza (Máquina) */
+            --tag-helena-bg: #ccfbf1; --tag-helena-text: #115e59; /* Verde (Regradora) */
+
+            --radius: 16px;
+            --shadow-paper: 3px 3px 10px rgba(0,0,0,0.06);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            color: var(--ink-color);
+            line-height: 1.6;
+            background-color: var(--paper-bg);
+            /* Efeito Papel Pautado */
+            background-image: linear-gradient(var(--paper-line) 1px, transparent 1px);
+            background-size: 100% 2rem;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Patrick Hand', cursive;
+            color: #1e293b;
+        }
+
+        /* --- HEADER --- */
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-bottom: 2px dashed #94a3b8;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);
+        }
+
+        .header-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .header-title {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 0px #e2e8f0;
+        }
+
+        .header-subtitle {
+            font-size: 1.2rem;
+            color: #64748b;
+            font-family: 'Patrick Hand', cursive;
+        }
+
+        /* --- CONTAINER --- */
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+            display: grid;
+            gap: 35px;
+            margin-bottom: 60px;
+        }
+
+        /* --- CARDS (PAPEL) --- */
+        .paper-card {
+            background-color: #ffffff;
+            border-radius: 2px;
+            box-shadow: var(--shadow-paper);
+            border: 1px solid #cbd5e1;
+            padding: 2rem;
+            position: relative;
+            transform: rotate(-0.5deg);
+            transition: transform 0.3s;
+        }
+        
+        .paper-card:hover { transform: rotate(0deg) translateY(-3px); }
+        
+        /* Régua Decorativa */
+        .paper-card::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 25px;
+            background-color: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            background-image: repeating-linear-gradient(90deg, #94a3b8 0, #94a3b8 1px, transparent 1px, transparent 10px);
+            opacity: 0.8;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--paper-line);
+            padding-bottom: 10px;
+        }
+
+        .card-icon { font-size: 1.8rem; color: var(--flow); }
+        .card-title { font-size: 1.8rem; margin: 0; }
+
+        /* --- POST-IT (DEFINIÇÃO) --- */
+        .post-it {
+            background-color: #f1f5f9; /* Cinza Gelo */
+            padding: 1.5rem;
+            border-radius: 2px 2px 16px 2px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+            font-family: 'Patrick Hand', cursive;
+            font-size: 1.3rem;
+            color: #334155;
+            transform: rotate(1deg);
+            margin: 20px 0;
+            border-left: 5px solid #475569;
+        }
+
+        /* --- PERSONAS --- */
+        .persona-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .persona-card {
+            background: #fff;
+            padding: 20px;
+            border: 2px dashed #94a3b8;
+            border-radius: 12px;
+        }
+        
+        .persona-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .persona-name { font-size: 1.4rem; font-weight: 700; color: #0f172a; }
+        .persona-tag { font-family: 'Nunito', sans-serif; font-size: 0.8rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; }
+        
+        .tag-vitor { background: var(--tag-vitor-bg); color: var(--tag-vitor-text); }
+        .tag-helena { background: var(--tag-helena-bg); color: var(--tag-helena-text); }
+
+        /* --- STICKERS (3 DIMENSÕES) --- */
+        .sticker-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;
+        }
+        
+        .sticker-box {
+            background: white; padding: 1.5rem; border-radius: 12px;
+            border: 2px solid #f8fafc; text-align: center;
+            transition: all 0.3s;
+        }
+        .sticker-box:hover { border-color: var(--flow); transform: scale(1.02); }
+        .sticker-icon { font-size: 2rem; margin-bottom: 10px; display: block; }
+
+        /* --- TRADUTOR INTERATIVO --- */
+        .translator-area {
+            background-color: #f0fdfa; /* Verde água muito claro */
+            padding: 2rem; border-radius: 20px;
+            border: 2px dashed #5eead4; text-align: center;
+        }
+
+        .btn-translate {
+            background: white; border: 2px solid #ccfbf1;
+            padding: 10px 20px; margin: 5px; border-radius: 30px;
+            font-family: 'Nunito', sans-serif; font-weight: 700; color: #0f766e;
+            cursor: pointer; transition: all 0.2s;
+            box-shadow: 0 4px 0 #ccfbf1;
+        }
+        
+        .btn-translate:active { box-shadow: 0 0 0 #ccfbf1; transform: translateY(4px); }
+        .btn-translate:hover { background: #fff; border-color: var(--primary); color: var(--primary); }
+
+        .result-bubble {
+            background: white; padding: 20px; border-radius: 20px;
+            margin-top: 20px; border: 2px solid #cbd5e1;
+            font-family: 'Patrick Hand', cursive; font-size: 1.3rem;
+            color: #334155; min-height: 100px; display: flex; align-items: center; justify-content: center;
+        }
+
+        /* --- ACCORDIONS --- */
+        details {
+            background: #f8fafc; border-radius: 12px; margin-bottom: 10px;
+            border: 1px solid #cbd5e1;
+        }
+        summary {
+            padding: 15px; font-weight: 700; cursor: pointer; list-style: none;
+            display: flex; justify-content: space-between; color: #475569;
+        }
+        summary:hover { background: #f1f5f9; border-radius: 12px; }
+        .details-content { padding: 20px; border-top: 1px dashed #cbd5e1; color: #475569; }
+
+        /* --- FLASHCARD (FLIP) --- */
+        .flashcard-container { perspective: 1000px; width: 100%; height: 280px; cursor: pointer; }
+        .flashcard-inner {
+            position: relative; width: 100%; height: 100%; text-align: center;
+            transition: transform 0.6s; transform-style: preserve-3d;
+        }
+        .flashcard-container.flipped .flashcard-inner { transform: rotateY(180deg); }
+        
+        .flashcard-front, .flashcard-back {
+            position: absolute; width: 100%; height: 100%;
+            -webkit-backface-visibility: hidden; backface-visibility: hidden;
+            border-radius: 16px; padding: 2rem;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            box-shadow: var(--shadow-paper); border: 2px solid;
+        }
+        
+        .flashcard-front {
+            background: #f1f5f9; border-color: #cbd5e1; color: #1e293b;
+        }
+        .flashcard-back {
+            background: #f0fdfa; border-color: #5eead4; color: #0f766e;
+            transform: rotateY(180deg);
+        }
+
+        /* --- FOOTER PADRÃO --- */
+        footer {
+            background-color: #ffffff;
+            border-top: 1px solid #e5e7eb;
+            padding: 2rem 0;
+            margin-top: auto;
+        }
+        .footer-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .footer-brand { color: #64748b; font-size: 0.9rem; font-weight: 600; }
+        .social-links { display: flex; gap: 1.5rem; }
+        .social-links a { color: #94a3b8; font-size: 1.2rem; transition: color 0.2s; }
+        .social-links a:hover { color: var(--primary); }
+
+        @media (max-width: 640px) {
+            .footer-container { flex-direction: column; gap: 1rem; }
+            .persona-grid, .sticker-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-content">
+            <h1 class="header-title">Padrões Inflexíveis</h1>
+            <p class="header-subtitle">Caderno de Psicoeducação</p>
+        </div>
+    </header>
+
+    <div class="main-container">
+
+        <div class="paper-card">
+            <div class="card-header">
+                <i class="fas fa-gavel card-icon"></i>
+                <h2 class="card-title">O Tirano Interior</h2>
+            </div>
+            <p>Este esquema é a crença de que você deve se esforçar para atingir padrões de desempenho extremamente altos, geralmente para evitar críticas. É a incapacidade de relaxar e se sentir satisfeito.</p>
+            
+            <div class="post-it">
+                <i class="fas fa-thumbtack" style="color:#475569; margin-right:10px;"></i>
+                "Nunca é bom o suficiente. Eu poderia ter feito melhor. Se eu parar para descansar, as coisas vão desmoronar."
+            </div>
+        </div>
+
+        <div class="paper-card" style="transform: rotate(0.5deg);">
+            <div class="card-header">
+                <i class="fas fa-users card-icon"></i>
+                <h2 class="card-title">Espelhos da Vida Real</h2>
+            </div>
+            <p>Como a rigidez e o perfeccionismo aparecem:</p>
+            
+            <div class="persona-grid">
+                <div class="persona-card">
+                    <div class="persona-header">
+                        <span class="persona-name">Vitor</span>
+                        <span class="persona-tag tag-vitor">A Máquina</span>
+                    </div>
+                    <p>Vitor trabalha 12h por dia e leva o notebook para as férias. Se ele tira 95% de aprovação, ele foca obsessivamente nos 5% que faltaram. Ele não saboreia conquistas, já parte para a próxima meta.</p>
+                    <p style="font-size:0.85rem; color:#334155;"><strong>Comportamento:</strong> Workaholic (Esforço)</p>
+                </div>
+
+                <div class="persona-card">
+                    <div class="persona-header">
+                        <span class="persona-name">Helena</span>
+                        <span class="persona-tag tag-helena">A Regradora</span>
+                    </div>
+                    <p>Helena tem o "jeito certo" de fazer tudo: dobrar a toalha, lavar a louça, estacionar. Ela critica o marido e os filhos constantemente porque eles são "desleixados". Ela vive tensa e irritada.</p>
+                    <p style="font-size:0.85rem; color:#115e59;"><strong>Comportamento:</strong> Hipercrítica (Controle)</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="paper-card">
+            <div class="card-header">
+                <i class="fas fa-shapes card-icon"></i>
+                <h2 class="card-title">Sintomas da Rigidez</h2>
+            </div>
+            <div class="sticker-grid">
+                <div class="sticker-box">
+                    <span class="sticker-icon">📏</span>
+                    <h4>Perfeccionismo</h4>
+                    <p>Preocupação excessiva com detalhes e medo paralisante de cometer erros.</p>
+                </div>
+                <div class="sticker-box">
+                    <span class="sticker-icon">⏱️</span>
+                    <h4>Pressão de Tempo</h4>
+                    <p>A sensação de que "não há tempo a perder". Ficar irritado com a lentidão dos outros.</p>
+                </div>
+                <div class="sticker-box">
+                    <span class="sticker-icon">🧱</span>
+                    <h4>Regras Rígidas</h4>
+                    <p>Muitos "deverias" morais, culturais ou religiosos. Inflexibilidade diante de mudanças.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="paper-card" style="transform: rotate(-0.5deg);">
+            <div class="card-header">
+                <i class="fas fa-sync card-icon"></i>
+                <h2 class="card-title">Tradutor de Leveza</h2>
+            </div>
+            <p>O esquema diz "Mais!". O adulto saudável diz "Basta". Vamos traduzir:</p>
+            
+            <div class="translator-area">
+                <p style="margin-bottom:15px; font-weight:700;">O que o tirano diz?</p>
+                <div>
+                    <button class="btn-translate" onclick="translateNeed('quase')">"Não ficou perfeito, que lixo."</button>
+                    <button class="btn-translate" onclick="translateNeed('descanso')">"Descansar é perda de tempo."</button>
+                    <button class="btn-translate" onclick="translateNeed('erro')">"Como você pôde errar isso?"</button>
+                </div>
+                
+                <div id="translator-bubble" class="result-bubble">
+                    Toque em uma cobrança para traduzir...
+                </div>
+            </div>
+        </div>
+
+        <div class="paper-card">
+            <div class="card-header">
+                <i class="fas fa-brain card-icon"></i>
+                <h2 class="card-title">Conceitos Clínicos</h2>
+            </div>
+            
+            <details>
+                <summary>🧠 Neurobiologia: A Esteira Hedônica <i class="fas fa-chevron-down"></i></summary>
+                <div class="details-content">
+                    <p>Seu sistema de dopamina é viciado na <em>antecipação</em> da meta, não na conquista. Assim que você alcança o objetivo, a satisfação dura segundos e o cérebro já grita "Próximo!". Você nunca chega lá.</p>
+                </div>
+            </details>
+
+            <details>
+                <summary>🌱 Como a Terapia Ajuda? <i class="fas fa-chevron-down"></i></summary>
+                <div class="details-content">
+                    <p>O foco é aprender o conceito de <strong>"Bom o Bastante"</strong>. É trocar a perfeição (impossível) pela excelência saudável. Trabalhamos a capacidade de brincar, relaxar e aceitar a imperfeição humana.</p>
+                </div>
+            </details>
+
+            <details>
+                <summary>⚠️ O Sucesso Vazio <i class="fas fa-chevron-down"></i></summary>
+                <div class="details-content">
+                    <p>Você pode ter muitas conquistas externas (dinheiro, títulos), mas se sente internamente exausto e vazio. O esquema rouba sua capacidade de sentir prazer no presente em nome de um futuro idealizado.</p>
+                </div>
+            </details>
+        </div>
+
+        <div class="paper-card">
+            <div class="card-header">
+                <i class="fas fa-adjust card-icon"></i>
+                <h2 class="card-title">Vire o Pensamento</h2>
+            </div>
+            <p>Toque no cartão quando sentir que deveria estar trabalhando:</p>
+            
+            <div class="flashcard-container" onclick="this.classList.toggle('flipped')">
+                <div class="flashcard-inner">
+                    <div class="flashcard-front">
+                        <h3 style="font-family:'Patrick Hand'; font-size:1.5rem;">Voz dos Padrões</h3>
+                        <p style="margin-top:10px;">"O que você está fazendo parado? Tem tanta coisa pendente! Você é preguiçoso. Se não correr agora, vai fracassar lá na frente. Mexa-se!"</p>
+                        <i class="fas fa-hand-pointer" style="margin-top:20px; color:#334155; font-size:1.5rem;"></i>
+                    </div>
+                    <div class="flashcard-back">
+                        <h3 style="font-family:'Patrick Hand'; font-size:1.5rem;">Voz do Adulto Saudável</h3>
+                        <p style="margin-top:10px;">"Eu fiz o meu melhor hoje e isso é suficiente. Descansar faz parte da produtividade. Eu tenho valor pelo que SOU, não apenas pelo que PRODUZO. Posso relaxar sem culpa."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-brand">
+                &copy; 2026 Bruno de Souza
+            </div>
+            <div class="social-links">
+                <a href="https://www.instagram.com/psi.brunosg/" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://wa.me/5553991898309" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.linkedin.com/in/psi-bsouza/" target="_blank"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function translateNeed(type) {
+            const bubble = document.getElementById('translator-bubble');
+            let text = "";
+            
+            if (type === 'quase') {
+                text = "✨ Tradução: 'Ficou muito bom. O perfeccionismo está me cegando para a qualidade do que fiz. Vou focar no que está feito.'";
+            } else if (type === 'descanso') {
+                text = "✨ Tradução: 'Meu corpo precisa recarregar. Se eu não descansar agora, vou pifar depois e perder mais tempo.'";
+            } else if (type === 'erro') {
+                text = "✨ Tradução: 'Erros são oportunidades de aprendizado, não atestados de incompetência. Sou humano e posso falhar.'";
+            }
+            
+            bubble.style.opacity = 0;
+            setTimeout(() => {
+                bubble.innerHTML = text;
+                bubble.style.opacity = 1;
+                bubble.style.transition = "opacity 0.3s";
+            }, 200);
+        }
+    </script>
+
+</body>
+</html>
