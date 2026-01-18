@@ -3,285 +3,273 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Esquema de Abandono - Guia Terapêutico</title>
+    <title>Esquema de Abandono - Caderno Terapêutico</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
     <style>
         :root {
-            /* Design System Lúdico & Clean */
-            --primary: #f59e0b;       /* Âmbar (Cor do Esquema) */
-            --primary-light: #fffbeb;
+            /* Paleta Lúdica "Papelaria" */
+            --paper-line: #e5e7eb;
+            --paper-bg: #fdfbf7;
+            --ink-color: #4b5563;
+            
+            /* Cores de Destaque (Estilo Marca-Texto) */
+            --marker-orange: #ffedd5;
+            --text-orange: #c2410c;
+            --marker-blue: #dbeafe;
+            --text-blue: #1e40af;
+            --marker-pink: #fce7f3;
+            --text-pink: #be185d;
+            
+            /* Botões e Detalhes */
+            --primary: #f59e0b;
             --primary-hover: #d97706;
-            --secondary: #64748b;     
-            --bg-body: #f8fafc;       
-            --bg-card: #ffffff;
-            --text-main: #1e293b;     
-            --text-muted: #64748b;
             
-            /* Cores Semânticas */
-            --schema-icon-bg: #fef3c7;
-            --schema-icon-color: #d97706;
-            --child-mode: #fda4af;    /* Rosa (Criança) */
-            --adult-mode: #34d399;    /* Verde (Adulto) */
-            
-            --radius: 16px; /* Bordas mais arredondadas (Lúdico) */
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --transition: all 0.3s ease;
+            --radius: 16px; /* Bordas bem redondinhas */
+            --shadow-paper: 3px 3px 10px rgba(0,0,0,0.05);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-body);
-            color: var(--text-main);
+            font-family: 'Nunito', sans-serif;
+            color: var(--ink-color);
             line-height: 1.6;
+            background-color: var(--paper-bg);
+            /* Efeito de Papel Pautado (Caderno) */
+            background-image: linear-gradient(var(--paper-line) 1px, transparent 1px);
+            background-size: 100% 2rem;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            
-            /* Fundo Gradiente Suave */
-            background-image: 
-                radial-gradient(at 0% 0%, hsla(37, 100%, 96%, 1) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, hsla(28, 100%, 96%, 1) 0px, transparent 50%);
-            background-attachment: fixed;
+        }
+
+        /* Títulos Manuscritos */
+        h1, h2, h3, h4 {
+            font-family: 'Patrick Hand', cursive;
+            color: #1f2937;
         }
 
         /* --- HEADER --- */
         header {
-            background-color: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid #e2e8f0;
-            padding: 1.5rem 0;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-bottom: 2px dashed #cbd5e1; /* Borda pontilhada de caderno */
+            padding: 2rem 0;
+            margin-bottom: 2rem;
             position: sticky;
             top: 0;
             z-index: 100;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
         }
 
         .header-content {
-            max-width: 1000px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 0 20px;
             text-align: center;
         }
 
         .header-title {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--text-main);
-            letter-spacing: -0.5px;
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 0px #fffbeb;
         }
 
         .header-subtitle {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            margin-top: 5px;
+            font-size: 1.2rem;
+            color: #64748b;
+            font-family: 'Patrick Hand', cursive;
         }
 
         /* --- CONTAINER --- */
         .main-container {
-            max-width: 1000px;
-            margin: 40px auto;
+            max-width: 900px;
+            margin: 0 auto;
             padding: 0 20px;
             width: 100%;
             display: grid;
-            gap: 30px;
+            gap: 35px;
             margin-bottom: 60px;
         }
 
-        /* --- CARDS --- */
-        .card {
-            background-color: var(--bg-card);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(0,0,0,0.05);
+        /* --- CARDS (FOLHAS DE PAPEL) --- */
+        .paper-card {
+            background-color: #ffffff;
+            border-radius: 2px; /* Cantos levemente retos como papel */
+            box-shadow: var(--shadow-paper);
+            border: 1px solid #e5e7eb;
             padding: 2rem;
-            transition: var(--transition);
+            position: relative;
+            transform: rotate(-0.5deg); /* Leve inclinação para parecer natural */
+            transition: transform 0.3s;
         }
-
-        .card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+        
+        .paper-card:hover { transform: rotate(0deg) translateY(-3px); }
+        
+        /* "Fita Adesiva" decorativa no topo do card */
+        .paper-card::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 30px;
+            background-color: rgba(255, 255, 255, 0.6);
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            opacity: 0.8;
+        }
 
         .card-header {
             display: flex;
             align-items: center;
             gap: 15px;
             margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid #f1f5f9;
+            border-bottom: 2px solid var(--paper-line);
+            padding-bottom: 10px;
         }
 
         .card-icon {
-            width: 45px; height: 45px;
-            background-color: var(--schema-icon-bg);
-            color: var(--schema-icon-color);
-            border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.25rem;
+            font-size: 1.8rem;
+            color: var(--primary);
         }
 
         .card-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--text-main);
+            font-size: 1.8rem;
+            margin: 0;
         }
 
-        /* --- GRIDS --- */
-        .grid-3 {
+        /* --- DESTAQUES (POST-IT) --- */
+        .post-it {
+            background-color: #fef3c7;
+            padding: 1.5rem;
+            border-radius: 2px 2px 16px 2px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+            font-family: 'Patrick Hand', cursive;
+            font-size: 1.3rem;
+            color: #78350f;
+            transform: rotate(1deg);
+            margin: 20px 0;
+            border-left: 5px solid #fcd34d;
+        }
+
+        /* --- HISTÓRIAS (PERSONAS) --- */
+        .persona-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
         }
 
-        /* --- BOXES INFORMATIVOS (AS 3 DIMENSÕES) --- */
-        .info-box {
-            background-color: #ffffff;
-            padding: 1.5rem;
+        .persona-card {
+            background: #fff;
+            padding: 20px;
+            border: 2px dashed #cbd5e1;
             border-radius: 12px;
-            border: 1px solid #e2e8f0;
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
         }
         
-        .info-box:hover { border-color: var(--primary); }
-        
-        .info-box h4 { 
-            font-size: 1rem; font-weight: 700; margin-bottom: 0.8rem; color: var(--text-main); 
-            display: flex; align-items: center; gap: 8px;
+        .persona-header {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;
         }
         
-        .info-box p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin: 0; }
-
-        /* --- FERRAMENTAS INTERATIVAS (TRADUTOR) --- */
-        .interactive-area {
-            background-color: #fffbeb;
-            padding: 2rem;
-            border-radius: 16px;
-            border: 2px dashed #fcd34d;
-            text-align: center;
-        }
-
-        .btn-option {
-            background-color: white;
-            border: 1px solid #e2e8f0;
-            padding: 0.8rem 1.5rem;
-            border-radius: 50px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--text-main);
-            cursor: pointer;
-            transition: var(--transition);
-            margin: 5px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        .persona-name { font-size: 1.4rem; font-weight: 700; color: #334155; }
+        
+        .persona-tag { 
+            font-family: 'Nunito', sans-serif; font-size: 0.8rem; 
+            font-weight: 700; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; 
         }
         
-        .btn-option:hover, .btn-option.active {
-            background-color: var(--primary);
-            color: white;
-            border-color: var(--primary);
-            transform: translateY(-2px);
-        }
+        .tag-mariana { background: #ffe4e6; color: #be123c; }
+        .tag-pedro { background: #e0f2fe; color: #0369a1; }
 
-        .result-display {
-            margin-top: 1.5rem;
-            padding: 1.5rem;
-            background: white;
-            border-radius: 12px;
-            min-height: 100px;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            opacity: 0; /* Animação */
-            transition: opacity 0.3s ease;
+        /* --- AS 3 DIMENSÕES (STICKERS) --- */
+        .sticker-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;
         }
-        .result-display.show { opacity: 1; }
-
-        /* --- ACCORDIONS (CONCEITOS CLÍNICOS) --- */
-        details {
-            background-color: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            margin-bottom: 12px;
-            overflow: hidden;
-        }
-        summary {
-            padding: 16px 20px;
-            font-size: 1rem;
-            font-weight: 600;
-            background-color: #f8fafc;
-            cursor: pointer;
-            list-style: none;
-            display: flex; justify-content: space-between; align-items: center;
-            transition: background 0.2s;
-        }
-        summary:hover { background-color: #f1f5f9; }
-        summary::-webkit-details-marker { display: none; }
         
-        .details-body { 
-            padding: 20px; 
-            font-size: 0.95rem; 
-            color: #475569; 
-            border-top: 1px solid #e2e8f0;
-            line-height: 1.7;
+        .sticker-box {
+            background: white; padding: 1.5rem; border-radius: 12px;
+            border: 2px solid #f1f5f9; text-align: center;
+            transition: all 0.3s;
+        }
+        .sticker-box:hover { border-color: var(--primary); transform: scale(1.02); }
+        
+        .sticker-icon { font-size: 2rem; margin-bottom: 10px; display: block; }
+
+        /* --- TRADUTOR INTERATIVO --- */
+        .translator-area {
+            background-color: #f0fdf4; /* Verde bem claro */
+            padding: 2rem; border-radius: 20px;
+            border: 2px dashed #86efac; text-align: center;
         }
 
-        /* --- FLASHCARD LÚDICO (SEM ALERT) --- */
+        .btn-translate {
+            background: white; border: 2px solid #cbd5e1;
+            padding: 10px 20px; margin: 5px; border-radius: 30px;
+            font-family: 'Nunito', sans-serif; font-weight: 700; color: #475569;
+            cursor: pointer; transition: all 0.2s;
+            box-shadow: 0 4px 0 #cbd5e1; /* Efeito 3D */
+        }
+        
+        .btn-translate:active { box-shadow: 0 0 0 #cbd5e1; transform: translateY(4px); }
+        .btn-translate:hover { background: #fff; border-color: var(--primary); color: var(--primary); }
+
+        .result-bubble {
+            background: white; padding: 20px; border-radius: 20px;
+            margin-top: 20px; border: 2px solid #e2e8f0;
+            font-family: 'Patrick Hand', cursive; font-size: 1.3rem;
+            color: #334155; min-height: 100px; display: flex; align-items: center; justify-content: center;
+        }
+
+        /* --- FLASHCARD (FLIP) --- */
         .flashcard-container {
-            perspective: 1000px;
-            width: 100%;
-            height: 250px;
-            cursor: pointer;
+            perspective: 1000px; width: 100%; height: 280px; cursor: pointer;
         }
-        
         .flashcard-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
+            position: relative; width: 100%; height: 100%; text-align: center;
+            transition: transform 0.8s; transform-style: preserve-3d;
         }
-        
-        .flashcard-container.flipped .flashcard-inner {
-            transform: rotateY(180deg);
-        }
+        .flashcard-container.flipped .flashcard-inner { transform: rotateY(180deg); }
         
         .flashcard-front, .flashcard-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            border-radius: 16px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(0,0,0,0.05);
+            position: absolute; width: 100%; height: 100%;
+            -webkit-backface-visibility: hidden; backface-visibility: hidden;
+            border-radius: 16px; padding: 2rem;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            box-shadow: var(--shadow-paper); border: 2px solid;
         }
         
         .flashcard-front {
-            background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+            background: #fff7ed; border-color: #ffedd5;
             color: #9a3412;
         }
-        
         .flashcard-back {
-            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
-            color: #065f46;
-            transform: rotateY(180deg);
+            background: #ecfdf5; border-color: #d1fae5;
+            color: #065f46; transform: rotateY(180deg);
         }
 
-        /* --- FOOTER (SEU PADRÃO) --- */
+        /* --- CONCEITOS CLÍNICOS (ABAS) --- */
+        details {
+            background: #f8fafc; border-radius: 12px; margin-bottom: 10px;
+            border: 1px solid #e2e8f0;
+        }
+        summary {
+            padding: 15px; font-weight: 700; cursor: pointer; list-style: none;
+            display: flex; justify-content: space-between;
+        }
+        summary:hover { color: var(--primary); background: #f1f5f9; border-radius: 12px; }
+        .details-content { padding: 20px; border-top: 1px dashed #cbd5e1; }
+
+        /* --- FOOTER SOLICITADO --- */
         footer {
             background-color: #ffffff;
             border-top: 1px solid #e2e8f0;
-            padding: 2.5rem 0;
+            padding: 2rem 0;
             margin-top: auto;
         }
-
         .footer-container {
             max-width: 1000px;
             margin: 0 auto;
@@ -290,23 +278,14 @@
             justify-content: space-between;
             align-items: center;
         }
-
-        .footer-brand {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
+        .footer-brand { color: #64748b; font-size: 0.9rem; font-weight: 600; }
         .social-links { display: flex; gap: 1.5rem; }
-        .social-links a {
-            color: #94a3b8; font-size: 1.2rem; text-decoration: none; transition: color 0.2s ease;
-        }
+        .social-links a { color: #94a3b8; font-size: 1.2rem; transition: color 0.2s; }
         .social-links a:hover { color: var(--primary); }
 
         @media (max-width: 640px) {
             .footer-container { flex-direction: column; gap: 1rem; }
-            .grid-3 { grid-template-columns: 1fr; }
-            .flashcard-container { height: 300px; }
+            .persona-grid, .sticker-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -315,119 +294,146 @@
     <header>
         <div class="header-content">
             <h1 class="header-title">Esquema de Abandono</h1>
-            <p class="header-subtitle">Guia de psicoeducação e ferramentas práticas.</p>
+            <p class="header-subtitle">Caderno de Psicoeducação</p>
         </div>
     </header>
 
     <div class="main-container">
 
-        <div class="card">
+        <div class="paper-card">
             <div class="card-header">
-                <div class="card-icon"><i class="fas fa-heart-broken"></i></div>
-                <div class="card-title">O Que é Esse Esquema?</div>
+                <i class="fas fa-heart-broken card-icon"></i>
+                <h2 class="card-title">O Que é Isso?</h2>
             </div>
-            <p>O Esquema de Abandono é a sensação profunda e persistente de que as pessoas importantes da sua vida são instáveis e, eventualmente, deixarão você. É o medo crônico da perda.</p>
-            <div style="background:#fff7ed; border-radius:8px; padding:15px; color:#c2410c; font-weight:500; font-size:0.95rem;">
-                <i class="fas fa-quote-left" style="margin-right:8px;"></i>
-                "Por favor, não vá. Se você for, eu ficarei sozinho para sempre e não vou sobreviver."
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <div class="card-icon"><i class="fas fa-cubes"></i></div>
-                <div class="card-title">As 3 Dimensões do Abandono</div>
-            </div>
-            <div class="grid-3">
-                <div class="info-box">
-                    <h4><i class="fas fa-wind" style="color:#f59e0b;"></i> Instabilidade</h4>
-                    <p>A percepção de que o outro é imprevisível. "Uma hora ele me ama, na outra ele some." O vínculo parece piscar como uma lâmpada falhando.</p>
-                </div>
-                <div class="info-box">
-                    <h4><i class="fas fa-user-slash" style="color:#ef4444;"></i> Perda de Conexão</h4>
-                    <p>O medo não é apenas físico, é de perder a conexão emocional. "Se ele não responde, é porque parou de gostar de mim."</p>
-                </div>
-                <div class="info-box">
-                    <h4><i class="fas fa-baby" style="color:#ec4899;"></i> Dependência</h4>
-                    <p>A crença infantil de que "eu não consigo viver sem ele". Uma fusão onde a sua sobrevivência emocional depende da presença do outro.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <div class="card-icon"><i class="fas fa-language"></i></div>
-                <div class="card-title">Tradutor de Necessidades</div>
-            </div>
-            <p>Quando o esquema ativa, tendemos a cobrar ou atacar. Use esta ferramenta para traduzir o "Pânico" em "Pedido Saudável".</p>
+            <p>O Esquema de Abandono é a sensação profunda de que as pessoas que você ama são instáveis e, eventualmente, vão deixar você sozinho.</p>
             
-            <div class="interactive-area">
-                <p style="margin-bottom:15px; font-weight:600; color:#4b5563;">O que você tem vontade de dizer?</p>
-                <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:10px;">
-                    <button class="btn-option" onclick="translateNeed('sumiu')">"Você sumiu! Não se importa comigo?"</button>
-                    <button class="btn-option" onclick="translateNeed('amor')">"Você ainda me ama? Tem certeza?"</button>
-                    <button class="btn-option" onclick="translateNeed('terminar')">"É melhor terminar logo então!"</button>
+            <div class="post-it">
+                <i class="fas fa-thumbtack" style="color:#d97706; margin-right:10px;"></i>
+                "Por favor, não vá. Se você for, eu não vou sobreviver sozinho."
+            </div>
+        </div>
+
+        <div class="paper-card" style="transform: rotate(0.5deg);">
+            <div class="card-header">
+                <i class="fas fa-user-friends card-icon"></i>
+                <h2 class="card-title">Espelhos da Vida Real</h2>
+            </div>
+            <p>Veja como esse esquema se manifesta de formas opostas:</p>
+            
+            <div class="persona-grid">
+                <div class="persona-card">
+                    <div class="persona-header">
+                        <span class="persona-name">Mariana</span>
+                        <span class="persona-tag tag-mariana">Apegada</span>
+                    </div>
+                    <p>Mariana entra em pânico se o namorado demora para responder. Ela manda 10 mensagens seguidas: "Você está bravo?". Ela tolera relações ruins só para não ficar sozinha.</p>
+                    <p style="font-size:0.85rem; color:#be123c;"><strong>Comportamento:</strong> Rendição (Clinging)</p>
+                </div>
+
+                <div class="persona-card">
+                    <div class="persona-header">
+                        <span class="persona-name">Pedro</span>
+                        <span class="persona-tag tag-pedro">Evitativo</span>
+                    </div>
+                    <p>Pedro aprendeu que "quem ama, sofre". Para não ser abandonado, ele abandona primeiro. Quando começa a gostar de alguém, ele se afasta ou termina para se proteger.</p>
+                    <p style="font-size:0.85rem; color:#0369a1;"><strong>Comportamento:</strong> Evitação (Escape)</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="paper-card">
+            <div class="card-header">
+                <i class="fas fa-cubes card-icon"></i>
+                <h2 class="card-title">As 3 Dimensões</h2>
+            </div>
+            <div class="sticker-grid">
+                <div class="sticker-box">
+                    <span class="sticker-icon">🌪️</span>
+                    <h4>Instabilidade</h4>
+                    <p>"Uma hora ele me ama, na outra ele some." O vínculo parece piscar.</p>
+                </div>
+                <div class="sticker-box">
+                    <span class="sticker-icon">🚫</span>
+                    <h4>Perda de Conexão</h4>
+                    <p>O medo de que o afeto e a atenção sejam retirados de repente.</p>
+                </div>
+                <div class="sticker-box">
+                    <span class="sticker-icon">👶</span>
+                    <h4>Dependência</h4>
+                    <p>A crença infantil de que "eu não consigo viver sem ele".</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="paper-card" style="transform: rotate(-0.5deg);">
+            <div class="card-header">
+                <i class="fas fa-language card-icon"></i>
+                <h2 class="card-title">Tradutor de Necessidades</h2>
+            </div>
+            <p>Quando estamos com medo, tendemos a atacar. Use o tradutor para transformar o "Pânico" em "Pedido":</p>
+            
+            <div class="translator-area">
+                <p style="margin-bottom:15px; font-weight:700;">O que você quer gritar?</p>
+                <div>
+                    <button class="btn-translate" onclick="translateNeed('sumiu')">"Você sumiu! Não liga pra mim!"</button>
+                    <button class="btn-translate" onclick="translateNeed('amor')">"Você ainda me ama? Jura?"</button>
+                    <button class="btn-translate" onclick="translateNeed('terminar')">"Então vamos terminar logo!"</button>
                 </div>
                 
-                <div id="translator-result" class="result-display">
-                    <span style="color:#94a3b8; font-style:italic;">Selecione uma frase acima para traduzir.</span>
+                <div id="translator-bubble" class="result-bubble">
+                    Toque em uma opção para traduzir...
                 </div>
             </div>
         </div>
 
-        <div class="card">
+        <div class="paper-card">
             <div class="card-header">
-                <div class="card-icon"><i class="fas fa-brain"></i></div>
-                <div class="card-title">Aprofundamento Clínico</div>
+                <i class="fas fa-brain card-icon"></i>
+                <h2 class="card-title">Por Dentro da Mente</h2>
             </div>
             
             <details>
-                <summary>Neurobiologia: O Pânico de Separação <i class="fas fa-chevron-down" style="color:#cbd5e1;"></i></summary>
-                <div class="details-body">
-                    <p><strong>A Amígdala:</strong> Em pessoas com este esquema, a amígdala (centro do medo) é hipersensível a sinais de separação. O silêncio do outro é processado pelo cérebro primitivo como <strong>risco de morte</strong>, disparando adrenalina antes que você possa pensar racionalmente.</p>
-                    <p><strong>Ocitocina:</strong> A instabilidade na infância pode ter desregulado o sistema de ocitocina (hormônio do vínculo), tornando difícil sentir-se "preenchido" ou seguro no afeto, exigindo "doses" constantes de reasseguramento.</p>
+                <summary>🧠 Neurobiologia: O Alarme <i class="fas fa-chevron-down"></i></summary>
+                <div class="details-content">
+                    <p><strong>A Amígdala:</strong> Em pessoas com este esquema, a amígdala (centro do medo) vê a separação como <strong>risco de morte</strong>. O silêncio do outro dispara adrenalina antes que você possa pensar.</p>
                 </div>
             </details>
 
             <details>
-                <summary>Como a Terapia do Esquema Ajuda? <i class="fas fa-chevron-down" style="color:#cbd5e1;"></i></summary>
-                <div class="details-body">
-                    <p>A TE trabalha com <strong>Reparentalização Limitada</strong>. O terapeuta ajuda a suprir (dentro dos limites éticos) as necessidades que faltaram na infância (estabilidade, segurança), ajudando o paciente a internalizar a figura do "Adulto Saudável" que acalma a "Criança Vulnerável".</p>
+                <summary>🌱 Como a Terapia Ajuda? <i class="fas fa-chevron-down"></i></summary>
+                <div class="details-content">
+                    <p>Usamos a <strong>Reparentalização Limitada</strong>. O terapeuta ajuda a suprir as necessidades de segurança que faltaram na infância, fortalecendo seu "Adulto Saudável" para acalmar a "Criança Vulnerável".</p>
                 </div>
             </details>
 
             <details>
-                <summary>Técnicas para o Paciente Usar <i class="fas fa-chevron-down" style="color:#cbd5e1;"></i></summary>
-                <div class="details-body">
-                    <ul style="padding-left:20px;">
-                        <li><strong>Cartão de Enfrentamento (Flashcard):</strong> Ler uma mensagem racional durante a crise (veja abaixo).</li>
-                        <li><strong>Objeto de Transição:</strong> Ter um objeto que simbolize a conexão com o terapeuta ou uma figura segura para segurar em momentos de solidão.</li>
-                        <li><strong>Diário de Evidências:</strong> Anotar fatos que provem que a pessoa <em>não</em> está indo embora (ex: "Ele mandou mensagem de bom dia hoje").</li>
+                <summary>🛠️ Técnicas para Usar <i class="fas fa-chevron-down"></i></summary>
+                <div class="details-content">
+                    <ul>
+                        <li><strong>Cartão de Enfrentamento:</strong> Ler uma frase racional na hora da crise.</li>
+                        <li><strong>Diário de Evidências:</strong> Anotar fatos que provam que a pessoa <em>não</em> foi embora.</li>
                     </ul>
                 </div>
             </details>
         </div>
 
-        <div class="card">
+        <div class="paper-card">
             <div class="card-header">
-                <div class="card-icon"><i class="fas fa-sync-alt"></i></div>
-                <div class="card-title">Exercício: Vire o Jogo</div>
+                <i class="fas fa-sync-alt card-icon"></i>
+                <h2 class="card-title">Vire o Pensamento</h2>
             </div>
-            <p>Toque no cartão abaixo quando sentir o pânico do abandono. Veja a transformação do pensamento.</p>
+            <p>Toque no cartão quando sentir o pânico chegando:</p>
             
             <div class="flashcard-container" onclick="this.classList.toggle('flipped')">
                 <div class="flashcard-inner">
                     <div class="flashcard-front">
-                        <i class="fas fa-exclamation-triangle" style="font-size:2rem; margin-bottom:15px;"></i>
-                        <h3 style="font-size:1.1rem; margin-bottom:10px;">Voz do Esquema (Pânico)</h3>
-                        <p style="font-style:italic;">"Ele não respondeu há 2 horas. Ele cansou de mim. Vai embora. Eu vou ficar sozinho de novo. Preciso ligar agora!"</p>
-                        <span style="margin-top:auto; font-size:0.8rem; opacity:0.7;">(Toque para ver a Realidade)</span>
+                        <h3 style="font-family:'Patrick Hand'; font-size:1.5rem;">Voz do Pânico</h3>
+                        <p style="margin-top:10px;">"Ele não respondeu há 2 horas. Ele cansou de mim. Vai embora. Eu vou ficar sozinho de novo!"</p>
+                        <i class="fas fa-hand-pointer" style="margin-top:20px; color:#f59e0b; font-size:1.5rem;"></i>
                     </div>
-                    
                     <div class="flashcard-back">
-                        <i class="fas fa-shield-alt" style="font-size:2rem; margin-bottom:15px;"></i>
-                        <h3 style="font-size:1.1rem; margin-bottom:10px;">Voz do Adulto Saudável</h3>
-                        <p>Eu sinto o medo da minha Criança, mas a realidade é: ele provavelmente está ocupado. O silêncio não é abandono. Eu sou adulto e seguro. Posso esperar.</p>
+                        <h3 style="font-family:'Patrick Hand'; font-size:1.5rem;">Voz da Realidade</h3>
+                        <p style="margin-top:10px;">"Sinto o medo da minha Criança, mas a verdade é: ele provavelmente está ocupado. O silêncio não é abandono. Eu sou adulto e seguro."</p>
                     </div>
                 </div>
             </div>
@@ -441,51 +447,32 @@
                 &copy; 2026 Bruno de Souza
             </div>
             <div class="social-links">
-                <a href="https://www.instagram.com/psi.brunosg/"><i class="fab fa-instagram"></i></a>
-                <a href="https://wa.me/5553991898309"><i class="fab fa-whatsapp"></i></a>
-                <a href="https://www.linkedin.com/in/psi-bsouza/"><i class="fab fa-linkedin"></i></a>
+                <a href="https://www.instagram.com/psi.brunosg/" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://wa.me/5553991898309" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.linkedin.com/in/psi-bsouza/" target="_blank"><i class="fab fa-linkedin"></i></a>
             </div>
         </div>
     </footer>
 
     <script>
         function translateNeed(type) {
-            const display = document.getElementById('translator-result');
-            let content = "";
+            const bubble = document.getElementById('translator-bubble');
+            let text = "";
             
-            // Remove class para reiniciar animação
-            display.classList.remove('show');
+            if (type === 'sumiu') {
+                text = "✨ Tradução: 'Estou me sentindo inseguro e preciso de um pouco de atenção para me acalmar.'";
+            } else if (type === 'amor') {
+                text = "✨ Tradução: 'Meu medo de abandono ativou. Preciso de um abraço ou uma palavra de carinho.'";
+            } else if (type === 'terminar') {
+                text = "✨ Tradução: 'Estou com tanto medo de você me deixar que prefiro sair antes. Mas eu quero ficar.'";
+            }
             
+            bubble.style.opacity = 0;
             setTimeout(() => {
-                if (type === 'sumiu') {
-                    content = `
-                        <div style="text-align:center;">
-                            <strong style="color:#ef4444; display:block; margin-bottom:5px;">A Queixa (Ataque):</strong> 
-                            "Você sumiu! Não se importa comigo?"<br><br>
-                            <strong style="color:#10b981; display:block; margin-bottom:5px;">A Necessidade Real (Vulnerabilidade):</strong>
-                            <span style="background:#d1fae5; color:#065f46; padding:5px 10px; border-radius:4px;">"Estou me sentindo inseguro e preciso de um pouco de atenção para me acalmar."</span>
-                        </div>`;
-                } else if (type === 'amor') {
-                    content = `
-                        <div style="text-align:center;">
-                            <strong style="color:#ef4444; display:block; margin-bottom:5px;">A Queixa (Checagem):</strong> 
-                            "Você ainda me ama? Tem certeza?"<br><br>
-                            <strong style="color:#10b981; display:block; margin-bottom:5px;">A Necessidade Real (Vulnerabilidade):</strong>
-                            <span style="background:#d1fae5; color:#065f46; padding:5px 10px; border-radius:4px;">"Meu esquema de abandono ativou. Preciso de um abraço ou uma palavra de carinho."</span>
-                        </div>`;
-                } else if (type === 'terminar') {
-                    content = `
-                        <div style="text-align:center;">
-                            <strong style="color:#ef4444; display:block; margin-bottom:5px;">A Queixa (Defesa):</strong> 
-                            "É melhor terminar logo então!"<br><br>
-                            <strong style="color:#10b981; display:block; margin-bottom:5px;">A Necessidade Real (Vulnerabilidade):</strong>
-                            <span style="background:#d1fae5; color:#065f46; padding:5px 10px; border-radius:4px;">"Estou com tanto medo de você me deixar que prefiro sair antes para não doer. Mas eu quero ficar."</span>
-                        </div>`;
-                }
-                
-                display.innerHTML = content;
-                display.classList.add('show');
-            }, 50);
+                bubble.innerHTML = text;
+                bubble.style.opacity = 1;
+                bubble.style.transition = "opacity 0.3s";
+            }, 200);
         }
     </script>
 
