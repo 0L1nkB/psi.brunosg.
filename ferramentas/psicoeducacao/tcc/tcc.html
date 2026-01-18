@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terapia Cognitivo-Comportamental - Caderno Terapêutico</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Paleta "Laboratório da Mente" */
+            --paper-line: #f0f9ff;    /* Linhas azul bem claro */
+            --paper-bg: #f8fcff;      
+            --ink-color: #0c4a6e;
+            
+            /* Cores da TCC (Lógica -> Insight) */
+            --logic: #0284c7;         /* Azul (Pensamento) */
+            --logic-hover: #0369a1;
+            --insight: #fbbf24;       /* Amarelo (A Descoberta) */
+            --action: #f97316;        /* Laranja (Comportamento) */
+            
+            --radius: 16px;
+            --shadow-paper: 3px 3px 10px rgba(0,0,0,0.06);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            color: var(--ink-color);
+            line-height: 1.6;
+            background-color: var(--paper-bg);
+            /* Efeito Papel Quadriculado (Matemático/Lógico) */
+            background-image: 
+                linear-gradient(var(--paper-line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--paper-line) 1px, transparent 1px);
+            background-size: 2rem 2rem;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Patrick Hand', cursive;
+            color: #075985;
+        }
+
+        /* --- HEADER --- */
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-bottom: 2px dashed #7dd3fc;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);
+        }
+
+        .header-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .header-title {
+            font-size: 2.8rem;
+            color: var(--logic);
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 0px #e0f2fe;
+        }
+
+        .header-subtitle {
+            font-size: 1.2rem;
+            color: #0369a1;
+            font-family: 'Patrick Hand', cursive;
+            background: #e0f2fe;
+            padding: 5px 15px;
+            border-radius: 20px;
+            transform: rotate(-1deg);
+            display: inline-block;
+        }
+
+        /* --- CONTAINER --- */
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+            display: grid;
+            gap: 35px;
+            margin-bottom: 60px;
+        }
+
+        /* --- CARDS (PAPEL) --- */
+        .paper-card {
+            background-color: #ffffff;
+            border-radius: 2px;
+            box-shadow: var(--shadow-paper);
+            border: 1px solid #bae6fd;
+            padding: 2rem;
+            position: relative;
+            transform: rotate(-0.5deg);
+            transition: transform 0.3s;
+        }
+        
+        .paper-card:hover { transform: rotate(0deg) translateY(-3px); }
+        
+        /* Lâmpada (Ideia) */
+        .paper-card::before {
+            content: '💡';
+            position: absolute;
+            top: -20px;
+            right: 20px;
+            font-size: 2.5rem;
+            z-index: 2;
+            filter: drop-shadow(2px 2px 0 rgba(0,0,0,0.1));
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #e0f2fe;
+            padding-bottom: 10px;
+        }
+
+        .card-icon { font-size: 1.8rem; color: var(--logic); }
+        .card-title { font-size: 1.8rem; margin: 0; }
+
+        /* --- POST-IT (DEFINIÇÃO) --- */
+        .post-it {
+            background-color: #fffbeb; /* Amarelo Post-it */
+            padding: 1.5rem;
+            border-radius: 2px 2px 16px 2px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+            font-family: 'Patrick Hand', cursive;
+            font-size: 1.3rem;
+            color: #92400e;
+            transform: rotate(1deg);
+            margin: 20px 0;
+            border-left: 5px solid #f59e0b;
+        }
+
+        /* --- TRIÂNGULO COGNITIVO (VISUAL) --- */
+        .triangle-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .triangle-point {
+            background: white;
+            border: 2px dashed #bae6fd;
+            border-radius: 50%;
+            width: 140px;
+            height: 140px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+        .triangle-point:hover { transform: scale(1.05); border-color: var(--logic); }
+        
+        .tp-icon { font-size: 2rem; margin-bottom: 5px; display: block; }
+        .tp-title { font-weight: 800; font-size: 1rem; color: #0369a1; }
+        
+        .arrow-icon { font-size: 1.5rem; color: #cbd5e1; }
+
+        /* --- STICKERS (DISTORÇÕES) --- */
+        .sticker-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;
+        }
+        
+        .sticker-box {
+            background: white; padding: 1.5rem; border-radius: 12px;
+            border: 2px solid #f0f9ff; text-align: center;
+            transition: all 0.3s;
+        }
+        .sticker-box:hover { border-color: var(--logic); transform: scale(1.02); }
+        .sticker-icon { font-size: 2rem; margin-bottom: 10px; display: block; }
+
+        /* --- TRADUTOR INTERATIVO (O DETETIVE) --- */
+        .translator-area {
+            background-color: #f0f9ff; /* Azul muito claro */
+            padding: 2rem; border-radius: 20px;
+            border: 2px dashed #7dd3fc; text-align: center;
+        }
+
+        .btn-translate {
+            background: white; border: 2px solid #bae6fd;
+            padding: 10px 20px; margin: 5px; border-radius: 30px;
+            font-family: 'Nunito', sans-serif; font-weight: 700; color: #0284c7;
+            cursor: pointer; transition: all 0.2s;
+            box-shadow: 0 4px 0 #bae6fd;
+        }
+        
+        .btn-translate:active { box-shadow: 0 0 0 #bae6fd; transform: translateY(4px); }
+        .btn-translate:hover { background: #fff; border-color: var(--logic); color: var(--logic); }
+
+        .result-bubble {
+            background: white; padding: 20px; border-radius: 20px;
+            margin-top: 20px; border: 2px solid #bae6fd;
+            font-family: 'Patrick Hand', cursive; font-size: 1.3rem;
+            color: #0c4a6e; min-height: 100px; display: flex; align-items: center; justify-content: center;
+        }
+
+        /* --- ACCORDIONS --- */
+        details {
+            background: #f8fcff; border-radius: 12px; margin-bottom: 10px;
+            border: 1px solid #bae6fd;
+        }
+        summary {
+            padding: 15px; font-weight: 700; cursor: pointer; list-style: none;
+            display: flex; justify-content: space-between; color: #0284c7;
+        }
+        summary:hover { background: #f0f9ff; border-radius: 12px; }
+        .details-content { padding: 20px; border-top: 1px dashed #bae6fd; color: #334155; }
+
+        /* --- FLASHCARD (FLIP) --- */
+        .flashcard-container { perspective: 1000px; width: 100%; height: 280px; cursor: pointer; }
+        .flashcard-inner {
+            position: relative; width: 100%; height: 100%; text-align: center;
+            transition: transform 0.6s; transform-style: preserve-3d;
+        }
+        .flashcard-container.flipped .flashcard-inner { transform: rotateY(180deg); }
+        
+        .flashcard-front, .flashcard-back {
+            position: absolute; width: 100%; height: 100%;
+            -webkit-backface-visibility: hidden; backface-visibility: hidden;
+            border-radius: 16px; padding: 2rem;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            box-shadow: var(--shadow-paper); border: 2px solid;
+        }
+        
+        .flashcard-front {
+            background: #f0f9ff; border-color: #bae6fd; color: #0369a1;
+        }
+        .flashcard-back {
+            background: #fffbeb; border-color: #fcd34d; color: #92400e;
+            transform: rotateY(180deg);
+        }
+
+        /* --- FOOTER PADRÃO --- */
+        footer {
+            background-color: #ffffff;
+            border-top: 1px solid #e5e7eb;
+            padding: 2rem 0;
+            margin-top: auto;
+        }
+        .footer-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .footer-brand { color: #64748b; font-size: 0.9rem; font-weight: 600; }
+        .social-links { display: flex; gap: 1.5rem; }
+        .social-links a { color: #94a3b8; font-size: 1.2rem; transition: color 0.2s; }
+        .social-links a:hover { color: var(--logic); }
+
+        @media (max-width: 640px) {
+            .footer-container { flex-direction: column; gap: 1rem; }
+            .triangle-container { flex-direction: column; }
+            .arrow-icon { transform: rotate(90deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-content">
+            <h1 class="header-title">Terapia Cognitivo-Comportamental</h1>
+            <p class="header-subtitle">Caderno de Psicoeducação</p>
+        </div>
+    </header>
+
+    <div class="main-container">
+
+        <div class="paper-card">
+            <div class="card-header">
+                <i class="fas fa-search card-icon"></i>
+                <h2 class="card-title">O Detetive da Mente</h2>
+            </div>
+            <p>A TCC é uma abordagem prática focada no "aqui e agora". A ideia central é simples: não são os eventos que nos perturbam, mas sim a <strong>interpretação</strong> que fazemos deles.</p>
+            
+            <div class="post-it">
+                <i class="fas fa-thumbtack" style="color:#b45309; margin-right:10px;"></i>
+                "Eu não fico triste porque choveu. Eu fico triste porque penso: 'A chuva estragou meu dia'."
+            </div>
+        </div>
+
+        <div class="paper-card" style="transform: rotate(0.5deg);">
+            <div class="card-header">
+                <i class="fas fa-shapes card-icon"></i>
+                <h2 class="card-title">A Tríade Mágica</h2>
+            </div>
+            <p>Tudo está conectado. Se mudarmos um ponto, mudamos os outros:</p>
+            
+            <div class="triangle-container">
+                <div class="triangle-point">
+                    <i class="fas fa-brain tp-icon" style="color:#0284c7;"></i>
+                    <div class="tp-title">PENSAMENTO</div>
+                    <span style="font-size:0.8rem;">"Ninguém gosta de mim"</span>
+                </div>
+                
+                <i class="fas fa-arrow-right arrow-icon"></i>
+
+                <div class="triangle-point">
+                    <i class="fas fa-heart tp-icon" style="color:#ef4444;"></i>
+                    <div class="tp-title">EMOÇÃO</div>
+                    <span style="font-size:0.8rem;">Tristeza, Solidão</span>
+                </div>
+
+                <i class="fas fa-arrow-right arrow-icon"></i>
+
+                <div class="triangle-point">
+                    <i class="fas fa-walking tp-icon" style="color:#f97316;"></i>
+                    <div class="tp-title">COMPORTAMENTO</div>
+                    <span style="font-size:0.8rem;">Isolar-se em casa</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="paper-card">
+            <div class="card-header">
+                <i class="fas fa-glasses card-icon"></i>
+                <h2 class="card-title">Óculos Sujos (Distorções)</h2>
+            </div>
+            <p>Às vezes, nossa mente nos prega peças. Chamamos isso de "Distorções Cognitivas":</p>
+            
+            <div class="sticker-grid">
+                <div class="sticker-box">
+                    <span class="sticker-icon">🔮</span>
+                    <h4>Previsão do Futuro</h4>
+                    <p>Achar que sabe o que vai acontecer e que será ruim. "Vou reprovar com certeza."</p>
+                </div>
+                <div class="sticker-box">
+                    <span class="sticker-icon">🧠</span>
+                    <h4>Leitura Mental</h4>
+                    <p>Achar que sabe o que o outro está pensando. "Ele não falou comigo porque me odeia."</p>
+                </div>
+                <div class="sticker-box">
+                    <span class="sticker-icon">🌪️</span>
+                    <h4>Catastrofização</h4>
+                    <p>Transformar um problema pequeno em um desastre terrível e sem solução.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="paper-card" style="transform: rotate(-0.5deg);">
+            <div class="card-header">
+                <i class="fas fa-microscope card-icon"></i>
+                <h2 class="card-title">O Laboratório de Pensamentos</h2>
+            </div>
+            <p>Vamos tratar o pensamento como uma <strong>Hipótese</strong>, não como um Fato. Vamos testar:</p>
+            
+            <div class="translator-area">
+                <p style="margin-bottom:15px; font-weight:700;">Qual é o pensamento automático?</p>
+                <div>
+                    <button class="btn-translate" onclick="translateNeed('sempre')">"Eu SEMPRE faço tudo errado."</button>
+                    <button class="btn-translate" onclick="translateNeed('todos')">"TODOS estão olhando para minha mancha."</button>
+                    <button class="btn-translate" onclick="translateNeed('inutil')">"Se eu errei isso, sou um INÚTIL."</button>
+                </div>
+                
+                <div id="translator-bubble" class="result-bubble">
+                    Clique em um pensamento para investigar...
+                </div>
+            </div>
+        </div>
+
+        <div class="paper-card">
+            <div class="card-header">
+                <i class="fas fa-book-reader card-icon"></i>
+                <h2 class="card-title">Conceitos Clínicos</h2>
+            </div>
+            
+            <details>
+                <summary>💭 Pensamentos Automáticos <i class="fas fa-chevron-down"></i></summary>
+                <div class="details-content">
+                    <p>São frases rápidas que surgem na mente sem a gente querer. Eles parecem verdades absolutas, mas muitas vezes são exagerados ou falsos. Na TCC, aprendemos a "pescar" esses pensamentos.</p>
+                </div>
+            </details>
+
+            <details>
+                <summary>🌳 Crenças Centrais <i class="fas fa-chevron-down"></i></summary>
+                <div class="details-content">
+                    <p>São as raízes profundas (parecidas com os Esquemas). São ideias fixas sobre nós mesmos ("Sou inadequado") ou sobre o mundo ("O mundo é perigoso"). A TCC ajuda a flexibilizar essas raízes.</p>
+                </div>
+            </details>
+
+            <details>
+                <summary>⚙️ Ativação Comportamental <i class="fas fa-chevron-down"></i></summary>
+                <div class="details-content">
+                    <p>Muitas vezes, esperamos ter vontade para fazer algo. A TCC ensina o contrário: <strong>Ação gera Motivação</strong>. Começamos a fazer (mesmo sem vontade) para mudar como nos sentimos.</p>
+                </div>
+            </details>
+        </div>
+
+        <div class="paper-card">
+            <div class="card-header">
+                <i class="fas fa-adjust card-icon"></i>
+                <h2 class="card-title">Vire o Pensamento</h2>
+            </div>
+            <p>Toque no cartão para desafiar um pensamento negativo:</p>
+            
+            <div class="flashcard-container" onclick="this.classList.toggle('flipped')">
+                <div class="flashcard-inner">
+                    <div class="flashcard-front">
+                        <h3 style="font-family:'Patrick Hand'; font-size:1.5rem;">Pensamento Automático</h3>
+                        <p style="margin-top:10px;">"Ele visualizou e não respondeu. Ele está bravo comigo. Eu devo ter falado alguma besteira. Ele nunca mais vai falar comigo."</p>
+                        <i class="fas fa-hand-pointer" style="margin-top:20px; color:#0284c7; font-size:1.5rem;"></i>
+                    </div>
+                    <div class="flashcard-back">
+                        <h3 style="font-family:'Patrick Hand'; font-size:1.5rem;">Resposta Racional</h3>
+                        <p style="margin-top:10px;">"Existem outras explicações? Talvez ele esteja ocupado, dirigindo ou sem bateria. O fato de não responder agora não prova que ele está bravo. Vou esperar antes de concluir o pior."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-brand">
+                &copy; 2026 Bruno de Souza
+            </div>
+            <div class="social-links">
+                <a href="https://www.instagram.com/psi.brunosg/" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://wa.me/5553991898309" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.linkedin.com/in/psi-bsouza/" target="_blank"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function translateNeed(type) {
+            const bubble = document.getElementById('translator-bubble');
+            let text = "";
+            
+            if (type === 'sempre') {
+                text = "🔍 <strong>Evidência:</strong> 'Sempre' é uma generalização. Lembre-se de 3 coisas que você fez certo essa semana. O erro de hoje não apaga os acertos.";
+            } else if (type === 'todos') {
+                text = "🔍 <strong>Evidência:</strong> Isso é 'Leitura Mental'. A maioria das pessoas está preocupada com elas mesmas, não com você.";
+            } else if (type === 'inutil') {
+                text = "🔍 <strong>Evidência:</strong> Errar uma tarefa faz de você um ser humano falível, não um inútil. Rótulos não ajudam.";
+            }
+            
+            bubble.style.opacity = 0;
+            setTimeout(() => {
+                bubble.innerHTML = text;
+                bubble.style.opacity = 1;
+                bubble.style.transition = "opacity 0.3s";
+            }, 200);
+        }
+    </script>
+
+</body>
+</html>
