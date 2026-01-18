@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esquema de Fracasso - Caderno Terapêutico</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Paleta "A Corrida da Vida" */
+            --paper-line: #f1f5f9;    /* Linhas cinza frio */
+            --paper-bg: #f8fafc;      
+            --ink-color: #334155;
+            
+            /* Cores do Esquema (Fracasso -> Realização Real) */
+            --primary: #475569;       /* Cinza Azulado (O Peso) */
+            --primary-hover: #1e293b;
+            --highlight: #d97706;     /* Bronze/Ouro (O Sucesso) */
+            
+            /* Tags de Personas */
+            --tag-tiago-bg: #e2e8f0; --tag-tiago-text: #475569; /* Cinza (Paralisado) */
+            --tag-livia-bg: #fffbeb; --tag-livia-text: #b45309; /* Amarelo (Impostora) */
+
+            --radius: 16px;
+            --shadow-paper: 3px 3px 10px rgba(0,0,0,0.06);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            color: var(--ink-color);
+            line-height: 1.6;
+            background-color: var(--paper-bg);
+            /* Efeito Papel Pautado */
+            background-image: linear-gradient(var(--paper-line) 1px, transparent 1px);
+            background-size: 100% 2rem;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Patrick Hand', cursive;
+            color: #0f172a;
+        }
+
+        /* --- HEADER --- */
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-bottom: 2px dashed #cbd5e1;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);
+        }
+
+        .header-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .header-title {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 0px #e2e8f0;
+        }
+
+        .header-subtitle {
+            font-size: 1.2rem;
+            color: #64748b;
+            font-family: 'Patrick Hand', cursive;
+        }
+
+        /* --- CONTAINER --- */
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+            display: grid;
+            gap: 35px;
+            margin-bottom: 60px;
+        }
+
+        /* --- CARDS (PAPEL) --- */
+        .paper-card {
+            background-color: #ffffff;
+            border-radius: 2px;
+            box-shadow: var(--shadow-paper);
+            border: 1px solid #e2e8f0;
+            padding: 2rem;
+            position: relative;
+            transform: rotate(-0.5deg);
+            transition: transform 0.3s;
+        }
+        
+        .paper-card:hover { transform: rotate(0deg) translateY(-3px); }
+        
+        /* Fita Adesiva (Washi Tape) */
+        .paper-card::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 30px;
+            background-color: rgba(71, 85, 105, 0.15); /* Cinza translúcido */
+            border: 1px solid #cbd5e1;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            opacity: 0.9;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--paper-line);
+            padding-bottom: 10px;
+        }
+
+        .card-icon { font-size: 1.8rem; color: var(--highlight); }
+        .card-title { font-size: 1.8rem; margin: 0; }
+
+        /* --- POST-IT (DEFINIÇÃO) --- */
+        .post-it {
+            background-color: #f1f5f9; /* Cinza Frio */
+            padding: 1.5rem;
+            border-radius: 2px 2px 16px 2px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+            font-family: 'Patrick Hand', cursive;
+            font-size: 1.3rem;
+            color: #334155;
+            transform: rotate(1deg);
+            margin: 20px 0;
+            border-left: 5px solid #64748b;
+        }
+
+        /* --- PERSONAS --- */
+        .persona-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .persona-card {
+            background: #fff;
+            padding: 20px;
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+        }
+        
+        .persona-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .persona-name { font-size: 1.4rem; font-weight: 700; color: #0f172a; }
+        .persona-tag { font-family: 'Nunito', sans-serif; font-size: 0.8rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; }
+        
+        .tag-tiago { background: var(--tag-tiago-bg); color: var(--tag-tiago-text); }
+        .tag-livia { background: var(--tag-livia-bg); color: var(--tag-livia-text); }
+
+        /* --- STICKERS (3 DIMENSÕES) --- */
+        .sticker-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;
+        }
+        
+        .sticker-box {
+            background: white; padding: 1.5rem; border-radius: 12px;
+            border: 2px solid #f8fafc; text-align: center;
+            transition: all 0.3s;
+        }
+        .sticker-box:hover { border-color: var(--highlight); transform: scale(1.02); }
+        .sticker-icon { font-size: 2rem; margin-bottom: 10px; display: block; }
+
+        /* --- TRADUTOR INTERATIVO --- */
+        .translator-area {
+            background-color: #fffbeb; /* Amarelo muito claro (Ouro) */
+            padding: 2rem; border-radius: 20px;
+            border: 2px dashed #fcd34d; text-align: center;
+        }
+
+        .btn-translate {
+            background: white; border: 2px solid #fde68a;
+            padding: 10px 20px; margin: 5px; border-radius: 30px;
+            font-family: 'Nunito', sans-serif; font-weight: 700; color: #b45309;
+            cursor: pointer; transition: all 0.2s;
+            box-shadow: 0 4px 0 #fde68a;
+        }
+        
+        .btn-translate:active { box-shadow: 0 0 0 #fde68a; transform: translateY(4px); }
+        .btn-translate:hover { background: #fff; border-color: var(--highlight); color: var(--highlight); }
+
+        .result-bubble {
+            background: white; padding: 20px; border-radius: 20px;
+            margin-top: 20px; border: 2px solid #e2e8f0;
+            font-family: 'Patrick Hand', cursive; font-size: 1.3rem;
+            color: #334155; min-height: 100px; display: flex; align-items: center; justify-content: center;
+        }
+
+        /* --- ACCORDIONS --- */
+        details {
+            background: #f8fafc; border-radius: 12px; margin-bottom: 10px;
+            border: 1px solid #cbd5e1;
+        }
+        summary {
+            padding: 15px; font-weight: 700; cursor: pointer; list-style: none;
+            display: flex; justify-content: space-between; color: #475569;
+        }
+        summary:hover { background: #f1f5f9; border-radius: 12px; }
+        .details-content { padding: 20px; border-top: 1px dashed #cbd5e1; color: #475569; }
+
+        /* --- FLASHCARD (FLIP) --- */
+        .flashcard-container { perspective: 1000px; width: 100%; height: 280px; cursor: pointer; }
+        .flashcard-inner {
+            position: relative; width: 100%; height: 100%; text-align: center;
+            transition: transform 0.6s; transform-style: preserve-3d;
+        }
+        .flashcard-container.flipped .flashcard-inner { transform: rotateY(180deg); }
+        
+        .flashcard-front, .flashcard-back {
+            position: absolute; width: 100%; height: 100%;
+            -webkit-backface-visibility: hidden; backface-visibility: hidden;
+            border-radius: 16px; padding: 2rem;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            box-shadow: var(--shadow-paper); border: 2px solid;
+        }
+        
+        .flashcard-front {
+            background: #f8fafc; border-color: #cbd5e1; color: #64748b;
+        }
+        .flashcard-back {
+            background: #fffbeb; border-color: #fcd34d; color: #b45309;
+            transform: rotateY(180deg);
+        }
+
+        /* --- FOOTER PADRÃO --- */
+        footer {
+            background-color: #ffffff;
+            border-top: 1px solid #e5e7eb;
+            padding: 2rem 0;
+            margin-top: auto;
+        }
+        .footer-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .footer-brand { color: #64748b; font-size: 0.9rem; font-weight: 600; }
+        .social-links { display: flex; gap: 1.5rem; }
+        .social-links a { color: #94a3b8; font-size: 1.2rem; transition: color 0.2s; }
+        .social-links a:hover { color: var(--primary); }
+
+        @media (max-width: 640px) {
+            .footer-container { flex-direction: column; gap: 1rem; }
+            .persona-grid, .sticker-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-content">
+            <h1 class="header-title">Esquema de Fracasso</h1>
+            <p class="header-subtitle">Caderno de Psicoeducação</p>
+        </div>
+    </header>
+
+    <div class="main-container">
+
+        <div class="paper-card">
+            <div class="card-header">
+                <i class="fas fa-chart-line-down card-icon"></i>
+                <h2 class="card-title">A Corrida Perdida</h2>
+            </div>
+            <p>O Esquema de Fracasso é a crença de que você fracassou, vai fracassar ou é inadequado em relação aos seus pares (carreira, estudos, conquistas). É a sensação de estar sempre "atrasado".</p>
+            
+            <div class="post-it">
+                <i class="fas fa-thumbtack" style="color:#475569; margin-right:10px;"></i>
+                "Olho para os lados e vejo todos vencendo, casando, sendo promovidos... e eu continuo estagnado. Sou uma fraude."
+            </div>
+        </div>
+
+        <div class="paper-card" style="transform: rotate(0.5deg);">
+            <div class="card-header">
+                <i class="fas fa-users card-icon"></i>
+                <h2 class="card-title">Espelhos da Vida Real</h2>
+            </div>
+            <p>Como o medo do fracasso paralisa ou exaure:</p>
+            
+            <div class="persona-grid">
+                <div class="persona-card">
+                    <div class="persona-header">
+                        <span class="persona-name">Tiago</span>
+                        <span class="persona-tag tag-tiago">O Procrastinador</span>
+                    </div>
+                    <p>Tiago é inteligente, mas nunca termina o que começa. Ele tem pavor de tentar e não conseguir, então prefere nem tentar. "Melhor ser visto como preguiçoso do que como incapaz."</p>
+                    <p style="font-size:0.85rem; color:#475569;"><strong>Comportamento:</strong> Evitação (Não tentar)</p>
+                </div>
+
+                <div class="persona-card">
+                    <div class="persona-header">
+                        <span class="persona-name">Lívia</span>
+                        <span class="persona-tag tag-livia">A Impostora</span>
+                    </div>
+                    <p>Lívia tem sucesso, mas acha que foi sorte. Ela trabalha 14 horas por dia para compensar sua suposta "falta de talento". Vive com medo de ser descoberta como uma fraude.</p>
+                    <p style="font-size:0.85rem; color:#b45309;"><strong>Comportamento:</strong> Rendição (Síndrome do Impostor)</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="paper-card">
+            <div class="card-header">
+                <i class="fas fa-shapes card-icon"></i>
+                <h2 class="card-title">Sintomas do Fracasso</h2>
+            </div>
+            <div class="sticker-grid">
+                <div class="sticker-box">
+                    <span class="sticker-icon">📉</span>
+                    <h4>Comparação</h4>
+                    <p>Comparar seu "bastidor" bagunçado com o "palco" perfeito dos outros no Instagram.</p>
+                </div>
+                <div class="sticker-box">
+                    <span class="sticker-icon">🐢</span>
+                    <h4>Estagnação</h4>
+                    <p>A sensação de que o tempo está passando e você não saiu do lugar.</p>
+                </div>
+                <div class="sticker-box">
+                    <span class="sticker-icon">🎭</span>
+                    <h4>Impostor</h4>
+                    <p>Acreditar que não tem talento real, que é burro ou menos capaz que a média.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="paper-card" style="transform: rotate(-0.5deg);">
+            <div class="card-header">
+                <i class="fas fa-sync card-icon"></i>
+                <h2 class="card-title">Tradutor de Sucesso</h2>
+            </div>
+            <p>Vamos redefinir o que significa vencer. Traduza o "Fracasso" em "Crescimento":</p>
+            
+            <div class="translator-area">
+                <p style="margin-bottom:15px; font-weight:700;">O que você pensa?</p>
+                <div>
+                    <button class="btn-translate" onclick="translateNeed('atrasado')">"Estou muito atrasado na vida."</button>
+                    <button class="btn-translate" onclick="translateNeed('burro')">"Sou burro, não consigo aprender."</button>
+                    <button class="btn-translate" onclick="translateNeed('sorte')">"Foi só sorte, não mérito."</button>
+                </div>
+                
+                <div id="translator-bubble" class="result-bubble">
+                    Toque em um pensamento para traduzir...
+                </div>
+            </div>
+        </div>
+
+        <div class="paper-card">
+            <div class="card-header">
+                <i class="fas fa-brain card-icon"></i>
+                <h2 class="card-title">Conceitos Clínicos</h2>
+            </div>
+            
+            <details>
+                <summary>🧠 Neurobiologia: O Bloqueio <i class="fas fa-chevron-down"></i></summary>
+                <div class="details-content">
+                    <p>O medo do julgamento pode "sequestrar" o Córtex Pré-Frontal (área do planejamento). A ansiedade de falhar consome tanta energia cerebral que sobra pouco foco para executar a tarefa, criando um ciclo real de baixo desempenho.</p>
+                </div>
+            </details>
+
+            <details>
+                <summary>🌱 Como a Terapia Ajuda? <i class="fas fa-chevron-down"></i></summary>
+                <div class="details-content">
+                    <p>Focamos em mudar a definição de sucesso: de "ser melhor que os outros" para "ser melhor que eu fui ontem". Trabalhamos também a identificação de talentos reais que foram ignorados ou desvalorizados na infância.</p>
+                </div>
+            </details>
+
+            <details>
+                <summary>⚠️ A Armadilha da Comparação <i class="fas fa-chevron-down"></i></summary>
+                <div class="details-content">
+                    <p>Você compara o seu início com o meio da jornada de outra pessoa. Isso é injusto. A única comparação válida é com a sua própria linha do tempo.</p>
+                </div>
+            </details>
+        </div>
+
+        <div class="paper-card">
+            <div class="card-header">
+                <i class="fas fa-adjust card-icon"></i>
+                <h2 class="card-title">Vire o Pensamento</h2>
+            </div>
+            <p>Toque no cartão quando se sentir inferior:</p>
+            
+            <div class="flashcard-container" onclick="this.classList.toggle('flipped')">
+                <div class="flashcard-inner">
+                    <div class="flashcard-front">
+                        <h3 style="font-family:'Patrick Hand'; font-size:1.5rem;">Voz do Fracasso</h3>
+                        <p style="margin-top:10px;">"Olha só para o fulano. Ele tem a minha idade e já tem casa, carro e sucesso. Eu sou um perdedor. Nunca vou chegar lá."</p>
+                        <i class="fas fa-hand-pointer" style="margin-top:20px; color:#475569; font-size:1.5rem;"></i>
+                    </div>
+                    <div class="flashcard-back">
+                        <h3 style="font-family:'Patrick Hand'; font-size:1.5rem;">Voz do Adulto Saudável</h3>
+                        <p style="margin-top:10px;">"A vida não é uma corrida linear. Cada um tem seu fuso horário. Eu tenho minhas próprias qualidades e estou no meu próprio caminho. O sucesso dele não anula o meu valor."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-brand">
+                &copy; 2026 Bruno de Souza
+            </div>
+            <div class="social-links">
+                <a href="https://www.instagram.com/psi.brunosg/" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://wa.me/5553991898309" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.linkedin.com/in/psi-bsouza/" target="_blank"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function translateNeed(type) {
+            const bubble = document.getElementById('translator-bubble');
+            let text = "";
+            
+            if (type === 'atrasado') {
+                text = "✨ Tradução: 'Não existe hora certa para acontecer. Eu estou caminhando no meu ritmo e cada passo conta.'";
+            } else if (type === 'burro') {
+                text = "✨ Tradução: 'Eu tenho um tipo diferente de inteligência. Notas escolares não definem meu valor ou meu futuro.'";
+            } else if (type === 'sorte') {
+                text = "✨ Tradução: 'Eu me esforcei para chegar aqui. Tenho mérito e competência. Vou aceitar meus elogios.'";
+            }
+            
+            bubble.style.opacity = 0;
+            setTimeout(() => {
+                bubble.innerHTML = text;
+                bubble.style.opacity = 1;
+                bubble.style.transition = "opacity 0.3s";
+            }, 200);
+        }
+    </script>
+
+</body>
+</html>
