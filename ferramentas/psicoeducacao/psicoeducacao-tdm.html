@@ -1,237 +1,364 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Psicoeducação: Transtorno Depressivo Maior</title>
+    <title>Entendendo a Depressão - Bruno de Souza</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
-    
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
     <style>
         :root {
-            --primary: #7DB9B6; 
-            --secondary: #E9EDC9; 
-            --accent: #E29578; 
-            --dark-green: #2D5A58;
-            --text-color: #444;
-            --bg-body: #FBFBFB;
+            /* Paleta "Recovery & Hope" (Tons de cura e serenidade) */
+            --bg-paper: #f9fbfd;      
+            --text-primary: #455a64;  
+            --text-serif: #37474f;    
+            
+            /* Cores de Destaque */
+            --accent-sage: #c5e1a5;   /* Crescimento/Ativação */
+            --accent-blue: #90caf9;   /* Mente/Clareza */
+            --accent-sand: #ffe082;   /* Luz/Energia */
+            --accent-rose: #f48fb1;   /* Afeto */
+            
+            --btn-color: #5c6bc0;     
+            --radius: 16px;
+            --shadow: 0 8px 30px rgba(0,0,0,0.06);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            font-family: 'Open Sans', sans-serif;
-            background-color: var(--bg-body);
-            color: var(--text-color);
+            font-family: 'Lato', sans-serif;
+            background-color: var(--bg-paper);
+            color: var(--text-primary);
             line-height: 1.8;
+            overflow-x: hidden;
         }
 
-        h1, h2, h3 { font-family: 'Quicksand', sans-serif; color: var(--dark-green); }
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            color: var(--text-serif);
+        }
 
-        .container { max-width: 900px; margin: 0 auto; padding: 0 25px; }
+        /* --- LAYOUT --- */
+        .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+        .section { padding: 80px 0; border-bottom: 1px dashed #cfd8dc; }
+        .section:nth-child(even) { background-color: white; }
+        .section-title { text-align: center; font-size: 2.5rem; margin-bottom: 15px; }
+        .section-subtitle { text-align: center; color: #78909c; margin-bottom: 50px; font-style: italic; max-width: 700px; margin-left: auto; margin-right: auto; }
 
-        /* --- Header / Hero --- */
+        /* --- HEADER --- */
         header {
-            height: 60vh;
-            background: linear-gradient(135deg, var(--primary) 0%, #A2D2FF 100%);
-            display: flex; align-items: center; justify-content: center;
-            text-align: center; color: white; border-radius: 0 0 60px 60px;
-            padding: 20px;
+            text-align: center; padding: 100px 20px 80px;
+            background: linear-gradient(180deg, #fff 0%, var(--bg-paper) 100%);
+        }
+        header h1 { font-size: 3.5rem; margin-bottom: 20px; letter-spacing: -1px; }
+        .badge {
+            background: var(--text-serif); color: white; padding: 5px 15px;
+            border-radius: 50px; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase;
         }
 
-        header h1 { font-size: 3rem; color: white; margin-bottom: 20px; }
-        header p { font-size: 1.2rem; max-width: 650px; opacity: 0.95; }
-
-        /* --- Seções --- */
-        section { padding: 80px 0; border-bottom: 1px solid #eee; }
-        .section-title { text-align: center; margin-bottom: 50px; }
-        .section-title h2 { font-size: 2.2rem; position: relative; display: inline-block; }
-        .section-title h2::after { content: ''; width: 60%; height: 4px; background: var(--secondary); position: absolute; bottom: -10px; left: 20%; border-radius: 2px; }
-
-        /* --- Cards e Boxes --- */
-        .info-card {
-            background: white; padding: 35px; border-radius: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.04); margin-bottom: 30px;
-            border: 1px solid #f0f0f0;
+        /* --- CRITÉRIOS --- */
+        .criteria-box {
+            background: white; border: 2px solid var(--accent-blue); border-radius: var(--radius);
+            padding: 30px; display: flex; align-items: center; gap: 20px; box-shadow: var(--shadow);
+        }
+        .time-badge {
+            background: var(--accent-blue); color: #1565c0; padding: 15px; border-radius: 50%;
+            width: 90px; height: 90px; display: flex; flex-direction: column; align-items: center;
+            justify-content: center; font-weight: bold; line-height: 1.2; text-align: center; flex-shrink: 0;
+            border: 3px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
-        .highlight-box {
-            background: var(--secondary); padding: 25px; border-left: 6px solid var(--primary);
-            border-radius: 10px; margin: 30px 0;
+        /* --- SINTOMAS --- */
+        .symptoms-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 40px; }
+        .check-item {
+            display: flex; align-items: flex-start; margin-bottom: 15px;
+            background: rgba(255,255,255,0.8); padding: 15px; border-radius: 12px;
+            border-left: 4px solid var(--accent-sage);
         }
+        .check-item i { color: #558b2f; margin-right: 15px; margin-top: 5px; font-size: 1.2rem; }
 
-        .grid-two { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
-
-        /* --- Neurobiologia --- */
-        .neuro-list { list-style: none; }
-        .neuro-list li { margin-bottom: 20px; padding-left: 30px; position: relative; }
-        .neuro-list li::before { content: '•'; color: var(--primary); font-size: 2rem; position: absolute; left: 0; top: -10px; }
-
-        /* --- Tabela --- */
-        .table-wrap { overflow-x: auto; margin-top: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        table { width: 100%; border-collapse: collapse; background: white; }
-        th, td { padding: 18px; text-align: left; border-bottom: 1px solid #f0f0f0; }
-        th { background: var(--primary); color: white; }
-
-        /* --- Exercício de Ativação Comportamental --- */
-        .activation-container {
-            background: var(--dark-green); color: white;
-            padding: 60px 20px; border-radius: 40px; text-align: center;
-            margin: 50px 0; display: flex; flex-direction: column; align-items: center;
+        /* --- NEUROBIOLOGIA --- */
+        .brain-box {
+            background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow);
+            display: flex; flex-direction: column; align-items: center;
         }
-
-        .step-visual {
-            display: flex; gap: 15px; margin: 40px 0; align-items: flex-end; height: 100px;
+        .hotspot-btn {
+            background: #78909c; color: white; border: none; padding: 10px 20px;
+            border-radius: 20px; cursor: pointer; margin: 5px; transition: opacity 0.3s;
+            font-size: 0.9rem; font-weight: bold;
         }
+        #brain-desc { margin-top: 30px; padding: 25px; border-radius: 10px; width: 100%; font-size: 1rem; }
 
-        .bar {
-            width: 30px; background: var(--primary); border-radius: 5px 5px 0 0;
-            animation: growBar 3s infinite alternate ease-in-out;
+        /* --- CICLO DA DEPRESSÃO (Inércia) --- */
+        .cycle-container {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px;
+            margin-top: 40px; justify-items: center;
         }
-
-        .bar:nth-child(2) { animation-delay: 0.5s; height: 40px; }
-        .bar:nth-child(3) { animation-delay: 1s; height: 60px; }
-        .bar:nth-child(4) { animation-delay: 1.5s; height: 85px; }
-
-        @keyframes growBar {
-            from { opacity: 0.4; transform: scaleY(0.8); }
-            to { opacity: 1; transform: scaleY(1.1); }
+        .cycle-step {
+            background: white; padding: 20px; border-radius: 50%; width: 200px; height: 200px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; box-shadow: var(--shadow); border: 2px solid transparent; font-size: 0.95rem;
+            transition: transform 0.3s;
         }
+        .cycle-step:hover { transform: scale(1.05); }
+        /* Cores mais frias para representar o ciclo depressivo */
+        .step-down-1 { background: #eceff1; border-color: #b0bec5; }
+        .step-down-2 { background: #cfd8dc; border-color: #90a4ae; }
+        .step-down-3 { background: #b0bec5; border-color: #78909c; }
+        .step-down-4 { background: #90a4ae; border-color: #546e7a; color: white; }
 
-        footer { background: #f4f4f4; padding: 60px 0; font-size: 0.9rem; color: #666; }
-        .ref-list { list-style: none; padding-top: 15px; }
-        .ref-list li { margin-bottom: 10px; }
+        /* --- BARALHO --- */
+        .cards-deck { display: flex; justify-content: center; gap: 25px; flex-wrap: wrap; }
+        .distortion-card { width: 220px; height: 350px; perspective: 1000px; cursor: pointer; }
+        .card-inner {
+            position: relative; width: 100%; height: 100%; text-align: center;
+            transition: transform 0.8s; transform-style: preserve-3d;
+            box-shadow: var(--shadow); border-radius: 15px;
+        }
+        .distortion-card.flipped .card-inner { transform: rotateY(180deg); }
+        .card-front, .card-back {
+            position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+            border-radius: 15px; display: flex; flex-direction: column; align-items: center;
+            justify-content: center; padding: 20px;
+        }
+        .card-front {
+            background: white; border: 8px solid var(--bg-paper);
+            background-image: radial-gradient(#cfd8dc 15%, transparent 16%); background-size: 10px 10px;
+        }
+        .card-back { background-color: #455a64; color: white; transform: rotateY(180deg); font-size: 0.9rem; }
+        .card-back h3 { color: var(--accent-sand); margin-bottom: 10px; font-size: 1.1rem; }
 
-        @media (max-width: 768px) { header h1 { font-size: 2.2rem; } }
+        /* --- WIDGET: ATIVAÇÃO COMPORTAMENTAL (NOVO) --- */
+        .activation-widget {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe082 100%);
+            padding: 50px; border-radius: var(--radius); text-align: center;
+            margin: 40px auto; max-width: 600px; box-shadow: var(--shadow);
+            position: relative;
+        }
+        .task-card {
+            background: white; padding: 30px; border-radius: 10px; margin: 20px auto;
+            font-family: 'Playfair Display', serif; font-size: 1.5rem; color: #f57f17;
+            min-height: 120px; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: all 0.3s;
+        }
+        .btn-action {
+            background: #f57f17; color: white; border: none; padding: 15px 40px;
+            border-radius: 50px; font-weight: bold; cursor: pointer; transition: transform 0.2s;
+            font-size: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .btn-action:hover { transform: translateY(-2px); }
+
+        /* --- TRATAMENTO --- */
+        .treatment-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        .treat-card { background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow); border-top: 6px solid; }
+        .treat-tcc { border-color: #81c784; }
+        .treat-med { border-color: #64b5f6; }
+        .treat-list { margin-top: 20px; padding-left: 20px; list-style-type: disc; }
+        .treat-list li { margin-bottom: 12px; font-size: 0.95rem; }
+
+        /* Footer */
+        .ref-section { font-size: 0.85rem; color: #666; background: #f5f5f5; padding: 40px 0; }
+        
+        @media (max-width: 768px) {
+            .symptoms-grid, .treatment-grid { grid-template-columns: 1fr; }
+            .criteria-box { flex-direction: column; text-align: center; }
+        }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="container" data-aos="fade-up">
-            <h1>Depressão Maior</h1>
-            <p>Compreendendo o peso do transtorno e os mecanismos biológicos da esperança.</p>
+        <div class="container">
+            <span class="badge">Psicoeducação Clínica</span>
+            <h1>Entendendo a Depressão</h1>
+            <p style="font-size: 1.3rem; color: #666;">Transtorno Depressivo Maior</p>
+            <p style="margin-top: 10px; font-style: italic;">"Não é fraqueza, não é preguiça. É uma condição clínica tratável."</p>
         </div>
     </header>
 
-    <main class="container">
-
-        <section data-aos="fade-up">
-            <div class="section-title"><h2>O que é o Transtorno Depressivo?</h2></div>
-            <p>O Transtorno Depressivo Maior (TDM) não é tristeza passageira ou fraqueza. É uma condição médica complexa que altera o humor, o pensamento e as funções biológicas básicas (sono, apetite e energia). Para o diagnóstico, os sintomas devem estar presentes por pelo menos <strong>duas semanas</strong>, representando uma mudança clara no funcionamento anterior.</p>
-            
-            <div class="highlight-box">
-                <strong>Anedonia:</strong> Um dos marcos da depressão é a perda de interesse ou prazer em atividades que antes eram gratificantes. É como se o "sistema de cores" da vida perdesse a saturação, deixando tudo em tons de cinza.
-            </div>
-        </section>
-
-        <section data-aos="fade-up">
-            <div class="section-title"><h2>A Neurociência da Depressão</h2></div>
-            <p>A depressão altera a estrutura física e a comunicação química do cérebro.</p>
-            
-            
-
-            <div class="info-card">
-                <ul class="neuro-list">
-                    <li><strong>Hipótese Monoaminérgica:</strong> Há uma redução na disponibilidade de neurotransmissores essenciais, como <strong>Serotonina</strong> (bem-estar), <strong>Dopamina</strong> (motivação/prazer) e <strong>Noradrenalina</strong> (energia).</li>
-                    <li><strong>Atrofia do Hipocampo:</strong> O estresse crônico e o excesso de cortisol podem reduzir o volume do hipocampo (área de memória e emoção). O tratamento ajuda a reverter esse processo através da <em>neuroplasticidade</em>.</li>
-                    <li><strong>Neuroplasticidade e BDNF:</strong> Na depressão, os níveis de BDNF (uma "proteína fertilizante" para neurônios) diminuem. O tratamento visa aumentar o BDNF para que o cérebro consiga criar novas conexões.</li>
-                    <li><strong>Eixo HPA (Estresse):</strong> O sistema de resposta ao estresse fica "travado" no modo ligado, mantendo níveis de cortisol elevados que prejudicam o sistema imunológico e o sono.</li>
-                </ul>
-            </div>
-        </section>
-
-        <section data-aos="fade-up">
-            <div class="section-title"><h2>Sintomas e Impactos</h2></div>
-            <div class="grid-two">
-                <div class="card info-card">
-                    <h3>Impacto Cognitivo</h3>
-                    <p>Dificuldade de tomada de decisão, perda de concentração, sentimentos de culpa excessiva e pensamentos recorrentes sobre a morte.</p>
-                </div>
-                <div class="card info-card">
-                    <h3>Impacto Físico</h3>
-                    <p>Alterações no padrão de sono (insônia ou hipersonia), fadiga constante, lentificação psicomotora ou agitação, e mudanças no peso.</p>
-                </div>
-            </div>
-        </section>
-
-        <section data-aos="fade-up">
-            <div class="section-title"><h2>Estratégias de Recuperação</h2></div>
-            <p>A recuperação da depressão foca em reconstruir a química cerebral e os padrões de comportamento.</p>
-            
-            
-
-            <div class="info-card">
-                <h3>Terapia Cognitivo-Comportamental (TCC)</h3>
-                <ul>
-                    <li><strong>Tríade Cognitiva de Beck:</strong> Trabalhar a visão negativa sobre si mesmo, o mundo e o futuro.</li>
-                    <li><strong>Ativação Comportamental:</strong> A estratégia mais eficaz. Consiste em retomar atividades pequenas de forma gradual para reativar o sistema de dopamina.</li>
-                    <li><strong>Desafios de Pensamento:</strong> Identificar distorções como a "generalização" (achar que nada nunca vai dar certo).</li>
-                </ul>
-            </div>
-
-            <div class="table-wrap">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Classes Medicamentosas</th>
-                            <th>Função Neuroquímica</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>ISRS (ex: Fluoxetina)</strong></td>
-                            <td>Aumentam a serotonina, melhorando o humor e a ansiedade.</td>
-                        </tr>
-                        <tr>
-                            <td><strong>IRSN (ex: Duloxetina)</strong></td>
-                            <td>Atuam na serotonina e noradrenalina, ajudando na energia e dores físicas.</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Atípicos (ex: Bupropiona)</strong></td>
-                            <td>Focam em dopamina e noradrenalina, auxiliando na motivação e prazer.</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <section class="activation-container" data-aos="zoom-in">
-            <h2>Pequenos Passos, Grandes Mudanças</h2>
-            <p>A depressão retira a energia para agir. Na TCC, aprendemos que a <strong>ação precede a motivação</strong>. Não esperamos ter vontade; agimos para que a vontade surja depois.</p>
-            
-            <div class="step-visual">
-                <div class="bar" style="height: 20px;"></div>
-                <div class="bar"></div>
-                <div class="bar"></div>
-                <div class="bar"></div>
-            </div>
-            
-            <p style="max-width: 500px; font-size: 0.9rem; opacity: 0.9;"><strong>Desafio de hoje:</strong> Qual é a menor tarefa possível que você pode realizar agora? (Ex: Lavar um copo, abrir a janela, trocar de roupa). <br><em>Cada pequena barra preenchida sinaliza ao seu cérebro que a mudança começou.</em></p>
-        </section>
-
-    </main>
-
-    <footer>
+    <section class="section">
         <div class="container">
-            <p style="font-weight: 700; color: var(--dark-green);">Referências Técnicas:</p>
-            <ul class="ref-list">
-                <li><strong>Beck, A. T. (1979).</strong> Cognitive Therapy of Depression.</li>
-                <li><strong>Stahl, S. M. (2014).</strong> Psicofarmacologia: Bases Neurocientíficas.</li>
-                <li><strong>American Psychiatric Association (2022).</strong> DSM-5-TR.</li>
-                <li><strong>Kandel, E. R. (2018).</strong> Princípios da Neurociência.</li>
-                <li><strong>Martell, C. R. (2010).</strong> Behavioral Activation for Depression.</li>
-            </ul>
-            <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
-            <p>© 2026 Guia de Psicoeducação Clínica - Bruno de Souza (CRP 07/44472)</p>
-        </div>
-    </footer>
+            <h2 class="section-title">Critérios Diagnósticos</h2>
+            <p class="section-subtitle">A depressão vai muito além de uma "tristeza passageira".</p>
 
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        AOS.init({ duration: 1000, once: true });
-    </script>
-</body>
-</html>
+            <div class="criteria-box">
+                <div class="time-badge">
+                    <span>+ 2</span>
+                    <span style="font-size:0.7rem;">SEMANAS</span>
+                </div>
+                <div>
+                    <h3>O Critério Temporal</h3>
+                    <p>Para o diagnóstico, os sintomas devem estar presentes na <strong>maior parte do dia, quase todos os dias</strong>, por no mínimo <strong>2 semanas</strong>, representando uma mudança em relação ao funcionamento anterior.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">O Que Você Sente?</h2>
+            <p class="section-subtitle">Os sintomas afetam a emoção, o corpo e o pensamento.</p>
+
+            <div class="symptoms-grid">
+                <div>
+                    <h3 style="color: #455a64; margin-bottom: 20px; border-bottom: 2px solid #b0bec5; display:inline-block;">Emocional & Cognitivo</h3>
+                    <div class="check-item">
+                        <i class="fas fa-heart-broken"></i>
+                        <div><strong>Anedonia:</strong> Perda de interesse ou prazer em atividades que antes você gostava (hobbies, socialização).</div>
+                    </div>
+                    <div class="check-item">
+                        <i class="fas fa-cloud"></i>
+                        <div><strong>Humor Deprimido:</strong> Sentir-se triste, vazio ou sem esperança na maior parte do tempo.</div>
+                    </div>
+                    <div class="check-item">
+                        <i class="fas fa-balance-scale-right"></i>
+                        <div><strong>Culpa Excessiva:</strong> Sentimentos de inutilidade ou culpa inapropriada sobre eventos passados.</div>
+                    </div>
+                    <div class="check-item">
+                        <i class="fas fa-brain"></i>
+                        <div><strong>Indecisão:</strong> Dificuldade extrema para pensar, concentrar-se ou tomar decisões simples.</div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 style="color: #558b2f; margin-bottom: 20px; border-bottom: 2px solid #c5e1a5; display:inline-block;">Sintomas Físicos</h3>
+                    <div class="check-item">
+                        <i class="fas fa-bed"></i>
+                        <div><strong>Sono Alterado:</strong> Insônia (acordar de madrugada) ou Hipersonia (dormir excessivamente).</div>
+                    </div>
+                    <div class="check-item">
+                        <i class="fas fa-utensils"></i>
+                        <div><strong>Apetite/Peso:</strong> Perda ou ganho de peso significativo sem dieta; diminuição ou aumento do apetite.</div>
+                    </div>
+                    <div class="check-item">
+                        <i class="fas fa-battery-quarter"></i>
+                        <div><strong>Fadiga Crônica:</strong> Perda de energia; qualquer pequena tarefa parece exigir um esforço imenso.</div>
+                    </div>
+                    <div class="check-item">
+                        <i class="fas fa-walking"></i>
+                        <div><strong>Lentificação:</strong> Movimentos ou fala mais lentos do que o normal (observável por outros).</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Ferramenta: Gerador de Ativação</h2>
+            <p class="section-subtitle">Na depressão, a ação precisa vir <strong>antes</strong> da motivação. Gere uma pequena tarefa para quebrar a inércia agora.</p>
+
+            <div class="activation-widget">
+                <i class="fas fa-bolt" style="font-size: 2rem; color: #f57f17; margin-bottom: 10px;"></i>
+                <h3>Pequenas Vitórias</h3>
+                
+                <div class="task-card" id="task-display">
+                    Clique no botão para gerar uma micro-missão.
+                </div>
+                
+                <button class="btn-action" onclick="generateTask()">Gerar Missão Possível</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">O Cérebro na Depressão</h2>
+            <p class="section-subtitle">Entenda as bases biológicas do transtorno.</p>
+
+            <div class="brain-box">
+                <i class="fas fa-brain" style="font-size: 5rem; color: #cfd8dc; margin-bottom: 20px;"></i>
+                
+                <div style="margin: 20px 0; display:flex; flex-wrap:wrap; justify-content:center;">
+                    <button class="hotspot-btn" onclick="explain('neuro')">1. Química (Neurotransmissores)</button>
+                    <button class="hotspot-btn" onclick="explain('hippo')">2. Hipocampo</button>
+                    <button class="hotspot-btn" onclick="explain('cortex')">3. Córtex Pré-Frontal</button>
+                </div>
+
+                <div id="brain-desc" style="background: #eceff1; display: block;">
+                    <p style="text-align:center;">Selecione um tópico acima para ver a explicação clínica.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">O Ciclo da Letargia</h2>
+            <p class="section-subtitle">Como a depressão se alimenta da inatividade ("Espiral Descendente").</p>
+            
+            <div class="cycle-container">
+                <div class="cycle-step step-down-1">
+                    <h4 style="margin-bottom:10px;">1. Sintoma Inicial</h4>
+                    <p>Cansaço, humor baixo ou falta de vontade.</p>
+                </div>
+                <div class="cycle-step step-down-2">
+                    <h4 style="margin-bottom:10px;">2. Comportamento</h4>
+                    <p>Ficar na cama, evitar amigos, não fazer tarefas.</p>
+                </div>
+                <div class="cycle-step step-down-3">
+                    <h4 style="margin-bottom:10px;">3. Consequência</h4>
+                    <p>Acúmulo de problemas, culpa, solidão.</p>
+                </div>
+                <div class="cycle-step step-down-4">
+                    <h4 style="margin-bottom:10px;">4. Resultado</h4>
+                    <p>Aumento da depressão e sentimento de fracasso.</p>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 30px; color: #546e7a;"><strong>A Terapia (Ativação Comportamental) visa quebrar o ciclo no passo 2.</strong></p>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">O Baralho da Depressão</h2>
+            <p class="section-subtitle">A "Tríade Cognitiva" de Beck: Visão negativa de Si, do Mundo e do Futuro.</p>
+
+            <div class="cards-deck">
+                <div class="distortion-card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <i class="fas fa-user-slash fa-3x" style="color:#b0bec5; margin-bottom:15px;"></i>
+                            <h3>Sobre Mim</h3>
+                            <p style="font-size:0.8rem; color:#888;">Toque para virar</p>
+                        </div>
+                        <div class="card-back">
+                            <h3>"Eu sou um peso"</h3>
+                            <p>Crença de inutilidade ou defeito. Você acredita que é falho, indesejável ou que sobrecarrega os outros.</p>
+                            <hr style="border:0; border-top:1px solid rgba(255,255,255,0.2); margin:10px 0;">
+                            <p><strong>Desafio:</strong> Isso é um fato ou um sentimento? O que você diria a um amigo nessa situação?</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="distortion-card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <i class="fas fa-globe-americas fa-3x" style="color:#b0bec5; margin-bottom:15px;"></i>
+                            <h3>Sobre o Mundo</h3>
+                            <p style="font-size:0.8rem; color:#888;">Toque para virar</p>
+                        </div>
+                        <div class="card-back">
+                            <h3>"Ninguém se importa"</h3>
+                            <p>Interpretar o mundo como hostil, exigente demais ou desprovido de prazer. Filtro negativo intenso.</p>
+                            <hr style="border:0; border-top:1px solid rgba(255,255,255,0.2); margin:10px 0;">
+                            <p><strong>Desafio:</strong> Procure uma exceção. Houve algum momento neutro ou bom hoje?</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="distortion-card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <i class="fas fa-hourglass-end fa-3x" style="color:#b0bec5; margin-bottom:15px;"></i>
+                            <h3>Sobre o Futuro</h3>
+                            <p style="font-size:0.8rem; color:#888;">Toque para virar</p>
+                        </div>
+                        <div class="card-back">
+                            <h3>"Nunca vai melhorar"</h3>
+                            <p>Desesperança. Acreditar que o sofrimento atual é permanente e imutável.</p>
+                            <hr style="border:0; border-top:1px solid rgba(255,255,255,0.2); margin:10px 0;">
+                            <p><strong>Fato:</strong> A depressão é episódica e tratável. O jeito que você se sente agora não é como se sentirá para sempre.</p>
