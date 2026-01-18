@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUATI - Avaliação Tipológica | Caderno Incrível</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #f0f8ff;
+            --paper: #ffffff;
+            --primary: #6c5ce7; /* Roxo */
+            --secondary: #00b894; /* Verde */
+            --accent: #fdcb6e; /* Amarelo */
+            --text: #2d3436;
+            --shadow: rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0; padding: 20px; color: var(--text);
+            display: flex; justify-content: center;
+        }
+
+        .container {
+            width: 100%; max-width: 900px;
+            background: var(--paper); padding: 40px;
+            border-radius: 25px; box-shadow: 10px 10px 0 var(--shadow);
+            border: 3px solid var(--text); position: relative;
+        }
+
+        /* HEADER */
+        header { text-align: center; margin-bottom: 30px; border-bottom: 2px dashed #ccc; padding-bottom: 20px; }
+        h1 { margin: 0; color: var(--primary); font-size: 2.2rem; text-transform: uppercase; }
+        .subtitle { font-size: 1rem; color: #636e72; font-weight: bold; margin-top: 5px; }
+
+        /* FORMULÁRIO DE DADOS */
+        .personal-data {
+            background: #f8f9fa; padding: 20px; border-radius: 15px; border: 1px solid #dfe6e9;
+            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 30px;
+        }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: bold; margin-bottom: 5px; color: var(--primary); }
+        .form-group input, .form-group select {
+            width: 100%; padding: 8px; border: 2px solid #ccc; border-radius: 8px;
+            font-family: inherit; font-size: 0.9rem;
+        }
+
+        /* SITUAÇÕES (ABAS) */
+        .situation-container { display: none; animation: fadeIn 0.5s; }
+        .situation-container.active { display: block; }
+        
+        .situation-title {
+            background: var(--accent); color: var(--text); padding: 10px 20px;
+            border-radius: 50px; display: inline-block; font-weight: bold;
+            margin-bottom: 20px; box-shadow: 3px 3px 0 rgba(0,0,0,0.1);
+        }
+
+        .question-box {
+            background: #fff; border: 1px solid #eee; padding: 15px;
+            margin-bottom: 15px; border-radius: 10px;
+            border-left: 5px solid var(--secondary);
+        }
+        .q-text { font-weight: bold; margin-bottom: 10px; display: block; }
+        
+        .option-label {
+            display: flex; align-items: center; cursor: pointer; padding: 8px;
+            border-radius: 8px; transition: 0.2s;
+        }
+        .option-label:hover { background: #f0f0f0; }
+        .option-label input { margin-right: 10px; transform: scale(1.3); accent-color: var(--primary); }
+
+        /* NAVEGAÇÃO */
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 30px; }
+        .btn {
+            background: var(--text); color: white; border: none; padding: 12px 30px;
+            border-radius: 50px; cursor: pointer; font-size: 1rem; font-weight: bold;
+            transition: 0.2s; box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+        }
+        .btn:hover { transform: translateY(-2px); }
+        .btn-prev { background: #b2bec3; }
+        .btn-next { background: var(--primary); }
+        .btn-finish { background: var(--secondary); }
+
+        /* RESULTADOS */
+        #results-screen { display: none; }
+        .result-card {
+            background: #fdf5e6; border: 2px solid var(--accent); border-radius: 15px;
+            padding: 30px; text-align: center; margin-bottom: 20px;
+        }
+        .type-code { font-size: 3rem; font-weight: 900; color: var(--primary); letter-spacing: 5px; }
+        .type-name { font-size: 1.5rem; font-weight: bold; color: var(--text); margin-bottom: 20px; }
+        .type-desc { text-align: left; line-height: 1.6; color: #444; white-space: pre-line; }
+
+        .score-table {
+            width: 100%; border-collapse: collapse; margin-top: 20px; background: white;
+        }
+        .score-table th, .score-table td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+        .score-table th { background: var(--primary); color: white; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        @media print {
+            .nav-buttons, .situation-title { display: none; }
+            .container { box-shadow: none; border: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>QUATI</h1>
+            <div class="subtitle">Questionário de Avaliação Tipológica (Versão II)</div>
+        </header>
+
+        <div class="personal-data" id="personal-data">
+            <div class="form-group">
+                <label>Nome:</label>
+                <input type="text" id="nome" placeholder="Nome completo">
+            </div>
+            <div class="form-group">
+                <label>Idade:</label>
+                <input type="number" id="idade" placeholder="Anos">
+            </div>
+            <div class="form-group">
+                <label>Escolaridade:</label>
+                <select id="escolaridade">
+                    <option value="">Selecione...</option>
+                    <option value="fundamental">Ensino Fundamental</option>
+                    <option value="medio">Ensino Médio</option>
+                    <option value="superior">Ensino Superior</option>
+                </select>
+            </div>
+        </div>
+
+        <form id="quati-form">
+            <div id="quiz-container"></div>
+            
+            <div class="nav-buttons">
+                <button type="button" class="btn btn-prev" id="btn-prev" onclick="changePage(-1)" style="display:none">Voltar</button>
+                <button type="button" class="btn btn-next" id="btn-next" onclick="changePage(1)">Próximo</button>
+                <button type="button" class="btn btn-finish" id="btn-finish" onclick="calculateResults()" style="display:none">Finalizar</button>
+            </div>
+        </form>
+
+        <div id="results-screen">
+            <h2 style="text-align:center; color:var(--text)">Resultado da Avaliação</h2>
+            
+            <div class="result-card">
+                <div style="font-size:0.9rem; text-transform:uppercase; color:#888;">Seu Tipo Psicológico</div>
+                <div class="type-code" id="res-code">---</div>
+                <div class="type-name" id="res-name">---</div>
+                <hr style="border:1px dashed #ccc; margin:20px 0;">
+                <div class="type-desc" id="res-desc">...</div>
+            </div>
+
+            <h3>Detalhamento dos Escores</h3>
+            <table class="score-table">
+                <thead>
+                    <tr>
+                        <th>Dimensão</th>
+                        <th>A (Ponto 1)</th>
+                        <th>B (Ponto 2)</th>
+                        <th>Resultado (R)</th>
+                        <th>Predominância</th>
+                    </tr>
+                </thead>
+                <tbody id="score-body"></tbody>
+            </table>
+
+            <div style="margin-top:20px; font-size:0.8rem; color:#666; text-align:center;">
+                <em>Nota: Esta é uma ferramenta digital auxiliar. Para fins de laudo oficial, consulte um psicólogo credenciado e os crivos originais da Vetor Editora.</em>
+            </div>
+
+            <button class="btn btn-prev" onclick="location.reload()" style="margin-top:20px; width:100%;">Nova Aplicação</button>
+        </div>
+
+    </div>
+
+    <script>
+        // --- BANCO DE DADOS DAS QUESTÕES (Extraído do PDF) ---
+        const sections = [
+            {
+                title: "Situação 1: A FESTA",
+                desc: "Supondo que você está em uma festa...",
+                questions: [
+                    { t: "Você...", a: "aprecia todo este movimento.", b: "pensa que talvez fosse melhor ter ficado em casa.", type: "R1" },
+                    { t: "Você...", a: "fica atento para oportunidades de contato que possam surgir.", b: "presta atenção especial na organização e nos detalhes da festa.", type: "R2" }, // S/N context
+                    { t: "Você...", a: "procura conversar sobre suas idéias e opiniões.", b: "prefere conversar sobre o que as pessoas gostam e estão sentindo.", type: "R3" }, // T/F
+                    { t: "Você...", a: "presta atenção a tudo e em todos a sua volta.", b: "está mais voltado para seu possível incômodo pessoal.", type: "R1" },
+                    { t: "Você...", a: "não fica reparando nos detalhes da festa.", b: "atenta especialmente para todos os detalhes e não os esquecerá.", type: "R2" },
+                    { t: "Você...", a: "não hesita em questionar os pontos de vista dos convidados.", b: "procura não criticar os outros para não criar um clima desagradável.", type: "R3" },
+                    { t: "Você...", a: "procura conversar com o maior número de pessoas possível.", b: "conversa com poucas pessoas.", type: "R1" },
+                    { t: "Você...", a: "não se preocupa em aproveitar o conforto oferecido.", b: "aproveita, com prazer, o conforto do ambiente.", type: "R2" },
+                    { t: "Você...", a: "expõe suas idéias de maneira clara para quem se aproximar.", b: "torna-se receptível e amigável com quem se aproxima.", type: "R3" },
+                    { t: "Você...", a: "não liga para o fato de haver tantas pessoas desconhecidas.", b: "fica retraído por haver tantos desconhecidos.", type: "R1" },
+                    { t: "Você...", a: "já está imaginando como poderia ser uma nova festa.", b: "pensa nos problemas práticos que ocorreram para se organizar esta festa.", type: "R2" },
+                    { t: "Você...", a: "numa conversação pode discordar e reafirmará a sua idéia até o fim.", b: "concorda com os outros para não estragar a festa.", type: "R3" },
+                    { t: "Você...", a: "quando recebeu o convite aceitou-o imediatamente.", b: "quando recebeu o convite pensou antes de aceitá-lo.", type: "R1" },
+                    { t: "Você...", a: "não fica reparando no que os outros têm ou fazem.", b: "repara no comportamento não convencional dos outros.", type: "R2" },
+                    { t: "Você...", a: "não se importa em criticar até mesmo o dono da festa.", b: "procura ressaltar os pontos positivos da festa.", type: "R3" }
+                ]
+            },
+            {
+                title: "Situação 2: O TRABALHO",
+                desc: "Em um ambiente de trabalho...",
+                questions: [
+                    { t: "Você...", a: "fica atento para saber tudo o que se passa ao seu redor.", b: "concentra-se nas suas tarefas.", type: "R1" },
+                    { t: "Você...", a: "aprecia participar de novas tarefas e projetos inovadores.", b: "gosta da rotina de trabalho e se apega a ela.", type: "R2" },
+                    { t: "Você...", a: "acha mais importante as tarefas a serem feitas.", b: "acha mais importante as pessoas que trabalham com você.", type: "R3" },
+                    { t: "Você...", a: "aprecia um ambiente movimentado.", b: "irrita-se quando a agitação dos outros não o deixa trabalhar.", type: "R1" },
+                    { t: "Você...", a: "ao receber uma tarefa precisa compreendê-la por inteiro.", b: "ao receber uma tarefa precisa saber os passos necessários.", type: "R2" },
+                    { t: "Você...", a: "critica objetivamente as idéias de seu superior.", b: "procura persuadir seu superior com muito tato.", type: "R3" },
+                    { t: "Você...", a: "constantemente conversa com os que estão a sua volta.", b: "prefere trabalhar em silêncio.", type: "R1" },
+                    { t: "Você...", a: "entusiasma-se com um novo projeto.", b: "preocupa-se mais com as tarefas presentes.", type: "R2" },
+                    { t: "Você...", a: "não se preocupa com a vida pessoal dos colegas.", b: "preocupa-se com a vida pessoal dos colegas.", type: "R3" },
+                    { t: "Você...", a: "prefere fazer mais de uma tarefa ao mesmo tempo.", b: "prefere fazer uma tarefa de cada vez.", type: "R1" }, // Adaptado ao contexto I/E de foco
+                    { t: "Você...", a: "pensa em inovações e mudanças.", b: "pensa na praticidade e operacionalidade.", type: "R2" },
+                    { t: "Você...", a: "é percebido como racional e imparcial.", b: "é percebido como afetuoso e pessoal.", type: "R3" },
+                    { t: "Você...", a: "é muito expansivo com todos os colegas.", b: "é contido e retraído.", type: "R1" },
+                    { t: "Você...", a: "sente-se melhor planejando algo novo.", b: "sente-se melhor executando uma tarefa determinada.", type: "R2" },
+                    { t: "Você...", a: "é lógico e impessoal nas decisões.", b: "é sensível aos sentimentos dos colegas.", type: "R3" }
+                ]
+            },
+            {
+                title: "Situação 3: A VIAGEM",
+                desc: "Em uma viagem de férias...",
+                questions: [
+                    { t: "Você...", a: "não pensou muito para escolher o lugar.", b: "ponderou uma série de informações antes de decidir.", type: "R1" },
+                    { t: "Você...", a: "pode alterar o roteiro da viagem no meio do caminho.", b: "cumpre o mais possível o roteiro.", type: "R2" }, // Inovação vs Fato
+                    { t: "Você...", a: "tem interesse em conhecer os fatos do local.", b: "tem interesse em conhecer o estilo de vida das pessoas.", type: "R3" }, // Lógica vs Humano (Adaptado)
+                    { t: "Você...", a: "organiza um roteiro para ver a maioria dos pontos.", b: "visita somente alguns pontos importantes.", type: "R1" }, // Ativo vs Focado
+                    { t: "Você...", a: "vive mais intensamente a expectativa.", b: "vive mais intensamente o momento.", type: "R2" },
+                    { t: "Você...", a: "interessado nos conteúdos que irá aprender.", b: "interessado nas emoções que irá sentir.", type: "R3" },
+                    { t: "Você...", a: "prefere viajar em grupo grande.", b: "prefere viajar em pequeno grupo.", type: "R1" },
+                    { t: "Você...", a: "motivado no planejamento.", b: "motivado quando a viagem inicia.", type: "R2" }, // Futuro vs Presente
+                    { t: "Você...", a: "organiza o roteiro de maneira lógica.", b: "organiza tomando por base o que gosta.", type: "R3" },
+                    { t: "Você...", a: "não se demora nos lugares.", b: "detém-se em lugar de interesse.", type: "R1" },
+                    { t: "Você...", a: "tende a ser desorganizado com horários.", b: "é organizado e prático.", type: "R2" },
+                    { t: "Você...", a: "expressa opiniões sem se preocupar com o clima.", b: "procura manter um clima harmonioso.", type: "R3" },
+                    { t: "Você...", a: "interessado em atividades físicas/esportivas.", b: "interessado em caminhadas tranquilas.", type: "R1" },
+                    { t: "Você...", a: "prefere divagar pensando na próxima viagem.", b: "prefere aproveitar o conforto de agora.", type: "R2" },
+                    { t: "Você...", a: "retorna com a sequência de fatos ordenada.", b: "retorna com lembranças afetivas.", type: "R3" }
+                ]
+            },
+            {
+                title: "Situação 4: O ESTUDO",
+                desc: "Em uma sala de aula...",
+                questions: [
+                    { t: "Você...", a: "tende a conversar constantemente.", b: "tende a ficar atento e concentrado.", type: "R1" },
+                    { t: "Você...", a: "aprecia trabalhos criativos.", b: "aprecia trabalhos práticos.", type: "R2" },
+                    { t: "Você...", a: "sente-se à vontade com ciências exatas.", b: "sente-se à vontade com ciências humanas.", type: "R3" },
+                    { t: "Você...", a: "sente dificuldade para concentrar-se muito tempo.", b: "sente facilidade para manter a atenção.", type: "R1" },
+                    { t: "Você...", a: "prefere matérias teóricas.", b: "prefere matérias aplicadas.", type: "R2" },
+                    { t: "Você...", a: "precisa compreender a lógica da matéria.", b: "precisa desenvolver afeto pelo professor.", type: "R3" },
+                    { t: "Você...", a: "procura se entrosar com o maior número de colegas.", b: "prefere pequeno grupo de amigos.", type: "R1" },
+                    { t: "Você...", a: "não tem paciência para repetir exercícios.", b: "é paciente a ponto de repetir exercícios.", type: "R2" },
+                    { t: "Você...", a: "é capaz de discutir com o professor (lógica).", b: "evita expor idéias divergentes.", type: "R3" },
+                    { t: "Você...", a: "sai melhor apresentando seminário.", b: "sai melhor redigindo resenha.", type: "R1" },
+                    { t: "Você...", a: "prefere elaboração de pesquisa.", b: "prefere aplicação imediata.", type: "R2" },
+                    { t: "Você...", a: "é mais questionador e crítico.", b: "é mais conciliador e pacificador.", type: "R3" },
+                    { t: "Você...", a: "aprecia trabalhos em grupo.", b: "aprecia trabalhos individuais.", type: "R1" },
+                    { t: "Você...", a: "procura novos conhecimentos teóricos.", b: "procura aplicar na prática.", type: "R2" },
+                    { t: "Você...", a: "critica as idéias de seus colegas.", b: "critica seus colegas (pessoal).", type: "R3" } // Adaptado
+                ]
+            },
+            {
+                title: "Situação 5: LAZER",
+                desc: "Em um final de semana livre...",
+                questions: [
+                    { t: "Você...", a: "prefere sair de casa.", b: "prefere ficar em casa.", type: "R1" },
+                    { t: "Você...", a: "esperou com mil possibilidades.", b: "organizou o tempo para tarefas práticas.", type: "R2" },
+                    { t: "Você...", a: "prefere tempo livre com tarefas (coisas).", b: "prefere tempo livre com pessoas.", type: "R3" }, // Adaptado
+                    { t: "Você...", a: "aceitaria um convite para sair imediatamente.", b: "prefere convidar para ficar em casa.", type: "R1" },
+                    { t: "Você...", a: "realiza menos do que planejou.", b: "cumpre metas dentro do tempo.", type: "R2" },
+                    { t: "Você...", a: "aprende sobre ciência e tecnologia.", b: "dedica-se aos amigos.", type: "R3" },
+                    { t: "Você...", a: "passear ao ar livre/lojas.", b: "ficar em casa lendo.", type: "R1" },
+                    { t: "Você...", a: "deixa a inspiração dizer o que fazer.", b: "faz coisas habituais.", type: "R2" },
+                    { t: "Você...", a: "trocar idéias profissionais.", b: "saber como vai a vida dele.", type: "R3" },
+                    { t: "Você...", a: "atividade em grupo.", b: "atividade sozinho.", type: "R1" },
+                    { t: "Você...", a: "planejar atividades futuras.", b: "atividades de utilidade imediata.", type: "R2" },
+                    { t: "Você...", a: "ir a uma palestra.", b: "participar de um bate-papo.", type: "R3" }, // Palestra (Info) vs Papo (Social/Feel)
+                    { t: "Você...", a: "filme de ação/aventura.", b: "filme existencial.", type: "R1" }, // Adaptado
+                    { t: "Você...", a: "inventa coisas para passar o tempo.", b: "segue roteiro do dia.", type: "R2" },
+                    { t: "Você...", a: "recusaria convite explicando razões.", b: "teria dificuldade em recusar.", type: "R3" }
+                ]
+            },
+            {
+                title: "Situação 6: VIDA PESSOAL",
+                desc: "Suas escolhas mais verdadeiras. Você se considera mais...",
+                questions: [
+                    { t: "Você é mais...", a: "comunicativo.", b: "observador.", type: "R1" },
+                    { t: "Você é mais...", a: "teórico.", b: "prático.", type: "R2" },
+                    { t: "Você é mais...", a: "racional.", b: "afetivo.", type: "R3" },
+                    { t: "Você é mais...", a: "expansivo.", b: "reservado.", type: "R1" },
+                    { t: "Você é mais...", a: "planejador.", b: "executor.", type: "R2" },
+                    { t: "Você é mais...", a: "objetivo.", b: "simpático.", type: "R3" },
+                    { t: "Você é mais...", a: "dinâmico.", b: "tranquilo.", type: "R1" },
+                    { t: "Você é mais...", a: "inovador.", b: "tradicional.", type: "R2" },
+                    { t: "Você é mais...", a: "verdadeiro, franco e direto.", b: "de por 'panos quentes'.", type: "R3" },
+                    { t: "Você é mais...", a: "impulsivo.", b: "hesitante.", type: "R1" },
+                    { t: "Você é mais...", a: "inventivo.", b: "rotineiro.", type: "R2" },
+                    { t: "Você é mais...", a: "justo.", b: "misericordioso.", type: "R3" },
+                    { t: "Você é mais...", a: "um aventureiro.", b: "um pesquisador.", type: "R1" },
+                    { t: "Você é mais...", a: "improvisador.", b: "estrategista.", type: "R2" },
+                    { t: "Você é mais...", a: "impessoal e lógico.", b: "pessoal e sentimental.", type: "R3" },
+                    { t: "Você é mais...", a: "disperso.", b: "compenetrado.", type: "R1" },
+                    { t: "Você é mais...", a: "imprevisível.", b: "previsível.", type: "R2" },
+                    { t: "Você é mais...", a: "consistente e razoável nas ideias.", b: "profundo nos sentimentos.", type: "R3" }
+                ]
+            }
+        ];
+
+        // DICIONÁRIO DE TIPOS (Baseado no Manual)
+        const typeDescriptions = {
+            "E St In": "Extrovertido, Sentimento, Intuição.\n\nPessoas que irradiam calor humano e simpatia. Valorizam muito o contato humano e são capazes de entrar em sintonia com os outros. Idealizam pessoas e causas. Profissões comuns: Ensino, Aconselhamento, Vendas, Relações Públicas.",
+            "E In St": "Extrovertido, Intuição, Sentimento.\n\nInovadoras, entusiastas, sempre vendo novas possibilidades. Grande imaginação e iniciativa. Odeiam a rotina. Profissões comuns: Artes, Jornalismo, Marketing, Publicidade.",
+            "E Ps In": "Extrovertido, Pensamento, Intuição.\n\nLíderes natos. Usam o pensamento para controlar o mundo. Lógicos, analíticos, gostam de fazer planos a longo prazo e executar. Profissões comuns: Executivos, Administração, Direito, Ciência.",
+            "E In Ps": "Extrovertido, Intuição, Pensamento.\n\nInovadores e engenhosos. Sempre enxergam novas maneiras de fazer as coisas. Estimulados por dificuldades. Podem perder o interesse quando o projeto vira rotina. Profissões: Inventores, Empreendedores, Jornalistas.",
+            "E St Ss": "Extrovertido, Sentimento, Sensação.\n\nAmistosos, realistas e com os pés no chão. Valorizam a harmonia e o conforto. Gostam de lidar com pessoas e fatos concretos. Profissões: Saúde, Ensino, Turismo, Serviços Sociais.",
+            "E Ss St": "Extrovertido, Sensação, Sentimento.\n\nAdaptáveis e realistas. Aceitam os fatos como são e buscam soluções satisfatórias. Curiosidade ativa por novos objetos e experiências. Profissões: Vendas, Design, Saúde, Esportes.",
+            "E Ps Ss": "Extrovertido, Pensamento, Sensação.\n\nPráticos e realistas. Gostam de organizar fatos e situações. Decisivos e objetivos. Focam no aqui e agora. Profissões: Negócios, Indústria, Construção, Administração.",
+            "E Ss Ps": "Extrovertido, Sensação, Pensamento.\n\nRealistas e adaptáveis. Confiam no que veem e ouvem. Bons resolvedores de problemas práticos. Aprendem pela experiência. Profissões: Engenharia, Policial, Marketing, Tecnologia.",
+            "I In St": "Introvertido, Intuição, Sentimento.\n\nInovadores no campo das ideias. Independentes e individuais. Grande capacidade de liderança por convicção. Profissões: Ciência, Pesquisa, Artes, Psicologia.",
+            "I St In": "Introvertido, Sentimento, Intuição.\n\nGrande calor humano escondido. Leais aos seus ideais. Perfeccionistas. Profissões: Aconselhamento, Literatura, Arte, Psicologia.",
+            "I In Ps": "Introvertido, Intuição, Pensamento.\n\nInovadores incansáveis. Confiam na visão interior. Independentes e às vezes teimosos. Valorizam eficiência. Profissões: Ciência Pura, Política, Filosofia.",
+            "I Ps In": "Introvertido, Pensamento, Intuição.\n\nAnalíticos e lógicos. Interessados em princípios e teorias. Podem ficar absorvidos em ideias. Profissões: Matemática, Economia, Pesquisa Acadêmica.",
+            "I Ss St": "Introvertido, Sensação, Sentimento.\n\nExtremamente confiáveis e responsáveis. Respeito pelos fatos. Pacientes com detalhes. Profissões: Saúde, Ensino, Escritório, Serviços Pessoais.",
+            "I St Ss": "Introvertido, Sentimento, Sensação.\n\nPontos de vista particulares. Lealdade a ideais internos. Sensíveis à estética e natureza. Profissões: Artes, Veterinária, Trabalho Social.",
+            "I Ss Ps": "Introvertido, Sensação, Pensamento.\n\nConfiáveis e práticos. Absorvem muitos fatos. Calmos em crises. Sistemáticos e perseverantes. Profissões: Contabilidade, Direito, Engenharia, Administração.",
+            "I Ps Ss": "Introvertido, Pensamento, Sensação.\n\nLógicos e críticos. Organizados com fatos e dados. Curiosidade intelectual discreta. Bons em análise técnica. Profissões: Mecânica, Engenharia, Direito, Estatística."
+        };
+
+        // CONTROLE DA APP
+        let currentSection = 0;
+        let answers = { R1: {a:0, b:0}, R2: {a:0, b:0}, R3: {a:0, b:0} };
+
+        function init() {
+            const container = document.getElementById('quiz-container');
+            
+            sections.forEach((sec, sIndex) => {
+                const div = document.createElement('div');
+                div.className = 'situation-container';
+                div.id = `sec-${sIndex}`;
+                
+                div.innerHTML = `
+                    <div class="situation-title">${sec.title}</div>
+                    <p style="margin-bottom:20px; font-style:italic;">${sec.desc}</p>
+                `;
+
+                sec.questions.forEach((q, qIndex) => {
+                    const qBox = document.createElement('div');
+                    qBox.className = 'question-box';
+                    qBox.innerHTML = `
+                        <span class="q-text">${qIndex + 1}. ${q.t}</span>
+                        <label class="option-label">
+                            <input type="radio" name="s${sIndex}_q${qIndex}" value="a" data-type="${q.type}">
+                            ${q.a}
+                        </label>
+                        <label class="option-label">
+                            <input type="radio" name="s${sIndex}_q${qIndex}" value="b" data-type="${q.type}">
+                            ${q.b}
+                        </label>
+                    `;
+                    div.appendChild(qBox);
+                });
+
+                container.appendChild(div);
+            });
+
+            showSection(0);
+        }
+
+        function showSection(index) {
+            document.querySelectorAll('.situation-container').forEach(el => el.classList.remove('active'));
+            document.getElementById(`sec-${index}`).classList.add('active');
+            
+            document.getElementById('btn-prev').style.display = index === 0 ? 'none' : 'block';
+            
+            if (index === sections.length - 1) {
+                document.getElementById('btn-next').style.display = 'none';
+                document.getElementById('btn-finish').style.display = 'block';
+            } else {
+                document.getElementById('btn-next').style.display = 'block';
+                document.getElementById('btn-finish').style.display = 'none';
+            }
+            
+            currentSection = index;
+            window.scrollTo(0,0);
+        }
+
+        function changePage(dir) {
+            showSection(currentSection + dir);
+        }
+
+        function calculateResults() {
+            // Reset
+            answers = { R1: {a:0, b:0}, R2: {a:0, b:0}, R3: {a:0, b:0} };
+            
+            // Coletar respostas
+            const inputs = document.querySelectorAll('input[type="radio"]:checked');
+            if(inputs.length < 93) {
+                if(!confirm("Algumas questões não foram respondidas. O resultado pode ser impreciso. Deseja continuar?")) return;
+            }
+
+            inputs.forEach(input => {
+                const type = input.getAttribute('data-type'); // R1, R2, R3
+                const val = input.value; // a, b
+                if(type) answers[type][val]++;
+            });
+
+            // Lógica de Apuração (Manual)
+            // R1: A=Extroversão (E), B=Introversão (I)
+            const r1_val = answers.R1.a - answers.R1.b;
+            const attitude = answers.R1.a >= answers.R1.b ? 'E' : 'I';
+
+            // R2: A=Intuição (In), B=Sensação (Ss)
+            const r2_val = answers.R2.a - answers.R2.b; // Manual diz subtrair menor do maior, aqui simplifico
+            const percept = answers.R2.a >= answers.R2.b ? 'In' : 'Ss';
+            const score_r2 = Math.abs(r2_val); // O valor absoluto para comparação
+
+            // R3: A=Pensamento (Ps), B=Sentimento (St)
+            const r3_val = answers.R3.a - answers.R3.b;
+            const judge = answers.R3.a >= answers.R3.b ? 'Ps' : 'St';
+            const score_r3 = Math.abs(r3_val);
+
+            // Determinar Principal e Auxiliar (Maior score vence)
+            // Se R2 > R3 -> Principal é Perceptiva
+            // Se R3 > R2 -> Principal é Julgamento
+            let mainFunc, auxFunc;
+            
+            // Para E (Extrovertido): Principal é a maior.
+            // Para I (Introvertido): Principal é a maior? O manual diz "Função Principal a que obtiver maior pontuação".
+            
+            if (Math.max(answers.R2.a, answers.R2.b) >= Math.max(answers.R3.a, answers.R3.b)) {
+                // R2 Ganhou
+                mainFunc = percept;
+                auxFunc = judge;
+            } else {
+                // R3 Ganhou
+                mainFunc = judge;
+                auxFunc = percept;
+            }
+
+            // Montar Código: Atitude + Principal + Auxiliar
+            const finalCode = `${attitude} ${mainFunc} ${auxFunc}`; // Ex: E St In
+
+            // Exibir
+            document.getElementById('quati-form').style.display = 'none';
+            document.getElementById('personal-data').style.display = 'none';
+            document.getElementById('results-screen').style.display = 'block';
+
+            document.getElementById('res-code').innerText = finalCode;
+            
+            // Buscar descrição
+            // Tenta achar a chave exata ou inverte as ultimas duas se não achar (ex: E In St vs E St In)
+            let desc = typeDescriptions[finalCode];
+            if(!desc) {
+                // Fallback: tentar inverter aux/main
+                const altCode = `${attitude} ${auxFunc} ${mainFunc}`;
+                desc = typeDescriptions[altCode] || "Descrição não encontrada para este perfil exato.";
+            }
+            
+            // Formatar texto
+            const parts = desc.split('\n\n');
+            document.getElementById('res-name').innerText = parts[0] || finalCode;
+            document.getElementById('res-desc').innerText = parts[1] || desc;
+
+            // Tabela de Detalhes
+            const tbody = document.getElementById('score-body');
+            tbody.innerHTML = `
+                <tr>
+                    <td>R1 (Atitude)</td>
+                    <td>${answers.R1.a} (E)</td>
+                    <td>${answers.R1.b} (I)</td>
+                    <td>${Math.abs(r1_val)}</td>
+                    <td>${attitude === 'E' ? 'Extroversão' : 'Introversão'}</td>
+                </tr>
+                <tr>
+                    <td>R2 (Percepção)</td>
+                    <td>${answers.R2.a} (In)</td>
+                    <td>${answers.R2.b} (Ss)</td>
+                    <td>${Math.abs(r2_val)}</td>
+                    <td>${percept === 'In' ? 'Intuição' : 'Sensação'}</td>
+                </tr>
+                <tr>
+                    <td>R3 (Julgamento)</td>
+                    <td>${answers.R3.a} (Ps)</td>
+                    <td>${answers.R3.b} (St)</td>
+                    <td>${Math.abs(r3_val)}</td>
+                    <td>${judge === 'Ps' ? 'Pensamento' : 'Sentimento'}</td>
+                </tr>
+            `;
+            
+            window.scrollTo(0,0);
+        }
+
+        // Iniciar
+        init();
+
+    </script>
+
+</body>
+</html>
