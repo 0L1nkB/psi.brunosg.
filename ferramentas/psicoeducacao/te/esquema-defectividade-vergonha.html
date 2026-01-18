@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Defectividade e Vergonha - Caderno Terapêutico</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Paleta "Hidden Self" */
+            --paper-line: #e7e5e4;    /* Linhas cinza pedra */
+            --paper-bg: #fafaf9;      /* Fundo off-white */
+            --ink-color: #44403c;
+            
+            /* Cores do Esquema (Vergonha = Vinho -> Aceitação) */
+            --primary: #be123c;       /* Vinho Rosado */
+            --primary-hover: #9f1239;
+            --secondary: #881337;     
+            
+            /* Tags de Personas */
+            --tag-elisa-bg: #f5f5f4; --tag-elisa-text: #78716c; /* Cinza (Invisível) */
+            --tag-marcos-bg: #ffe4e6; --tag-marcos-text: #be123c; /* Vermelho (Crítico) */
+
+            --radius: 16px;
+            --shadow-paper: 3px 3px 10px rgba(0,0,0,0.06);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            color: var(--ink-color);
+            line-height: 1.6;
+            background-color: var(--paper-bg);
+            /* Efeito Papel Pautado */
+            background-image: linear-gradient(var(--paper-line) 1px, transparent 1px);
+            background-size: 100% 2rem;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Patrick Hand', cursive;
+            color: #1c1917;
+        }
+
+        /* --- HEADER --- */
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-bottom: 2px dashed #d6d3d1;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);
+        }
+
+        .header-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .header-title {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 0px #ffe4e6;
+        }
+
+        .header-subtitle {
+            font-size: 1.2rem;
+            color: #78716c;
+            font-family: 'Patrick Hand', cursive;
+        }
+
+        /* --- CONTAINER --- */
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+            display: grid;
+            gap: 35px;
+            margin-bottom: 60px;
+        }
+
+        /* --- CARDS (PAPEL) --- */
+        .paper-card {
+            background-color: #ffffff;
+            border-radius: 2px;
+            box-shadow: var(--shadow-paper);
+            border: 1px solid #e7e5e4;
+            padding: 2rem;
+            position: relative;
+            transform: rotate(-0.5deg);
+            transition: transform 0.3s;
+        }
+        
+        .paper-card:hover { transform: rotate(0deg) translateY(-3px); }
+        
+        /* Fita Adesiva (Washi Tape) */
+        .paper-card::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 30px;
+            background-color: rgba(190, 18, 60, 0.15); /* Vinho translúcido */
+            border: 1px solid #e7e5e4;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            opacity: 0.9;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--paper-line);
+            padding-bottom: 10px;
+        }
+
+        .card-icon { font-size: 1.8rem; color: var(--primary); }
+        .card-title { font-size: 1.8rem; margin: 0; }
+
+        /* --- POST-IT (DEFINIÇÃO) --- */
+        .post-it {
+            background-color: #ffe4e6; /* Rosa Pálido */
+            padding: 1.5rem;
+            border-radius: 2px 2px 16px 2px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+            font-family: 'Patrick Hand', cursive;
+            font-size: 1.3rem;
+            color: #881337;
+            transform: rotate(1deg);
+            margin: 20px 0;
+            border-left: 5px solid #be123c;
+        }
+
+        /* --- PERSONAS --- */
+        .persona-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .persona-card {
+            background: #fff;
+            padding: 20px;
+            border: 2px dashed #d6d3d1;
+            border-radius: 12px;
+        }
+        
+        .persona-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .persona-name { font-size: 1.4rem; font-weight: 700; color: #44403c; }
+        .persona-tag { font-family: 'Nunito', sans-serif; font-size: 0.8rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; }
+        
+        .tag-elisa { background: var(--tag-elisa-bg); color: var(--tag-elisa-text); }
+        .tag-marcos { background: var(--tag-marcos-bg); color: var(--tag-marcos-text); }
+
+        /* --- STICKERS (3 DIMENSÕES) --- */
+        .sticker-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;
+        }
+        
+        .sticker-box {
+            background: white; padding: 1.5rem; border-radius: 12px;
+            border: 2px solid #f5f5f4; text-align: center;
+            transition: all 0.3s;
+        }
+        .sticker-box:hover { border-color: var(--primary); transform: scale(1.02); }
+        .sticker-icon { font-size: 2rem; margin-bottom: 10px; display: block; }
+
+        /* --- TRADUTOR INTERATIVO --- */
+        .translator-area {
+            background-color: #fff1f2; /* Vermelho muito claro */
+            padding: 2rem; border-radius: 20px;
+            border: 2px dashed #fda4af; text-align: center;
+        }
+
+        .btn-translate {
+            background: white; border: 2px solid #e7e5e4;
+            padding: 10px 20px; margin: 5px; border-radius: 30px;
+            font-family: 'Nunito', sans-serif; font-weight: 700; color: #57534e;
+            cursor: pointer; transition: all 0.2s;
+            box-shadow: 0 4px 0 #e7e5e4;
+        }
+        
+        .btn-translate:active { box-shadow: 0 0 0 #e7e5e4; transform: translateY(4px); }
+        .btn-translate:hover { background: #fff; border-color: var(--primary); color: var(--primary); }
+
+        .result-bubble {
+            background: white; padding: 20px; border-radius: 20px;
+            margin-top: 20px; border: 2px solid #e7e5e4;
+            font-family: 'Patrick Hand', cursive; font-size: 1.3rem;
+            color: #44403c; min-height: 100px; display: flex; align-items: center; justify-content: center;
+        }
+
+        /* --- ACCORDIONS --- */
+        details {
+            background: #fafaf9; border-radius: 12px; margin-bottom: 10px;
+            border: 1px solid #d6d3d1;
+        }
+        summary {
+            padding: 15px; font-weight: 700; cursor: pointer; list-style: none;
+            display: flex; justify-content: space-between; color: #be123c;
+        }
+        summary:hover { background: #f5f5f4; border-radius: 12px; }
+        .details-content { padding: 20px; border-top: 1px dashed #d6d3d1; color: #57534e; }
+
+        /* --- FLASHCARD (FLIP) --- */
+        .flashcard-container { perspective: 1000px; width: 100%; height: 280px; cursor: pointer; }
+        .flashcard-inner {
+            position: relative; width: 100%; height: 100%; text-align: center;
+            transition: transform 0.6s; transform-style: preserve-3d;
+        }
+        .flashcard-container.flipped .flashcard-inner { transform: rotateY(180deg); }
+        
+        .flashcard-front, .flashcard-back {
+            position: absolute; width: 100%; height: 100%;
+            -webkit-backface-visibility: hidden; backface-visibility: hidden;
+            border-radius: 16px; padding: 2rem;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            box-shadow: var(--shadow-paper); border: 2px solid;
+        }
+        
+        .flashcard-front {
+            background: #fff1f2; border-color: #fecdd3; color: #881337;
+        }
+        .flashcard-back {
+            background: #f0fdf4; border-color: #86efac; color: #15803d;
+            transform: rotateY(180deg);
+        }
+
+        /* --- FOOTER PADRÃO --- */
+        footer {
+            background-color: #ffffff;
+            border-top: 1px solid #e5e7eb;
+            padding: 2rem 0;
+            margin-top: auto;
+        }
+        .footer-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .footer-brand { color: #64748b; font-size: 0.9rem; font-weight: 600; }
+        .social-links { display: flex; gap: 1.5rem; }
+        .social-links a { color: #94a3b8; font-size: 1.2rem; transition: color 0.2s; }
+        .social-links a:hover { color: var(--primary); }
+
+        @media (max-width: 640px) {
+            .footer-container { flex-direction: column; gap: 1rem; }
+            .persona-grid, .sticker-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-content">
+            <h1 class="header-title">Defectividade e Vergonha</h1>
+            <p class="header-subtitle">Caderno de Psicoeducação</p>
+        </div>
+    </header>
+
+    <div class="main-container">
+
+        <div class="paper-card">
+            <div class="card-header">
+                <i class="fas fa-mask card-icon"></i>
+                <h2 class="card-title">O Segredo Obscuro</h2>
+            </div>
+            <p>Este é o esquema da vergonha. É a sensação de que você é internamente falho, mau, inferior ou indigno de amor. O medo central é: "Se me conhecerem de verdade, vão fugir."</p>
+            
+            <div class="post-it">
+                <i class="fas fa-thumbtack" style="color:#be123c; margin-right:10px;"></i>
+                "Eu preciso me esconder. Sou uma fraude. Ninguém pode ver quem eu realmente sou."
+            </div>
+        </div>
+
+        <div class="paper-card" style="transform: rotate(0.5deg);">
+            <div class="card-header">
+                <i class="fas fa-users card-icon"></i>
+                <h2 class="card-title">Espelhos da Vida Real</h2>
+            </div>
+            <p>Como esse esquema se esconde no dia a dia:</p>
+            
+            <div class="persona-grid">
+                <div class="persona-card">
+                    <div class="persona-header">
+                        <span class="persona-name">Elisa</span>
+                        <span class="persona-tag tag-elisa">A Invisível</span>
+                    </div>
+                    <p>Elisa é tímida e quieta. Ela nunca dá sua opinião com medo de falar bobagem. Aceita críticas calada porque, no fundo, acha que o crítico tem razão. Evita relacionamentos íntimos.</p>
+                    <p style="font-size:0.85rem; color:#78716c;"><strong>Comportamento:</strong> Evitação (Esconder-se)</p>
+                </div>
+
+                <div class="persona-card">
+                    <div class="persona-header">
+                        <span class="persona-name">Marcos</span>
+                        <span class="persona-tag tag-marcos">O Perfeito</span>
+                    </div>
+                    <p>Marcos é arrogante e crítico com os outros. Ele precisa ser o melhor em tudo. Se comete um erro mínimo, entra em colapso. Ele ataca os outros para tirar o foco das próprias falhas.</p>
+                    <p style="font-size:0.85rem; color:#be123c;"><strong>Comportamento:</strong> Ataque (Narcisismo)</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="paper-card">
+            <div class="card-header">
+                <i class="fas fa-shapes card-icon"></i>
+                <h2 class="card-title">As 3 Faces da Vergonha</h2>
+            </div>
+            <div class="sticker-grid">
+                <div class="sticker-box">
+                    <span class="sticker-icon">🙈</span>
+                    <h4>Falha Interna</h4>
+                    <p>A sensação de que você nasceu "quebrado" ou "errado" e não tem conserto.</p>
+                </div>
+                <div class="sticker-box">
+                    <span class="sticker-icon">🔍</span>
+                    <h4>Hipersensibilidade</h4>
+                    <p>Qualquer crítica, mesmo construtiva, é sentida como um ataque pessoal devastador.</p>
+                </div>
+                <div class="sticker-box">
+                    <span class="sticker-icon">⚖️</span>
+                    <h4>Comparação</h4>
+                    <p>Você se compara o tempo todo e sempre se sente inferior aos outros.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="paper-card" style="transform: rotate(-0.5deg);">
+            <div class="card-header">
+                <i class="fas fa-sync card-icon"></i>
+                <h2 class="card-title">Tradutor de Pensamentos</h2>
+            </div>
+            <p>O esquema mente para você. Vamos traduzir a "Autocrítica" em "Necessidade Real":</p>
+            
+            <div class="translator-area">
+                <p style="margin-bottom:15px; font-weight:700;">O que sua mente diz?</p>
+                <div>
+                    <button class="btn-translate" onclick="translateNeed('fraude')">"Vão descobrir que sou uma fraude."</button>
+                    <button class="btn-translate" onclick="translateNeed('lixo')">"Sou um lixo, não mereço nada."</button>
+                    <button class="btn-translate" onclick="translateNeed('perfeito')">"Tenho que ser perfeito ou serei rejeitado."</button>
+                </div>
+                
+                <div id="translator-bubble" class="result-bubble">
+                    Toque em um pensamento para traduzir...
+                </div>
+            </div>
+        </div>
+
+        <div class="paper-card">
+            <div class="card-header">
+                <i class="fas fa-brain card-icon"></i>
+                <h2 class="card-title">Conceitos Clínicos</h2>
+            </div>
+            
+            <details>
+                <summary>🧠 Neurobiologia: O Instinto de Sumir <i class="fas fa-chevron-down"></i></summary>
+                <div class="details-content">
+                    <p>A vergonha ativa o <strong>Sistema Vagal Dorsal</strong> (o sistema de "fingir de morto"). Quando criticado, você sente vontade de "afundar no chão" ou ficar invisível. É uma reação biológica de defesa contra a rejeição do grupo.</p>
+                </div>
+            </details>
+
+            <details>
+                <summary>🌱 Como a Terapia Ajuda? <i class="fas fa-chevron-down"></i></summary>
+                <div class="details-content">
+                    <p>O foco é a <strong>Autoaceitação Incondicional</strong>. O terapeuta ajuda a separar "o que você faz" (comportamento, que pode errar) de "quem você é" (valor intrínseco, que é imutável). Você aprende a ser imperfeito e amado ao mesmo tempo.</p>
+                </div>
+            </details>
+
+            <details>
+                <summary>⚠️ A Armadilha da Perfeição <i class="fas fa-chevron-down"></i></summary>
+                <div class="details-content">
+                    <p>Muitos tentam curar a defectividade sendo perfeitos (corpo perfeito, notas perfeitas). Mas isso é uma armadilha: a perfeição é impossível, e cada pequeno erro reacende a vergonha. A cura está na vulnerabilidade, não no sucesso.</p>
+                </div>
+            </details>
+        </div>
+
+        <div class="paper-card">
+            <div class="card-header">
+                <i class="fas fa-adjust card-icon"></i>
+                <h2 class="card-title">Vire o Pensamento</h2>
+            </div>
+            <p>Toque no cartão quando se sentir inferior ou com vergonha:</p>
+            
+            <div class="flashcard-container" onclick="this.classList.toggle('flipped')">
+                <div class="flashcard-inner">
+                    <div class="flashcard-front">
+                        <h3 style="font-family:'Patrick Hand'; font-size:1.5rem;">Voz da Vergonha</h3>
+                        <p style="margin-top:10px;">"Eu estraguei tudo. Sou um idiota. Ninguém vai gostar de mim se souberem quem eu sou. Melhor ficar quieto."</p>
+                        <i class="fas fa-hand-pointer" style="margin-top:20px; color:#be123c; font-size:1.5rem;"></i>
+                    </div>
+                    <div class="flashcard-back">
+                        <h3 style="font-family:'Patrick Hand'; font-size:1.5rem;">Voz do Adulto Saudável</h3>
+                        <p style="margin-top:10px;">"Eu cometi um erro, mas eu NÃO SOU um erro. Todos falham. Sou humano e digno de amor mesmo com minhas imperfeições. Não preciso ser perfeito para ser amado."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-brand">
+                &copy; 2026 Bruno de Souza
+            </div>
+            <div class="social-links">
+                <a href="https://www.instagram.com/psi.brunosg/" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://wa.me/5553991898309" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.linkedin.com/in/psi-bsouza/" target="_blank"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function translateNeed(type) {
+            const bubble = document.getElementById('translator-bubble');
+            let text = "";
+            
+            if (type === 'fraude') {
+                text = "✨ Tradução: 'Estou sentindo a síndrome do impostor. Preciso me lembrar das minhas conquistas reais e aceitar que estou aprendendo.'";
+            } else if (type === 'lixo') {
+                text = "✨ Tradução: 'Estou com vergonha e preciso de autocompaixão. O erro que cometi não define meu valor como pessoa.'";
+            } else if (type === 'perfeito') {
+                text = "✨ Tradução: 'Estou ansioso por aceitação. Preciso lembrar que as pessoas gostam de mim pela minha humanidade, não pela minha performance.'";
+            }
+            
+            bubble.style.opacity = 0;
+            setTimeout(() => {
+                bubble.innerHTML = text;
+                bubble.style.opacity = 1;
+                bubble.style.transition = "opacity 0.3s";
+            }, 200);
+        }
+    </script>
+
+</body>
+</html>
