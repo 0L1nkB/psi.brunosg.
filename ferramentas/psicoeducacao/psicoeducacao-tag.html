@@ -3,25 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desvendando o TAG - Bruno de Souza</title>
+    <title>Guia Completo do TAG - Bruno de Souza</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
     <style>
         :root {
-            /* Paleta "Papelaria Digital" inspirada nos prints (Imagem 5 e 7) */
-            --bg-paper: #fdfbf7;      /* Fundo creme/papel */
-            --text-primary: #4a4a4a;  /* Cinza chumbo suave */
-            --text-serif: #2c3e50;    /* Azul escuro para títulos */
+            /* Paleta "Papelaria Fina" Mantida */
+            --bg-paper: #fdfbf7;      
+            --text-primary: #4a4a4a;  
+            --text-serif: #2c3e50;    
             
-            /* Cores dos Diagramas */
-            --accent-peach: #ffccbc;  /* Pêssego (Gatilhos) */
-            --accent-sage: #c8e6c9;   /* Verde Sálvia (Pensamentos) */
-            --accent-sand: #ffe082;   /* Areia/Amarelo (Emoções) */
-            --accent-blue: #b3e5fc;   /* Azul Bebê (Comportamento) */
+            /* Cores de Destaque */
+            --accent-peach: #ffccbc;  
+            --accent-sage: #c8e6c9;   
+            --accent-sand: #ffe082;   
+            --accent-blue: #b3e5fc;
+            --accent-lavender: #e1bee7; /* Nova cor para TCC */
             
-            --btn-color: #7986cb;     /* Roxo suave para botões */
+            --btn-color: #7986cb;     
             --radius: 16px;
             --shadow: 0 8px 30px rgba(0,0,0,0.06);
         }
@@ -36,12 +37,12 @@
             overflow-x: hidden;
         }
 
-        h1, h2, h3 {
+        h1, h2, h3, h4 {
             font-family: 'Playfair Display', serif;
             color: var(--text-serif);
         }
 
-        /* --- LAYOUT GERAL --- */
+        /* --- LAYOUT --- */
         .container {
             max-width: 900px;
             margin: 0 auto;
@@ -53,10 +54,13 @@
             border-bottom: 1px dashed #e0e0e0;
         }
 
+        .section:nth-child(even) { background-color: white; }
+        .section:nth-child(odd) { background-color: var(--bg-paper); }
+
         .section-title {
             text-align: center;
             font-size: 2.5rem;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
         .section-subtitle {
@@ -64,118 +68,80 @@
             color: #888;
             margin-bottom: 50px;
             font-style: italic;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        /* --- HERO HEADER --- */
+        /* --- HEADER --- */
         header {
             text-align: center;
-            padding: 100px 20px 60px;
+            padding: 100px 20px 80px;
             background: linear-gradient(180deg, #fff 0%, var(--bg-paper) 100%);
         }
 
-        header h1 {
-            font-size: 3.8rem;
-            margin-bottom: 20px;
-            letter-spacing: -1px;
-        }
+        header h1 { font-size: 3.5rem; margin-bottom: 20px; letter-spacing: -1px; }
 
         .badge {
-            display: inline-block;
-            background: var(--text-serif);
-            color: white;
-            padding: 5px 15px;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 20px;
+            background: var(--text-serif); color: white; padding: 5px 15px;
+            border-radius: 50px; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase;
         }
 
-        /* --- COMPARAÇÃO (Inspirado na Imagem 2 - Fome vs Fome Emocional) --- */
-        .comparison-wrapper {
-            display: flex;
-            gap: 30px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .comp-card {
-            flex: 1;
-            min-width: 300px;
+        /* --- CRITÉRIOS DIAGNÓSTICOS (NOVO) --- */
+        .criteria-box {
             background: white;
-            padding: 40px;
+            border: 2px solid var(--accent-sage);
             border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            position: relative;
-            overflow: hidden;
-            border-top: 5px solid;
-        }
-
-        .comp-card.normal { border-color: var(--accent-sage); }
-        .comp-card.tag { border-color: var(--accent-peach); }
-
-        .comp-card ul { list-style: none; margin-top: 20px; }
-        .comp-card li { margin-bottom: 15px; position: relative; padding-left: 25px; }
-        .comp-card li::before {
-            content: '•';
-            position: absolute; left: 0; font-size: 1.5rem; line-height: 1rem;
-            color: #ccc;
-        }
-
-        /* --- CICLO DA ANSIEDADE (Inspirado na Imagem 5 - Diagrama Circular) --- */
-        .cycle-container {
-            position: relative;
-            max-width: 800px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            margin-top: 40px;
-        }
-
-        .cycle-step {
-            background: white;
             padding: 30px;
-            border-radius: 50%; /* Bolhas redondas como no print */
-            width: 100%;
-            aspect-ratio: 1 / 1; /* Mantém redondo */
+            margin-top: 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .time-badge {
+            background: var(--accent-sage);
+            color: #2e7d32;
+            padding: 15px;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            font-weight: bold;
+            line-height: 1.2;
             text-align: center;
-            box-shadow: var(--shadow);
-            position: relative;
-            transition: transform 0.3s;
-            border: 2px solid transparent;
+            flex-shrink: 0;
         }
 
-        .cycle-step:hover { transform: scale(1.05); z-index: 10; }
-
-        /* Cores das Bolhas (Inspirado no print 7) */
-        .step-1 { background-color: var(--accent-peach); border: 2px solid #ffab91; }
-        .step-2 { background-color: var(--accent-sage); border: 2px solid #a5d6a7; }
-        .step-3 { background-color: var(--accent-sand); border: 2px solid #ffd54f; }
-        .step-4 { background-color: var(--accent-blue); border: 2px solid #81d4fa; }
-
-        .cycle-step h4 { font-size: 1.2rem; margin-bottom: 10px; color: #333; }
-        .cycle-step p { font-size: 0.9rem; line-height: 1.4; }
-
-        /* Conectores (Setas Pontilhadas CSS) */
-        .cycle-arrow {
-            position: absolute;
-            font-size: 2rem;
-            color: #bbb;
-            z-index: 0;
-        }
-        
-        /* Posicionamento Desktop */
-        @media (min-width: 768px) {
-            .cycle-arrow.a1 { top: 45%; left: 45%; transform: rotate(0deg); } /* Centro */
-            /* Layout circular abstrato via Grid */
+        /* --- SINTOMAS CHECKLIST (NOVO) --- */
+        .symptoms-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
         }
 
-        /* --- NEUROBIOLOGIA (Simples e Clean) --- */
+        .symptom-column h3 { margin-bottom: 20px; border-bottom: 2px solid var(--accent-peach); display: inline-block; }
+
+        .check-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            background: rgba(255,255,255,0.6);
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .check-item i {
+            color: var(--btn-color);
+            margin-right: 15px;
+            margin-top: 5px;
+        }
+
+        /* --- NEUROBIOLOGIA --- */
         .brain-box {
             background: white;
             padding: 40px;
@@ -186,133 +152,56 @@
             align-items: center;
         }
         
-        .brain-svg {
-            width: 200px;
-            margin-bottom: 30px;
-            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1));
-        }
-
         .hotspot-btn {
-            background: var(--btn-color);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            margin: 5px;
-            font-size: 0.9rem;
-            transition: opacity 0.3s;
-        }
-        .hotspot-btn:hover { opacity: 0.8; }
-
-        /* --- BARALHO DE DISTORÇÕES (Inspirado na Imagem 4) --- */
-        .cards-deck {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
+            background: var(--btn-color); color: white; border: none; padding: 8px 16px;
+            border-radius: 20px; cursor: pointer; margin: 5px; transition: opacity 0.3s;
         }
 
-        .distortion-card {
-            width: 260px;
-            height: 380px;
-            perspective: 1000px;
-            cursor: pointer;
+        /* --- TRATAMENTO (NOVO) --- */
+        .treatment-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
         }
 
-        .card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            transition: transform 0.8s;
-            transform-style: preserve-3d;
-            box-shadow: var(--shadow);
-            border-radius: 20px;
-        }
-
-        .distortion-card.flipped .card-inner {
-            transform: rotateY(180deg);
-        }
-
-        .card-front, .card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            border-radius: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .card-front {
+        .treat-card {
             background: white;
-            border: 10px solid var(--bg-paper); /* Borda branca grossa estilo carta */
-            background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23f0f0f0' fill-opacity='1' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E");
-        }
-
-        .card-back {
-            background-color: var(--text-serif);
-            color: white;
-            transform: rotateY(180deg);
-        }
-
-        /* --- RESPIRAÇÃO (Visual Zen) --- */
-        .breathe-widget {
-            background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%);
-            padding: 60px 20px;
+            padding: 30px;
             border-radius: var(--radius);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
+            box-shadow: var(--shadow);
+            border-top: 5px solid;
         }
 
-        .circle-breathe {
-            width: 200px;
-            height: 200px;
-            background: rgba(255,255,255,0.9);
-            border-radius: 50%;
-            margin: 0 auto 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            color: var(--text-serif);
-            box-shadow: 0 0 50px rgba(255,255,255,0.8);
-            transform: scale(1);
-        }
+        .treat-tcc { border-color: var(--accent-lavender); }
+        .treat-med { border-color: var(--accent-blue); }
 
-        .btn-start {
-            background: var(--text-serif);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(44, 62, 80, 0.3);
-            transition: transform 0.2s;
-        }
-        .btn-start:hover { transform: scale(1.05); }
+        .treat-list { margin-top: 20px; padding-left: 20px; }
+        .treat-list li { margin-bottom: 10px; }
 
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 60px 20px;
-            color: #888;
+        /* --- CICLO E BARALHO (Mantidos do anterior) --- */
+        .cycle-container {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px;
+            margin-top: 40px; justify-items: center;
+        }
+        .cycle-step {
+            background: white; padding: 20px; border-radius: 50%; width: 200px; height: 200px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; box-shadow: var(--shadow); border: 2px solid transparent;
             font-size: 0.9rem;
         }
+        .step-1 { background: var(--accent-peach); border-color: #ffab91; }
+        .step-2 { background: var(--accent-sage); border-color: #a5d6a7; }
+        .step-3 { background: var(--accent-sand); border-color: #ffd54f; }
+        .step-4 { background: var(--accent-blue); border-color: #81d4fa; }
 
-        /* Mobile Adjustments */
+        /* --- REFERÊNCIAS --- */
+        .ref-section { font-size: 0.85rem; color: #666; background: #f5f5f5; padding: 40px 0; }
+        .ref-list li { margin-bottom: 5px; list-style-type: decimal; margin-left: 20px; }
+
+        /* Responsividade */
         @media (max-width: 768px) {
-            header h1 { font-size: 2.5rem; }
-            .cycle-container { grid-template-columns: 1fr; }
-            .cycle-step { width: 220px; height: 220px; margin: 0 auto; }
+            .symptoms-grid, .treatment-grid { grid-template-columns: 1fr; }
+            .criteria-box { flex-direction: column; text-align: center; }
         }
     </style>
 </head>
@@ -322,133 +211,97 @@
         <div class="container">
             <span class="badge">Psicoeducação</span>
             <h1>Desvendando o TAG</h1>
-            <p style="font-size: 1.2rem; color: #666; max-width: 600px; margin: 0 auto;">
-                Um guia interativo para entender como a Ansiedade Generalizada funciona e como retomar o controle.
-            </p>
+            <p style="font-size: 1.2rem; color: #666;">Transtorno de Ansiedade Generalizada</p>
+            <p style="margin-top:10px; font-style:italic;">"O sofrimento não está no fato, mas na expectativa dele."</p>
         </div>
     </header>
 
     <section class="section">
         <div class="container">
-            <h2 class="section-title">Preocupação vs. TAG</h2>
-            <p class="section-subtitle">Qual é a diferença entre se preocupar e adoecer?</p>
+            <h2 class="section-title">O que define o TAG?</h2>
+            <p class="section-subtitle">A preocupação no TAG é excessiva, difícil de controlar e persistente.</p>
 
-            <div class="comparison-wrapper">
-                <div class="comp-card normal">
-                    <h3 style="color: #4caf50;">Ansiedade Funcional</h3>
-                    <ul>
-                        <li>Focada em problemas reais e atuais.</li>
-                        <li>Impulsiona para a ação (resolver).</li>
-                        <li>Passa assim que o problema é resolvido.</li>
-                        <li>Corpo reage, mas logo relaxa.</li>
-                    </ul>
+            <div class="criteria-box">
+                <div class="time-badge">
+                    <span>+ 6</span>
+                    <span style="font-size:0.7rem;">MESES</span>
                 </div>
-                <div class="comp-card tag">
-                    <h3 style="color: #ff7043;">TAG (Transtorno)</h3>
-                    <ul>
-                        <li>Focada em hipóteses ("E se?").</li>
-                        <li>Gera paralisia ou ruminação.</li>
-                        <li>Persistente, mesmo sem motivo aparente.</li>
-                        <li>Sintomas físicos constantes (tensão, insônia).</li>
-                    </ul>
+                <div>
+                    <h3>O Critério do Tempo</h3>
+                    <p>Para o diagnóstico, a ansiedade e a preocupação excessiva devem ocorrer na <strong>maioria dos dias</strong> por pelo menos <strong>6 meses</strong>, sobre diversos eventos ou atividades (escola, trabalho, família).</p>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <section class="section" style="background-color: #fff;">
-        <div class="container">
-            <h2 class="section-title">O Ciclo da Ansiedade</h2>
-            <p class="section-subtitle">Como o TAG se mantém ativo na sua mente?</p>
-
-            <div class="cycle-container">
-                <div class="cycle-step step-1">
-                    <h4>1. Situação ou Gatilho</h4>
-                    <p>Algo incerto acontece (ex: chefe chama para conversa).</p>
-                </div>
-
-                <div class="cycle-step step-2">
-                    <h4>2. Pensamento "E se..."</h4>
-                    <p>Interpretação catastrófica. "E se eu for demitido?"</p>
-                </div>
-
-                <div class="cycle-step step-3">
-                    <h4>3. Emoção e Corpo</h4>
-                    <p>Medo intenso, taquicardia, tensão muscular.</p>
-                </div>
-
-                <div class="cycle-step step-4">
-                    <h4>4. Comportamento</h4>
-                    <p>Evitar a situação, buscar reasseguramento excessivo.</p>
-                </div>
-            </div>
-            <p style="text-align: center; margin-top: 30px; font-weight: bold; color: #888;">
-                <i class="fas fa-sync-alt"></i> O comportamento de segurança alivia na hora, mas confirma o perigo para o cérebro.
-            </p>
         </div>
     </section>
 
     <section class="section">
         <div class="container">
-            <h2 class="section-title">Por Dentro do Cérebro</h2>
-            <p class="section-subtitle">O que acontece biologicamente?</p>
+            <h2 class="section-title">Sintomatologia</h2>
+            <p class="section-subtitle">Como o TAG se manifesta no corpo e no comportamento.</p>
+
+            <div class="symptoms-grid">
+                <div class="symptom-column">
+                    <h3 style="color: #d84315;">Comportamental & Cognitivo</h3>
+                    <div class="check-item">
+                        <i class="fas fa-search"></i>
+                        <p><strong>Hipervigilância:</strong> Estar sempre "escaneando" o ambiente em busca de perigo.</p>
+                    </div>
+                    <div class="check-item">
+                        <i class="fas fa-redo"></i>
+                        <p><strong>Busca de Reasseguramento:</strong> Perguntar várias vezes a mesma coisa para ter certeza.</p>
+                    </div>
+                    <div class="check-item">
+                        <i class="fas fa-hand-paper"></i>
+                        <p><strong>Evitação:</strong> Deixar de fazer coisas por medo do resultado incerto.</p>
+                    </div>
+                    <div class="check-item">
+                        <i class="fas fa-brain"></i>
+                        <p><strong>"Branco" na mente:</strong> Dificuldade de concentração ou memória.</p>
+                    </div>
+                </div>
+
+                <div class="symptom-column">
+                    <h3 style="color: #2e7d32;">Físico</h3>
+                    <div class="check-item">
+                        <i class="fas fa-bolt"></i>
+                        <p><strong>Tensão Muscular:</strong> Principalmente ombros, pescoço e mandíbula.</p>
+                    </div>
+                    <div class="check-item">
+                        <i class="fas fa-bed"></i>
+                        <p><strong>Alterações no Sono:</strong> Dificuldade para iniciar o sono ou sono não reparador.</p>
+                    </div>
+                    <div class="check-item">
+                        <i class="fas fa-coffee"></i>
+                        <p><strong>Inquietude:</strong> Sensação de estar com os nervos à flor da pele.</p>
+                    </div>
+                    <div class="check-item">
+                        <i class="fas fa-battery-empty"></i>
+                        <p><strong>Fadigabilidade:</strong> Cansar-se facilmente.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Neurobiologia do TAG</h2>
+            <p class="section-subtitle">Não é "frescura", é biológico. Entenda o funcionamento cerebral.</p>
 
             <div class="brain-box">
-                <svg class="brain-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M50 90C70 90 85 75 85 50C85 25 70 10 50 10C30 10 15 25 15 50C15 75 30 90 50 90Z" fill="#eee"/>
-                    <circle cx="50" cy="50" r="40" stroke="#ddd" stroke-width="2" stroke-dasharray="4 4"/>
-                    <circle cx="40" cy="60" r="5" fill="#ff7043" class="brain-dot" style="cursor:pointer;" onclick="showBrainInfo('amygdala')"/>
-                    <circle cx="30" cy="30" r="5" fill="#42a5f5" class="brain-dot" style="cursor:pointer;" onclick="showBrainInfo('cortex')"/>
+                <svg width="150" height="150" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 90C70 90 85 75 85 50C85 25 70 10 50 10C30 10 15 25 15 50C15 75 30 90 50 90Z" fill="#f5f5f5" stroke="#ccc" stroke-width="2"/>
+                    <circle cx="50" cy="50" r="35" stroke="#e0e0e0" stroke-dasharray="3 3"/>
                 </svg>
 
-                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                    <button class="hotspot-btn" onclick="showBrainInfo('amygdala')" style="background:#ffccbc; color:#bf360c;">Amígdala</button>
-                    <button class="hotspot-btn" onclick="showBrainInfo('cortex')" style="background:#bbdefb; color:#0d47a1;">Córtex Pré-Frontal</button>
+                <div style="display: flex; gap: 10px; margin: 20px 0; flex-wrap: wrap; justify-content: center;">
+                    <button class="hotspot-btn" onclick="explain('amygdala')">Amígdala</button>
+                    <button class="hotspot-btn" onclick="explain('cortex')">Córtex Pré-Frontal</button>
+                    <button class="hotspot-btn" onclick="explain('neuro')">Neurotransmissores</button>
                 </div>
 
-                <div id="brain-text" style="text-align: center; max-width: 500px; min-height: 80px;">
-                    <p>Clique nos botões acima para descobrir.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="section" style="background-color: #fff;">
-        <div class="container">
-            <h2 class="section-title">Baralho das Distorções</h2>
-            <p class="section-subtitle">Vire as cartas para conhecer as armadilhas mentais do TAG.</p>
-
-            <div class="cards-deck">
-                <div class="distortion-card" onclick="this.classList.toggle('flipped')">
-                    <div class="card-inner">
-                        <div class="card-front">
-                            <i class="fas fa-cloud-showers-heavy" style="font-size: 3rem; color: #b0bec5; margin-bottom: 20px;"></i>
-                            <h3>Catastrofização</h3>
-                            <p style="font-size: 0.8rem; margin-top: 10px;">Clique para virar</p>
-                        </div>
-                        <div class="card-back">
-                            <h3>O pior cenário</h3>
-                            <p>"Se ele não atendeu, com certeza sofreu um acidente."</p>
-                            <hr style="width: 50%; border: 1px solid rgba(255,255,255,0.3); margin: 15px 0;">
-                            <p style="font-size: 0.9rem;">Dica: Pergunte-se "Qual a evidência real disso?"</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="distortion-card" onclick="this.classList.toggle('flipped')">
-                    <div class="card-inner">
-                        <div class="card-front">
-                            <i class="fas fa-magic" style="font-size: 3rem; color: #b0bec5; margin-bottom: 20px;"></i>
-                            <h3>Adivinhação</h3>
-                            <p style="font-size: 0.8rem; margin-top: 10px;">Clique para virar</p>
-                        </div>
-                        <div class="card-back">
-                            <h3>Bola de Cristal</h3>
-                            <p>"Eu sei que vou travar na apresentação e todos vão rir."</p>
-                            <hr style="width: 50%; border: 1px solid rgba(255,255,255,0.3); margin: 15px 0;">
-                            <p style="font-size: 0.9rem;">Dica: Você não prevê o futuro. Foque no agora.</p>
-                        </div>
-                    </div>
+                <div id="brain-desc" style="background: var(--accent-blue); padding: 20px; border-radius: 10px; text-align: center; width: 100%;">
+                    Clique nos botões acima para ver a explicação.
                 </div>
             </div>
         </div>
@@ -456,67 +309,91 @@
 
     <section class="section">
         <div class="container">
-            <h2 class="section-title">Respiração Diafragmática</h2>
-            <p class="section-subtitle">Uma ferramenta física para "desligar" o alarme da Amígdala.</p>
-
-            <div class="breathe-widget">
-                <div class="circle-breathe" id="breathe-visual">
-                    <span id="breathe-label">Pronto?</span>
+            <h2 class="section-title">O Ciclo Vicioso</h2>
+            <div class="cycle-container">
+                <div class="cycle-step step-1">
+                    <h4>Gatilho</h4>
+                    <p>Situação Incerta</p>
                 </div>
-                <button class="btn-start" onclick="startBreathing()">Iniciar Ciclo</button>
+                <div class="cycle-step step-2">
+                    <h4>Pensamento</h4>
+                    <p>"E se algo ruim acontecer?"</p>
+                </div>
+                <div class="cycle-step step-3">
+                    <h4>Emoção</h4>
+                    <p>Ansiedade e Medo</p>
+                </div>
+                <div class="cycle-step step-4">
+                    <h4>Comportamento</h4>
+                    <p>Evitar ou Checar (Alívio temporário)</p>
+                </div>
             </div>
+        </div>
+    </section>
+
+    <section class="section" style="background-color: #f3e5f5;"> <div class="container">
+            <h2 class="section-title">Pilares do Tratamento</h2>
+            <p class="section-subtitle">A abordagem padrão-ouro envolve a combinação de psicoterapia e, quando necessário, medicação.</p>
+
+            <div class="treatment-grid">
+                <div class="treat-card treat-tcc">
+                    <h3 style="color: #8e24aa;"><i class="fas fa-comments"></i> Terapia Cognitivo-Comportamental (TCC)</h3>
+                    <p style="margin-top: 10px;">Considerada a primeira linha de tratamento para o TAG.</p>
+                    <ul class="treat-list">
+                        <li><strong>Reestruturação Cognitiva:</strong> Identificar e desafiar pensamentos catastróficos ("E se?").</li>
+                        <li><strong>Exposição Imaginária:</strong> Enfrentar os medos de forma segura para reduzir a sensibilidade.</li>
+                        <li><strong>Resolução de Problemas:</strong> Diferenciar preocupação útil de inútil.</li>
+                        <li><strong>Relaxamento:</strong> Técnicas para reduzir a tensão muscular.</li>
+                    </ul>
+                </div>
+
+                <div class="treat-card treat-med">
+                    <h3 style="color: #1565c0;"><i class="fas fa-pills"></i> Psicofarmacologia</h3>
+                    <p style="margin-top: 10px;">O tratamento medicamentoso visa regular a química cerebral.</p>
+                    <ul class="treat-list">
+                        <li><strong>ISRS (Antidepressivos):</strong> Como Escitalopram ou Sertralina. Aumentam a disponibilidade de Serotonina. São de uso contínuo e longo prazo.</li>
+                        <li><strong>Benzodiazepínicos:</strong> Usados apenas pontualmente para crises agudas (risco de dependência).</li>
+                        <li><strong>Nota:</strong> A medicação alivia os sintomas, mas a terapia ensina habilidades para lidar com eles.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="ref-section">
+        <div class="container">
+            <h4>Referências Bibliográficas</h4>
+            <ul class="ref-list">
+                <li>American Psychiatric Association. (2014). <em>Manual Diagnóstico e Estatístico de Transtornos Mentais (DSM-5)</em>. Porto Alegre: Artmed.</li>
+                <li>Leahy, R. L. (2011). <em>Livre de ansiedade</em>. Porto Alegre: Artmed.</li>
+                <li>Clark, D. A., & Beck, A. T. (2012). <em>Terapia cognitiva para os transtornos de ansiedade</em>. Porto Alegre: Artmed.</li>
+                <li>Stahl, S. M. (2014). <em>Psicofarmacologia Essencial de Stahl</em>.</li>
+            </ul>
         </div>
     </section>
 
     <footer>
-        <h3>Bruno de Souza</h3>
-        <p>Psicólogo | CRP 07/44472</p>
-        <p style="margin-top: 10px; font-size: 0.8rem;">Ferramenta desenvolvida para fins psicoeducativos.</p>
+        <div class="container" style="text-align: center;">
+            <h3>Bruno de Souza</h3>
+            <p>Psicólogo Clínico | CRP 07/44472</p>
+            <p>Especialista em TCC e Terapia do Esquema</p>
+        </div>
     </footer>
 
     <script>
-        // Lógica da Neurobiologia
-        function showBrainInfo(part) {
-            const textEl = document.getElementById('brain-text');
-            if (part === 'amygdala') {
-                textEl.innerHTML = "<strong>A Amígdala (O Alarme):</strong> No TAG, ela é hipersensível. Reage a situações comuns (como um e-mail) com a mesma intensidade de um perigo de vida.";
-            } else if (part === 'cortex') {
-                textEl.innerHTML = "<strong>O Córtex Pré-Frontal (O Racional):</strong> Deveria acalmar o alarme, mas no TAG essa conexão está enfraquecida. É difícil 'pensar claro' durante uma crise.";
-            }
-        }
-
-        // Lógica da Respiração (Animação via JS para controle preciso)
-        function startBreathing() {
-            const circle = document.getElementById('breathe-visual');
-            const label = document.getElementById('breathe-label');
-            const btn = document.querySelector('.btn-start');
+        function explain(topic) {
+            const display = document.getElementById('brain-desc');
             
-            btn.style.display = 'none'; // Esconde botão
-
-            function breatheCycle() {
-                // 1. Inspirar (4s)
-                label.innerText = "Inspire...";
-                circle.style.transition = "all 4s ease-in-out";
-                circle.style.transform = "scale(1.4)";
-                circle.style.backgroundColor = "white";
-
-                setTimeout(() => {
-                    // 2. Segurar (4s)
-                    label.innerText = "Segure";
-                    circle.style.transition = "none"; // Pausa movimento
-                    
-                    setTimeout(() => {
-                        // 3. Expirar (6s)
-                        label.innerText = "Expire...";
-                        circle.style.transition = "all 6s ease-in-out";
-                        circle.style.transform = "scale(1)";
-                        circle.style.backgroundColor = "rgba(255,255,255,0.7)";
-                    }, 4000); // Fim do Segurar
-                }, 4000); // Fim do Inspirar
+            if(topic === 'amygdala') {
+                display.innerHTML = "<strong>Amígdala Hiperativa:</strong> No TAG, o 'centro do medo' do cérebro é excessivamente sensível, interpretando situações neutras como ameaças perigosas.";
+                display.style.background = "#ffccbc";
+            } else if(topic === 'cortex') {
+                display.innerHTML = "<strong>Córtex Pré-Frontal Hipoativo:</strong> A área responsável pelo planejamento e lógica tem dificuldade em 'frear' a amígdala, dificultando o acalmar-se racionalmente.";
+                display.style.background = "#bbdefb";
+            } else if(topic === 'neuro') {
+                display.innerHTML = "<strong>Desregulação Química:</strong> Frequentemente envolve baixos níveis de GABA (freio inibitório) e Serotonina (bem-estar), mantendo o sistema nervoso em alerta constante.";
+                display.style.background = "#fff9c4";
             }
-
-            breatheCycle(); // Primeiro ciclo imediato
-            setInterval(breatheCycle, 14000); // Repete a cada 14s (4+4+6)
         }
     </script>
 </body>
