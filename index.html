@@ -1,375 +1,381 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Psicólogo Bruno de Souza Gonçalves | Terapia Cognitivo-Comportamental</title>
-    <style>
-        /* --- CONFIGURAÇÕES GERAIS --- */
-        :root {
-            --cor-fundo: #FFF9F0;       /* Creme suave */
-            --cor-branco: #FFFFFF;
-            --cor-texto: #4A4A4A;       /* Cinza escuro */
-            --cor-destaque: #D97853;    /* Laranja Terracota */
-            --cor-destaque-suave: #FBECE6; /* Laranja muito claro para fundos */
-            --cor-destaque-hover: #BF6240; 
-            --sombra-suave: 0 10px 30px rgba(217, 120, 83, 0.1);
-        }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Psicólogo Bruno de Souza Gonçalves | Terapia Cognitivo-Comportamental</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- CONFIGURAÇÕES GERAIS (BASEADAS NO ESTILO "FERRAMENTAS") --- */
+        :root {
+            --cor-fundo: #FFF9F0;       /* Creme suave (Mantido da sua marca) */
+            --cor-branco: #FFFFFF;
+            --cor-texto: #2D3748;       /* Cinza chumbo para leitura */
+            --cor-texto-suave: #4A5568;
+            --cor-destaque: #D97853;    /* Laranja Terracota */
+            --cor-destaque-bg: #FBECE6; /* Fundo suave do destaque */
+            --cor-borda: #E2E8F0;
+            --sombra-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --radius-padrao: 12px;
+        }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
-            background-color: var(--cor-fundo);
-            color: var(--cor-texto);
-            line-height: 1.6;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
 
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
+        a { text-decoration: none; color: inherit; transition: 0.2s; }
+        
+        /* --- CONTAINER CENTRALIZADO (ESTILO BLOG/WIKI) --- */
+        .main-wrapper {
+            max-width: 900px; /* Largura focada na leitura */
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
 
-        a { text-decoration: none; transition: 0.3s; }
+        /* --- CABEÇALHO --- */
+        header {
+            text-align: center;
+            padding-bottom: 60px;
+            border-bottom: 1px solid rgba(217, 120, 83, 0.2);
+            margin-bottom: 60px;
+        }
 
-        /* --- MENU SUPERIOR (NOVO) --- */
-        nav {
-            background-color: var(--cor-branco);
-            padding: 15px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            position: sticky; /* Menu fica fixo ao rolar */
-            top: 0;
-            z-index: 1000;
-        }
+        .badge {
+            display: inline-block;
+            background-color: var(--cor-destaque-bg);
+            color: var(--cor-destaque);
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 6px 16px;
+            border-radius: 50px;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
 
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1A202C;
+            margin-bottom: 10px;
+            letter-spacing: -0.02em;
+        }
 
-        .logo {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: var(--cor-destaque);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--cor-texto-suave);
+            max-width: 600px;
+            margin: 0 auto 30px auto;
+        }
 
-        .menu-links a {
-            color: var(--cor-texto);
-            margin-left: 20px;
-            font-size: 0.95rem;
-            font-weight: 500;
-        }
+        .header-meta {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-size: 0.95rem;
+            color: var(--cor-destaque);
+            font-weight: 600;
+        }
 
-        .menu-links a:hover { color: var(--cor-destaque); }
+        /* --- BOTÃO CTA --- */
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            background-color: var(--cor-destaque);
+            color: #fff;
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-top: 20px;
+            box-shadow: 0 4px 14px rgba(217, 120, 83, 0.3);
+        }
+        .btn-primary:hover {
+            background-color: #BF6240;
+            transform: translateY(-2px);
+        }
 
-        /* --- CABEÇALHO / HERO (ELABORADO) --- */
-        header {
-            text-align: center;
-            padding: 100px 20px 120px; /* Mais espaço */
-            background: linear-gradient(135deg, #FFF 0%, #FFF4E6 100%);
-            border-bottom: 1px solid #FFE4D1;
-            position: relative;
-            overflow: hidden;
-        }
+        /* --- SEÇÕES DE CONTEÚDO --- */
+        section { margin-bottom: 80px; }
 
-        /* Elemento decorativo de fundo (Círculo suave) */
-        header::before {
-            content: '';
-            position: absolute;
-            top: -50px;
-            left: -50px;
-            width: 300px;
-            height: 300px;
-            background: var(--cor-destaque-suave);
-            border-radius: 50%;
-            opacity: 0.5;
-            z-index: 0;
-        }
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: #1A202C;
+            border-left: 4px solid var(--cor-destaque);
+            padding-left: 16px;
+        }
 
-        header .container { position: relative; z-index: 1; }
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #2D3748;
+        }
 
-        .tagline-top {
-            display: inline-block;
-            background-color: var(--cor-destaque-suave);
-            color: var(--cor-destaque);
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: bold;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
+        p { margin-bottom: 16px; font-size: 1.05rem; }
 
-        h1 {
-            color: #2c2c2c;
-            font-size: 3rem;
-            margin-bottom: 15px;
-            font-weight: 700;
-            letter-spacing: -1px;
-        }
-        
-        h1 span { color: var(--cor-destaque); }
+        /* --- BOX DE TEXTO (TCC E TE) --- */
+        .concept-box {
+            background: var(--cor-branco);
+            border: 1px solid var(--cor-borda);
+            border-radius: var(--radius-padrao);
+            padding: 30px;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--cor-destaque);
+        }
 
-        .hero-sub {
-            font-size: 1.25rem;
-            color: #666;
-            max-width: 750px;
-            margin: 0 auto 40px auto;
-        }
+        .concept-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
 
-        /* --- BOTÃO WHATSAPP COM EFEITO --- */
-        .btn-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background-color: var(--cor-destaque);
-            color: #fff;
-            padding: 18px 38px;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 1.1rem;
-            box-shadow: 0 4px 15px rgba(217, 120, 83, 0.4);
-            transition: all 0.3s ease;
-        }
+        @media (max-width: 768px) {
+            .concept-grid { grid-template-columns: 1fr; }
+        }
 
-        .btn-cta:hover {
-            background-color: var(--cor-destaque-hover);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(217, 120, 83, 0.5);
-        }
+        /* --- GRID DE CARDS (ESTILO "FERRAMENTAS") --- */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
 
-        /* --- SEÇÕES DO SITE --- */
-        section { padding: 80px 20px; }
+        .card {
+            background: var(--cor-branco);
+            padding: 24px;
+            border-radius: var(--radius-padrao);
+            border: 1px solid var(--cor-borda);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
 
-        .section-identificacao { background-color: var(--cor-fundo); text-align: center; }
-        
-        .section-title {
-            font-size: 2rem;
-            color: var(--cor-destaque);
-            margin-bottom: 40px;
-            text-align: center;
-        }
+        .card:hover {
+            border-color: var(--cor-destaque);
+            box-shadow: var(--sombra-card);
+            transform: translateY(-2px);
+        }
 
-        .card-container {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            flex-wrap: wrap;
-        }
+        .card-icon {
+            font-size: 1.8rem;
+            margin-bottom: 16px;
+            display: block;
+        }
 
-        .card {
-            background: var(--cor-branco);
-            border: 1px solid #F0E0D6;
-            border-radius: 16px;
-            padding: 35px;
-            width: 320px;
-            box-shadow: var(--sombra-suave);
-            transition: transform 0.3s;
-        }
-        
-        .card:hover { transform: translateY(-5px); border-color: var(--cor-destaque); }
-        .card h3 { color: var(--cor-destaque); margin-bottom: 15px; font-size: 1.3rem; }
+        .card-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: #1A202C;
+        }
 
-        /* --- SEÇÃO SOBRE --- */
-        .section-sobre { background-color: var(--cor-branco); }
+        .card-text {
+            font-size: 0.95rem;
+            color: var(--cor-texto-suave);
+        }
 
-        .sobre-content {
-            display: flex;
-            align-items: flex-start;
-            gap: 60px;
-            flex-wrap: wrap;
-        }
+        /* --- PERFIL/SOBRE --- */
+        .profile-container {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            background: var(--cor-branco);
+            padding: 40px;
+            border-radius: var(--radius-padrao);
+            border: 1px solid var(--cor-borda);
+        }
 
-        .sobre-foto {
-            width: 280px;
-            height: 280px;
-            border-radius: 20px; /* Borda um pouco mais quadrada, moderna */
-            object-fit: cover;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--cor-destaque-bg);
+        }
 
-        .sobre-texto { flex: 1; min-width: 300px; }
-        .sobre-texto p { margin-bottom: 15px; font-size: 1.05rem; }
+        .profile-content ul {
+            list-style: none;
+            margin-top: 15px;
+        }
+        .profile-content li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+            font-size: 0.95rem;
+        }
+        .profile-content li::before {
+            content: "•";
+            color: var(--cor-destaque);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
 
-        .social-links { margin-top: 25px; display: flex; gap: 15px; }
-        
-        .social-btn {
-            display: inline-block;
-            padding: 10px 20px;
-            border: 1px solid var(--cor-destaque);
-            color: var(--cor-destaque);
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-        .social-btn:hover { background-color: var(--cor-destaque); color: #fff; }
+        @media (max-width: 768px) {
+            .profile-container { flex-direction: column; text-align: center; }
+            .profile-content ul { text-align: left; }
+        }
 
-        /* --- FORMAÇÃO --- */
-        .section-formacao { background-color: #FAFAFA; }
-        
-        .lista-formacao {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            list-style: none;
-        }
+        /* --- MENU SIMPLES --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 40px;
+        }
+        .nav-logo { font-weight: 800; font-size: 1.1rem; color: var(--cor-destaque); }
+        .nav-links a { margin-left: 20px; font-weight: 500; font-size: 0.9rem; }
+        .nav-links a:hover { color: var(--cor-destaque); }
 
-        .item-formacao {
-            background: #fff;
-            padding: 25px;
-            border-left: 5px solid var(--cor-destaque);
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
-        }
-        .item-formacao strong { display: block; font-size: 1.15rem; color: #333; margin-bottom: 5px; }
-
-        /* --- RODAPÉ --- */
-        footer {
-            background-color: #2D2D2D;
-            color: #BBB;
-            text-align: center;
-            padding: 50px 20px;
-            font-size: 0.9rem;
-        }
-        footer strong { color: #FFF; font-size: 1.1rem; display: block; margin-bottom: 10px; }
-
-        /* Responsivo */
-        @media (max-width: 768px) {
-            h1 { font-size: 2.2rem; }
-            .nav-container { flex-direction: column; gap: 15px; }
-            .menu-links { margin-top: 10px; }
-            .menu-links a { margin: 0 10px; }
-            .sobre-content { text-align: center; justify-content: center; }
-        }
-    </style>
+        /* --- FOOTER --- */
+        footer {
+            text-align: center;
+            padding-top: 40px;
+            border-top: 1px solid var(--cor-borda);
+            color: #718096;
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
 <body>
 
-    <nav>
-        <div class="nav-container">
-            <div class="logo">Psicólogo Bruno Souza</div>
-            <div class="menu-links">
-                <a href="#sobre">Sobre</a>
-                <a href="#terapias">Terapias</a>
-                <a href="#formacao">Formação</a>
-               <a href="ferramentas/listaferramentas.html"> Restrito </a>
-            </div>
-        </div>
-    </nav>
+<div class="main-wrapper">
 
-    <header>
-        <div class="container">
-            <span class="tagline-top">Psicologia Baseada em Evidências</span>
-            <h1>Bruno de Souza Gonçalves</h1>
-            <p style="color: var(--cor-destaque); font-weight: bold; font-size: 1.2rem; margin-bottom: 20px;">
-                Psicólogo Clínico | CRP 07/44472
-            </p>
-            <p class="hero-sub">
-                Enfrente a ansiedade e a depressão com suporte profissional. 
-                Uma abordagem ética que une Terapia Cognitivo-Comportamental e Neurociências para o seu bem-estar.
-            </p>
-            
-            <a href="https://wa.me/5553991898309" class="btn-cta" target="_blank">
-                <span>Agendar Conversa Inicial</span>
-            </a>
-        </div>
-    </header>
+    <nav>
+        <div class="nav-logo">PSI. BRUNO SOUZA</div>
+        <div class="nav-links">
+            <a href="#metodologia">Metodologia</a>
+            <a href="#servicos">Áreas de Atuação</a>
+            <a href="#sobre">Sobre Mim</a>
+            <a href="ferramentas/listaferramentas.html" style="color: var(--cor-destaque);"><strong>Área Restrita</strong></a>
+        </div>
+    </nav>
 
-    <section id="terapias" class="section-identificacao">
-        <div class="container">
-            <h2 class="section-title">Como a terapia pode ajudar?</h2>
-            <div class="card-container">
-                <div class="card">
-                    <h3>Ansiedade</h3>
-                    <p>Entenda os gatilhos da sua ansiedade e aprenda técnicas práticas para retomar o controle da sua rotina.</p>
-                </div>
-                <div class="card">
-                    <h3>Depressão</h3>
-                    <p>Um espaço de escuta qualificada para ajudar você a reconstruir o sentido e enfrentar momentos difíceis.</p>
-                </div>
-                <div class="card">
-                    <h3>Psicologia do Esporte</h3>
-                    <p>Foco no desempenho mental e equilíbrio emocional para atletas e praticantes de atividade física.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+    <header>
+        <span class="badge">Psicologia Baseada em Evidências</span>
+        <h1>Bruno de Souza Gonçalves</h1>
+        <p class="subtitle">Psicólogo Clínico | CRP 07/44472</p>
+        
+        <div class="header-meta">
+            <span>📍 Atendimento Online & Presencial</span>
+            <span>🧠 TCC & Esquemas</span>
+        </div>
 
-    <section id="sobre" class="section-sobre">
-        <div class="container">
-            <div class="sobre-content">
-                <img src="img/foto.jpg" alt="Foto Bruno de Souza" class="sobre-foto">
-                
-                <div class="sobre-texto">
-                    <h2 class="section-title" style="text-align: left; margin-bottom: 20px;">Olá, sou o Bruno</h2>
-                    <p>
-                        Minha jornada na psicologia começou com o desejo de entender a mente para viver melhor. 
-                        Com graduação pela <strong>UCPEL</strong> e especialização em andamento no <strong>Instituto Cognitivo</strong>, 
-                        ofereço um espaço seguro para superação de desafios emocionais.
-                    </p>
-                    <p>
-                        Minha prática clínica integra a Terapia Cognitivo-Comportamental (TCC) e a Terapia do Esquema, 
-                        sempre pautada na ética e nos avanços das neurociências.
-                    </p>
-                    <p>
-                        Além da clínica, atuo com Psicologia do Esporte e Psicologia organizacional, auxiliando a mente a alcançar novos patamares 
-                        de performance e saúde.
-                    </p>
-                     <p>
-                        Forneço um atendimento humanizado e focado em fornecer e auxiliar o paciente a ter uma qualidade de vida integral, busco compreender a situação do paciente e apartir disto fornecer
-                         a flexibilidade tanto em valor quanto em horarios.
-                    </p>
+        <a href="https://wa.me/5553991898309" target="_blank" class="btn-primary">
+            Agendar Conversa Inicial
+        </a>
+    </header>
 
-                    <div class="social-links">
-                        <a href="https://www.instagram.com/psi.brunosg/" target="_blank" class="social-btn">Instagram</a>
-                        <a href="https://www.linkedin.com/in/psi-bsouza/" target="_blank" class="social-btn">LinkedIn</a>
-                        <a href="https://www.buscapsico.com.br/psicologo/Bruno%20de%20souza%20gon%C3%A7alves" target="_blank" class="social-btn">Agende automaticamente</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <section id="metodologia">
+        <h2>Minha Abordagem Clínica</h2>
+        <p>Meu trabalho é fundamentado na ciência e na prática baseada em evidências, utilizando duas das abordagens mais eficazes da psicologia moderna:</p>
 
-    <section id="formacao" class="section-formacao">
-        <div class="container">
-            <h2 class="section-title">Formação e Qualificações</h2>
-            <ul class="lista-formacao">
-                <li class="item-formacao">
-                    <strong>Bacharelado em Psicologia</strong>
-                    <span>Universidade Católica de Pelotas (UCPEL)</span>
-                </li>
-                <li class="item-formacao">
-                    <strong>Especialista em TCC</strong>
-                    <span>Instituto Cognitivo (Em andamento)</span>
-                </li>
-                <li class="item-formacao">
-                    <strong>Especialista em Terapia do Esquema</strong>
-                    <span>Instituto Cognitivo (Em andamento)</span>
-                </li>
-                <li class="item-formacao">
-                    <strong>Formação em Psicoterapia Baseada em Evidências</strong>
-                    <span>INPBE</span>
-                </li>
-            </ul>
-        </div>
-    </section>
+        <div class="concept-grid">
+            <div class="concept-box">
+                <h3 style="color: var(--cor-destaque);">Terapia Cognitivo-Comportamental (TCC)</h3>
+                <p>
+                    A <strong>TCC</strong> é uma abordagem estruturada e focada no "aqui e agora". Ela parte do princípio de que não são os eventos em si que nos afetam, mas a forma como os interpretamos.
+                </p>
+                <p style="font-size: 0.95rem; color: #555;">
+                    <strong>Foco:</strong> Identificar pensamentos automáticos disfuncionais, modificar comportamentos que mantêm o sofrimento e desenvolver habilidades práticas de enfrentamento.
+                </p>
+            </div>
 
-    <footer>
-        <div class="container">
-            <strong>Bruno de Souza Gonçalves</strong>
-            <p>Psicólogo Clínico - CRP 07/44472</p>
-            <br>
-            <p>&copy; 2026 Todos os direitos reservados.</p>
-        </div>
-    </footer>
+            <div class="concept-box">
+                <h3 style="color: var(--cor-destaque);">Terapia do Esquema (TE)</h3>
+                <p>
+                    A <strong>TE</strong> é uma evolução integrativa, ideal para padrões emocionais profundos que se repetem ao longo da vida, originados geralmente na infância (os chamados "Esquemas").
+                </p>
+                <p style="font-size: 0.95rem; color: #555;">
+                    <strong>Foco:</strong> Trabalhar necessidades emocionais não atendidas, curar feridas do passado e quebrar ciclos de autossabotagem através de técnicas vivenciais e emocionais.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="servicos">
+        <h2>Áreas de Atuação</h2>
+        <p>Utilizo essas ferramentas para tratar demandas específicas e promover qualidade de vida.</p>
+        
+        <div class="cards-grid">
+            <div class="card">
+                <span class="card-icon">🌪️</span>
+                <div class="card-title">Ansiedade & Pânico</div>
+                <div class="card-text">
+                    Aprenda a regular seu sistema nervoso, entender gatilhos e reduzir a catastrofização dos pensamentos.
+                </div>
+            </div>
+
+            <div class="card">
+                <span class="card-icon">🌑</span>
+                <div class="card-title">Depressão</div>
+                <div class="card-text">
+                    Reativação comportamental e reestruturação cognitiva para reconstruir o sentido e a vitalidade.
+                </div>
+            </div>
+
+            <div class="card">
+                <span class="card-icon">🏋️</span>
+                <div class="card-title">Psicologia do Esporte</div>
+                <div class="card-text">
+                    Foco em alta performance, gestão de pressão e equilíbrio emocional para atletas.
+                </div>
+            </div>
+
+            <div class="card">
+                <span class="card-icon">🧠</span>
+                <div class="card-title">Transtorno de Humor</div>
+                <div class="card-text">
+                    Estratégias de estabilização e psicoeducação para lidar com oscilações de humor.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="sobre">
+        <h2>Sobre o Profissional</h2>
+        <div class="profile-container">
+            <img src="img/foto.jpg" alt="Bruno de Souza" class="profile-img">
+            
+            <div class="profile-content">
+                <h3>Olá, eu sou o Bruno.</h3>
+                <p>
+                    Busco oferecer um atendimento humanizado e flexível, compreendendo a realidade de cada paciente. Meu objetivo é criar um ecossistema de ferramentas terapêuticas que você possa levar para a vida.
+                </p>
+                <br>
+                <strong>Formação Acadêmica:</strong>
+                <ul>
+                    <li>Bacharel em Psicologia pela <strong>UCPEL</strong></li>
+                    <li>Especializando em Terapia Cognitivo-Comportamental (Instituto Cognitivo)</li>
+                    <li>Especializando em Terapia do Esquema (Instituto Cognitivo)</li>
+                    <li>Formação em Prática Baseada em Evidências (INPBE)</li>
+                </ul>
+                
+                <div style="margin-top: 25px;">
+                    <a href="https://www.linkedin.com/in/psi-bsouza/" target="_blank" style="margin-right: 15px; font-weight: 600; color: var(--cor-destaque);">LinkedIn</a>
+                    <a href="https://www.instagram.com/psi.brunosg/" target="_blank" style="font-weight: 600; color: var(--cor-destaque);">Instagram</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p><strong>Bruno de Souza Gonçalves</strong> | CRP 07/44472</p>
+        <p>&copy; 2026 Todos os direitos reservados.</p>
+    </footer>
+
+</div>
 
 </body>
 </html>
