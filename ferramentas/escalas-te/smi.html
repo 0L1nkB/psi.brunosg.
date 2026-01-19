@@ -46,8 +46,254 @@
     </div>
 
     <script>
-        // LISTA DE ITENS (Resumida para o exemplo, a lógica suporta todos os 124)
-        // Você pode colar a lista completa de 124 itens aqui dentro.
+        // LISTA DE ITENS E MAPEAMENTO DE MODOS (Baseado no SMI Brasil 1.1)
         const items = [
-            { t: "1. Eu exijo respeito ao não permitir que os outros me intimidem.", m: "Bully" },
-            { t: "2. Eu me sinto amado e aceito.", m: "Happy"
+            { t: "1. Eu exijo respeito ao não permitir que os outros me intimidem ou mandem em mim.", m: "Bully" },
+            { t: "2. Eu me sinto amado e aceito.", m: "Happy" },
+            { t: "3. Eu não me permito sentir prazer, pois não mereço.", m: "Punitive" },
+            { t: "4. Eu me sinto fundamentalmente inadequado, falho ou defeituoso.", m: "Vulnerable" },
+            { t: "5. Eu tenho impulsos de me punir, me machucando (p. ex., me cortando).", m: "Punitive" },
+            { t: "6. Eu me sinto perdido.", m: "Vulnerable" },
+            { t: "7. Eu sou duro comigo mesmo.", m: "Demanding" },
+            { t: "8. Eu me esforço muito para agradar outras pessoas; assim, evito conflitos, confrontos ou rejeição.", m: "Compliant" },
+            { t: "9. Eu não consigo me perdoar.", m: "Punitive" },
+            { t: "10. Eu faço coisas para que eu me torne o centro das atenções.", m: "SelfAggrandizer" },
+            { t: "11. Eu fico irritado quando as pessoas não fazem o que eu peço.", m: "SelfAggrandizer" },
+            { t: "12. Eu tenho dificuldade de controlar meus impulsos.", m: "Impulsive" },
+            { t: "13. Se eu não consigo atingir um objetivo, me frustro facilmente e desisto.", m: "Impulsive" }, // Indisciplined aspect
+            { t: "14. Eu tenho acessos de raiva.", m: "Angry" },
+            { t: "15. Eu ajo de forma impulsiva ou expresso emoções que magoam os outros ou me causam problemas.", m: "Impulsive" },
+            { t: "16. Quando algo ruim acontece, a culpa é minha.", m: "Punitive" },
+            { t: "17. Eu me sinto contente e tranquilo.", m: "Happy" },
+            { t: "18. Eu mudo o meu jeito de ser dependendo de quem esteja comigo, assim essas pessoas gostarão de mim ou me aprovarão.", m: "Compliant" },
+            { t: "19. Eu me sinto conectado às outras pessoas.", m: "Happy" },
+            { t: "20. Quando ocorrem problemas, me esforço bastante para resolvê-los eu mesmo.", m: "Healthy" },
+            { t: "21. Eu não me disciplino para concluir tarefas chatas ou rotineiras.", m: "Impulsive" }, // Indisciplined
+            { t: "22. Eu preciso cuidar das pessoas à minha volta.", m: "Compliant" }, // Self-Sacrifice aspect
+            { t: "23. Se você permitir que as outras pessoas façam piadas ou mexam com você, você é um trouxa.", m: "Bully" },
+            { t: "24. Eu me sinto conectado às outras pessoas. (Item repetido no PDF, mantido estrutura)", m: "Happy" }, 
+            // Nota: O item 24 no PDF parece repetido ou similar ao 19/Happy. Ajustado para Happy.
+            { t: "25. Eu agrido as pessoas fisicamente quando estou com raiva delas.", m: "Angry" },
+            { t: "26. Quando eu começo a ficar bravo, muitas vezes não consigo controlar a raiva e perco a cabeça.", m: "Angry" },
+            { t: "27. Para mim, é importante ser o número 1 (p. ex., o mais popular, o mais bem-sucedido, o mais rico, o mais poderoso).", m: "SelfAggrandizer" },
+            { t: "28. Eu me sinto indiferente em relação à maioria das coisas.", m: "Detached" },
+            { t: "29. Eu consigo resolver problemas racionalmente, sem deixar que as minhas emoções tomem conta de mim.", m: "Healthy" },
+            { t: "30. É ridículo planejar como você lidará com as situações.", m: "Impulsive" },
+            { t: "31. Eu não me contentarei em ficar em segundo lugar.", m: "SelfAggrandizer" },
+            { t: "32. Atacar é a melhor defesa.", m: "Bully" },
+            { t: "33. Eu me sinto frio e emocionalmente afastado das pessoas.", m: "Detached" },
+            { t: "34. Eu me sinto desconectado (sem contato comigo mesmo, minhas emoções e com as outras pessoas).", m: "Detached" },
+            { t: "35. Eu sigo as minhas emoções cegamente.", m: "Impulsive" },
+            { t: "36. Eu me sinto desesperado.", m: "Vulnerable" },
+            { t: "37. Eu permito que outras pessoas me critiquem ou me coloquem para baixo.", m: "Compliant" },
+            { t: "38. Nas relações, eu deixo a outra pessoa tomar as decisões.", m: "Compliant" },
+            { t: "39. Eu me sinto distante das outras pessoas.", m: "Detached" },
+            { t: "40. Eu não penso antes de falar, isso me traz problemas ou machuca as outras pessoas.", m: "Impulsive" },
+            { t: "41. Eu trabalho ou pratico exercícios físicos intensamente para que não precise pensar sobre as coisas que me incomodam.", m: "SelfSoother" },
+            { t: "42. Eu estou bravo porque as pessoas estão tentando tirar a minha liberdade ou independência.", m: "Angry" },
+            { t: "43. Eu não sinto nada.", m: "Detached" },
+            { t: "44. Eu faço o que eu quero fazer, independentemente dos sentimentos e necessidades dos outros.", m: "SelfAggrandizer" },
+            { t: "45. Eu não me permito relaxar ou me divertir até que tenha terminado tudo o que eu deveria fazer.", m: "Demanding" },
+            { t: "46. Eu jogo coisas (longe, no chão, na parede, etc.) quando estou com raiva.", m: "Angry" },
+            { t: "47. Eu sinto raiva das outras pessoas.", m: "Angry" },
+            { t: "48. Eu me sinto aceito pelas outras pessoas.", m: "Happy" },
+            { t: "49. Eu tenho tanta raiva acumulada dentro de mim que preciso extravasá-la.", m: "Angry" },
+            { t: "50. Eu me sinto só.", m: "Vulnerable" },
+            { t: "51. Eu tento dar o meu melhor em tudo.", m: "Demanding" },
+            { t: "52. Eu gosto de fazer coisas animadas ou relaxantes para evitar meus sentimentos (p. ex., trabalhar, apostar, comer, fazer compras, atividade sexual, assistir TV).", m: "SelfSoother" },
+            { t: "53. Igualdade não existe, então é melhor ser superior aos outros.", m: "Bully" },
+            { t: "54. Quando fico bravo, eu frequentemente perco o controle e ameaço as pessoas.", m: "Angry" },
+            { t: "55. Em vez de expressar as minhas próprias necessidades, eu deixo que as pessoas façam as coisas do jeito que preferem.", m: "Compliant" },
+            { t: "56. Se uma pessoa não concorda comigo, ela está contra mim.", m: "Bully" }, // Or Angry
+            { t: "57. Eu me esforço para estar sempre ocupado; assim, meus pensamentos e sentimentos incômodos me perturbam menos.", m: "SelfSoother" },
+            { t: "58. Quando eu sinto raiva dos outros, me considero uma pessoa má.", m: "Punitive" },
+            { t: "59. Eu não quero me envolver com as pessoas.", m: "Detached" },
+            { t: "60. Eu sinto tanta raiva que já cheguei a machucar ou matar alguém.", m: "Angry" },
+            { t: "61. Eu sinto que tenho bastante estabilidade e segurança na minha vida.", m: "Happy" },
+            { t: "62. Eu sei quando expressar as minhas emoções e quando não as expressar.", m: "Healthy" },
+            { t: "63. Eu sinto raiva de uma pessoa por ela ter me deixado só ou me abandonado.", m: "Angry" },
+            { t: "64. Eu não me sinto conectado às outras pessoas.", m: "Detached" },
+            { t: "65. Eu não consigo me disciplinar para fazer coisas que acho desagradáveis, mesmo que eu saiba que são para o meu próprio bem.", m: "Impulsive" },
+            { t: "66. Eu desrespeito as regras e depois me arrependo.", m: "Impulsive" },
+            { t: "67. Eu me sinto humilhado.", m: "Vulnerable" },
+            { t: "68. Eu confio na maioria das pessoas.", m: "Happy" },
+            { t: "69. Primeiro eu ajo, depois eu penso.", m: "Impulsive" },
+            { t: "70. Eu me entedio facilmente e perco o interesse nas coisas.", m: "Impulsive" },
+            { t: "71. Mesmo com pessoas à minha volta, eu me sinto sozinho.", m: "Vulnerable" },
+            { t: "72. Eu não me permito fazer coisas agradáveis que as outras pessoas fazem, pois sou uma pessoa má.", m: "Punitive" },
+            { t: "73. Eu expresso ou comunico o que necessito sem passar dos limites (p. ex., sem exigir demais dos outros).", m: "Healthy" },
+            { t: "74. Eu me sinto especial e melhor do que a maioria das outras pessoas.", m: "SelfAggrandizer" },
+            { t: "75. Eu não me importo com nada; nada faz diferença para mim.", m: "Detached" },
+            { t: "76. Eu fico bravo quando alguém me diz como devo me sentir ou me comportar.", m: "Angry" },
+            { t: "77. Se você não dominar os outros, eles dominarão você.", m: "Bully" },
+            { t: "78. Eu digo o que sinto, ou ajo impulsivamente, sem pensar nas consequências.", m: "Impulsive" },
+            { t: "79. Eu sinto vontade de gritar/brigar com as pessoas pelo jeito como elas me tratam.", m: "Angry" },
+            { t: "80. Eu sou capaz de cuidar de mim mesmo.", m: "Healthy" },
+            { t: "81. Eu sou bastante crítico em relação aos outros.", m: "SelfAggrandizer" },
+            { t: "82. Eu estou sob pressão constante para atingir objetivos e dar conta das coisas.", m: "Demanding" },
+            { t: "83. Eu estou tentando não cometer erros; caso contrário, irei me criticar fortemente.", m: "Demanding" },
+            { t: "84. Eu mereço ser punido.", m: "Punitive" },
+            { t: "85. Eu posso aprender, crescer e mudar.", m: "Healthy" },
+            { t: "86. Eu quero me distrair dos pensamentos e sentimentos que possam me deixar chateado.", m: "SelfSoother" },
+            { t: "87. Eu estou com raiva de mim mesmo.", m: "Punitive" },
+            { t: "88. Eu me sinto indiferente e apático.", m: "Detached" },
+            { t: "89. Eu preciso ser o melhor em tudo que faço.", m: "SelfAggrandizer" },
+            { t: "90. Eu sacrifico prazer, saúde e felicidade para satisfazer meus próprios padrões de exigência.", m: "Demanding" },
+            { t: "91. Eu exijo bastante das outras pessoas.", m: "SelfAggrandizer" },
+            { t: "92. Se eu fico com raiva, às vezes fico tão fora do controle que agrido fisicamente ou prejudico outras pessoas.", m: "Angry" },
+            { t: "93. Eu sou inabalável.", m: "Bully" },
+            { t: "94. Eu sou uma pessoa má.", m: "Punitive" },
+            { t: "95. Eu me sinto seguro.", m: "Happy" },
+            { t: "96. Eu me sinto ouvido, compreendido, acolhido e aceito.", m: "Happy" },
+            { t: "97. Para mim, é impossível controlar meus impulsos.", m: "Impulsive" },
+            { t: "98. Eu destruo coisas quando estou com raiva.", m: "Angry" },
+            { t: "99. Se você dominar as outras pessoas, nada poderá acontecer com você.", m: "Bully" },
+            { t: "100. Eu ajo de forma passiva mesmo quando não gosto do jeito que as coisas estão.", m: "Compliant" },
+            { t: "101. A minha raiva sai do controle.", m: "Angry" },
+            { t: "102. Eu zombo ou intimido outras pessoas.", m: "Bully" },
+            { t: "103. Eu sinto vontade de agredir verbal ou fisicamente alguém pelo que essa pessoa fez para mim.", m: "Angry" },
+            { t: "104. Eu sei que há uma forma 'certa' e uma 'errada' de fazer as coisas. Eu me esforço para fazer as coisas do jeito certo; caso contrário, eu começo a me criticar.", m: "Demanding" },
+            { t: "105. Eu frequentemente me sinto sozinho no mundo.", m: "Vulnerable" },
+            { t: "106. Eu me sinto fraco e sem saída.", m: "Vulnerable" },
+            { t: "107. Eu sou preguiçoso.", m: "Impulsive" }, // Or Undisciplined
+            { t: "108. Eu posso suportar qualquer coisa que venha das pessoas que são importantes para mim.", m: "Compliant" },
+            { t: "109. Eu fui traído ou tratado de forma injusta.", m: "Vulnerable" }, // Or Angry
+            { t: "110. Se eu sinto o impulso de fazer alguma coisa, vou e faço.", m: "Impulsive" },
+            { t: "111. Eu me sinto deixado de lado ou excluído.", m: "Vulnerable" },
+            { t: "112. Eu diminuo ou menosprezo os outros.", m: "Bully" },
+            { t: "113. Eu me sinto otimista.", m: "Happy" },
+            { t: "114. Eu sinto que não deveria ter que seguir as mesmas regras que as outras pessoas seguem.", m: "SelfAggrandizer" },
+            { t: "115. Neste momento, minha vida se resume a iniciar e concluir tarefas do jeito certo.", m: "Demanding" },
+            { t: "116. Eu me cobro para ser mais responsável do que a maioria das outras pessoas.", m: "Demanding" },
+            { t: "117. Eu consigo me defender de forma adequada quando me sinto criticado injustamente, maltratado ou quando sinto que tiraram vantagem de mim.", m: "Healthy" },
+            { t: "118. Eu não mereço pena, ou que os outros sejam compreensivos comigo quando algo de ruim me acontece.", m: "Punitive" },
+            { t: "119. Eu sinto que ninguém me ama.", m: "Vulnerable" },
+            { t: "120. Eu sinto que sou uma pessoa fundamentalmente boa.", m: "Healthy" },
+            { t: "121. Quando necessário, eu concluo tarefas chatas e rotineiras para que eu conquiste aquilo que eu valorizo.", m: "Healthy" },
+            { t: "122. Eu me sinto espontâneo e divertido.", m: "Happy" },
+            { t: "123. Às vezes eu fico com tanta raiva que sinto que seria capaz de matar alguém.", m: "Angry" },
+            { t: "124. Eu tenho uma boa noção de quem sou e do que preciso para me deixar feliz.", m: "Healthy" }
+        ];
+
+        const modes = {
+            "Vulnerable": "Criança Vulnerável",
+            "Angry": "Criança Zangada/Raivosa",
+            "Impulsive": "Criança Impulsiva/Indisciplinada",
+            "Happy": "Criança Feliz",
+            "Compliant": "Capitulador Complacente",
+            "Detached": "Protetor Desligado",
+            "SelfSoother": "Auto-confortador Desligado",
+            "SelfAggrandizer": "Auto-engrandecedor",
+            "Bully": "Intimidação e Ataque",
+            "Punitive": "Pais Punitivos",
+            "Demanding": "Pais Exigentes",
+            "Healthy": "Adulto Saudável"
+        };
+
+        const container = document.getElementById('questions-container');
+
+        // GERAR PERGUNTAS
+        items.forEach((item, index) => {
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            
+            // Botões de 1 a 6
+            let buttonsHTML = '';
+            for(let i=1; i<=6; i++) {
+                buttonsHTML += `<div class="scale-btn" onclick="selectOption(${index}, ${i}, this)">${i}</div>`;
+            }
+
+            card.innerHTML = `
+                <div class="q-number">${index + 1}</div>
+                <div class="q-text">${item.t}</div>
+                <div class="scale-container">
+                    ${buttonsHTML}
+                </div>
+                <input type="hidden" id="answer-${index}" value="0">
+            `;
+            container.appendChild(card);
+        });
+
+        function selectOption(qIndex, value, btnElement) {
+            document.getElementById(`answer-${qIndex}`).value = value;
+            const parent = btnElement.parentNode;
+            parent.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
+            btnElement.classList.add('selected');
+        }
+
+        function calculateResults() {
+            let modeScores = {};
+            let modeCounts = {};
+
+            // Inicializar
+            for (let m in modes) {
+                modeScores[m] = 0;
+                modeCounts[m] = 0;
+            }
+
+            let totalAnswered = 0;
+
+            items.forEach((item, index) => {
+                const val = parseInt(document.getElementById(`answer-${index}`).value);
+                if (val > 0) {
+                    modeScores[item.m] += val;
+                    modeCounts[item.m]++;
+                    totalAnswered++;
+                }
+            });
+
+            if (totalAnswered < items.length) {
+                if(!confirm(`Você respondeu apenas ${totalAnswered} de ${items.length} itens. Continuar?`)) return;
+            }
+
+            const chartArea = document.getElementById('charts-container');
+            chartArea.innerHTML = '';
+
+            // Agrupar por Categorias (Criança, Enfrentamento, Pais, Adulto)
+            const groups = {
+                "MODOS CRIANÇA": ["Vulnerable", "Angry", "Impulsive", "Happy"],
+                "MODOS ENFRENTAMENTO": ["Compliant", "Detached", "SelfSoother", "SelfAggrandizer", "Bully"],
+                "MODOS PAIS": ["Punitive", "Demanding"],
+                "MODO ADULTO": ["Healthy"]
+            };
+
+            for (let groupName in groups) {
+                const title = document.createElement('div');
+                title.className = 'mode-group-title';
+                title.innerText = groupName;
+                chartArea.appendChild(title);
+
+                groups[groupName].forEach(modeKey => {
+                    const count = modeCounts[modeKey];
+                    const total = modeScores[modeKey];
+                    // Média: Total / Quantidade de Itens
+                    const average = count > 0 ? (total / count).toFixed(1) : 0;
+                    
+                    // Lógica visual: Escala vai de 1 a 6.
+                    // Média > 3.5 começa a ser relevante. > 4.5 alto.
+                    const percent = ((average - 1) / 5) * 100; // Normaliza 1-6 para 0-100%
+                    const isHigh = average >= 4.0; 
+
+                    const row = document.createElement('div');
+                    row.className = `schema-row ${isHigh ? 'high-score' : ''}`;
+                    
+                    row.innerHTML = `
+                        <div class="schema-header">
+                            <span>${modes[modeKey]}</span>
+                            <span>Média: ${average}</span>
+                        </div>
+                        <div class="progress-bg">
+                            <div class="progress-bar" style="width: ${Math.max(0, percent)}%"></div>
+                        </div>
+                    `;
+                    chartArea.appendChild(row);
+                });
+            }
+
+            document.getElementById('result-area').style.display = 'block';
+            document.getElementById('result-area').scrollIntoView({ behavior: 'smooth' });
+        }
+         </script>
+</body>
+</html>
+
