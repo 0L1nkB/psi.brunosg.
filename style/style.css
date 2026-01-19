@@ -216,3 +216,136 @@ footer {
     opacity: 0.6;
     padding-bottom: 20px;
 }
+/* Cartão da Pergunta */
+.scale-card {
+    background: white;
+    border: 2px dashed #b2bec3;
+    border-radius: 20px;
+    padding: 25px 20px 20px 25px;
+    margin-bottom: 20px;
+    position: relative;
+    transition: all 0.2s;
+}
+
+.scale-card:hover {
+    border-color: var(--primary);
+    background-color: #fdf5e6; /* Leve tom creme */
+    transform: scale(1.01);
+}
+
+/* Número da Questão (Bolinha flutuante) */
+.q-number {
+    position: absolute; top: -15px; left: -10px;
+    background: var(--accent); color: var(--text);
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: bold; font-size: 1.1rem;
+    border: 3px solid var(--text);
+    box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+}
+
+.q-text {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    line-height: 1.4;
+    padding-left: 10px;
+}
+
+/* Container dos Botões 1-6 */
+.scale-options {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* Botão Individual de Nota */
+.scale-btn {
+    flex: 1;
+    min-width: 40px;
+    padding: 12px 5px;
+    border: 2px solid #dfe6e9;
+    background: #f1f2f6;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #636e72;
+    text-align: center;
+    transition: 0.1s;
+    font-size: 1rem;
+}
+
+.scale-btn:hover {
+    background: #dfe6e9;
+    border-color: #b2bec3;
+}
+
+/* Estado Selecionado */
+.scale-btn.selected {
+    background: var(--primary);
+    color: white;
+    border-color: var(--text);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 0 var(--text);
+}
+
+/* --- ÁREA DE RESULTADOS --- */
+.result-box {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    border: 3px solid var(--text);
+    margin-top: 40px;
+    box-shadow: 10px 10px 0 rgba(0,0,0,0.05);
+}
+
+.result-group-title {
+    margin-top: 25px; margin-bottom: 10px;
+    font-size: 1.1rem; font-weight: 800;
+    color: var(--text);
+    text-transform: uppercase;
+    border-bottom: 2px dashed #dfe6e9;
+    padding-bottom: 5px;
+}
+
+.result-row { margin-bottom: 15px; }
+
+.result-header {
+    display: flex; justify-content: space-between;
+    font-weight: bold; margin-bottom: 5px;
+    font-size: 0.95rem;
+}
+
+.score-high { color: #d63031; font-weight: 900; }
+
+/* Barra de Progresso Lúdica */
+.progress-track {
+    background: #eee;
+    height: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 2px solid #dfe6e9;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--secondary);
+    width: 0%;
+    transition: width 1s ease;
+    border-right: 2px solid rgba(0,0,0,0.1);
+}
+
+.progress-fill.fill-high {
+    background: #ff7675; /* Vermelho suave para scores altos */
+}
+
+/* Estilos de Impressão */
+@media print {
+    body { background: white; padding: 0; }
+    #dashboard { max-width: 100%; }
+    header, .highlight-box, form, .btn-login, .btn-back { display: none; }
+    .result-box { display: block !important; border: none; box-shadow: none; margin: 0; }
+    .progress-track { border: 1px solid #ccc; -webkit-print-color-adjust: exact; }
+    .progress-fill { -webkit-print-color-adjust: exact; }
+}
