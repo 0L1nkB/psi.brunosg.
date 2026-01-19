@@ -15,25 +15,27 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
+            margin-top: 20px;
         }
 
         .logic-row {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
             background: #fff;
-            padding: 10px;
+            padding: 15px;
             border-radius: 20px;
-            border: 2px dashed #b2bec3;
+            border: 3px dashed #b2bec3; /* Borda tracejada lúdica */
         }
 
         .logic-box {
             flex: 1;
-            padding: 15px;
+            padding: 20px;
             border-radius: 15px;
             text-align: center;
             font-weight: bold;
             position: relative;
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
         }
 
         .box-if {
@@ -42,16 +44,16 @@
             border: 2px solid #ffe0b2;
         }
         
-        .box-if::before { content: 'SE...'; display: block; font-size: 0.8rem; opacity: 0.8; margin-bottom: 5px; }
+        .box-if::before { content: 'SE...'; display: block; font-size: 0.8rem; opacity: 0.8; margin-bottom: 5px; text-transform: uppercase; }
 
         .box-then {
             background: #ffebee;
             color: #c0392b;
             border: 2px solid #ffcdd2;
         }
-        .box-then::before { content: 'ENTÃO...'; display: block; font-size: 0.8rem; opacity: 0.8; margin-bottom: 5px; }
+        .box-then::before { content: 'ENTÃO...'; display: block; font-size: 0.8rem; opacity: 0.8; margin-bottom: 5px; text-transform: uppercase; }
 
-        .logic-arrow { font-size: 1.5rem; color: #b2bec3; }
+        .logic-arrow { font-size: 2rem; color: #b2bec3; }
 
         /* Área de Reescrita */
         .rewrite-box {
@@ -67,13 +69,14 @@
             background: white;
             border: 2px solid var(--primary);
             color: var(--primary);
-            padding: 10px 20px;
+            padding: 12px 25px;
             border-radius: 30px;
             font-weight: bold;
-            font-family: inherit;
+            font-family: 'Comic Sans MS', sans-serif;
             cursor: pointer;
             margin: 5px;
             transition: 0.2s;
+            font-size: 1rem;
             box-shadow: 0 4px 0 rgba(0,0,0,0.1);
         }
         .btn-option:hover { transform: translateY(-2px); background: var(--primary); color: white; }
@@ -81,10 +84,10 @@
         /* Resultado da Nova Regra */
         .result-bubble {
             background: white;
-            border: 2px dashed #00b894;
-            padding: 20px;
+            border: 3px dashed #00b894;
+            padding: 25px;
             border-radius: 20px;
-            margin-top: 20px;
+            margin-top: 25px;
             color: #00b894;
             font-weight: bold;
             min-height: 80px;
@@ -92,6 +95,7 @@
             align-items: center;
             justify-content: center;
             box-shadow: 5px 5px 0 rgba(0,0,0,0.05);
+            font-size: 1.1rem;
         }
 
         /* Accordion Lúdico */
@@ -100,7 +104,7 @@
             border: 2px solid #dfe6e9;
             border-radius: 15px;
             margin-bottom: 15px;
-            padding: 10px;
+            padding: 5px;
             transition: 0.3s;
         }
         details[open] { border-color: var(--primary); box-shadow: 0 5px 0 rgba(0,0,0,0.05); }
@@ -111,22 +115,23 @@
             color: var(--text);
             list-style: none;
             display: flex; justify-content: space-between; align-items: center;
-            padding: 5px 10px;
+            padding: 15px;
+            font-size: 1.1rem;
         }
-        summary:hover { color: var(--primary); }
+        summary:hover { color: var(--primary); background-color: #f9f9f9; border-radius: 10px; }
+        summary::-webkit-details-marker { display: none; }
         
         .details-content {
-            margin-top: 15px;
-            padding-top: 15px;
+            padding: 20px;
             border-top: 2px dashed #dfe6e9;
             color: #636e72;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
         /* Mobile */
         @media (max-width: 600px) {
             .logic-row { flex-direction: column; }
-            .logic-arrow { transform: rotate(90deg); }
+            .logic-arrow { transform: rotate(90deg); margin: 10px 0; }
         }
     </style>
 </head>
@@ -143,7 +148,7 @@
 
         <section>
             <h2><i class="fa-solid fa-gavel"></i> O Código Penal Interno</h2>
-            <p>Se as Crenças Nucleares são as raízes da árvore, as <strong>Crenças Intermediárias</strong> são o tronco. Elas são as regras e suposições que criamos para <em>sobreviver</em> e tentar lidar com nossas dores profundas.</p>
+            <p>Se as Crenças Nucleares são as raízes da árvore, as <strong>Crenças Intermediárias</strong> são o tronco. Elas são as regras, suposições e atitudes que criamos para <em>sobreviver</em> e tentar lidar com nossas dores profundas.</p>
             
             <div class="highlight-box">
                 "Eu criei essas regras na infância para me proteger, mas agora elas viraram uma prisão."
@@ -187,19 +192,19 @@
                 <div class="card cat-ludico">
                     <div class="card-icon"><i class="fa-solid fa-scale-balanced"></i></div>
                     <div class="card-title">Regras</div>
-                    <div class="card-desc">Ordens rígidas. "Eu <strong>devo</strong> ser perfeito." "Eu <strong>tenho que</strong> trabalhar mais."</div>
+                    <div class="card-desc">Ordens rígidas.<br>"Eu <strong>devo</strong> ser perfeito."<br>"Eu <strong>tenho que</strong> trabalhar mais."</div>
                 </div>
                 
                 <div class="card cat-baralho">
                     <div class="card-icon"><i class="fa-solid fa-cloud-question"></i></div>
                     <div class="card-title">Suposições</div>
-                    <div class="card-desc">Previsões do futuro. "Se eu pedir ajuda, vão achar que sou fraco."</div>
+                    <div class="card-desc">Previsões do futuro.<br>"Se eu pedir ajuda, vão achar que sou fraco."</div>
                 </div>
 
                 <div class="card cat-te">
                     <div class="card-icon"><i class="fa-solid fa-face-angry"></i></div>
                     <div class="card-title">Atitudes</div>
-                    <div class="card-desc">Julgamentos de valor. "Ser vulnerável é perigoso." "Chorar é fraqueza."</div>
+                    <div class="card-desc">Julgamentos de valor.<br>"Ser vulnerável é perigoso."<br>"Chorar é fraqueza."</div>
                 </div>
             </div>
         </section>
@@ -209,7 +214,7 @@
             <p>O objetivo não é ficar sem regras, mas ter regras flexíveis. Vamos trocar o <strong>"Tenho que"</strong> pelo <strong>"Prefiro"</strong>:</p>
             
             <div class="rewrite-box">
-                <p style="margin-bottom: 20px; font-weight: bold;">Toque em uma regra rígida para flexibilizar:</p>
+                <p style="margin-bottom: 20px; font-weight: bold; font-size: 1.1rem;">Toque em uma regra rígida para flexibilizar:</p>
                 
                 <div>
                     <button class="btn-option" onclick="rewriteRule('perfeito')">"Eu DEVO ser perfeito"</button>
@@ -218,7 +223,7 @@
                 </div>
                 
                 <div id="flex-result" class="result-bubble">
-                    Toque em um botão acima...
+                    Toque em um botão acima para ver a mágica... ✨
                 </div>
             </div>
         </section>
@@ -251,6 +256,11 @@
 
         <footer>
             Feito com carinho ❤️ • Psicólogo Bruno de Souza
+            <div class="social-links" style="margin-top: 15px;">
+                <a href="https://www.instagram.com/psi.brunosg/" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://wa.me/5553991898309" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+                <a href="https://www.linkedin.com/in/psi-bsouza/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+            </div>
         </footer>
 
     </div>
@@ -261,11 +271,11 @@
             let text = "";
             
             if (type === 'perfeito') {
-                text = "🌱 <strong>Nova Regra:</strong> 'Eu PREFIRO fazer bem feito, mas se eu errar, ainda sou uma pessoa competente. Errar faz parte.'";
+                text = "🌱 <strong>Nova Regra:</strong> 'Eu PREFIRO fazer bem feito, mas se eu errar, ainda sou uma pessoa competente. Errar faz parte do aprendizado.'";
             } else if (type === 'agradar') {
                 text = "🌱 <strong>Nova Regra:</strong> 'Eu GOSTARIA que todos gostassem de mim, mas é impossível agradar a todos. Posso sobreviver a uma cara feia.'";
             } else if (type === 'forte') {
-                text = "🌱 <strong>Nova Regra:</strong> 'É bom ser forte, mas também é saudável sentir. Chorar não me torna fraco, me torna humano.'";
+                text = "🌱 <strong>Nova Regra:</strong> 'É bom ser forte, mas também é saudável sentir. Chorar não me torna fraco, me torna humano e alivia a tensão.'";
             }
             
             box.style.opacity = 0;
