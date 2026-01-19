@@ -3,395 +3,312 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crenças Centrais - O Código Fonte</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>Crenças Intermediárias - Laboratório da Mente</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://psibrunosg.github.io/site/style/style.css">
 
     <style>
-                :root {
-            /* --- IDENTIDADE VISUAL "ESQUEMAS" --- */
-            --bg-body: #f0f2f5;       /* Fundo cinza padrão */
-            --bg-card: #ffffff;       /* Cartões brancos */
-            --text-main: #1a1a1a;
-            --text-muted: #65676b;
-            --accent-color: #007bff;  /* Azul Destaque */
-            --border-radius: 12px;    /* Arredondamento das caixas */
-            --card-shadow: 0 2px 4px rgba(0,0,0,0.05), 0 8px 16px rgba(0,0,0,0.05);
-            
-            /* Cores Específicas desta ferramenta */
-            --pa-color: #e65100;      /* Laranja para Pensamentos */
-            --emo-color: #c62828;     /* Vermelho para Emoção */
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            line-height: 1.6;
-            padding: 40px 20px;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-
-        h1, h2, h3, h4 {
-            font-family: 'Patrick Hand', cursive;
-            color: #5b21b6;
-        }
-
-        /* --- HEADER --- */
-        header {
-            background-color: rgba(255, 255, 255, 0.95);
-            border-bottom: 2px dashed #a78bfa;
-            padding: 2rem 0;
-            margin-bottom: 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);
-        }
-
-        .header-content {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0 20px;
-            text-align: center;
-        }
-
-        .header-title {
-            font-size: 2.8rem;
-            color: var(--core);
-            margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 0px #ede9fe;
-        }
-
-        .header-subtitle {
-            font-size: 1.2rem;
-            color: #6d28d9;
-            font-family: 'Patrick Hand', cursive;
-            background: #ede9fe;
-            padding: 5px 15px;
-            border-radius: 20px;
-            transform: rotate(-1deg);
-            display: inline-block;
-        }
-
-        /* --- CONTAINER --- */
-        .main-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0 20px;
-            width: 100%;
-            display: grid;
-            gap: 35px;
-            margin-bottom: 60px;
-        }
-
-        /* --- CARDS (PAPEL) --- */
-        .paper-card {
-            background-color: #ffffff;
-            border-radius: 2px;
-            box-shadow: var(--shadow-paper);
-            border: 1px solid #ddd6fe;
-            padding: 2.5rem;
-            position: relative;
-            transform: rotate(-0.5deg);
-            transition: transform 0.3s;
-        }
+        /* === ESTILOS ESPECÍFICOS DESTA PÁGINA === */
         
-        .paper-card:hover { transform: rotate(0deg) translateY(-3px); }
-        
-        /* Ícone de Chip/Raiz */
-        .paper-card::before {
-            content: '🌱';
-            position: absolute;
-            top: -20px;
-            right: 20px;
-            font-size: 2.5rem;
-            z-index: 2;
-            filter: drop-shadow(2px 2px 0 rgba(0,0,0,0.1));
+        /* --- Diagrama Lógico (Se... Então...) --- */
+        .logic-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 20px;
         }
 
-        .card-header {
+        .logic-row {
             display: flex;
             align-items: center;
             gap: 15px;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid #ede9fe;
-            padding-bottom: 10px;
-        }
-
-        .card-icon { font-size: 1.8rem; color: var(--core); }
-        .card-title { font-size: 1.8rem; margin: 0; }
-
-        /* --- DIAGRAMA DA ÁRVORE (METÁFORA) --- */
-        .tree-diagram {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .tree-level {
-            width: 80%;
-            padding: 15px;
-            border-radius: 12px;
-            text-align: center;
-            color: white;
-            font-weight: 700;
-            position: relative;
-        }
-
-        .level-leaves { background: #a78bfa; width: 90%; opacity: 0.7; }
-        .level-trunk { background: #8b5cf6; width: 70%; opacity: 0.85; }
-        .level-roots { background: #5b21b6; width: 50%; opacity: 1; border: 3px solid #4c1d95; }
-
-        /* --- AS 3 CATEGORIAS (GRID) --- */
-        .category-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .cat-card {
             background: #fff;
             padding: 20px;
-            border-radius: 12px;
-            border: 2px solid;
-            text-align: center;
-            transition: transform 0.2s;
-        }
-        .cat-card:hover { transform: scale(1.03); }
-
-        .cat-helpless { border-color: var(--helpless); background: #eff6ff; }
-        .cat-helpless i { color: var(--helpless); font-size: 2rem; margin-bottom: 10px; }
-        
-        .cat-unlove { border-color: var(--unlove); background: #fdf2f8; }
-        .cat-unlove i { color: var(--unlove); font-size: 2rem; margin-bottom: 10px; }
-        
-        .cat-worthless { border-color: var(--worthless); background: #fff7ed; }
-        .cat-worthless i { color: var(--worthless); font-size: 2rem; margin-bottom: 10px; }
-
-        /* --- SETA DESCENDENTE (INTERATIVO) --- */
-        .arrow-area {
-            background-color: #f5f3ff;
-            padding: 2rem; border-radius: 20px;
-            border: 2px dashed #8b5cf6;
-            text-align: center;
+            border-radius: 20px;
+            border: 3px dashed #b2bec3; /* Borda tracejada estilo caderno */
+            font-family: 'Comic Sans MS', sans-serif;
         }
 
-        .thought-bubble {
-            background: white; padding: 10px 20px;
-            border-radius: 20px; border: 1px solid #cbd5e1;
-            display: inline-block; margin-bottom: 10px;
-            font-size: 0.9rem; color: #64748b;
-        }
-
-        .btn-drill {
-            background: var(--core); border: none;
-            padding: 10px 25px; border-radius: 30px;
-            color: white; font-weight: 700; cursor: pointer;
-            margin-top: 10px; box-shadow: 0 4px 0 #5b21b6;
-            font-family: 'Nunito';
-        }
-        .btn-drill:active { transform: translateY(4px); box-shadow: none; }
-
-        .deep-belief {
-            margin-top: 20px;
+        .logic-box {
+            flex: 1;
             padding: 20px;
-            background: #4c1d95; color: white;
-            border-radius: 12px;
-            font-family: 'Patrick Hand'; font-size: 1.3rem;
-            display: none; /* Escondido inicialmente */
+            border-radius: 15px;
+            text-align: center;
+            font-weight: bold;
+            position: relative;
+            font-size: 1.1rem;
         }
 
-        /* --- MUDANÇA (COMPARAÇÃO) --- */
-        .belief-switch {
+        /* Caixa do "SE..." */
+        .box-if {
+            background: #fff3e0;
+            color: #e67e22;
+            border: 2px solid #ffe0b2;
+        }
+        .box-if::before { 
+            content: 'SE...'; 
+            display: block; 
+            font-size: 0.8rem; 
+            opacity: 0.8; 
+            margin-bottom: 5px; 
+            text-transform: uppercase; 
+        }
+
+        /* Caixa do "ENTÃO..." */
+        .box-then {
+            background: #ffebee;
+            color: #c0392b;
+            border: 2px solid #ffcdd2;
+        }
+        .box-then::before { 
+            content: 'ENTÃO...'; 
+            display: block; 
+            font-size: 0.8rem; 
+            opacity: 0.8; 
+            margin-bottom: 5px; 
+            text-transform: uppercase; 
+        }
+
+        .logic-arrow { font-size: 2rem; color: #b2bec3; }
+
+        /* --- Área Interativa (Reescrita) --- */
+        .rewrite-box {
+            background: #f0f8ff;
+            border: 3px solid #dfe6e9;
+            border-radius: 25px;
+            padding: 30px;
+            text-align: center;
+        }
+
+        /* Botões de Opção */
+        .btn-option {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-family: 'Comic Sans MS', sans-serif;
+            cursor: pointer;
+            margin: 5px;
+            transition: 0.2s;
+            font-size: 1rem;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.1);
+        }
+        .btn-option:hover { 
+            transform: translateY(-2px); 
+            background: var(--primary); 
+            color: white; 
+        }
+
+        /* Resultado (Bolha) */
+        .result-bubble {
+            background: white;
+            border: 3px dashed #00b894;
+            padding: 25px;
+            border-radius: 20px;
+            margin-top: 25px;
+            color: #00b894;
+            font-weight: bold;
+            min-height: 80px;
             display: flex;
-            gap: 20px;
-            justify-content: space-between;
-            margin-top: 20px;
-            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 5px 5px 0 rgba(0,0,0,0.05);
+            font-size: 1.1rem;
+            font-family: 'Comic Sans MS', sans-serif;
         }
 
-        .old-belief {
-            flex: 1; padding: 20px; background: #f3f4f6; color: #6b7280;
-            border-radius: 12px; border: 1px dashed #9ca3af;
-            text-decoration: line-through; opacity: 0.7;
+        /* --- Accordion (Detalhes) --- */
+        details {
+            background: white;
+            border: 2px solid #dfe6e9;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            padding: 5px;
+            transition: 0.3s;
         }
-
-        .new-belief {
-            flex: 1; padding: 20px; background: #ecfdf5; color: #047857;
-            border-radius: 12px; border: 2px solid #10b981;
-            font-weight: 700; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
-
-        /* --- FOOTER PADRÃO --- */
-        footer {
-            background-color: #ffffff;
-            border-top: 1px solid #e5e7eb;
-            padding: 2rem 0;
-            margin-top: auto;
-        }
-        .footer-container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 0 20px;
+        details[open] { border-color: var(--primary); box-shadow: 0 5px 0 rgba(0,0,0,0.05); }
+        
+        summary {
+            cursor: pointer;
+            font-weight: bold;
+            color: var(--text);
+            list-style: none;
             display: flex; justify-content: space-between; align-items: center;
+            padding: 15px;
+            font-size: 1.1rem;
         }
-        .footer-brand { color: #64748b; font-size: 0.9rem; font-weight: 600; }
-        .social-links { display: flex; gap: 1.5rem; }
-        .social-links a { color: #94a3b8; font-size: 1.2rem; transition: color 0.2s; }
-        .social-links a:hover { color: var(--core); }
+        summary:hover { color: var(--primary); background-color: #f9f9f9; border-radius: 10px; }
+        
+        /* Remove seta padrão feia */
+        summary::-webkit-details-marker { display: none; }
+        
+        .details-content {
+            padding: 20px;
+            border-top: 2px dashed #dfe6e9;
+            color: #636e72;
+            line-height: 1.6;
+        }
 
-        @media (max-width: 640px) {
-            .footer-container { flex-direction: column; gap: 1rem; }
-            .belief-switch { flex-direction: column; }
+        /* Mobile */
+        @media (max-width: 600px) {
+            .logic-row { flex-direction: column; }
+            .logic-arrow { transform: rotate(90deg); margin: 10px 0; }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="header-content">
-            <h1 class="header-title">Crenças Centrais</h1>
-            <p class="header-subtitle">O Código Fonte da Sua Mente</p>
-        </div>
-    </header>
+    <a href="tcc.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Voltar</a>
 
-    <div class="main-container">
+    <div id="dashboard" style="margin-top: 60px; display: block !important;"> 
+        
+        <header>
+            <h1>Crenças Intermediárias</h1>
+            <div class="subtitle">As Regras do Jogo Mental</div>
+        </header>
 
-        <div class="paper-card">
-            <div class="card-header">
-                <i class="fas fa-server card-icon"></i>
-                <h2 class="card-title">O que são elas?</h2>
-            </div>
-            <p>São as verdades mais profundas, rígidas e absolutas que você acredita sobre <strong>si mesmo</strong>, sobre <strong>os outros</strong> e sobre o <strong>mundo</strong>. Elas são como o sistema operacional do seu computador: rodam em segundo plano e controlam tudo o que você vê.</p>
+        <section>
+            <h2><i class="fa-solid fa-gavel"></i> O Código Penal Interno</h2>
+            <p>Se as Crenças Nucleares são as raízes da árvore, as <strong>Crenças Intermediárias</strong> são o tronco. Elas são as regras, suposições e atitudes que criamos para <em>sobreviver</em> e tentar lidar com nossas dores profundas.</p>
             
-            <div class="tree-diagram">
-                <div class="tree-level level-leaves">🍃 Pensamentos Automáticos (O que aparece)</div>
-                <div class="tree-level level-trunk">🪵 Crenças Intermediárias (As Regras)</div>
-                <div class="tree-level level-roots">🌱 CRENÇAS CENTRAIS (A Raiz)</div>
+            <div class="highlight-box">
+                "Eu criei essas regras na infância para me proteger da dor, mas agora elas viraram uma prisão."
             </div>
-        </div>
+        </section>
 
-        <div class="paper-card" style="transform: rotate(0.5deg);">
-            <div class="card-header">
-                <i class="fas fa-layer-group card-icon"></i>
-                <h2 class="card-title">A Tríade da Dor</h2>
-            </div>
-            <p>A maioria das crenças negativas se encaixa em uma dessas três categorias:</p>
+        <section>
+            <h2><i class="fa-solid fa-calculator"></i> A Fórmula "Se... Então..."</h2>
+            <p>Sua mente tenta negociar com a realidade criando condições rígidas. Veja como funciona:</p>
             
-            <div class="category-grid">
-                <div class="cat-card cat-helpless">
-                    <i class="fas fa-battery-empty"></i>
-                    <h3>Desamparo</h3>
-                    <p>"Sou fraco, incompetente, vulnerável ou fracassado. Não consigo me virar sozinho."</p>
-                </div>
-
-                <div class="cat-card cat-unlove">
-                    <i class="fas fa-heart-broken"></i>
-                    <h3>Desamor</h3>
-                    <p>"Não sou amável, sou indesejável, feio ou chato. Vou acabar sozinho. Há algo de errado comigo."</p>
-                </div>
-
-                <div class="cat-card cat-worthless">
-                    <i class="fas fa-trash-alt"></i>
-                    <h3>Desvalor</h3>
-                    <p>"Sou inútil, não mereço viver, sou mau, sou um lixo. Minha existência não tem valor moral."</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="paper-card" style="transform: rotate(-0.5deg);">
-            <div class="card-header">
-                <i class="fas fa-arrow-down card-icon"></i>
-                <h2 class="card-title">Escavando a Verdade</h2>
-            </div>
-            <p>Para encontrar a crença central, usamos a técnica da <strong>Seta Descendente</strong>. Perguntamos repetidamente: <em>"E se isso for verdade, o que isso diz sobre mim?"</em></p>
-            
-            <div class="arrow-area">
-                <div class="thought-bubble">💭 "Ele não respondeu minha mensagem."</div>
-                <br><i class="fas fa-arrow-down" style="color:#a78bfa; margin:5px;"></i><br>
+            <div class="logic-container">
                 
-                <div class="thought-bubble">💭 "Significa que ele não gosta de mim."</div>
-                <br><i class="fas fa-arrow-down" style="color:#a78bfa; margin:5px;"></i><br>
-                
-                <div class="thought-bubble">💭 "Se ele não gosta, ninguém vai gostar."</div>
-                <br><i class="fas fa-arrow-down" style="color:#a78bfa; margin:5px;"></i><br>
-
-                <button class="btn-drill" onclick="showCore()">REVELAR A RAIZ</button>
-                
-                <div id="core-display" class="deep-belief">
-                    💎 CRENÇA DE DESAMOR:<br>
-                    "Eu sou impossível de ser amado."
+                <div class="logic-row">
+                    <div class="logic-box box-if">
+                        "Se eu agradar a todos..."
+                    </div>
+                    <div class="logic-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="logic-box box-then" style="background: #e3f2fd; color: #0984e3; border-color: #90caf9;">
+                        "...então serei amado."
+                    </div>
                 </div>
-            </div>
-        </div>
 
-        <div class="paper-card">
-            <div class="card-header">
-                <i class="fas fa-sync-alt card-icon"></i>
-                <h2 class="card-title">Atualizando o Sistema</h2>
+                <div class="logic-row">
+                    <div class="logic-box box-if" style="background: #fff3e0; color: #e67e22; border-color: #ffe0b2;">
+                        "Se eu falhar em algo..."
+                    </div>
+                    <div class="logic-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="logic-box box-then">
+                        "...então serei rejeitado."
+                    </div>
+                </div>
+
             </div>
-            <p>Não podemos simplesmente "apagar" uma crença antiga. Precisamos construir uma nova e fortalecê-la com evidências.</p>
+        </section>
+
+        <section>
+            <h2><i class="fa-solid fa-shapes"></i> As 3 Formas</h2>
+            <p>Elas não aparecem sempre do mesmo jeito. Identifique qual formato você usa mais:</p>
             
-            <div class="belief-switch">
-                <div class="old-belief">
-                    <h4>Crença Antiga</h4>
-                    "Eu sou um fracasso total."
-                    <br><br>
-                    <small>(Rígida, exagerada, dolorosa)</small>
+            <div class="grid">
+                <div class="card cat-ludico">
+                    <div class="card-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+                    <div class="card-title">Regras</div>
+                    <div class="card-desc">Ordens rígidas.<br>"Eu <strong>devo</strong> ser perfeito."<br>"Eu <strong>tenho que</strong> trabalhar mais."</div>
                 </div>
                 
-                <i class="fas fa-arrow-right" style="align-self:center; font-size:1.5rem; color:#10b981;"></i>
+                <div class="card cat-baralho">
+                    <div class="card-icon"><i class="fa-solid fa-cloud-question"></i></div>
+                    <div class="card-title">Suposições</div>
+                    <div class="card-desc">Previsões do futuro.<br>"Se eu pedir ajuda, vão achar que sou fraco."</div>
+                </div>
 
-                <div class="new-belief">
-                    <h4>Nova Crença</h4>
-                    "Eu sou uma pessoa em desenvolvimento. Tenho falhas, mas também tenho muitas competências."
-                    <br><br>
-                    <small>(Realista, flexível, gentil)</small>
+                <div class="card cat-te">
+                    <div class="card-icon"><i class="fa-solid fa-face-angry"></i></div>
+                    <div class="card-title">Atitudes</div>
+                    <div class="card-desc">Julgamentos de valor.<br>"Ser vulnerável é perigoso."<br>"Chorar é fraqueza."</div>
                 </div>
             </div>
-        </div>
+        </section>
+
+        <section>
+            <h2><i class="fa-solid fa-wand-magic-sparkles"></i> Reescrevendo as Leis</h2>
+            <p>O objetivo não é ficar sem regras, mas ter regras flexíveis. Vamos trocar o <strong>"Tenho que"</strong> pelo <strong>"Prefiro"</strong>:</p>
+            
+            <div class="rewrite-box">
+                <p style="margin-bottom: 20px; font-weight: bold; font-size: 1.1rem; color: var(--text);">Toque em uma regra rígida para flexibilizar:</p>
+                
+                <div>
+                    <button class="btn-option" onclick="rewriteRule('perfeito')">"Eu DEVO ser perfeito"</button>
+                    <button class="btn-option" onclick="rewriteRule('agradar')">"TENHO QUE agradar"</button>
+                    <button class="btn-option" onclick="rewriteRule('forte')">"NUNCA posso chorar"</button>
+                </div>
+                
+                <div id="flex-result" class="result-bubble">
+                    Toque em um botão acima para ver a mágica... ✨
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2><i class="fa-solid fa-brain"></i> Por que elas existem?</h2>
+            
+            <div style="margin-top: 20px;">
+                <details>
+                    <summary>🛡️ Função Protetora <i class="fa-solid fa-chevron-down"></i></summary>
+                    <div class="details-content">
+                        Você não criou essas regras por mal. Elas foram estratégias brilhantes da sua infância para lidar com o ambiente. 
+                        <br><br>
+                        <em>Ex: "Se eu for bonzinho (Regra), meus pais não brigam (Proteção)".</em> 
+                        <br>O problema é que a regra continua ativa mesmo quando o perigo já passou.
+                    </div>
+                </details>
+
+                <details>
+                    <summary>🚧 O Problema da Rigidez <i class="fa-solid fa-chevron-down"></i></summary>
+                    <div class="details-content">
+                        Crenças disfuncionais são <strong>rígidas</strong>. Elas não aceitam exceções. 
+                        <br><br>
+                        <em>"Eu devo ser produtivo 100% do tempo".</em>
+                        <br>Isso gera culpa constante, porque somos humanos e falhamos.
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <footer>
+            Feito com carinho ❤️ • Psicólogo Bruno de Souza
+            <div class="social-links" style="margin-top: 15px;">
+                <a href="https://www.instagram.com/psi.brunosg/" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://wa.me/5553991898309" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+                <a href="https://www.linkedin.com/in/psi-bsouza/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+            </div>
+        </footer>
 
     </div>
 
-    <footer>
-        <div class="footer-container">
-            <div class="footer-brand">
-                &copy; 2026 Bruno de Souza
-            </div>
-            <div class="social-links">
-                <a href="https://www.instagram.com/psi.brunosg/" target="_blank"><i class="fab fa-instagram"></i></a>
-                <a href="https://wa.me/5553991898309" target="_blank"><i class="fab fa-whatsapp"></i></a>
-                <a href="https://www.linkedin.com/in/psi-bsouza/" target="_blank"><i class="fab fa-linkedin"></i></a>
-            </div>
-        </div>
-    </footer>
-
     <script>
-        function showCore() {
-            const display = document.getElementById('core-display');
-            display.style.display = 'block';
-            display.style.animation = 'fadeIn 1s';
+        function rewriteRule(type) {
+            const box = document.getElementById('flex-result');
+            let text = "";
+            
+            if (type === 'perfeito') {
+                text = "🌱 <strong>Nova Regra:</strong> 'Eu PREFIRO fazer bem feito, mas se eu errar, ainda sou uma pessoa competente. Errar faz parte do aprendizado.'";
+            } else if (type === 'agradar') {
+                text = "🌱 <strong>Nova Regra:</strong> 'Eu GOSTARIA que todos gostassem de mim, mas é impossível agradar a todos. Posso sobreviver a uma cara feia.'";
+            } else if (type === 'forte') {
+                text = "🌱 <strong>Nova Regra:</strong> 'É bom ser forte, mas também é saudável sentir. Chorar não me torna fraco, me torna humano e alivia a tensão.'";
+            }
+            
+            box.style.opacity = 0;
+            setTimeout(() => {
+                box.innerHTML = text;
+                box.style.opacity = 1;
+                box.style.transition = "opacity 0.3s";
+            }, 200);
         }
     </script>
-
-    <style>
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
 
 </body>
 </html>
