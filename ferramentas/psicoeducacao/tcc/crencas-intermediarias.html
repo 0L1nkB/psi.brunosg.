@@ -120,7 +120,24 @@
         }
         summary:hover { color: var(--primary); background-color: #f9f9f9; border-radius: 10px; }
         summary::-webkit-details-marker { display: none; }
-        
+        /* === ESTILOS GERAIS DOS BLOCOS (Caixas por Tema) === */
+        section {
+            background-color: #ffffff; /* Fundo branco para o bloco */
+            border: 3px solid #dfe6e9; /* Borda cinza azulada estilo "cartão" */
+            border-radius: 25px; /* Bordas bem arredondadas */
+            padding: 30px; /* Espaço interno */
+            margin-bottom: 35px; /* Espaço entre um bloco e outro */
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05); /* Sombra suave para dar profundidade */
+        }
+
+        /* Ajuste para o título ficar mais bonito dentro da caixa */
+        section h2 {
+            margin-top: 0; /* Remove espaço acima do título */
+            border-bottom: 2px dashed #b2bec3; /* Linha tracejada abaixo do título */
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            color: var(--primary); /* Usa a cor principal (roxo/azul) se definida, ou pode fixar uma cor */
+        }
         .details-content {
             padding: 20px;
             border-top: 2px dashed #dfe6e9;
