@@ -9,20 +9,19 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
     <style>
-        :root {
-            /* --- IDENTIDADE VISUAL PADRÃO --- */
-            --bg-body: #f0f2f5;       
-            --bg-card: #ffffff;       
+               :root {
+            /* --- IDENTIDADE VISUAL "ESQUEMAS" --- */
+            --bg-body: #f0f2f5;       /* Fundo cinza padrão */
+            --bg-card: #ffffff;       /* Cartões brancos */
             --text-main: #1a1a1a;
             --text-muted: #65676b;
-            --accent-color: #0288d1;  /* Azul Profundo para Regras */
-            --border-radius: 12px;    
+            --accent-color: #007bff;  /* Azul Destaque */
+            --border-radius: 12px;    /* Arredondamento das caixas */
             --card-shadow: 0 2px 4px rgba(0,0,0,0.05), 0 8px 16px rgba(0,0,0,0.05);
             
             /* Cores Específicas desta ferramenta */
-            --condition-bg: #fff3e0; --condition-text: #e65100; /* Laranja (SE) */
-            --result-bg: #ffebee;    --result-text: #c62828;    /* Vermelho (ENTÃO) */
-            --growth-bg: #e8f5e9;    --growth-text: #1b5e20;    /* Verde (Nova Regra) */
+            --pa-color: #e65100;      /* Laranja para Pensamentos */
+            --emo-color: #c62828;     /* Vermelho para Emoção */
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -39,6 +38,7 @@
             max-width: 900px;
             margin: 0 auto;
         }
+
 
         /* --- HEADER --- */
         header {
