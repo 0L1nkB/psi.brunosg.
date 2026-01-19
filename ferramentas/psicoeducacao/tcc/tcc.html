@@ -3,364 +3,352 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TCC - O Laboratório da Mente</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>TCC - Caderno de Psicoeducação</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            /* Paleta de Cores inspirada na página de referência */
-            --primary: #2c3e50;       /* Azul escuro profissional */
-            --accent: #008b8b;        /* Ciano escuro/Teal (Cor de destaque) */
-            --accent-hover: #006666;  
-            --bg-body: #f8f9fa;       /* Cinza muito claro */
-            --bg-card: #ffffff;
-            --text-main: #333333;
-            --text-muted: #666666;
-            --radius: 12px;
-            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --paper-bg: #fffdf7;      /* Cor de papel creme suave */
+            --ink-color: #2c3e50;     /* Azul escuro (caneta) */
+            --highlight: #ffd54f;     /* Amarelo marca-texto */
+            --accent-blue: #4fc3f7;   /* Azul claro lúdico */
+            --accent-orange: #ffb74d; /* Laranja lúdico */
+            --card-shadow: 4px 4px 0px rgba(0,0,0,0.1); /* Sombra dura estilo desenho */
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            line-height: 1.7;
+            font-family: 'Nunito', sans-serif;
+            background-color: #f0f2f5;
+            color: var(--ink-color);
             margin: 0;
-            padding: 0;
+            padding: 20px;
+            line-height: 1.6;
         }
 
-        /* Container centralizado para leitura */
-        .container {
+        .notebook-container {
             max-width: 800px;
-            margin: 40px auto;
-            padding: 0 20px;
+            margin: 0 auto;
+            background-color: var(--paper-bg);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border: 1px solid #e0e0e0;
+            position: relative;
         }
 
-        /* Tipografia */
+        /* Títulos com fonte manuscrita */
         h1, h2, h3 {
-            color: var(--primary);
-            margin-top: 0;
+            font-family: 'Patrick Hand', cursive;
+            color: #d35400; /* Tom de argila/laranja escuro */
         }
 
         h1 {
-            font-size: 2.5rem;
             text-align: center;
-            margin-bottom: 0.5rem;
-            letter-spacing: -0.02em;
+            font-size: 3em;
+            margin-bottom: 0.2em;
+            text-shadow: 2px 2px 0px #eee;
         }
 
         .subtitle {
             text-align: center;
-            color: var(--text-muted);
-            font-size: 1.1rem;
-            margin-bottom: 3rem;
-            font-weight: 300;
+            color: #7f8c8d;
+            font-family: 'Patrick Hand', cursive;
+            font-size: 1.5em;
+            margin-bottom: 40px;
+            border-bottom: 2px dashed #bdc3c7;
+            padding-bottom: 20px;
         }
 
         h2 {
-            border-left: 5px solid var(--accent);
-            padding-left: 15px;
-            margin-top: 3rem;
-            margin-bottom: 1.5rem;
-            font-size: 1.8rem;
-        }
-
-        /* Cartões de Conteúdo (Padrão da página referência) */
-        .card {
-            background: var(--bg-card);
-            border-radius: var(--radius);
-            padding: 2rem;
-            box-shadow: var(--shadow);
-            margin-bottom: 2rem;
-            border: 1px solid rgba(0,0,0,0.05);
-        }
-
-        /* --- O ICEBERG (Redesenhado) --- */
-        .iceberg-container {
-            border-radius: var(--radius);
-            overflow: hidden;
-            color: white;
-            box-shadow: var(--shadow);
-            position: relative;
-        }
-
-        /* Gradiente contínuo */
-        .ocean-depths {
-            background: linear-gradient(180deg, 
-                #4facfe 0%,     /* Superfície Clara */
-                #00f2fe 0%,     /* Ajuste visual */
-                #4facfe 10%,    /* Água Raso */
-                #0072ff 50%,    /* Água Média */
-                #001e3d 100%);  /* Profundidade */
-            padding: 40px 30px;
-        }
-
-        .ice-level {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px); /* Efeito de vidro */
-            border: 1px solid rgba(255,255,255,0.3);
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            transition: transform 0.2s ease;
-        }
-
-        .ice-level:hover {
-            transform: scale(1.02);
-            background: rgba(255, 255, 255, 0.25);
-        }
-
-        .ice-level h3 {
-            color: #fff;
-            font-size: 1.3rem;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .ice-level p {
-            font-size: 0.95rem;
-            margin-bottom: 15px;
-            opacity: 0.9;
-        }
-
-        /* Linha da Água */
-        .water-marker {
-            text-align: right;
-            border-bottom: 2px dashed rgba(255,255,255,0.5);
-            color: rgba(255,255,255,0.8);
-            font-size: 0.8rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            margin: -10px 0 25px 0;
-            padding-bottom: 5px;
-        }
-
-        /* --- BOTÕES FUNCIONAIS --- */
-        .btn-link {
-            display: block;
-            width: 100%;
-            text-align: center;
-            background-color: var(--bg-card);
-            color: var(--accent);
-            text-decoration: none;
-            padding: 12px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .btn-link:hover {
-            background-color: var(--accent);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        /* Botões dentro do texto normal (fora do iceberg) */
-        .btn-inline {
+            font-size: 2em;
+            margin-top: 40px;
+            background: linear-gradient(120deg, #ffe082 0%, #ffe082 100%);
+            background-repeat: no-repeat;
+            background-size: 100% 30%;
+            background-position: 0 88%;
             display: inline-block;
-            background-color: var(--accent);
-            color: white;
+            padding: 0 5px;
+        }
+
+        p { font-size: 1.1em; }
+
+        /* --- ESTILO DOS BOTÕES (Parecem Adesivos/Etiquetas) --- */
+        .sticker-btn {
+            display: inline-block;
+            font-family: 'Patrick Hand', cursive;
+            background-color: var(--accent-orange);
+            color: #fff !important;
             padding: 8px 20px;
-            border-radius: 50px;
+            border-radius: 20px; /* Bordas arredondadas irregulares */
             text-decoration: none;
-            font-weight: 500;
-            font-size: 0.9rem;
+            font-size: 1.3em;
+            transform: rotate(-2deg); /* Leve inclinação para parecer colado */
+            box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
             margin-top: 10px;
-            transition: background 0.3s;
-        }
-        .btn-inline:hover {
-            background-color: var(--accent-hover);
+            border: 2px solid #fff;
         }
 
-        /* --- DIAGRAMA DE FLUXO (Anatomia) --- */
-        .flow-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 15px;
-            margin-bottom: 20px;
-            padding: 15px;
-            background: #f1f4f8;
-            border-radius: 8px;
-            border-left: 4px solid var(--accent);
-        }
-        .flow-number {
-            background: var(--accent);
-            color: white;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            flex-shrink: 0;
+        .sticker-btn:hover {
+            transform: rotate(0deg) scale(1.05);
+            background-color: #ff9800;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
         }
 
-        /* --- GRID DE ARMADILHAS --- */
-        .traps-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
+        /* --- O ICEBERG (Estilo Ilustração/Colagem) --- */
+        .iceberg-illustration {
+            margin-top: 30px;
+            border: 2px solid #333;
+            border-radius: 15px;
+            overflow: hidden;
+            background-color: #e3f2fd; /* Cor do Céu */
         }
-        .trap-box {
-            text-align: center;
+
+        /* Camada 1: Superfície */
+        .layer-surface {
+            background-color: #e3f2fd; /* Céu */
+            padding: 30px;
+            position: relative;
+            border-bottom: 3px solid #0288d1; /* Linha da água forte */
+        }
+        
+        .tip-iceberg {
+            background-color: #fff;
+            width: 60%;
+            margin: 0 auto;
             padding: 20px;
-            border: 1px solid #eee;
+            border-radius: 20px 20px 0 0; /* Formato de ponta arredondada */
+            text-align: center;
+            border: 2px solid #0288d1;
+            border-bottom: none;
+            box-shadow: inset 0 0 20px rgba(0,136,209,0.1);
+        }
+
+        /* Camada 2: Submerso Raso */
+        .layer-middle {
+            background-color: #81d4fa; /* Água clara */
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .middle-iceberg {
+            background-color: #e1f5fe;
+            width: 75%;
+            margin: 0 auto;
+            padding: 20px;
+            border: 2px solid #0277bd;
             border-radius: 10px;
+        }
+
+        /* Camada 3: Fundo */
+        .layer-deep {
+            background-color: #0288d1; /* Água escura */
+            padding: 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .deep-iceberg {
+            background-color: #01579b;
+            color: #fff;
+            width: 90%;
+            margin: 0 auto;
+            padding: 20px;
+            border: 2px dashed #81d4fa;
+            border-radius: 0 0 30px 30px;
+        }
+
+        /* Títulos dentro do Iceberg */
+        .iceberg-title {
+            font-weight: bold;
+            display: block;
+            font-size: 1.2em;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* --- FLUXOGRAMA LÚDICO --- */
+        .sketch-box {
+            border: 2px dashed #bdc3c7;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
             background: #fff;
         }
-        .trap-icon { font-size: 2rem; display: block; margin-bottom: 10px; }
+        .arrow-down {
+            text-align: center;
+            font-size: 2em;
+            color: #bdc3c7;
+            margin: -10px 0;
+        }
 
+        /* --- NOTAS/POST-IT --- */
+        .note-card {
+            background-color: #fff9c4; /* Amarelo Post-it */
+            padding: 15px;
+            box-shadow: 3px 3px 5px rgba(0,0,0,0.1);
+            transform: rotate(-1deg);
+            margin-bottom: 20px;
+            font-family: 'Patrick Hand', cursive;
+            font-size: 1.2em;
+        }
+
+        /* --- RODAPÉ --- */
         footer {
             text-align: center;
-            margin-top: 60px;
-            padding: 40px;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            border-top: 1px solid #eee;
+            margin-top: 50px;
+            font-size: 0.9em;
+            color: #999;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        /* Ajustes para mobile */
+        @media (max-width: 600px) {
+            .notebook-container { padding: 20px; }
+            h1 { font-size: 2.2em; }
+            .tip-iceberg, .middle-iceberg, .deep-iceberg { width: 95%; }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
+    <div class="notebook-container">
         
         <header>
-            <h1>Terapia Cognitivo-Comportamental</h1>
-            <div class="subtitle">Manual de Psicoeducação Clínica</div>
+            <h1>O Laboratório da Mente 🧠</h1>
+            <div class="subtitle">Guia Prático de TCC</div>
         </header>
 
-        <div class="card">
-            <h2>O Que é a TCC?</h2>
-            <p>A TCC é uma abordagem estruturada e diretiva. A premissa central, inspirada no estoicismo, é que <strong>não são os fatos que nos perturbam, mas o que pensamos sobre eles</strong>.</p>
-            <p>Nosso objetivo não é "pensar positivo", mas sim "pensar de forma realista e adaptativa" (Reestruturação Cognitiva).</p>
-        </div>
+        <section>
+            <h2>📝 O Que é a TCC?</h2>
+            <p>Imagine que a TCC é como aprender a usar o "painel de controle" do seu cérebro. A ideia principal, que vem lá dos filósofos estoicos, é simples:</p>
+            
+            <div class="note-card">
+                📌 "Não são as coisas que acontecem que nos chateiam, mas o que a gente PENSA sobre elas."
+            </div>
+            
+            <p>Nosso objetivo não é ficar pensando positivo o tempo todo (isso não funciona!), mas sim pensar de um jeito <strong>realista</strong> e que ajude você a resolver problemas.</p>
+        </section>
 
         <section>
-            <h2>A Anatomia de uma Reação</h2>
-            <p style="margin-bottom: 20px;">Tudo começa com um gatilho. Entenda o fluxo:</p>
+            <h2>⚡ Como a Reação Acontece?</h2>
+            <p>Tudo segue um ciclo rapidinho. Veja o passo a passo:</p>
 
-            <div class="flow-item" style="border-left-color: #666;">
-                <div class="flow-number" style="background:#666;">G</div>
-                <div>
-                    <strong>SITUAÇÃO (Gatilho)</strong><br>
-                    Ex: O chefe pede para falar com você.
-                </div>
+            <div class="sketch-box">
+                <strong>0. A SITUAÇÃO (O Gatilho)</strong><br>
+                Ex: Seu chefe diz "Precisamos conversar".
             </div>
 
-            <div class="flow-item">
-                <div class="flow-number">1</div>
-                <div>
-                    <strong>PENSAMENTO AUTOMÁTICO</strong><br>
-                    Interpretação rápida: <em>"Vou ser demitido."</em>
-                    <br>
-                    <a href="pensamentos-automaticos.html" class="btn-inline">Ver detalhes</a>
-                </div>
+            <div class="arrow-down">⬇️</div>
+
+            <div class="sketch-box" style="border-color: #e74c3c;">
+                <strong>1. PENSAMENTO AUTOMÁTICO</strong><br>
+                Aquele estalo rápido na mente:<br>
+                <em>"Ai meu Deus, vou ser demitido! Fiz algo errado!"</em>
+                <br><br>
+                <a href="pensamentos-automaticos.html" class="sticker-btn" style="background-color: #e74c3c; font-size: 1em;">Ler sobre isso</a>
             </div>
 
-            <div class="flow-item">
-                <div class="flow-number">2</div>
-                <div>
-                    <strong>EMOÇÃO & CORPO</strong><br>
-                    Ansiedade, taquicardia, suor frio.
-                </div>
+            <div class="arrow-down">⬇️</div>
+
+            <div class="sketch-box">
+                <strong>2. EMOÇÃO & CORPO</strong><br>
+                Medo, coração disparado, barriga gelada.
             </div>
 
-            <div class="flow-item">
-                <div class="flow-number">3</div>
-                <div>
-                    <strong>COMPORTAMENTO</strong><br>
-                    Evitar o chefe ou agir defensivamente.
-                </div>
+            <div class="arrow-down">⬇️</div>
+
+            <div class="sketch-box">
+                <strong>3. COMPORTAMENTO</strong><br>
+                Você evita o chefe ou já chega na sala se defendendo.
             </div>
         </section>
 
         <section>
-            <h2>O Iceberg Mental</h2>
-            <p>A maior parte do nosso funcionamento mental está submersa. Entenda as camadas:</p>
-            
-            <div class="iceberg-container">
-                <div class="ocean-depths">
-                    
-                    <div class="water-marker">Nível da Consciência</div>
+            <h2>❄️ O Iceberg Mental</h2>
+            <p>Nossa mente tem camadas, igualzinho a um iceberg. Olha só o que está escondido:</p>
 
-                    <div class="ice-level">
-                        <h3>🌊 Superfície: Pensamentos Automáticos</h3>
-                        <p>Frases rápidas e imagens que surgem espontaneamente diante de situações.</p>
-                        <a href="pensamentos-automaticos.html" class="btn-link">
-                            Explorar Pensamentos Automáticos
+            <div class="iceberg-illustration">
+                
+                <div class="layer-surface">
+                    <div style="position: absolute; top: 10px; right: 10px; color: #0277bd; font-weight: bold;">👀 O que a gente vê</div>
+                    <div class="tip-iceberg">
+                        <span class="iceberg-title">🌊 Superfície</span>
+                        <p><strong>Pensamentos Automáticos</strong><br>Frases rápidas do dia a dia. "Isso vai dar errado".</p>
+                        
+                        <a href="pensamentos-automaticos.html" class="sticker-btn" style="background:#4fc3f7; color: #000!important;">
+                            Ver Detalhes
                         </a>
                     </div>
-
-                    <div class="ice-level">
-                        <h3>⚓ Meio: Crenças Intermediárias</h3>
-                        <p>Regras ("se... então..."), atitudes e suposições que criamos para viver.</p>
-                        <a href="crencas-intermediarias.html" class="btn-link">
-                            Entender Regras & Suposições
-                        </a>
-                    </div>
-
-                    <div class="ice-level">
-                        <h3>💎 Fundo: Crenças Nucleares</h3>
-                        <p>Verdades absolutas e rígidas sobre quem somos (Ex: "Sou inadequado").</p>
-                        <a href="crencas-centrais.html" class="btn-link">
-                            Descobrir Crenças Centrais
-                        </a>
-                    </div>
-
                 </div>
+
+                <div class="layer-middle">
+                    <div class="middle-iceberg">
+                        <span class="iceberg-title">⚓ Meio do Mar</span>
+                        <p><strong>Crenças Intermediárias</strong><br>Regras e atitudes. "Se eu falhar, ninguém vai gostar de mim".</p>
+                        
+                        <a href="crencas-intermediarias.html" class="sticker-btn" style="background:#29b6f6;">
+                            Entender as Regras
+                        </a>
+                    </div>
+                </div>
+
+                <div class="layer-deep">
+                    <div style="margin-bottom: 10px; opacity: 0.8;">🔒 Onde tudo começa...</div>
+                    <div class="deep-iceberg">
+                        <span class="iceberg-title">💎 Fundo do Mar</span>
+                        <p><strong>Crenças Nucleares</strong><br>Verdades profundas sobre quem somos. "Eu sou incapaz".</p>
+                        
+                        <a href="crencas-centrais.html" class="sticker-btn" style="background:#01579b; border-color: #4fc3f7;">
+                            Escavar a Raiz
+                        </a>
+                    </div>
+                </div>
+
             </div>
         </section>
 
-        <div class="card">
-            <h2>Armadilhas do Pensamento</h2>
-            <p>Distorções cognitivas comuns que nos enganam:</p>
+        <section>
+            <h2>🕸️ Armadilhas da Mente</h2>
+            <p>As vezes nosso cérebro conta mentiras convincentes (Distorções Cognitivas):</p>
             
-            <div class="traps-grid">
-                <div class="trap-box">
-                    <span class="trap-icon">⚖️</span>
-                    <h4>Tudo ou Nada</h4>
-                    <p>Visão em preto e branco. "Se errei isso, sou um fracasso total".</p>
-                </div>
-                <div class="trap-box">
-                    <span class="trap-icon">🔮</span>
-                    <h4>Adivinhação</h4>
-                    <p>Prever o futuro negativo sem evidências concretas.</p>
-                </div>
-                <div class="trap-box">
-                    <span class="trap-icon">❤️‍🔥</span>
-                    <h4>Raciocínio Emocional</h4>
-                    <p>Achar que o que você <em>sente</em> é a verdade dos fatos.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2>Caixa de Ferramentas</h2>
-            <ul style="padding-left: 20px; list-style: none;">
-                <li style="margin-bottom: 20px;">
-                    <strong>📝 RPD (Registro de Pensamentos):</strong><br>
-                    O diário de bordo da TCC. Anotar os pensamentos para sair do piloto automático.
+            <ul style="list-style: none; padding: 0;">
+                <li style="margin-bottom: 15px; background: #fff; padding: 10px; border-radius: 10px; border-left: 5px solid #ffca28;">
+                    <strong>⚖️ Tudo ou Nada:</strong> Se não foi perfeito, foi horrível. Sem meio termo.
                 </li>
-                <li style="margin-bottom: 20px;">
-                    <strong>⚙️ Ativação Comportamental:</strong><br>
-                    Agendar atividades prazerosas para combater a inércia da depressão.
+                <li style="margin-bottom: 15px; background: #fff; padding: 10px; border-radius: 10px; border-left: 5px solid #ab47bc;">
+                    <strong>🔮 Adivinhação:</strong> Achar que sabe o futuro (e que ele será ruim) sem ter prova nenhuma.
                 </li>
-                <li>
-                    <strong>🧪 Experimentos Comportamentais:</strong><br>
-                    Testar suas crenças na prática (Ex: Falar "não" e ver se o mundo acaba).
+                <li style="margin-bottom: 15px; background: #fff; padding: 10px; border-radius: 10px; border-left: 5px solid #ef5350;">
+                    <strong>❤️‍🔥 Raciocínio Emocional:</strong> "Se eu me sinto culpado, é porque eu fiz algo errado." (Sentimento não é fato!).
                 </li>
             </ul>
-        </div>
+        </section>
+
+        <section>
+            <h2>🧰 Sua Caixa de Ferramentas</h2>
+            <p>O que vamos usar na terapia:</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div style="background: #e8f5e9; padding: 15px; border-radius: 10px;">
+                    <strong>📝 RPD</strong><br>
+                    Diário de pensamentos para sair do piloto automático.
+                </div>
+                <div style="background: #fff3e0; padding: 15px; border-radius: 10px;">
+                    <strong>⚙️ Ativação</strong><br>
+                    Fazer coisas prazerosas mesmo sem vontade inicial.
+                </div>
+                <div style="background: #f3e5f5; padding: 15px; border-radius: 10px; grid-column: span 2;">
+                    <strong>🧪 Experimentos</strong><br>
+                    Testar suas crenças na vida real. (Ex: Falar "não" e ver o que acontece).
+                </div>
+            </div>
+        </section>
 
         <footer>
-            <p>&copy; 2026 Bruno de Souza</p>
-            <p style="opacity: 0.6; font-size: 0.8em;">Material de Psicoeducação - Terapia Cognitivo-Comportamental</p>
+            © 2026 Bruno de Souza - Material de Apoio TCC
         </footer>
 
     </div>
