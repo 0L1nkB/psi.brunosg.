@@ -6,12 +6,44 @@
     <title>Minhas Ferramentas | Bruno de Souza</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../style/style.css">
+
+    <style>
+        body {
+            /* Usei um roxo azulado profundo, profissional e agradável */
+            background-color: #3c315c;
+            
+            /* Se preferir um gradiente mais moderno, descomente a linha abaixo: */
+            /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+            
+            /* Garante que o fundo cubra toda a altura da tela */
+            min-height: 100vh;
+        }
+
+        /* Ajustando a cor dos textos fora dos cartões para branco para dar contraste */
+        header h1, header .crp, footer {
+            color: #ffffff !important;
+        }
+
+        /* Ajustando o link de "Sair" para branco */
+        #btn-sair {
+             color: rgba(255,255,255,0.8) !important;
+        }
+        #btn-sair:hover {
+             color: #ffffff !important;
+        }
+
+        /* Pequeno ajuste para garantir que o rodapé não fique colado no final em telas grandes */
+        #dashboard {
+            padding-bottom: 20px;
+        }
+    </style>
+
 </head>
 <body>
 
     <div id="dashboard" style="display: block;">
         
-        <a href="login.html" style="position: absolute; top: 15px; right: 20px; text-decoration: none; color: #555; font-size: 0.9em;">
+        <a href="login.html" id="btn-sair" style="position: absolute; top: 15px; right: 20px; text-decoration: none; font-size: 0.9em;">
             <i class="fa-solid fa-right-from-bracket"></i> Sair
         </a>
 
