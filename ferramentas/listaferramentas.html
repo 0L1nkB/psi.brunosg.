@@ -9,17 +9,12 @@
 </head>
 <body>
 
-    <div id="login-screen">
-        <div class="login-box">
-            <h2 style="margin-top: 20px;">Olá! 👋</h2>
-            <p>Qual é a palavra-chave?</p>
-            <input type="password" id="password" class="login-input" placeholder="Digite aqui...">
-            <button type="button" class="btn-login" onclick="checkLogin()">ABRIR BAÚ 🔓</button>
-            <p class="error-msg" id="error">Ops! Tente de novo.</p>
-        </div>
-    </div>
+    <div id="dashboard" style="display: block;">
+        
+        <a href="login.html" style="position: absolute; top: 15px; right: 20px; text-decoration: none; color: #555; font-size: 0.9em;">
+            <i class="fa-solid fa-right-from-bracket"></i> Sair
+        </a>
 
-    <div id="dashboard">
         <header>
             <h1>🧩 Minha Caixa de Ferramentas</h1>
             <div class="crp">Psicólogo Bruno de Souza • CRP 07/44472</div>
@@ -194,28 +189,6 @@
             Feito com carinho ❤️ • Uso exclusivo do Psi Bruno
         </footer>
     </div>
-
-    <script>
-        const SENHA_CORRETA = "psi123"; // SENHA AQUI
-
-        function checkLogin() {
-            var input = document.getElementById('password');
-            var error = document.getElementById('error');
-            
-            if (input.value === SENHA_CORRETA) {
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('dashboard').style.display = 'block';
-            } else {
-                error.style.display = 'block';
-                input.value = '';
-                input.focus();
-            }
-        }
-
-        document.getElementById('password').addEventListener("keypress", function(e) {
-            if (e.key === "Enter") checkLogin();
-        });
-    </script>
 
 </body>
 </html>
