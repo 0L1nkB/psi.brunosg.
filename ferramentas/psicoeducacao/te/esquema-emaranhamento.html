@@ -3,414 +3,365 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emaranhamento - Caderno Terapêutico</title>
+    <title>Emaranhamento | Bruno de Souza</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <style>
         :root {
-            /* Paleta "Cortando o Cordão" */
-            --paper-line: #ffedd5;    /* Linhas pêssego bem claras */
-            --paper-bg: #fffbf7;      
-            --ink-color: #4a4a4a;
+            /* Identidade Visual - Tema "Fusão/Individualidade" */
+            --bg-color: #fff8f5;      /* Laranja/Pêssego muito suave */
+            --primary: #ff7043;       /* Laranja Coral (Vínculo/Fusão) */
+            --primary-dark: #d84315;
+            --accent: #26a69a;        /* Turquesa (Individualidade/Eu) */
+            --text: #2d3436;
+            --card-border: #b0bec5;
             
-            /* Cores do Esquema (Fusão -> Individualidade) */
-            --primary: #f97316;       /* Laranja Coral (O Vínculo Forte) */
-            --primary-hover: #c2410c;
-            --individuality: #0d9488; /* Turquesa (O Eu Separado) */
-            
-            /* Tags de Personas */
-            --tag-gabriel-bg: #ffedd5; --tag-gabriel-text: #9a3412; /* Laranja (Sombra) */
-            --tag-fernanda-bg: #ccfbf1; --tag-fernanda-text: #0f766e; /* Turquesa (Fugitiva) */
-
-            --radius: 16px;
-            --shadow-paper: 3px 3px 10px rgba(0,0,0,0.06);
+            /* Cores Específicas */
+            --merge-color: #ffab91;   /* Laranja Claro (Fusão/Gabriel) */
+            --escape-color: #80cbc4;  /* Turquesa Claro (Fuga/Fernanda) */
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Nunito', sans-serif;
-            color: var(--ink-color);
-            line-height: 1.6;
-            background-color: var(--paper-bg);
-            /* Efeito Papel Pautado */
-            background-image: linear-gradient(var(--paper-line) 1px, transparent 1px);
-            background-size: 100% 2rem;
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#ffccbc 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            color: var(--text);
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            align-items: center;
         }
 
-        h1, h2, h3, h4 {
-            font-family: 'Patrick Hand', cursive;
-            color: #c2410c;
-        }
-
-        /* --- HEADER --- */
+        /* --- CABEÇALHO --- */
         header {
-            background-color: rgba(255, 255, 255, 0.95);
-            border-bottom: 2px dashed #fdba74;
-            padding: 2rem 0;
-            margin-bottom: 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);
-        }
-
-        .header-content {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0 20px;
             text-align: center;
+            margin: 20px auto 40px auto;
+            background: white;
+            padding: 30px 20px;
+            border-radius: 25px;
+            border: 3px dashed var(--primary);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            position: relative;
+            max-width: 800px;
+            width: 100%;
         }
 
-        .header-title {
-            font-size: 2.5rem;
+        header::before {
+            content: ""; 
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%) rotate(-1deg);
+            width: 140px; height: 35px; 
+            background-color: rgba(255, 112, 67, 0.2); 
+            border: 1px solid rgba(0,0,0,0.05); 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2rem;
             color: var(--primary);
-            margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 0px #ffedd5;
+            text-transform: uppercase;
+            margin: 0;
+            font-weight: 800;
         }
 
-        .header-subtitle {
-            font-size: 1.2rem;
-            color: #78716c;
-            font-family: 'Patrick Hand', cursive;
-        }
+        .subtitle { margin-top: 5px; color: #636e72; font-weight: 600; }
 
         /* --- CONTAINER --- */
         .main-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0 20px;
+            max-width: 850px;
             width: 100%;
-            display: grid;
-            gap: 35px;
-            margin-bottom: 60px;
+            margin-bottom: 80px;
         }
 
-        /* --- CARDS (PAPEL) --- */
-        .paper-card {
-            background-color: #ffffff;
-            border-radius: 2px;
-            box-shadow: var(--shadow-paper);
-            border: 1px solid #fed7aa;
-            padding: 2rem;
-            position: relative;
-            transform: rotate(-0.5deg);
-            transition: transform 0.3s;
-        }
-        
-        .paper-card:hover { transform: rotate(0deg) translateY(-3px); }
-        
-        /* Fita Adesiva (Washi Tape) */
-        .paper-card::before {
-            content: '';
-            position: absolute;
-            top: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 30px;
-            background-color: rgba(249, 115, 22, 0.15); /* Laranja translúcido */
-            border: 1px solid #fdba74;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            opacity: 0.9;
+        /* --- CARDS DE CONTEÚDO --- */
+        .content-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.05);
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
         }
 
-        .card-header {
+        .content-card:hover {
+            border-color: var(--card-border);
+            transform: translateY(-2px);
+        }
+
+        .card-title {
+            color: var(--primary-dark);
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid var(--paper-line);
+            gap: 10px;
+            border-bottom: 2px dashed #eee;
             padding-bottom: 10px;
         }
 
-        .card-icon { font-size: 1.8rem; color: var(--primary); }
-        .card-title { font-size: 1.8rem; margin: 0; }
-
-        /* --- POST-IT (DEFINIÇÃO) --- */
-        .post-it {
-            background-color: #ffedd5; /* Pêssego */
-            padding: 1.5rem;
-            border-radius: 2px 2px 16px 2px;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
-            font-family: 'Patrick Hand', cursive;
-            font-size: 1.3rem;
-            color: #9a3412;
-            transform: rotate(1deg);
-            margin: 20px 0;
-            border-left: 5px solid #f97316;
-        }
-
-        /* --- PERSONAS --- */
-        .persona-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-        }
-
-        .persona-card {
-            background: #fff;
+        .highlight-box {
+            background: #fbe9e7;
+            border-left: 5px solid var(--primary);
             padding: 20px;
-            border: 2px dashed #fdba74;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 1rem;
+            color: #bf360c;
+        }
+
+        /* --- GRID DE PERSONAS (DUAL) --- */
+        .dual-symptoms {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .symptom-column h4 {
+            text-align: center; margin-bottom: 15px; font-weight: 800; text-transform: uppercase; font-size: 0.9rem;
+        }
+
+        .symptom-item {
+            background: #f8f9fa;
+            padding: 15px;
             border-radius: 12px;
+            display: flex; flex-direction: column; gap: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid;
         }
         
-        .persona-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .persona-name { font-size: 1.4rem; font-weight: 700; color: #c2410c; }
-        .persona-tag { font-family: 'Nunito', sans-serif; font-size: 0.8rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; }
-        
-        .tag-gabriel { background: var(--tag-gabriel-bg); color: var(--tag-gabriel-text); }
-        .tag-fernanda { background: var(--tag-fernanda-bg); color: var(--tag-fernanda-text); }
+        .style-merge { border-color: var(--merge-color); }
+        .style-escape { border-color: var(--escape-color); }
 
-        /* --- STICKERS (3 DIMENSÕES) --- */
-        .sticker-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;
+        .persona-tag {
+            font-size: 0.75rem; text-transform: uppercase; font-weight: 800;
+            padding: 4px 10px; border-radius: 20px; width: fit-content;
         }
-        
-        .sticker-box {
-            background: white; padding: 1.5rem; border-radius: 12px;
-            border: 2px solid #fff7ed; text-align: center;
-            transition: all 0.3s;
-        }
-        .sticker-box:hover { border-color: var(--primary); transform: scale(1.02); }
-        .sticker-icon { font-size: 2rem; margin-bottom: 10px; display: block; }
+        .tag-gabriel { background: #ffccbc; color: #bf360c; }
+        .tag-fernanda { background: #b2dfdb; color: #00695c; }
 
-        /* --- TRADUTOR INTERATIVO --- */
-        .translator-area {
-            background-color: #f0fdfa; /* Turquesa muito claro (Ar Fresco) */
-            padding: 2rem; border-radius: 20px;
-            border: 2px dashed #99f6e4; text-align: center;
+        /* --- WIDGET: TRADUTOR DO EU --- */
+        .translator-container {
+            text-align: center;
+            background: #e0f2f1; /* Turquesa muito claro */
+            padding: 25px;
+            border-radius: 20px;
+            border: 2px dashed #4db6ac;
         }
 
-        .btn-translate {
-            background: white; border: 2px solid #ccfbf1;
-            padding: 10px 20px; margin: 5px; border-radius: 30px;
-            font-family: 'Nunito', sans-serif; font-weight: 700; color: #0f766e;
-            cursor: pointer; transition: all 0.2s;
-            box-shadow: 0 4px 0 #ccfbf1;
-        }
-        
-        .btn-translate:active { box-shadow: 0 0 0 #ccfbf1; transform: translateY(4px); }
-        .btn-translate:hover { background: #fff; border-color: var(--individuality); color: var(--individuality); }
-
-        .result-bubble {
-            background: white; padding: 20px; border-radius: 20px;
-            margin-top: 20px; border: 2px solid #99f6e4;
-            font-family: 'Patrick Hand', cursive; font-size: 1.3rem;
-            color: #115e59; min-height: 100px; display: flex; align-items: center; justify-content: center;
+        .translator-display {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: 0.3s;
         }
 
-        /* --- ACCORDIONS --- */
-        details {
-            background: #fff7ed; border-radius: 12px; margin-bottom: 10px;
-            border: 1px solid #fdba74;
+        .btn-trans {
+            background: white; border: 2px solid #b2dfdb; color: #00796b;
+            padding: 10px 20px; border-radius: 30px; font-weight: 700;
+            cursor: pointer; margin: 5px; transition: 0.2s; font-family: 'Quicksand';
         }
-        summary {
-            padding: 15px; font-weight: 700; cursor: pointer; list-style: none;
-            display: flex; justify-content: space-between; color: #c2410c;
-        }
-        summary:hover { background: #ffedd5; border-radius: 12px; }
-        .details-content { padding: 20px; border-top: 1px dashed #fdba74; color: #4b5563; }
+        .btn-trans:hover { border-color: var(--accent); background: var(--accent); color: white; }
 
-        /* --- FLASHCARD (FLIP) --- */
-        .flashcard-container { perspective: 1000px; width: 100%; height: 280px; cursor: pointer; }
-        .flashcard-inner {
-            position: relative; width: 100%; height: 100%; text-align: center;
-            transition: transform 0.6s; transform-style: preserve-3d;
+        /* --- NEUROBIOLOGIA --- */
+        .neuro-box {
+            display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; margin-top: 20px;
         }
-        .flashcard-container.flipped .flashcard-inner { transform: rotateY(180deg); }
-        
-        .flashcard-front, .flashcard-back {
+        .neuro-item {
+            flex: 1; min-width: 200px;
+            background: #fafafa; border: 1px solid #eee;
+            padding: 20px; border-radius: 15px;
+            text-align: center;
+        }
+        .neuro-item i { font-size: 2rem; color: var(--primary); margin-bottom: 10px; }
+        .neuro-item h4 { margin: 5px 0; font-size: 1rem; color: var(--primary-dark); }
+        .neuro-item p { font-size: 0.85rem; color: #666; margin: 0; }
+
+        /* --- FLIP CARDS --- */
+        .flip-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .flip-card {
+            background-color: transparent;
+            height: 300px;
+            perspective: 1000px;
+            cursor: pointer;
+            margin: 0 auto;
+            max-width: 350px;
+            width: 100%;
+        }
+
+        .flip-card-inner {
+            position: relative; width: 100%; height: 100%;
+            text-align: center; transition: transform 0.6s;
+            transform-style: preserve-3d;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+
+        .flip-front, .flip-back {
             position: absolute; width: 100%; height: 100%;
             -webkit-backface-visibility: hidden; backface-visibility: hidden;
-            border-radius: 16px; padding: 2rem;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            box-shadow: var(--shadow-paper); border: 2px solid;
-        }
-        
-        .flashcard-front {
-            background: #fff7ed; border-color: #ffedd5; color: #9a3412;
-        }
-        .flashcard-back {
-            background: #f0fdfa; border-color: #99f6e4; color: #0f766e;
-            transform: rotateY(180deg);
+            padding: 25px; border-radius: 15px; border: 2px solid #dfe6e9;
+            box-sizing: border-box;
         }
 
-        /* --- FOOTER PADRÃO --- */
+        .flip-front { background-color: white; color: #2d3436; }
+        .flip-back { background-color: var(--accent); color: white; transform: rotateY(180deg); border-color: var(--accent); }
+
+        /* Botão Voltar */
+        .btn-back {
+            display: block; margin: 30px auto; text-align: center; color: #b2bec3; text-decoration: none; font-weight: 600;
+        }
+        .btn-back:hover { color: var(--primary); }
+
+        /* --- FOOTER ADAPTADO --- */
         footer {
-            background-color: #ffffff;
-            border-top: 1px solid #e5e7eb;
-            padding: 2rem 0;
+            width: 100%;
+            background-color: white;
+            border-top: 1px dashed #b2bec3;
+            padding: 30px 20px;
             margin-top: auto;
         }
         .footer-container {
-            max-width: 1000px;
+            max-width: 900px;
             margin: 0 auto;
-            padding: 0 20px;
-            display: flex; justify-content: space-between; align-items: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .footer-brand { color: #64748b; font-size: 0.9rem; font-weight: 600; }
-        .social-links { display: flex; gap: 1.5rem; }
-        .social-links a { color: #94a3b8; font-size: 1.2rem; transition: color 0.2s; }
-        .social-links a:hover { color: var(--primary); }
+        .footer-brand { color: #636e72; font-weight: 700; font-size: 0.95rem; }
+        .social-links { display: flex; gap: 20px; }
+        .social-links a { color: #b2bec3; font-size: 1.4rem; transition: all 0.3s ease; }
+        .social-links a:hover { color: var(--primary); transform: translateY(-3px); }
 
-        @media (max-width: 640px) {
-            .footer-container { flex-direction: column; gap: 1rem; }
-            .persona-grid, .sticker-grid { grid-template-columns: 1fr; }
+        @media (max-width: 600px) {
+            .dual-symptoms { grid-template-columns: 1fr; }
+            .footer-container { flex-direction: column; gap: 15px; }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="header-content">
-            <h1 class="header-title">Emaranhamento</h1>
-            <p class="header-subtitle">Caderno de Psicoeducação</p>
-        </div>
+    <header data-aos="fade-down">
+        <h1>Emaranhamento</h1>
+        <div class="subtitle">O nó cego da identidade</div>
     </header>
 
     <div class="main-container">
-
-        <div class="paper-card">
-            <div class="card-header">
-                <i class="fas fa-link card-icon"></i>
-                <h2 class="card-title">O Nó Cego</h2>
-            </div>
-            <p>O Esquema de Emaranhamento (ou Self Subdesenvolvido) é a sensação de não ter uma identidade própria. Você se sente "fundido" com outra pessoa (mãe, pai, parceiro), como se não pudesse existir ou ser feliz sem ela.</p>
-            
-            <div class="post-it">
-                <i class="fas fa-thumbtack" style="color:#c2410c; margin-right:10px;"></i>
-                "Não sei onde eu termino e você começa. Se você está triste, eu estou triste. Se você for embora, eu deixo de existir."
+        
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-link"></i> O Que é Isso?</div>
+            <p>O Esquema de Emaranhamento (ou Self Subdesenvolvido) é a sensação de não ter uma identidade própria. Você se sente "fundido" com outra pessoa, como se não pudesse existir ou ser feliz sem ela.</p>
+            <div class="highlight-box">
+                <i class="fa-solid fa-circle-nodes"></i> <strong>A Sensação Central:</strong> "Não sei onde eu termino e você começa. Se você está triste, eu estou triste. Se você for embora, eu deixo de existir."
             </div>
         </div>
 
-        <div class="paper-card" style="transform: rotate(0.5deg);">
-            <div class="card-header">
-                <i class="fas fa-users card-icon"></i>
-                <h2 class="card-title">Espelhos da Vida Real</h2>
-            </div>
-            <p>Como a fusão emocional se manifesta:</p>
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-users"></i> Formas de Enfrentamento</div>
             
-            <div class="persona-grid">
-                <div class="persona-card">
-                    <div class="persona-header">
-                        <span class="persona-name">Gabriel</span>
-                        <span class="persona-tag tag-gabriel">O Sombra</span>
+            <div class="dual-symptoms">
+                <div class="symptom-column">
+                    <div class="symptom-item style-merge">
+                        <span class="persona-tag tag-gabriel">Gabriel (O Sombra)</span>
+                        <div><strong>Comportamento:</strong> Não tem opiniões próprias. Copia os gostos da esposa/mãe. Sente culpa se tiver um desejo diferente.</div>
                     </div>
-                    <p>Gabriel não tem opiniões. Se perguntam o que ele quer jantar, ele olha para a esposa. Ele veste o que a mãe comprava. Ele vive a vida do outro, sentindo-se culpado se tiver um desejo diferente.</p>
-                    <p style="font-size:0.85rem; color:#9a3412;"><strong>Comportamento:</strong> Rendição (Fusão)</p>
-                </div>
-
-                <div class="persona-card">
-                    <div class="persona-header">
-                        <span class="persona-name">Fernanda</span>
-                        <span class="persona-tag tag-fernanda">A Fugitiva</span>
+                    <div class="symptom-item style-merge">
+                        <div><strong>Consequência:</strong> Perda total de identidade, vive a vida do outro.</div>
                     </div>
-                    <p>Fernanda evita relacionamentos sérios. Ela sente que, se deixar alguém se aproximar, será "engolida" ou sufocada. Ela mantém todos à distância para proteger seu frágil senso de eu.</p>
-                    <p style="font-size:0.85rem; color:#0f766e;"><strong>Comportamento:</strong> Evitação (Medo de engolfamento)</p>
+                </div>
+
+                <div class="symptom-column">
+                    <div class="symptom-item style-escape">
+                        <span class="persona-tag tag-fernanda">Fernanda (A Fugitiva)</span>
+                        <div><strong>Comportamento:</strong> Evita relacionamentos sérios por medo de ser "engolida" ou sufocada. Mantém distância para proteger seu "eu".</div>
+                    </div>
+                    <div class="symptom-item style-escape">
+                        <div><strong>Consequência:</strong> Isolamento emocional, medo de intimidade.</div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="paper-card">
-            <div class="card-header">
-                <i class="fas fa-shapes card-icon"></i>
-                <h2 class="card-title">Sintomas da Fusão</h2>
-            </div>
-            <div class="sticker-grid">
-                <div class="sticker-box">
-                    <span class="sticker-icon">🪢</span>
-                    <h4>Fusão Total</h4>
-                    <p>Não saber o que sente ou pensa sem consultar o outro. "Nós pensamos..." em vez de "Eu penso...".</p>
-                </div>
-                <div class="sticker-box">
-                    <span class="sticker-icon">😶</span>
-                    <h4>Vazio de Identidade</h4>
-                    <p>Sentir-se "oco" ou sem direção quando está sozinho. Falta de hobbies ou gostos próprios.</p>
-                </div>
-                <div class="sticker-box">
-                    <span class="sticker-icon">😟</span>
-                    <h4>Culpa por Separar</h4>
-                    <p>Sentir que ter uma vida própria é uma traição ou abandono da outra pessoa.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="paper-card" style="transform: rotate(-0.5deg);">
-            <div class="card-header">
-                <i class="fas fa-language card-icon"></i>
-                <h2 class="card-title">Tradutor do "Eu"</h2>
-            </div>
-            <p>Vamos separar sua voz da voz do outro. Traduza a "Fusão" em "Individuação":</p>
-            
-            <div class="translator-area">
-                <p style="margin-bottom:15px; font-weight:700;">O que você costuma dizer?</p>
-                <div>
-                    <button class="btn-translate" onclick="translateNeed('nos')">"Nós não gostamos disso."</button>
-                    <button class="btn-translate" onclick="translateNeed('morrer')">"Eu não vivo sem você."</button>
-                    <button class="btn-translate" onclick="translateNeed('culpa')">"Se eu for, vou magoá-lo."</button>
-                </div>
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-language"></i> Tradutor do "Eu"</div>
+            <div class="translator-container">
+                <p style="font-weight:700; color:#00796b; margin-bottom:15px;">Vamos separar sua voz da do outro:</p>
                 
-                <div id="translator-bubble" class="result-bubble">
-                    Toque em uma frase para traduzir...
+                <div>
+                    <button class="btn-trans" onclick="translateNeed('nos')">"Nós não gostamos disso."</button>
+                    <button class="btn-trans" onclick="translateNeed('morrer')">"Eu não vivo sem você."</button>
+                    <button class="btn-trans" onclick="translateNeed('culpa')">"Se eu for, vou magoá-lo."</button>
+                </div>
+
+                <div class="translator-display" id="trans-res">
+                    <span style="color:#b0bec5; font-style:italic;">Clique na frase...</span>
                 </div>
             </div>
         </div>
 
-        <div class="paper-card">
-            <div class="card-header">
-                <i class="fas fa-brain card-icon"></i>
-                <h2 class="card-title">Conceitos Clínicos</h2>
-            </div>
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-brain"></i> Por Dentro da Mente</div>
             
-            <details>
-                <summary>🧠 Neurobiologia: O Cérebro Fusionado <i class="fas fa-chevron-down"></i></summary>
-                <div class="details-content">
-                    <p>Seus neurônios-espelho (empatia) são hiperativos para o outro, mas hipoativos para si mesmo. Você sente a dor do outro como se fosse sua, mas tem dificuldade em acessar seus próprios sinais corporais e emocionais.</p>
+            <div class="neuro-box">
+                <div class="neuro-item">
+                    <i class="fa-solid fa-network-wired"></i>
+                    <h4>Neurônios-Espelho</h4>
+                    <p>Eles estão hiperativos para o outro, mas hipoativos para si mesmo. Você sente a dor do outro como sua, mas tem dificuldade em acessar seus próprios sinais.</p>
                 </div>
-            </details>
-
-            <details>
-                <summary>🌱 Como a Terapia Ajuda? <i class="fas fa-chevron-down"></i></summary>
-                <div class="details-content">
-                    <p>O foco é a <strong>Individuação</strong>. É o processo de descobrir quem é "Você" fora da relação. O terapeuta ajuda a construir fronteiras saudáveis, onde você pode amar sem deixar de ser você.</p>
+                <div class="neuro-item">
+                    <i class="fa-solid fa-fingerprint"></i>
+                    <h4>Individuação</h4>
+                    <p>O processo de descobrir quem é "Você" fora da relação. O cérebro precisa aprender a construir fronteiras saudáveis.</p>
                 </div>
-            </details>
-
-            <details>
-                <summary>⚠️ A Ilusão da Traição <i class="fas fa-chevron-down"></i></summary>
-                <div class="details-content">
-                    <p>O esquema diz que "ser feliz sozinho é egoísmo". Isso é mentira. Relacionamentos saudáveis são feitos de dois indivíduos inteiros, não de duas metades. Ter sua vida enriquece a relação, não a destrói.</p>
-                </div>
-            </details>
+            </div>
         </div>
 
-        <div class="paper-card">
-            <div class="card-header">
-                <i class="fas fa-adjust card-icon"></i>
-                <h2 class="card-title">Vire o Pensamento</h2>
-            </div>
-            <p>Toque no cartão quando sentir culpa por ser você:</p>
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-rotate"></i> Vire o Pensamento</div>
+            <p style="margin-bottom:20px; text-align:center; font-size:0.9rem; color:#aaa;">Toque no cartão para ativar o Adulto Saudável</p>
             
-            <div class="flashcard-container" onclick="this.classList.toggle('flipped')">
-                <div class="flashcard-inner">
-                    <div class="flashcard-front">
-                        <h3 style="font-family:'Patrick Hand'; font-size:1.5rem;">Voz do Emaranhamento</h3>
-                        <p style="margin-top:10px;">"Como posso ir ao cinema sozinho enquanto ele está em casa? Isso é errado. Eu deveria ficar. Se eu me divertir sem ele, estou traindo nossa conexão."</p>
-                        <i class="fas fa-hand-pointer" style="margin-top:20px; color:#f97316; font-size:1.5rem;"></i>
-                    </div>
-                    <div class="flashcard-back">
-                        <h3 style="font-family:'Patrick Hand'; font-size:1.5rem;">Voz do Adulto Saudável</h3>
-                        <p style="margin-top:10px;">"Eu tenho o direito de ter meus próprios momentos. Isso não significa que eu o ame menos. Ter individualidade é saudável. Eu posso ser 'Eu' e ainda sermos 'Nós'."</p>
+            <div class="flip-grid">
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-front">
+                            <i class="fa-solid fa-people-arrows" style="font-size:2.5rem; color:#dfe6e9; margin-bottom:15px;"></i>
+                            <h3 style="font-size:1.1rem; color:#2d3436;">Voz do Emaranhamento</h3>
+                            <p style="margin-top:10px; font-size:0.9rem; color:#555;">"Como posso me divertir sozinho enquanto ele está em casa? Isso é errado. Se eu tiver vida própria, estou traindo nossa conexão."</p>
+                        </div>
+                        <div class="flip-back">
+                            <h3 style="font-size:1.1rem; margin-bottom:10px;">Adulto Saudável</h3>
+                            <p style="font-size:0.9rem;">"Eu tenho o direito de ter meus próprios momentos. Isso não significa que eu o ame menos. Ter individualidade é saudável. Posso ser 'Eu' e ainda sermos 'Nós'."</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <center>
+            <a href="../../listaferramentas.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Voltar para Ferramentas</a>
+        </center>
 
     </div>
 
@@ -420,31 +371,39 @@
                 &copy; 2026 Bruno de Souza
             </div>
             <div class="social-links">
-                <a href="https://www.instagram.com/psi.brunosg/" target="_blank"><i class="fab fa-instagram"></i></a>
-                <a href="https://wa.me/5553991898309" target="_blank"><i class="fab fa-whatsapp"></i></a>
-                <a href="https://www.linkedin.com/in/psi-bsouza/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                <a href="https://www.instagram.com/psi.brunosg/" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://wa.me/5553991898309" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.linkedin.com/in/psi-bsouza/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
             </div>
         </div>
     </footer>
 
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
+        AOS.init();
+
         function translateNeed(type) {
-            const bubble = document.getElementById('translator-bubble');
+            const display = document.getElementById('trans-res');
             let text = "";
+            let color = "";
             
             if (type === 'nos') {
-                text = "✨ Tradução: 'Ele não gosta disso, mas EU gosto. Eu tenho permissão para ter gostos diferentes.'";
+                text = "✨ <strong>Tradução:</strong> 'Ele não gosta disso, mas EU gosto. Eu tenho permissão para ter gostos diferentes e expressá-los.'";
+                color = "#ff7043";
             } else if (type === 'morrer') {
-                text = "✨ Tradução: 'Eu prefiro estar com você, mas eu SOBREVIVO sem você. Eu sou uma pessoa inteira.'";
+                text = "✨ <strong>Tradução:</strong> 'Eu prefiro estar com você, mas eu SOBREVIVO sem você. Eu sou uma pessoa inteira por conta própria.'";
+                color = "#26a69a";
             } else if (type === 'culpa') {
-                text = "✨ Tradução: 'Colocar limites não é machucar. É necessário para que eu continue saudável na relação.'";
+                text = "✨ <strong>Tradução:</strong> 'Colocar limites não é machucar. É necessário para que eu continue saudável na relação.'";
+                color = "#ffab91";
             }
             
-            bubble.style.opacity = 0;
+            display.style.opacity = 0;
+            display.style.borderTop = `5px solid ${color}`;
+            
             setTimeout(() => {
-                bubble.innerHTML = text;
-                bubble.style.opacity = 1;
-                bubble.style.transition = "opacity 0.3s";
+                display.innerHTML = `<p style="font-size:1.1rem; color:#2d3436;">${text}</p>`;
+                display.style.opacity = 1;
             }, 200);
         }
     </script>
