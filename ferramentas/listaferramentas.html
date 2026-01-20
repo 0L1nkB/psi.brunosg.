@@ -11,14 +11,12 @@
 
     <style>
         :root {
-            /* Cores e Identidade */
             --bg-color: #f0f8ff;
             --primary: #6c5ce7;
             --secondary: #00b894;
             --accent: #fdcb6e;
             --text: #2d3436;
             
-            /* Cores das Seções */
             --color-psico: #00cec9;
             --color-jogos: #fd79a8;
             --color-baralhos: #e17055;
@@ -27,7 +25,6 @@
             --color-aval: #00b894;
         }
 
-        /* --- BACKGROUND DA ROLETA (Pontilhado) --- */
         body {
             font-family: 'Quicksand', sans-serif;
             background-color: var(--bg-color);
@@ -37,12 +34,13 @@
             padding: 20px;
             min-height: 100vh;
             color: var(--text);
+            overflow-x: hidden; /* Evita rolagem lateral indesejada */
         }
 
-        /* --- CABEÇALHO COM FITA ADESIVA --- */
+        /* --- CABEÇALHO --- */
         header {
             text-align: center;
-            margin: 20px auto 50px auto;
+            margin: 20px auto 60px auto; /* Mais espaço embaixo do header */
             background: white;
             padding: 30px 20px;
             border-radius: 25px;
@@ -50,6 +48,7 @@
             box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
             position: relative;
             max-width: 800px;
+            z-index: 10;
         }
 
         header::before {
@@ -59,7 +58,7 @@
             background-color: rgba(255, 118, 117, 0.8);
             border: 1px solid rgba(0,0,0,0.05); 
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            z-index: 10;
+            z-index: 11;
         }
 
         header h1 {
@@ -71,13 +70,9 @@
         }
 
         .subtitle {
-            margin-top: 5px;
-            color: #636e72;
-            font-weight: 600;
-            font-size: 1rem;
+            margin-top: 5px; color: #636e72; font-weight: 600; font-size: 1rem;
         }
 
-        /* Botão Sair */
         #btn-sair {
             position: absolute; top: 15px; right: 20px;
             text-decoration: none; color: #b2bec3;
@@ -85,75 +80,83 @@
         }
         #btn-sair:hover { color: var(--primary); }
 
-        /* --- GRID E CARDS --- */
+        /* --- CONTAINER E GRID (CORREÇÃO DE SOBREPOSIÇÃO) --- */
         .dashboard-container {
-            max-width: 1200px; /* Aumentei um pouco para caber mais cards */
+            max-width: 1200px;
             margin: 0 auto;
-            padding-bottom: 60px;
+            padding: 0 20px 80px 20px; /* Padding lateral e inferior */
         }
 
         .section-label {
             font-size: 1.4rem; font-weight: 800;
-            margin: 60px 0 25px;
+            margin: 60px 0 30px; /* Margem generosa */
             display: flex; align-items: center; gap: 12px;
             padding-left: 10px; text-transform: uppercase; letter-spacing: 1px;
             border-bottom: 2px dashed rgba(0,0,0,0.1);
-            padding-bottom: 10px;
+            padding-bottom: 15px;
         }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 25px;
+            /* AUMENTADO: Largura mínima 260px para evitar esmagamento */
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            /* AUMENTADO: Espaço maior entre os itens */
+            gap: 35px;
+            width: 100%;
         }
 
-        /* CARD ESTILO SMI (Tracejado) */
+        /* --- CARDS --- */
         .tool-card {
             background: white;
             border: 2px dashed #b2bec3;
             border-radius: 20px;
-            padding: 25px 15px;
+            padding: 30px 20px; /* Padding interno maior */
             text-decoration: none;
             color: var(--text);
-            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             box-shadow: 0 4px 0 rgba(0,0,0,0.05);
             display: flex; flex-direction: column; align-items: center; text-align: center;
-            height: 100%;
+            height: 100%; /* Garante altura igual na linha */
             position: relative;
+            background-clip: padding-box;
+            z-index: 1;
         }
 
+        /* Correção Visual: Ao passar o mouse, o card vem para frente (Z-Index) */
         .tool-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
             border-color: var(--primary);
             background-color: #fff;
+            z-index: 10; /* Fica por cima dos vizinhos se houver conflito */
         }
 
         .card-icon {
-            font-size: 2rem; margin-bottom: 12px; transition: 0.3s;
+            font-size: 2.2rem; margin-bottom: 15px; transition: 0.3s;
         }
 
-        .tool-card:hover .card-icon { transform: scale(1.1) rotate(5deg); }
+        .tool-card:hover .card-icon { transform: scale(1.15) rotate(5deg); }
 
         .card-title {
-            font-weight: 700; font-size: 1rem; margin-bottom: 5px; color: #2d3436;
+            font-weight: 700; font-size: 1.1rem; margin-bottom: 8px; color: #2d3436;
         }
 
         .card-desc {
-            font-size: 0.8rem; color: #636e72; line-height: 1.4;
+            font-size: 0.85rem; color: #636e72; line-height: 1.5;
         }
 
         footer {
             text-align: center; margin-top: 80px; color: #b2bec3; font-size: 0.9rem; font-weight: 600;
         }
 
+        /* Responsividade Extrema */
         @media (max-width: 600px) {
-            header { padding: 20px 10px; }
-            header h1 { font-size: 1.5rem; }
-            .grid { grid-template-columns: 1fr 1fr; gap: 15px; } /* 2 colunas no celular */
-            .tool-card { padding: 15px 10px; }
-            .card-title { font-size: 0.9rem; }
-            .card-desc { font-size: 0.75rem; }
+            .grid { 
+                grid-template-columns: 1fr; /* 1 coluna em celulares */
+                gap: 25px;
+            }
+            .tool-card { padding: 20px; }
+            header { margin-bottom: 40px; }
         }
     </style>
 </head>
