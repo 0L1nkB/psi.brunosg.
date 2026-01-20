@@ -3,94 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BHS - Escala de Futuro | Caderno Incrível</title>
+    <title>BHS - Escala de Futuro | Bruno de Souza</title>
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
     <style>
         :root {
-            /* Paleta Lúdica */
-            --bg-color: #f0f8ff;
-            --paper: #ffffff;
-            --primary: #8e44ad; /* Roxo (Introspecção/Futuro) */
-            --secondary: #a29bfe; /* Lilás */
-            --accent: #fdcb6e; /* Amarelo */
+            /* Identidade Visual */
+            --bg-color: #f3e5f5;      /* Fundo Roxo Bem Claro */
+            --primary: #9b59b6;       /* Roxo Principal */
+            --primary-dark: #8e44ad;
             --text: #2d3436;
-            --certo-color: #00b894; /* Verde */
-            --errado-color: #ff7675; /* Vermelho Suave */
-            --shadow: rgba(0,0,0,0.1);
+            --card-border: #b2bec3;
+            
+            /* Cores dos Botões */
+            --true-color: #00b894;    /* Verde (Certo) */
+            --false-color: #ff7675;   /* Vermelho (Errado) */
         }
 
         body {
-            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+            font-family: 'Quicksand', sans-serif;
             background-color: var(--bg-color);
-            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
+            background-image: radial-gradient(#d1c4e9 2px, transparent 2px);
             background-size: 20px 20px;
             margin: 0;
             padding: 20px;
+            min-height: 100vh;
             color: var(--text);
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .container {
-            width: 100%;
-            max-width: 800px;
-            background: var(--paper);
-            padding: 40px;
-            border-radius: 25px;
-            box-shadow: 10px 10px 0 var(--shadow);
-            border: 3px solid var(--text);
-            position: relative;
-        }
-
-        /* CABEÇALHO COM FITA ROXA */
+        /* --- CABEÇALHO (Estilo Fita Adesiva) --- */
         header {
             text-align: center;
-            margin-bottom: 40px;
+            margin: 20px auto 40px auto;
+            background: white;
+            padding: 30px 20px;
+            border-radius: 25px;
+            border: 3px dashed var(--primary);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
             position: relative;
+            max-width: 800px;
+            width: 100%;
         }
 
         header::before {
-            content: ""; position: absolute; top: -55px; left: 50%; transform: translateX(-50%) rotate(-1deg);
-            width: 180px; height: 40px; background-color: rgba(162, 155, 254, 0.8);
+            content: ""; 
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%) rotate(-1deg);
+            width: 140px; height: 35px; 
+            background-color: rgba(155, 89, 182, 0.3); 
+            border: 1px solid rgba(0,0,0,0.05); 
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        h1 { margin: 0; color: var(--primary); font-size: 2.2rem; text-transform: uppercase; }
-        .instruction { font-size: 1.1rem; color: #636e72; margin-top: 15px; line-height: 1.5; }
+        header h1 {
+            font-size: 2rem;
+            color: var(--primary-dark);
+            text-transform: uppercase;
+            margin: 0;
+            font-weight: 800;
+        }
 
-        /* LISTA DE PERGUNTAS */
-        .question-item {
-            background: #fff;
-            margin-bottom: 15px;
-            padding: 20px;
-            border-radius: 15px;
-            border: 2px dashed #b2bec3;
+        .subtitle { margin-top: 5px; color: #636e72; font-weight: 600; }
+
+        /* --- CONTAINER PRINCIPAL --- */
+        .main-container {
+            max-width: 850px;
+            width: 100%;
+            margin-bottom: 80px;
+        }
+
+        /* --- CARTÃO DE PERGUNTA --- */
+        .question-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.05);
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
             display: flex;
             flex-direction: column;
             gap: 15px;
-            transition: background 0.2s;
         }
 
-        .question-item:hover { background-color: #f8f9fa; border-color: var(--primary); }
-
-        .q-text { 
-            font-size: 1.1rem; 
-            font-weight: bold; 
-            display: flex; 
-            gap: 10px; 
-            align-items: center; 
-        }
-        
-        .q-number { 
-            background: var(--primary); 
-            color: white; 
-            min-width: 30px; height: 30px; 
-            border-radius: 50%; 
-            display: flex; align-items: center; justify-content: center; 
-            font-size: 0.9rem; 
+        .question-card:hover {
+            border-color: var(--card-border);
+            transform: translateY(-2px);
         }
 
-        /* BOTÕES DE RESPOSTA (CERTO / ERRADO) */
+        .q-header {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .q-number {
+            background: var(--primary-bg);
+            color: var(--primary);
+            font-weight: 800;
+            min-width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            border: 2px solid var(--primary);
+        }
+
+        .q-text {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #2d3436;
+            line-height: 1.4;
+        }
+
+        /* --- BOTÕES DE RESPOSTA --- */
         .options-row {
             display: flex;
             gap: 15px;
@@ -98,190 +131,184 @@
         }
 
         .option-label {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100px;
-            padding: 8px;
-            border-radius: 50px;
-            border: 2px solid #ccc;
+            flex: 1;
+            max-width: 120px;
+            padding: 10px;
+            border-radius: 12px;
             cursor: pointer;
-            font-weight: bold;
+            text-align: center;
+            font-weight: 700;
             font-size: 0.9rem;
             transition: all 0.2s;
-            background: white;
+            border: 2px solid #dfe6e9;
+            background: #f8f9fa;
+            color: #636e72;
         }
 
-        .option-label input { display: none; } /* Esconde o rádio padrão */
-
         /* Estilo Botão CERTO */
-        .btn-certo:has(input:checked) {
-            background-color: var(--certo-color);
+        .btn-true:hover { border-color: var(--true-color); color: var(--true-color); background: #e0f2f1; }
+        .btn-true:has(input:checked) {
+            background-color: var(--true-color);
             color: white;
-            border-color: var(--certo-color);
+            border-color: var(--true-color);
             box-shadow: 0 4px 0 #00896f;
             transform: translateY(-2px);
         }
 
         /* Estilo Botão ERRADO */
-        .btn-errado:has(input:checked) {
-            background-color: var(--errado-color);
+        .btn-false:hover { border-color: var(--false-color); color: var(--false-color); background: #ffebee; }
+        .btn-false:has(input:checked) {
+            background-color: var(--false-color);
             color: white;
-            border-color: var(--errado-color);
+            border-color: var(--false-color);
             box-shadow: 0 4px 0 #d63031;
             transform: translateY(-2px);
         }
 
-        /* RODAPÉ E RESULTADO */
-        .result-box {
-            margin-top: 40px;
-            background: #f3e5f5; /* Roxo clarinho */
-            padding: 30px;
-            border-radius: 20px;
+        input[type="radio"] { display: none; }
+
+        /* --- BARRA DE RESULTADOS (Fixa) --- */
+        .result-bar {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2d3436;
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
             text-align: center;
-            border: 3px solid var(--primary);
+            font-size: 1.2rem;
+            font-weight: 700;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
             display: none;
+            z-index: 100;
+            border: 2px solid white;
+            animation: slideUp 0.3s ease-out;
+            white-space: nowrap;
         }
 
-        .score-display { font-size: 3rem; color: var(--primary); font-weight: 800; margin: 10px 0; }
-        .score-title { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; color: #2d3436; }
-
-        /* BOTÃO SALVAR */
-        .btn-action {
-            display: block; width: 100%;
-            margin-top: 30px; padding: 15px;
-            background-color: var(--primary); color: white;
-            border: none; border-radius: 50px;
-            font-size: 1.3rem; font-weight: bold; font-family: inherit;
-            cursor: pointer; box-shadow: 0 6px 0 #6c3483;
-            transition: transform 0.1s;
+        @keyframes slideUp {
+            from { transform: translate(-50%, 100px); }
+            to { transform: translate(-50%, 0); }
         }
-        .btn-action:hover { transform: translateY(-3px); }
-        .btn-action:active { transform: translateY(3px); box-shadow: none; }
+
+        /* Botão Voltar */
+        .btn-back {
+            display: inline-block; margin-top: 20px; color: #b2bec3; text-decoration: none; font-weight: 600; transition: 0.3s;
+        }
+        .btn-back:hover { color: var(--primary-dark); }
 
         @media (max-width: 600px) {
-            .options-row { justify-content: space-between; width: 100%; }
-            .option-label { flex: 1; }
-        }
-
-        @media print {
-            body { background: white; padding: 0; }
-            .container { box-shadow: none; border: none; width: 100%; }
-            .btn-action { display: none; }
-            .question-item { page-break-inside: avoid; border: 1px solid #ccc; background: none; }
-            .option-label { border: 1px solid #000; color: #000 !important; box-shadow: none !important; }
-            .btn-certo:has(input:checked) { background: #ddd !important; }
-            .btn-errado:has(input:checked) { background: #ddd !important; }
+            .q-text { font-size: 1rem; }
+            .option-label { font-size: 0.85rem; padding: 8px; }
+            .result-bar { width: 90%; font-size: 1rem; padding: 15px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <header>
-            <h1>BHS - Escala de Futuro</h1>
-            <p class="instruction">
-                Este questionário contém 20 afirmações sobre o futuro.<br>
-                Leia cada uma e marque <strong>CERTO</strong> se ela descreve sua atitude na última semana, ou <strong>ERRADO</strong> se não descreve.
-            </p>
-        </header>
+    <header data-aos="fade-down">
+        <h1>BHS - Escala de Futuro</h1>
+        <div class="subtitle">Como você viu seu futuro na última semana?</div>
+    </header>
 
-        <form id="bhs-form">
-            <div id="questions-container"></div>
+    <div class="main-container">
+        <form id="bhsForm">
+            <div id="quiz-area"></div>
         </form>
 
-        <div class="result-box" id="result-area">
-            <div class="score-title">Pontuação Total</div>
-            <div class="score-display" id="total-score">0</div>
-            <p style="color: #666; font-size: 0.9rem;">(Interpretação clínica reservada ao psicólogo)</p>
-        </div>
-
-        <button class="btn-action" onclick="window.print()">
-            <i class="fa-solid fa-print"></i> IMPRIMIR / SALVAR PDF
-        </button>
+        <center>
+            <a href="../listaferramentas.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Voltar para Ferramentas</a>
+        </center>
     </div>
 
+    <div class="result-bar" id="resultBar">
+        <i class="fa-solid fa-calculator"></i> Pontuação: <span id="scoreVal">0</span>
+    </div>
+    
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // PERGUNTAS E GABARITO (SCORE = 1 SE A RESPOSTA FOR IGUAL A 'TARGET')
-        // Target: true = Pontua se marcar CERTO. 
-        // Target: false = Pontua se marcar ERRADO (Invertido).
+        AOS.init();
+
+        // Target: true (Pontua se marcar CERTO) | false (Pontua se marcar ERRADO)
         const questions = [
-            { text: "Penso no futuro com esperança e entusiasmo.", target: false },
-            { text: "Seria melhor desistir, porque nada há que eu possa fazer para tornar as coisas melhores para mim.", target: true },
-            { text: "Quando as coisas vão mal, me ajuda saber que elas não podem continuar assim para sempre.", target: false },
-            { text: "Não consigo imaginar que espécie da vida será a minha em dez anos.", target: true },
-            { text: "Tenho tempo suficiente para realizar as coisas que quero fazer.", target: false },
-            { text: "No futuro, eu espero ter sucesso no que mais me interessa.", target: false },
-            { text: "Meu futuro me parece negro.", target: true },
-            { text: "Acontece que tenho uma sorte especial e espero conseguir mais coisas boas da vida do que uma pessoa comum.", target: false },
-            { text: "Simplesmente não consigo aproveitar as oportunidades e não há razão para que consiga, no futuro.", target: true },
-            { text: "Minhas experiências passadas me prepararam bem para o futuro.", target: false },
-            { text: "Tudo o que posso ver à minha frente é mais desprazer do que prazer.", target: true },
-            { text: "Não espero conseguir o que realmente quero.", target: true },
-            { text: "Quando penso no futuro, espero ser mais feliz do que sou agora.", target: false },
-            { text: "As coisas simplesmente não se resolvem da maneira que eu quero.", target: true },
-            { text: "Tenho uma grande fé no futuro.", target: false },
-            { text: "Nunca consigo o que quero. Assim, é tolice querer qualquer coisa.", target: true },
-            { text: "É pouco provável que eu vá obter qualquer satisfação real, no futuro.", target: true },
-            { text: "O futuro me parece vago e incerto.", target: true },
-            { text: "Posso esperar mais tempos bons do que maus.", target: false },
-            { text: "Não adianta tentar realmente obter algo que quero, porque provavelmente não vou conseguir.", target: true }
+            { t: "Penso no futuro com esperança e entusiasmo.", target: false },
+            { t: "Seria melhor desistir, pois não há nada que eu possa fazer para melhorar.", target: true },
+            { t: "Quando as coisas vão mal, me ajuda saber que não podem durar para sempre.", target: false },
+            { t: "Não consigo imaginar como será minha vida em dez anos.", target: true },
+            { t: "Tenho tempo suficiente para realizar as coisas que quero.", target: false },
+            { t: "No futuro, espero ter sucesso no que mais me interessa.", target: false },
+            { t: "Meu futuro me parece escuro/negro.", target: true },
+            { t: "Espero conseguir mais coisas boas da vida do que a média das pessoas.", target: false },
+            { t: "Não consigo aproveitar oportunidades e não há razão para ter sorte no futuro.", target: true },
+            { t: "Minhas experiências passadas me prepararam bem para o futuro.", target: false },
+            { t: "Tudo o que vejo à minha frente é mais desprazer do que prazer.", target: true },
+            { t: "Não espero conseguir o que realmente quero.", target: true },
+            { t: "Quando penso no futuro, espero ser mais feliz do que sou agora.", target: false },
+            { t: "As coisas simplesmente não se resolvem da maneira que eu quero.", target: true },
+            { t: "Tenho uma grande fé no futuro.", target: false },
+            { t: "Nunca consigo o que quero, então é tolice querer qualquer coisa.", target: true },
+            { t: "É pouco provável que eu obtenha qualquer satisfação real no futuro.", target: true },
+            { t: "O futuro me parece vago e incerto.", target: true },
+            { t: "Posso esperar mais tempos bons do que maus.", target: false },
+            { t: "Não adianta tentar obter o que quero, pois provavelmente não vou conseguir.", target: true }
         ];
 
-        const container = document.getElementById('questions-container');
+        const area = document.getElementById('quiz-area');
 
-        // GERAR HTML
+        // Gerar Perguntas
         questions.forEach((q, index) => {
-            const div = document.createElement('div');
-            div.className = 'question-item';
-            
-            div.innerHTML = `
-                <div class="q-text">
-                    <span class="q-number">${index + 1}</span>
-                    ${q.text}
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            card.setAttribute('data-aos', 'fade-up');
+
+            card.innerHTML = `
+                <div class="q-header">
+                    <div class="q-number">${index + 1}</div>
+                    <div class="q-text">${q.t}</div>
                 </div>
                 <div class="options-row">
-                    <label class="option-label btn-certo">
-                        <input type="radio" name="q${index}" value="true" onchange="calculateScore()">
+                    <label class="option-label btn-true">
+                        <input type="radio" name="q${index}" value="true" onchange="calcScore()">
                         CERTO
                     </label>
-                    <label class="option-label btn-errado">
-                        <input type="radio" name="q${index}" value="false" onchange="calculateScore()">
+                    <label class="option-label btn-false">
+                        <input type="radio" name="q${index}" value="false" onchange="calcScore()">
                         ERRADO
                     </label>
                 </div>
             `;
-            container.appendChild(div);
+            area.appendChild(card);
         });
 
-        // CÁLCULO
-        function calculateScore() {
+        function calcScore() {
             let total = 0;
-            let answeredCount = 0;
-            const form = document.getElementById('bhs-form');
+            const form = document.getElementById('bhsForm');
             const formData = new FormData(form);
+            let count = 0;
 
             for (let [name, value] of formData.entries()) {
-                const index = parseInt(name.substring(1)); // Pega o índice da pergunta (q0 -> 0)
-                const isTrue = (value === 'true'); // Converte string "true" para booleano
-                const target = questions[index].target; // Gabarito (true ou false)
+                const index = parseInt(name.substring(1));
+                const isTrue = (value === 'true');
+                const target = questions[index].target;
 
-                // Se a resposta do usuário for igual ao gabarito de desesperança, soma 1
+                // Se a resposta bater com o gabarito de desesperança, soma 1
                 if (isTrue === target) {
                     total++;
                 }
-                answeredCount++;
+                count++;
             }
 
-            // Exibir se começou a responder
-            const resultArea = document.getElementById('result-area');
-            const scoreDisplay = document.getElementById('total-score');
+            const bar = document.getElementById('resultBar');
+            const span = document.getElementById('scoreVal');
             
-            if (answeredCount > 0) {
-                resultArea.style.display = 'block';
-                scoreDisplay.innerText = total;
+            if (count > 0) {
+                bar.style.display = 'block';
+                span.innerText = total;
             }
         }
     </script>
+
 </body>
 </html>
