@@ -3,414 +3,365 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dependência e Incompetência - Caderno Terapêutico</title>
+    <title>Dependência e Incompetência | Bruno de Souza</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <style>
         :root {
-            /* Paleta "Pequeno no Mundo Grande" */
-            --paper-line: #eff6ff;    /* Linhas azuladas */
-            --paper-bg: #fdfdff;      
-            --ink-color: #374151;
+            /* Identidade Visual - Tema "Crescimento/Autonomia" */
+            --bg-color: #e3f2fd;      /* Azul muito pálido */
+            --primary: #1976d2;       /* Azul Royal (Confiança/Guia) */
+            --primary-dark: #0d47a1;
+            --accent: #ffb74d;        /* Laranja Suave (Alerta/Criança) */
+            --text: #2d3436;
+            --card-border: #90caf9;
             
-            /* Cores do Esquema (Azul Bebê -> Confiança) */
-            --primary: #3b82f6;       /* Azul Royal Suave */
-            --primary-hover: #2563eb;
-            --secondary: #1e3a8a;     
-            
-            /* Tags de Personas */
-            --tag-bia-bg: #dbeafe; --tag-bia-text: #1e40af; /* Azul (Criança) */
-            --tag-rafa-bg: #fef3c7; --tag-rafa-text: #b45309; /* Amarelo (Travado) */
-
-            --radius: 16px;
-            --shadow-paper: 3px 3px 10px rgba(0,0,0,0.06);
+            /* Cores Específicas */
+            --child-color: #1565c0;   /* Azul (Criança/Bia) */
+            --stuck-color: #ef6c00;   /* Laranja (Travado/Rafael) */
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Nunito', sans-serif;
-            color: var(--ink-color);
-            line-height: 1.6;
-            background-color: var(--paper-bg);
-            /* Efeito Papel Pautado */
-            background-image: linear-gradient(var(--paper-line) 1px, transparent 1px);
-            background-size: 100% 2rem;
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#bbdefb 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            color: var(--text);
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            align-items: center;
         }
 
-        h1, h2, h3, h4 {
-            font-family: 'Patrick Hand', cursive;
-            color: #1e3a8a;
-        }
-
-        /* --- HEADER --- */
+        /* --- CABEÇALHO --- */
         header {
-            background-color: rgba(255, 255, 255, 0.95);
-            border-bottom: 2px dashed #bfdbfe;
-            padding: 2rem 0;
-            margin-bottom: 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);
-        }
-
-        .header-content {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0 20px;
             text-align: center;
+            margin: 20px auto 40px auto;
+            background: white;
+            padding: 30px 20px;
+            border-radius: 25px;
+            border: 3px dashed var(--primary);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            position: relative;
+            max-width: 800px;
+            width: 100%;
         }
 
-        .header-title {
-            font-size: 2.5rem;
+        header::before {
+            content: ""; 
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%) rotate(-1deg);
+            width: 140px; height: 35px; 
+            background-color: rgba(25, 118, 210, 0.2); 
+            border: 1px solid rgba(0,0,0,0.05); 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2rem;
             color: var(--primary);
-            margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 0px #eff6ff;
+            text-transform: uppercase;
+            margin: 0;
+            font-weight: 800;
         }
 
-        .header-subtitle {
-            font-size: 1.2rem;
-            color: #64748b;
-            font-family: 'Patrick Hand', cursive;
-        }
+        .subtitle { margin-top: 5px; color: #636e72; font-weight: 600; }
 
         /* --- CONTAINER --- */
         .main-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0 20px;
+            max-width: 850px;
             width: 100%;
-            display: grid;
-            gap: 35px;
-            margin-bottom: 60px;
+            margin-bottom: 80px;
         }
 
-        /* --- CARDS (PAPEL) --- */
-        .paper-card {
-            background-color: #ffffff;
-            border-radius: 2px;
-            box-shadow: var(--shadow-paper);
-            border: 1px solid #e5e7eb;
-            padding: 2rem;
-            position: relative;
-            transform: rotate(-0.5deg);
-            transition: transform 0.3s;
-        }
-        
-        .paper-card:hover { transform: rotate(0deg) translateY(-3px); }
-        
-        /* Fita Adesiva (Washi Tape) */
-        .paper-card::before {
-            content: '';
-            position: absolute;
-            top: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 30px;
-            background-color: rgba(59, 130, 246, 0.15); /* Azul translúcido */
-            border: 1px solid #bfdbfe;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            opacity: 0.9;
+        /* --- CARDS DE CONTEÚDO --- */
+        .content-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.05);
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
         }
 
-        .card-header {
+        .content-card:hover {
+            border-color: var(--card-border);
+            transform: translateY(-2px);
+        }
+
+        .card-title {
+            color: var(--primary-dark);
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid var(--paper-line);
+            gap: 10px;
+            border-bottom: 2px dashed #eee;
             padding-bottom: 10px;
         }
 
-        .card-icon { font-size: 1.8rem; color: var(--primary); }
-        .card-title { font-size: 1.8rem; margin: 0; }
-
-        /* --- POST-IT (DEFINIÇÃO) --- */
-        .post-it {
-            background-color: #eff6ff; /* Azul Bebê */
-            padding: 1.5rem;
-            border-radius: 2px 2px 16px 2px;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
-            font-family: 'Patrick Hand', cursive;
-            font-size: 1.3rem;
-            color: #1e3a8a;
-            transform: rotate(1deg);
-            margin: 20px 0;
-            border-left: 5px solid #60a5fa;
-        }
-
-        /* --- PERSONAS --- */
-        .persona-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-        }
-
-        .persona-card {
-            background: #fff;
+        .highlight-box {
+            background: #e3f2fd;
+            border-left: 5px solid var(--primary);
             padding: 20px;
-            border: 2px dashed #bfdbfe;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 1rem;
+            color: #0d47a1;
+        }
+
+        /* --- GRID DE PERSONAS (DUAL) --- */
+        .dual-symptoms {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .symptom-column h4 {
+            text-align: center; margin-bottom: 15px; font-weight: 800; text-transform: uppercase; font-size: 0.9rem;
+        }
+
+        .symptom-item {
+            background: #f8f9fa;
+            padding: 15px;
             border-radius: 12px;
+            display: flex; flex-direction: column; gap: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid;
         }
         
-        .persona-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .persona-name { font-size: 1.4rem; font-weight: 700; color: #1e40af; }
-        .persona-tag { font-family: 'Nunito', sans-serif; font-size: 0.8rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; }
-        
-        .tag-bia { background: var(--tag-bia-bg); color: var(--tag-bia-text); }
-        .tag-rafa { background: var(--tag-rafa-bg); color: var(--tag-rafa-text); }
+        .style-child { border-color: var(--child-color); }
+        .style-stuck { border-color: var(--stuck-color); }
 
-        /* --- STICKERS (3 DIMENSÕES) --- */
-        .sticker-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;
+        .persona-tag {
+            font-size: 0.75rem; text-transform: uppercase; font-weight: 800;
+            padding: 4px 10px; border-radius: 20px; width: fit-content;
         }
-        
-        .sticker-box {
-            background: white; padding: 1.5rem; border-radius: 12px;
-            border: 2px solid #f0f9ff; text-align: center;
-            transition: all 0.3s;
-        }
-        .sticker-box:hover { border-color: var(--primary); transform: scale(1.02); }
-        .sticker-icon { font-size: 2rem; margin-bottom: 10px; display: block; }
+        .tag-bia { background: #bbdefb; color: var(--child-color); }
+        .tag-rafa { background: #ffe0b2; color: var(--stuck-color); }
 
-        /* --- TRADUTOR INTERATIVO --- */
-        .translator-area {
-            background-color: #f0f9ff; /* Azul gelo */
-            padding: 2rem; border-radius: 20px;
-            border: 2px dashed #93c5fd; text-align: center;
+        /* --- WIDGET: TRADUTOR DE PENSAMENTOS --- */
+        .translator-container {
+            text-align: center;
+            background: #e3f2fd;
+            padding: 25px;
+            border-radius: 20px;
+            border: 2px dashed #64b5f6;
         }
 
-        .btn-translate {
-            background: white; border: 2px solid #dbeafe;
-            padding: 10px 20px; margin: 5px; border-radius: 30px;
-            font-family: 'Nunito', sans-serif; font-weight: 700; color: #2563eb;
-            cursor: pointer; transition: all 0.2s;
-            box-shadow: 0 4px 0 #dbeafe;
-        }
-        
-        .btn-translate:active { box-shadow: 0 0 0 #dbeafe; transform: translateY(4px); }
-        .btn-translate:hover { background: #fff; border-color: var(--primary); color: var(--primary); }
-
-        .result-bubble {
-            background: white; padding: 20px; border-radius: 20px;
-            margin-top: 20px; border: 2px solid #bfdbfe;
-            font-family: 'Patrick Hand', cursive; font-size: 1.3rem;
-            color: #1e3a8a; min-height: 100px; display: flex; align-items: center; justify-content: center;
+        .translator-display {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: 0.3s;
         }
 
-        /* --- ACCORDIONS --- */
-        details {
-            background: #eff6ff; border-radius: 12px; margin-bottom: 10px;
-            border: 1px solid #bfdbfe;
+        .btn-trans {
+            background: white; border: 2px solid #bbdefb; color: #1565c0;
+            padding: 10px 20px; border-radius: 30px; font-weight: 700;
+            cursor: pointer; margin: 5px; transition: 0.2s; font-family: 'Quicksand';
         }
-        summary {
-            padding: 15px; font-weight: 700; cursor: pointer; list-style: none;
-            display: flex; justify-content: space-between; color: #2563eb;
-        }
-        summary:hover { background: #dbeafe; border-radius: 12px; }
-        .details-content { padding: 20px; border-top: 1px dashed #bfdbfe; color: #4b5563; }
+        .btn-trans:hover { border-color: var(--accent); background: var(--accent); color: white; }
 
-        /* --- FLASHCARD (FLIP) --- */
-        .flashcard-container { perspective: 1000px; width: 100%; height: 280px; cursor: pointer; }
-        .flashcard-inner {
-            position: relative; width: 100%; height: 100%; text-align: center;
-            transition: transform 0.6s; transform-style: preserve-3d;
+        /* --- NEUROBIOLOGIA --- */
+        .neuro-box {
+            display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; margin-top: 20px;
         }
-        .flashcard-container.flipped .flashcard-inner { transform: rotateY(180deg); }
-        
-        .flashcard-front, .flashcard-back {
+        .neuro-item {
+            flex: 1; min-width: 200px;
+            background: #fafafa; border: 1px solid #eee;
+            padding: 20px; border-radius: 15px;
+            text-align: center;
+        }
+        .neuro-item i { font-size: 2rem; color: var(--primary); margin-bottom: 10px; }
+        .neuro-item h4 { margin: 5px 0; font-size: 1rem; color: var(--primary-dark); }
+        .neuro-item p { font-size: 0.85rem; color: #666; margin: 0; }
+
+        /* --- FLIP CARDS --- */
+        .flip-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .flip-card {
+            background-color: transparent;
+            height: 300px;
+            perspective: 1000px;
+            cursor: pointer;
+            margin: 0 auto;
+            max-width: 350px;
+            width: 100%;
+        }
+
+        .flip-card-inner {
+            position: relative; width: 100%; height: 100%;
+            text-align: center; transition: transform 0.6s;
+            transform-style: preserve-3d;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+
+        .flip-front, .flip-back {
             position: absolute; width: 100%; height: 100%;
             -webkit-backface-visibility: hidden; backface-visibility: hidden;
-            border-radius: 16px; padding: 2rem;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            box-shadow: var(--shadow-paper); border: 2px solid;
-        }
-        
-        .flashcard-front {
-            background: #eff6ff; border-color: #bfdbfe; color: #1e3a8a;
-        }
-        .flashcard-back {
-            background: #ecfdf5; border-color: #6ee7b7; color: #047857;
-            transform: rotateY(180deg);
+            padding: 25px; border-radius: 15px; border: 2px solid #dfe6e9;
+            box-sizing: border-box;
         }
 
-        /* --- FOOTER PADRÃO --- */
+        .flip-front { background-color: white; color: #2d3436; }
+        .flip-back { background-color: var(--accent); color: white; transform: rotateY(180deg); border-color: var(--accent); }
+
+        /* Botão Voltar */
+        .btn-back {
+            display: block; margin: 30px auto; text-align: center; color: #b2bec3; text-decoration: none; font-weight: 600;
+        }
+        .btn-back:hover { color: var(--primary); }
+
+        /* --- FOOTER ADAPTADO --- */
         footer {
-            background-color: #ffffff;
-            border-top: 1px solid #e5e7eb;
-            padding: 2rem 0;
+            width: 100%;
+            background-color: white;
+            border-top: 1px dashed #b2bec3;
+            padding: 30px 20px;
             margin-top: auto;
         }
         .footer-container {
-            max-width: 1000px;
+            max-width: 900px;
             margin: 0 auto;
-            padding: 0 20px;
-            display: flex; justify-content: space-between; align-items: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .footer-brand { color: #64748b; font-size: 0.9rem; font-weight: 600; }
-        .social-links { display: flex; gap: 1.5rem; }
-        .social-links a { color: #94a3b8; font-size: 1.2rem; transition: color 0.2s; }
-        .social-links a:hover { color: var(--primary); }
+        .footer-brand { color: #636e72; font-weight: 700; font-size: 0.95rem; }
+        .social-links { display: flex; gap: 20px; }
+        .social-links a { color: #b2bec3; font-size: 1.4rem; transition: all 0.3s ease; }
+        .social-links a:hover { color: var(--primary); transform: translateY(-3px); }
 
-        @media (max-width: 640px) {
-            .footer-container { flex-direction: column; gap: 1rem; }
-            .persona-grid, .sticker-grid { grid-template-columns: 1fr; }
+        @media (max-width: 600px) {
+            .dual-symptoms { grid-template-columns: 1fr; }
+            .footer-container { flex-direction: column; gap: 15px; }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="header-content">
-            <h1 class="header-title">Dependência</h1>
-            <p class="header-subtitle">Caderno de Psicoeducação</p>
-        </div>
+    <header data-aos="fade-down">
+        <h1>Dependência e Incompetência</h1>
+        <div class="subtitle">A eterna criança em busca de um guia</div>
     </header>
 
     <div class="main-container">
-
-        <div class="paper-card">
-            <div class="card-header">
-                <i class="fas fa-baby-carriage card-icon"></i>
-                <h2 class="card-title">A Eterna Criança</h2>
-            </div>
-            <p>O Esquema de Dependência é a crença de que você é incapaz de lidar com as responsabilidades do dia a dia (finanças, decisões, problemas práticos) sem a ajuda de alguém "mais forte".</p>
-            
-            <div class="post-it">
-                <i class="fas fa-thumbtack" style="color:#2563eb; margin-right:10px;"></i>
-                "Sinto que todos receberam o manual de como ser adulto, menos eu. Estou sobrecarregado."
+        
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-baby-carriage"></i> O Que é Isso?</div>
+            <p>É a crença de que você é incapaz de lidar com as responsabilidades do dia a dia (decisões, finanças, problemas) sem a ajuda substancial de alguém "mais forte".</p>
+            <div class="highlight-box">
+                <i class="fa-solid fa-circle-exclamation"></i> <strong>A Sensação Central:</strong> "Sinto que todos receberam o manual de como ser adulto, menos eu. Estou sobrecarregado e perdido."
             </div>
         </div>
 
-        <div class="paper-card" style="transform: rotate(0.5deg);">
-            <div class="card-header">
-                <i class="fas fa-users card-icon"></i>
-                <h2 class="card-title">Espelhos da Vida Real</h2>
-            </div>
-            <p>Veja como a dependência trava a vida de formas diferentes:</p>
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-users"></i> Formas de Enfrentamento</div>
             
-            <div class="persona-grid">
-                <div class="persona-card">
-                    <div class="persona-header">
-                        <span class="persona-name">Bia</span>
-                        <span class="persona-tag tag-bia">A Menina</span>
+            <div class="dual-symptoms">
+                <div class="symptom-column">
+                    <div class="symptom-item style-child">
+                        <span class="persona-tag tag-bia">Bia (A Menina)</span>
+                        <div><strong>Comportamento:</strong> Pede aprovação para tudo (roupa, comida, emprego). Deixa mãe/marido decidirem sua vida.</div>
                     </div>
-                    <p>Bia não compra uma roupa sem mandar foto para a mãe ou marido. Ela tem pavor de tomar a decisão "errada". Deixa que os outros escolham o restaurante, o filme e até a carreira dela.</p>
-                    <p style="font-size:0.85rem; color:#1e40af;"><strong>Comportamento:</strong> Rendição (Passividade)</p>
-                </div>
-
-                <div class="persona-card">
-                    <div class="persona-header">
-                        <span class="persona-name">Rafael</span>
-                        <span class="persona-tag tag-rafa">O Travado</span>
+                    <div class="symptom-item style-child">
+                        <div><strong>Consequência:</strong> Perda de autonomia, sensação de ser "propriedade" do outro.</div>
                     </div>
-                    <p>Rafael deixa as contas vencerem e o carro quebrar, não por preguiça, mas por pavor de lidar com a burocracia. Ele evita "coisas de adulto" porque se sente incompetente para resolvê-las.</p>
-                    <p style="font-size:0.85rem; color:#b45309;"><strong>Comportamento:</strong> Evitação (Procrastinação)</p>
+                </div>
+
+                <div class="symptom-column">
+                    <div class="symptom-item style-stuck">
+                        <span class="persona-tag tag-rafa">Rafael (O Travado)</span>
+                        <div><strong>Comportamento:</strong> Evita burocracia, consertos ou finanças por pavor. Espera "alguém resolver".</div>
+                    </div>
+                    <div class="symptom-item style-stuck">
+                        <div><strong>Consequência:</strong> Problemas práticos se acumulam (multas, dívidas) gerando mais ansiedade.</div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="paper-card">
-            <div class="card-header">
-                <i class="fas fa-shapes card-icon"></i>
-                <h2 class="card-title">Por que me sinto pequeno?</h2>
-            </div>
-            <div class="sticker-grid">
-                <div class="sticker-box">
-                    <span class="sticker-icon">🙇</span>
-                    <h4>Incompetência</h4>
-                    <p>A sensação real de não ter as habilidades práticas ou o "bom senso" que os outros têm.</p>
-                </div>
-                <div class="sticker-box">
-                    <span class="sticker-icon">⚖️</span>
-                    <h4>Medo de Errar</h4>
-                    <p>Paralisia diante de decisões. O erro parece uma catástrofe, não um aprendizado.</p>
-                </div>
-                <div class="sticker-box">
-                    <span class="sticker-icon">🆘</span>
-                    <h4>Busca de Guia</h4>
-                    <p>A necessidade constante de ter uma "figura parental" (marido, chefe, pai) para segurar sua mão.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="paper-card" style="transform: rotate(-0.5deg);">
-            <div class="card-header">
-                <i class="fas fa-sync card-icon"></i>
-                <h2 class="card-title">Tradutor de Pensamentos</h2>
-            </div>
-            <p>A dependência diz que você não consegue. Vamos traduzir isso para a voz adulta:</p>
-            
-            <div class="translator-area">
-                <p style="margin-bottom:15px; font-weight:700;">O que sua mente diz?</p>
-                <div>
-                    <button class="btn-translate" onclick="translateNeed('decide')">"Você decide, tanto faz."</button>
-                    <button class="btn-translate" onclick="translateNeed('sozinho')">"Eu não consigo fazer isso sozinho."</button>
-                    <button class="btn-translate" onclick="translateNeed('erro')">"E se eu escolher errado?"</button>
-                </div>
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-language"></i> Tradutor de Pensamentos</div>
+            <div class="translator-container">
+                <p style="font-weight:700; color:#1565c0; margin-bottom:15px;">A dependência mente. Vamos traduzi-la:</p>
                 
-                <div id="translator-bubble" class="result-bubble">
-                    Toque em um pensamento para traduzir...
+                <div>
+                    <button class="btn-trans" onclick="translateNeed('decide')">"Você decide, tanto faz."</button>
+                    <button class="btn-trans" onclick="translateNeed('sozinho')">"Eu não consigo fazer isso sozinho."</button>
+                    <button class="btn-trans" onclick="translateNeed('erro')">"E se eu escolher errado?"</button>
+                </div>
+
+                <div class="translator-display" id="trans-res">
+                    <span style="color:#b0bec5; font-style:italic;">Clique no pensamento...</span>
                 </div>
             </div>
         </div>
 
-        <div class="paper-card">
-            <div class="card-header">
-                <i class="fas fa-brain card-icon"></i>
-                <h2 class="card-title">Conceitos Clínicos</h2>
-            </div>
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-brain"></i> Por Dentro da Mente</div>
             
-            <details>
-                <summary>🧠 Neurobiologia: O Desamparo Aprendido <i class="fas fa-chevron-down"></i></summary>
-                <div class="details-content">
-                    <p>Seus pais provavelmente fizeram tudo por você (superproteção) ou não ensinaram como fazer (negligência). Seu cérebro não formou as vias neurais de "autoeficácia". Você aprendeu que é mais seguro ficar passivo do que tentar.</p>
+            <div class="neuro-box">
+                <div class="neuro-item">
+                    <i class="fa-solid fa-seedling"></i>
+                    <h4>Desamparo Aprendido</h4>
+                    <p>Seus pais fizeram tudo por você (superproteção) ou não ensinaram (negligência). Seu cérebro não criou as vias neurais de "eu consigo".</p>
                 </div>
-            </details>
-
-            <details>
-                <summary>🌱 Como a Terapia Ajuda? <i class="fas fa-chevron-down"></i></summary>
-                <div class="details-content">
-                    <p>O foco é a <strong>Autonomia Gradual</strong>. O terapeuta não vai dar as respostas (isso reforçaria o esquema). Ele vai ajudar você a confiar no seu próprio julgamento, começando com pequenas decisões.</p>
+                <div class="neuro-item">
+                    <i class="fa-solid fa-couch"></i>
+                    <h4>Passividade</h4>
+                    <p>Pedir ajuda alivia a ansiedade na hora, mas reforça a crença de incompetência a longo prazo. A cura exige tolerar o desconforto de decidir.</p>
                 </div>
-            </details>
-
-            <details>
-                <summary>⚠️ A Armadilha da Passividade <i class="fas fa-chevron-down"></i></summary>
-                <div class="details-content">
-                    <p>Quanto mais você pede para os outros decidirem, mais sua ansiedade diminui na hora, mas mais sua crença de incompetência aumenta a longo prazo. A cura envolve suportar a ansiedade de decidir e ver que você sobrevive ao erro.</p>
-                </div>
-            </details>
+            </div>
         </div>
 
-        <div class="paper-card">
-            <div class="card-header">
-                <i class="fas fa-adjust card-icon"></i>
-                <h2 class="card-title">Vire o Pensamento</h2>
-            </div>
-            <p>Toque no cartão quando se sentir paralisado:</p>
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-rotate"></i> Vire o Pensamento</div>
+            <p style="margin-bottom:20px; text-align:center; font-size:0.9rem; color:#aaa;">Toque no cartão para ativar o Adulto Saudável</p>
             
-            <div class="flashcard-container" onclick="this.classList.toggle('flipped')">
-                <div class="flashcard-inner">
-                    <div class="flashcard-front">
-                        <h3 style="font-family:'Patrick Hand'; font-size:1.5rem;">Voz da Criança</h3>
-                        <p style="margin-top:10px;">"É muita coisa pra mim. Não sei resolver isso. Alguém tem que vir me salvar. Eu vou estragar tudo se tentar."</p>
-                        <i class="fas fa-hand-pointer" style="margin-top:20px; color:#3b82f6; font-size:1.5rem;"></i>
-                    </div>
-                    <div class="flashcard-back">
-                        <h3 style="font-family:'Patrick Hand'; font-size:1.5rem;">Voz do Adulto Saudável</h3>
-                        <p style="margin-top:10px;">"Eu posso tentar. Se eu errar, eu conserto. Errar faz parte de ser adulto. Eu tenho capacidade de aprender e resolver problemas um passo de cada vez."</p>
+            <div class="flip-grid">
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-front">
+                            <i class="fa-solid fa-child-reaching" style="font-size:2.5rem; color:#dfe6e9; margin-bottom:15px;"></i>
+                            <h3 style="font-size:1.1rem; color:#2d3436;">Voz da Criança</h3>
+                            <p style="margin-top:10px; font-size:0.9rem; color:#555;">"É muita coisa pra mim. Não sei resolver. Alguém tem que me salvar. Se eu tentar, vou estragar tudo."</p>
+                        </div>
+                        <div class="flip-back">
+                            <h3 style="font-size:1.1rem; margin-bottom:10px;">Adulto Saudável</h3>
+                            <p style="font-size:0.9rem;">"Eu posso tentar. Se eu errar, eu conserto. Errar faz parte de ser adulto. Tenho capacidade de aprender e resolver um passo de cada vez."</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <center>
+            <a href="../../listaferramentas.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Voltar para Ferramentas</a>
+        </center>
 
     </div>
 
@@ -420,31 +371,39 @@
                 &copy; 2026 Bruno de Souza
             </div>
             <div class="social-links">
-                <a href="https://www.instagram.com/psi.brunosg/" target="_blank"><i class="fab fa-instagram"></i></a>
-                <a href="https://wa.me/5553991898309" target="_blank"><i class="fab fa-whatsapp"></i></a>
-                <a href="https://www.linkedin.com/in/psi-bsouza/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                <a href="https://www.instagram.com/psi.brunosg/" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://wa.me/5553991898309" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.linkedin.com/in/psi-bsouza/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
             </div>
         </div>
     </footer>
 
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
+        AOS.init();
+
         function translateNeed(type) {
-            const bubble = document.getElementById('translator-bubble');
+            const display = document.getElementById('trans-res');
             let text = "";
+            let color = "";
             
             if (type === 'decide') {
-                text = "✨ Tradução: 'Tenho medo de assumir a responsabilidade. Vou praticar escolher algo pequeno hoje e bancar minha escolha.'";
+                text = "✨ <strong>Tradução:</strong> 'Tenho medo de assumir a responsabilidade. Vou praticar escolher algo pequeno hoje e bancar minha escolha.'";
+                color = "#1565c0";
             } else if (type === 'sozinho') {
-                text = "✨ Tradução: 'Sinto que não tenho ferramentas, mas posso pesquisar ou aprender. Não preciso de alguém para fazer por mim, só para me ensinar.'";
+                text = "✨ <strong>Tradução:</strong> 'Sinto que não tenho ferramentas, mas posso pesquisar ou aprender. Não preciso de alguém para fazer por mim, só para me ensinar.'";
+                color = "#ef6c00";
             } else if (type === 'erro') {
-                text = "✨ Tradução: 'O erro não é o fim do mundo. Errar é como eu aprendo a ser competente. Tenho permissão para falhar.'";
+                text = "✨ <strong>Tradução:</strong> 'O erro não é o fim do mundo. Errar é como eu aprendo a ser competente. Tenho permissão para falhar.'";
+                color = "#ffb74d";
             }
             
-            bubble.style.opacity = 0;
+            display.style.opacity = 0;
+            display.style.borderTop = `5px solid ${color}`;
+            
             setTimeout(() => {
-                bubble.innerHTML = text;
-                bubble.style.opacity = 1;
-                bubble.style.transition = "opacity 0.3s";
+                display.innerHTML = `<p style="font-size:1.1rem; color:#2d3436;">${text}</p>`;
+                display.style.opacity = 1;
             }, 200);
         }
     </script>
