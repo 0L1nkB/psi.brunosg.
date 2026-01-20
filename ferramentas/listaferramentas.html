@@ -11,131 +11,166 @@
 
     <style>
         :root {
-            --primary-bg: #f8f9fa; /* Fundo idêntico à Roleta */
-            --card-bg: #ffffff;
-            --text-main: #333333;
-            --text-muted: #777777;
-            --accent: #7DB9B6;
-            --shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            /* Cores extraídas/adaptadas do estilo SMI e da sua identidade */
+            --primary: #0984e3;      /* Azul vibrante */
+            --accent: #fdcb6e;       /* Amarelo do destaque */
+            --text: #2d3436;         /* Cinza escuro */
+            --bg-body: #f8f9fa;      /* Fundo claro */
+            --card-border: #b2bec3;  /* Cinza da borda tracejada */
+            
+            /* Cores das Seções */
+            --color-psico: #00cec9;
+            --color-jogos: #fd79a8;
+            --color-baralhos: #e17055;
+            --color-tcc: #6c5ce7;
+            --color-esquema: #a29bfe;
+            --color-aval: #00b894;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Quicksand', sans-serif;
-            background-color: var(--primary-bg);
-            color: var(--text-main);
+            font-family: 'Quicksand', sans-serif; /* Mantendo a legibilidade */
+            background-color: var(--bg-body);
+            color: var(--text);
             padding: 20px;
             min-height: 100vh;
         }
 
-        /* --- Header --- */
+        /* --- Header (Estilo SMI) --- */
         header {
             text-align: center;
-            padding: 40px 0;
+            padding: 40px 0 20px 0;
             max-width: 900px;
             margin: 0 auto;
         }
 
         header h1 {
             font-size: 2.2rem;
-            color: #2c3e50;
+            color: var(--text);
             margin-bottom: 5px;
+            font-weight: 700;
         }
 
         .crp {
-            font-size: 0.95rem;
-            color: var(--text-muted);
+            font-size: 1rem;
+            color: #636e72;
             font-weight: 500;
         }
 
+        /* Botão Sair */
         #btn-sair {
             position: absolute;
             top: 20px;
             right: 20px;
             text-decoration: none;
-            color: #999;
+            color: #b2bec3;
             font-size: 0.9rem;
             font-weight: 600;
             transition: 0.3s;
         }
+        #btn-sair:hover { color: var(--text); }
 
-        #btn-sair:hover { color: var(--text-main); }
-
-        /* --- Layout de Seções --- */
+        /* --- Layout --- */
         .dashboard-container {
             max-width: 1000px;
             margin: 0 auto;
+            padding-bottom: 40px;
         }
 
+        /* Títulos das Seções */
         .section-label {
-            font-size: 1.1rem;
+            font-size: 1.3rem;
             font-weight: 700;
-            margin: 40px 0 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #eee;
+            margin: 50px 0 20px;
             display: flex;
             align-items: center;
             gap: 10px;
+            padding-left: 10px;
         }
 
-        /* --- Grid de Cards --- */
+        /* Grid */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 15px;
+            gap: 20px;
         }
 
-        .card {
-            background: var(--card-bg);
+        /* --- CARDS COM O DESIGN DO SMI --- */
+        /* Aqui está a mágica: copiando o estilo .scale-card do seu código SMI */
+        .tool-card {
+            background: white;
+            border: 2px dashed var(--card-border); /* Borda tracejada */
+            border-radius: 20px;                   /* Arredondamento grande */
+            padding: 25px 20px;
+            position: relative;
             text-decoration: none;
-            padding: 25px 15px;
-            border-radius: 18px;
-            text-align: center;
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-            border: 1px solid transparent;
+            color: var(--text);
+            transition: all 0.2s ease;
+            box-shadow: 4px 4px 0 rgba(0,0,0,0.05); /* Sombra dura deslocada */
             display: flex;
             flex-direction: column;
             align-items: center;
+            text-align: center;
+            height: 100%;
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            border-color: var(--accent);
+        .tool-card:hover {
+            border-color: var(--primary);
+            background-color: #ffffff;
+            transform: translateY(-4px); /* Sobe um pouco mais */
+            box-shadow: 6px 6px 0 rgba(0,0,0,0.1); /* Sombra aumenta */
         }
 
+        /* Ícones dentro dos cards */
         .card-icon {
-            font-size: 1.8rem;
-            color: var(--accent);
-            margin-bottom: 12px;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            transition: 0.3s;
+        }
+
+        .tool-card:hover .card-icon {
+            transform: scale(1.1);
         }
 
         .card-title {
             font-weight: 700;
-            font-size: 1rem;
-            color: var(--text-main);
-            margin-bottom: 6px;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
         }
 
         .card-desc {
-            font-size: 0.8rem;
-            color: var(--text-muted);
+            font-size: 0.85rem;
+            color: #636e72;
             line-height: 1.4;
+        }
+
+        /* Highlight Box estilo SMI (opcional para avisos) */
+        .highlight-box {
+            background: #fffce0;
+            border: 2px dashed #fdcb6e;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+            color: var(--text);
         }
 
         footer {
             text-align: center;
-            padding: 60px 0 20px;
+            padding: 40px 0;
             font-size: 0.85rem;
-            color: #aaa;
+            color: #b2bec3;
+            border-top: 2px dashed #dfe6e9;
+            margin-top: 60px;
         }
 
         /* Responsividade */
         @media (max-width: 600px) {
-            header h1 { font-size: 1.8rem; }
-            .grid { grid-template-columns: 1fr 1fr; }
+            .grid { grid-template-columns: 1fr 1fr; gap: 15px; }
+            .tool-card { padding: 20px 10px; }
+            .card-title { font-size: 0.95rem; }
+            .card-desc { font-size: 0.75rem; }
         }
     </style>
 </head>
@@ -152,137 +187,153 @@
 
     <div class="dashboard-container">
 
-        <div class="section-label" style="color:#5c7c8a;"><i class="fa-solid fa-book-open"></i> Psicoeducação</div>
+        <div class="highlight-box" data-aos="fade-up">
+            <i class="fa-solid fa-circle-info"></i> Bem-vindo ao seu ecossistema de terapia.
+        </div>
+
+        <div class="section-label" style="color: var(--color-psico);">
+            <i class="fa-solid fa-book-open"></i> Psicoeducação
+        </div>
         <div class="grid">
-            <a href="psico-tag.html" class="card">
-                <div class="card-icon"><i class="fa-solid fa-wind"></i></div>
+            <a href="psico-tag.html" class="tool-card" style="border-color: #b2bec3;">
+                <div class="card-icon" style="color: var(--color-psico);"><i class="fa-solid fa-wind"></i></div>
                 <div class="card-title">TAG</div>
-                <div class="card-desc">Ansiedade Generalizada.</div>
+                <div class="card-desc">Ansiedade Generalizada</div>
             </a>
-            <a href="psico-tdah.html" class="card">
-                <div class="card-icon"><i class="fa-solid fa-bolt"></i></div>
+            <a href="psico-tdah.html" class="tool-card">
+                <div class="card-icon" style="color: var(--color-psico);"><i class="fa-solid fa-bolt"></i></div>
                 <div class="card-title">TDAH</div>
-                <div class="card-desc">Neurobiologia e Foco.</div>
+                <div class="card-desc">Neurobiologia e Foco</div>
             </a>
-            <a href="psico-panico.html" class="card">
-                <div class="card-icon"><i class="fa-solid fa-wave-square"></i></div>
+            <a href="psico-panico.html" class="tool-card">
+                <div class="card-icon" style="color: var(--color-psico);"><i class="fa-solid fa-wave-square"></i></div>
                 <div class="card-title">Pânico</div>
-                <div class="card-desc">O alarme falso do corpo.</div>
+                <div class="card-desc">Alarme falso do corpo</div>
             </a>
-            <a href="psico-social.html" class="card">
-                <div class="card-icon"><i class="fa-solid fa-users-viewfinder"></i></div>
+            <a href="psico-social.html" class="tool-card">
+                <div class="card-icon" style="color: var(--color-psico);"><i class="fa-solid fa-users-viewfinder"></i></div>
                 <div class="card-title">Ansiedade Social</div>
-                <div class="card-desc">Medo do julgamento.</div>
+                <div class="card-desc">Medo do julgamento</div>
             </a>
-            <a href="psico-tdm.html" class="card">
-                <div class="card-icon"><i class="fa-solid fa-cloud-showers-heavy"></i></div>
+            <a href="psico-tdm.html" class="tool-card">
+                <div class="card-icon" style="color: var(--color-psico);"><i class="fa-solid fa-cloud-showers-heavy"></i></div>
                 <div class="card-title">Depressão</div>
-                <div class="card-desc">Funcionamento e Ativação.</div>
+                <div class="card-desc">Ativação comportamental</div>
             </a>
-            <a href="psico-tab.html" class="card">
-                <div class="card-icon"><i class="fa-solid fa-masks-theater"></i></div>
+            <a href="psico-tab.html" class="tool-card">
+                <div class="card-icon" style="color: var(--color-psico);"><i class="fa-solid fa-masks-theater"></i></div>
                 <div class="card-title">Bipolaridade</div>
-                <div class="card-desc">Ciclos e Estabilidade.</div>
+                <div class="card-desc">Ciclos e Estabilidade</div>
             </a>
-            <a href="psico-compulsao.html" class="card">
-                <div class="card-icon"><i class="fa-solid fa-utensils"></i></div>
-                <div class="card-title">Compulsão Alimentar</div>
-                <div class="card-desc">Cérebro e Alimento.</div>
-            </a>
-        </div>
-
-        <div class="section-label" style="color:#7DB9B6;"><i class="fa-solid fa-gamepad"></i> Jogos e Regulação</div>
-        <div class="grid">
-            <a href="jogo-memoria-emocoes.html" class="card">
-                <div class="card-icon"><i class="fa-solid fa-puzzle-piece"></i></div>
-                <div class="card-title">Memória das Emoções</div>
-                <div class="card-desc">Jogo de associação visual.</div>
-            </a>
-            <a href="roleta-afirmacoes.html" class="card">
-                <div class="card-icon"><i class="fa-solid fa-dharmachakra"></i></div>
-                <div class="card-title">Roleta de Elogios</div>
-                <div class="card-desc">Reforço positivo diário.</div>
-            </a>
-            <a href="dragao-raiva.html" class="card">
-                <div class="card-icon"><i class="fa-solid fa-dragon"></i></div>
-                <div class="card-title">Domando o Dragão</div>
-                <div class="card-desc">Manejo de raiva e TOD.</div>
-            </a>
-            <a href="estrela-respiracao.html" class="card">
-                <div class="card-icon"><i class="fa-solid fa-star"></i></div>
-                <div class="card-title">Estrela da Respiração</div>
-                <div class="card-desc">Mindfulness guiado.</div>
+            <a href="psico-compulsao.html" class="tool-card">
+                <div class="card-icon" style="color: var(--color-psico);"><i class="fa-solid fa-utensils"></i></div>
+                <div class="card-title">Compulsão</div>
+                <div class="card-desc">Cérebro e Alimento</div>
             </a>
         </div>
 
-        <div class="section-label" style="color:#d35400;"><i class="fa-solid fa-comments"></i> Baralhos de Conversa</div>
+        <div class="section-label" style="color: var(--color-jogos);">
+            <i class="fa-solid fa-gamepad"></i> Jogos e Regulação
+        </div>
         <div class="grid">
-            <a href="dialogando-casal.html" class="card">
-                <div class="card-icon"><i class="fa-solid fa-heart-pulse"></i></div>
-                <div class="card-title">Dialogando em Casal</div>
-                <div class="card-desc">80 perguntas para casais.</div>
+            <a href="jogo-memoria-emocoes.html" class="tool-card">
+                <div class="card-icon" style="color: var(--color-jogos);"><i class="fa-solid fa-puzzle-piece"></i></div>
+                <div class="card-title">Memória</div>
+                <div class="card-desc">Jogo das Emoções</div>
             </a>
-            <a href="100perguntas-historia.html" class="card">
-                <div class="card-icon"><i class="fa-solid fa-hourglass-start"></i></div>
+            <a href="roleta-afirmacoes.html" class="tool-card">
+                <div class="card-icon" style="color: var(--color-jogos);"><i class="fa-solid fa-dharmachakra"></i></div>
+                <div class="card-title">Roleta</div>
+                <div class="card-desc">Reforço positivo</div>
+            </a>
+            <a href="dragao-raiva.html" class="tool-card">
+                <div class="card-icon" style="color: var(--color-jogos);"><i class="fa-solid fa-dragon"></i></div>
+                <div class="card-title">Dragão</div>
+                <div class="card-desc">Manejo de Raiva/TOD</div>
+            </a>
+            <a href="estrela-respiracao.html" class="tool-card">
+                <div class="card-icon" style="color: var(--color-jogos);"><i class="fa-solid fa-star"></i></div>
+                <div class="card-title">Respiração</div>
+                <div class="card-desc">Técnica da Estrela</div>
+            </a>
+        </div>
+
+        <div class="section-label" style="color: var(--color-baralhos);">
+            <i class="fa-solid fa-comments"></i> Baralhos de Conversa
+        </div>
+        <div class="grid">
+            <a href="dialogando-casal.html" class="tool-card">
+                <div class="card-icon" style="color: var(--color-baralhos);"><i class="fa-solid fa-heart-pulse"></i></div>
+                <div class="card-title">Casais</div>
+                <div class="card-desc">Dialogando em Casal</div>
+            </a>
+            <a href="100perguntas-historia.html" class="tool-card">
+                <div class="card-icon" style="color: var(--color-baralhos);"><i class="fa-solid fa-hourglass-start"></i></div>
                 <div class="card-title">Nossa História</div>
-                <div class="card-desc">Conexão e Descoberta.</div>
+                <div class="card-desc">Conexão e Passado</div>
             </a>
-            <a href="100perguntas-futuro.html" class="card">
-                <div class="card-icon"><i class="fa-solid fa-map-location-dot"></i></div>
+            <a href="100perguntas-futuro.html" class="tool-card">
+                <div class="card-icon" style="color: var(--color-baralhos);"><i class="fa-solid fa-map-location-dot"></i></div>
                 <div class="card-title">Nosso Futuro</div>
-                <div class="card-desc">Intimidade e Planos.</div>
+                <div class="card-desc">Planos e Sonhos</div>
             </a>
-            <a href="../ferramentas/baralhos/baralho-puxa-conversa.html" class="card">
-                <div class="card-icon"><i class="fa-solid fa-comment-dots"></i></div>
+            <a href="../ferramentas/baralhos/baralho-puxa-conversa.html" class="tool-card">
+                <div class="card-icon" style="color: var(--color-baralhos);"><i class="fa-solid fa-comment-dots"></i></div>
                 <div class="card-title">Puxa Conversa</div>
-                <div class="card-desc">Quebra-gelo para sessões.</div>
+                <div class="card-desc">Quebra-gelo</div>
             </a>
         </div>
 
-        <div class="section-label" style="color:#2980b9;"><i class="fa-solid fa-brain"></i> Ferramentas TCC</div>
+        <div class="section-label" style="color: var(--color-tcc);">
+            <i class="fa-solid fa-brain"></i> Ferramentas TCC
+        </div>
         <div class="grid">
-            <a href="modelo-cognitivo.html" class="card">
-                <div class="card-icon"><i class="fa-solid fa-diagram-project"></i></div>
+            <a href="modelo-cognitivo.html" class="tool-card">
+                <div class="card-icon" style="color: var(--color-tcc);"><i class="fa-solid fa-diagram-project"></i></div>
                 <div class="card-title">Modelo Cognitivo</div>
-                <div class="card-desc">S, P, E e Comportamento.</div>
+                <div class="card-desc">Situação, Pensamento...</div>
             </a>
-            <a href="caderno-tcc.html" class="card">
-                <div class="card-icon"><i class="fa-solid fa-book-medical"></i></div>
-                <div class="card-title">Caderno TCC (v4.0)</div>
-                <div class="card-desc">Super App de monitoramento.</div>
+            <a href="caderno-tcc.html" class="tool-card">
+                <div class="card-icon" style="color: var(--color-tcc);"><i class="fa-solid fa-book-medical"></i></div>
+                <div class="card-title">Caderno TCC</div>
+                <div class="card-desc">Monitoramento completo</div>
             </a>
-            <a href="rpd.html" class="card">
-                <div class="card-icon"><i class="fa-solid fa-pen-fancy"></i></div>
+            <a href="rpd.html" class="tool-card">
+                <div class="card-icon" style="color: var(--color-tcc);"><i class="fa-solid fa-pen-fancy"></i></div>
                 <div class="card-title">RPD Simples</div>
-                <div class="card-desc">Registro rápido.</div>
+                <div class="card-desc">Registro de Pensamentos</div>
             </a>
         </div>
 
-        <div class="section-label" style="color:#8e44ad;"><i class="fa-solid fa-puzzle-piece"></i> Terapia do Esquema</div>
+        <div class="section-label" style="color: var(--color-esquema);">
+            <i class="fa-solid fa-puzzle-piece"></i> Terapia do Esquema
+        </div>
         <div class="grid">
-            <a href="../ferramentas/escalas-te/smi.html" class="card">
-                <div class="card-icon"><i class="fa-solid fa-chart-pie"></i></div>
+            <a href="../ferramentas/escalas-te/smi.html" class="tool-card">
+                <div class="card-icon" style="color: var(--color-esquema);"><i class="fa-solid fa-chart-pie"></i></div>
                 <div class="card-title">SMI (Modos)</div>
-                <div class="card-desc">Inventário de Modos.</div>
+                <div class="card-desc">Inventário de Modos</div>
             </a>
-            <a href="../ferramentas/escalas-te/ysqs3.html" class="card">
-                <div class="card-icon"><i class="fa-solid fa-list-ol"></i></div>
+            <a href="../ferramentas/escalas-te/ysqs3.html" class="tool-card">
+                <div class="card-icon" style="color: var(--color-esquema);"><i class="fa-solid fa-list-ol"></i></div>
                 <div class="card-title">YSQ (Esquemas)</div>
-                <div class="card-desc">Questionário de Young.</div>
+                <div class="card-desc">Questionário Young</div>
             </a>
         </div>
 
-        <div class="section-label" style="color:#27ae60;"><i class="fa-solid fa-clipboard-check"></i> Avaliação & Escalas</div>
+        <div class="section-label" style="color: var(--color-aval);">
+            <i class="fa-solid fa-clipboard-check"></i> Avaliação & Escalas
+        </div>
         <div class="grid">
-            <a href="../ferramentas/escalas/asrs18.html" class="card">
-                <div class="card-icon"><i class="fa-solid fa-user-check"></i></div>
+            <a href="../ferramentas/escalas/asrs18.html" class="tool-card">
+                <div class="card-icon" style="color: var(--color-aval);"><i class="fa-solid fa-user-check"></i></div>
                 <div class="card-title">ASRS (TDAH)</div>
-                <div class="card-desc">Rastreio de TDAH Adulto.</div>
+                <div class="card-desc">Rastreio Adulto</div>
             </a>
-            <a href="../ferramentas/escalas/bdi.html" class="card">
-                <div class="card-icon"><i class="fa-solid fa-notes-medical"></i></div>
+            <a href="../ferramentas/escalas/bdi.html" class="tool-card">
+                <div class="card-icon" style="color: var(--color-aval);"><i class="fa-solid fa-notes-medical"></i></div>
                 <div class="card-title">BDI (Depressão)</div>
-                <div class="card-desc">Inventário de Beck.</div>
+                <div class="card-desc">Inventário Beck</div>
             </a>
         </div>
 
