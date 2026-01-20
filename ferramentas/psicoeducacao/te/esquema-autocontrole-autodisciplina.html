@@ -3,414 +3,365 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Autocontrole Insuficiente - Caderno Terapêutico</title>
+    <title>Autocontrole Insuficiente | Bruno de Souza</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <style>
         :root {
-            /* Paleta "Agora ou Depois?" */
-            --paper-line: #fce7f3;    /* Linhas rosa claro */
-            --paper-bg: #fffbfd;      
-            --ink-color: #831843;
+            /* Identidade Visual - Tema "Impulso/Estrutura" */
+            --bg-color: #fce4ec;      /* Rosa muito suave */
+            --primary: #d81b60;       /* Rosa Intenso (Impulso) */
+            --primary-dark: #ad1457;
+            --accent: #1976d2;        /* Azul (Disciplina/Estrutura) */
+            --text: #2d3436;
+            --card-border: #b0bec5;
             
-            /* Cores do Esquema (Impulso -> Disciplina) */
-            --primary: #db2777;       /* Magenta Vibrante (O Impulso) */
-            --primary-hover: #be185d;
-            --structure: #1e3a8a;     /* Azul Marinho (A Estrutura) */
-            
-            /* Tags de Personas */
-            --tag-davi-bg: #fbcfe8; --tag-davi-text: #9d174d; /* Rosa (Impulsivo) */
-            --tag-ju-bg: #e0f2fe; --tag-ju-text: #0369a1; /* Azul (Procrastinadora) */
-
-            --radius: 16px;
-            --shadow-paper: 3px 3px 10px rgba(0,0,0,0.06);
+            /* Cores Específicas */
+            --impulse-color: #e91e63; /* Cor do Davi */
+            --procrast-color: #0288d1; /* Cor da Juliana */
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Nunito', sans-serif;
-            color: var(--ink-color);
-            line-height: 1.6;
-            background-color: var(--paper-bg);
-            /* Efeito Papel Pautado */
-            background-image: linear-gradient(var(--paper-line) 1px, transparent 1px);
-            background-size: 100% 2rem;
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#f8bbd0 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            color: var(--text);
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            align-items: center;
         }
 
-        h1, h2, h3, h4 {
-            font-family: 'Patrick Hand', cursive;
-            color: #881337;
-        }
-
-        /* --- HEADER --- */
+        /* --- CABEÇALHO --- */
         header {
-            background-color: rgba(255, 255, 255, 0.95);
-            border-bottom: 2px dashed #f9a8d4;
-            padding: 2rem 0;
-            margin-bottom: 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);
-        }
-
-        .header-content {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0 20px;
             text-align: center;
+            margin: 20px auto 40px auto;
+            background: white;
+            padding: 30px 20px;
+            border-radius: 25px;
+            border: 3px dashed var(--primary);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            position: relative;
+            max-width: 800px;
+            width: 100%;
         }
 
-        .header-title {
-            font-size: 2.5rem;
+        header::before {
+            content: ""; 
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%) rotate(-1deg);
+            width: 140px; height: 35px; 
+            background-color: rgba(216, 27, 96, 0.2); 
+            border: 1px solid rgba(0,0,0,0.05); 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2rem;
             color: var(--primary);
-            margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 0px #fce7f3;
+            text-transform: uppercase;
+            margin: 0;
+            font-weight: 800;
         }
 
-        .header-subtitle {
-            font-size: 1.2rem;
-            color: #be185d;
-            font-family: 'Patrick Hand', cursive;
-        }
+        .subtitle { margin-top: 5px; color: #636e72; font-weight: 600; }
 
         /* --- CONTAINER --- */
         .main-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0 20px;
+            max-width: 850px;
             width: 100%;
-            display: grid;
-            gap: 35px;
-            margin-bottom: 60px;
+            margin-bottom: 80px;
         }
 
-        /* --- CARDS (PAPEL) --- */
-        .paper-card {
-            background-color: #ffffff;
-            border-radius: 2px;
-            box-shadow: var(--shadow-paper);
-            border: 1px solid #fce7f3;
-            padding: 2rem;
-            position: relative;
-            transform: rotate(-0.5deg);
-            transition: transform 0.3s;
-        }
-        
-        .paper-card:hover { transform: rotate(0deg) translateY(-3px); }
-        
-        /* Fita Adesiva (Washi Tape) */
-        .paper-card::before {
-            content: '';
-            position: absolute;
-            top: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 30px;
-            background-color: rgba(219, 39, 119, 0.15); /* Magenta translúcido */
-            border: 1px solid #f9a8d4;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            opacity: 0.9;
+        /* --- CARDS DE CONTEÚDO --- */
+        .content-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.05);
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
         }
 
-        .card-header {
+        .content-card:hover {
+            border-color: var(--card-border);
+            transform: translateY(-2px);
+        }
+
+        .card-title {
+            color: var(--primary-dark);
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid var(--paper-line);
+            gap: 10px;
+            border-bottom: 2px dashed #eee;
             padding-bottom: 10px;
         }
 
-        .card-icon { font-size: 1.8rem; color: var(--primary); }
-        .card-title { font-size: 1.8rem; margin: 0; }
-
-        /* --- POST-IT (DEFINIÇÃO) --- */
-        .post-it {
-            background-color: #fce7f3; /* Rosa Bebê */
-            padding: 1.5rem;
-            border-radius: 2px 2px 16px 2px;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
-            font-family: 'Patrick Hand', cursive;
-            font-size: 1.3rem;
-            color: #831843;
-            transform: rotate(1deg);
-            margin: 20px 0;
-            border-left: 5px solid #db2777;
-        }
-
-        /* --- PERSONAS --- */
-        .persona-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-        }
-
-        .persona-card {
-            background: #fff;
+        .highlight-box {
+            background: #fff3e0; /* Laranja suave para alerta */
+            border-left: 5px solid var(--primary);
             padding: 20px;
-            border: 2px dashed #f9a8d4;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 1rem;
+            color: #555;
+        }
+
+        /* --- GRID DE PERSONAS (DUAL) --- */
+        .dual-symptoms {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .symptom-column h4 {
+            text-align: center; margin-bottom: 15px; font-weight: 800; text-transform: uppercase; font-size: 0.9rem;
+        }
+
+        .symptom-item {
+            background: #f8f9fa;
+            padding: 15px;
             border-radius: 12px;
+            display: flex; flex-direction: column; gap: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid;
         }
         
-        .persona-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .persona-name { font-size: 1.4rem; font-weight: 700; color: #831843; }
-        .persona-tag { font-family: 'Nunito', sans-serif; font-size: 0.8rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; }
-        
-        .tag-davi { background: var(--tag-davi-bg); color: var(--tag-davi-text); }
-        .tag-ju { background: var(--tag-ju-bg); color: var(--tag-ju-text); }
+        .style-impulse { border-color: var(--impulse-color); }
+        .style-procrast { border-color: var(--procrast-color); }
 
-        /* --- STICKERS (3 DIMENSÕES) --- */
-        .sticker-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;
+        .persona-tag {
+            font-size: 0.75rem; text-transform: uppercase; font-weight: 800;
+            padding: 4px 10px; border-radius: 20px; width: fit-content;
         }
-        
-        .sticker-box {
-            background: white; padding: 1.5rem; border-radius: 12px;
-            border: 2px solid #fff1f2; text-align: center;
-            transition: all 0.3s;
-        }
-        .sticker-box:hover { border-color: var(--primary); transform: scale(1.02); }
-        .sticker-icon { font-size: 2rem; margin-bottom: 10px; display: block; }
+        .tag-davi { background: #fce4ec; color: var(--impulse-color); }
+        .tag-ju { background: #e1f5fe; color: var(--procrast-color); }
 
-        /* --- TRADUTOR INTERATIVO --- */
-        .translator-area {
-            background-color: #fff1f2; /* Rosa muito claro */
-            padding: 2rem; border-radius: 20px;
-            border: 2px dashed #f472b6; text-align: center;
+        /* --- WIDGET: TRADUTOR DE DESCULPAS --- */
+        .translator-container {
+            text-align: center;
+            background: #e3f2fd;
+            padding: 25px;
+            border-radius: 20px;
+            border: 2px dashed #90caf9;
         }
 
-        .btn-translate {
-            background: white; border: 2px solid #fbcfe8;
-            padding: 10px 20px; margin: 5px; border-radius: 30px;
-            font-family: 'Nunito', sans-serif; font-weight: 700; color: #db2777;
-            cursor: pointer; transition: all 0.2s;
-            box-shadow: 0 4px 0 #fbcfe8;
-        }
-        
-        .btn-translate:active { box-shadow: 0 0 0 #fbcfe8; transform: translateY(4px); }
-        .btn-translate:hover { background: #fff; border-color: var(--primary); color: var(--primary); }
-
-        .result-bubble {
-            background: white; padding: 20px; border-radius: 20px;
-            margin-top: 20px; border: 2px solid #f9a8d4;
-            font-family: 'Patrick Hand', cursive; font-size: 1.3rem;
-            color: #831843; min-height: 100px; display: flex; align-items: center; justify-content: center;
+        .translator-display {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: 0.3s;
         }
 
-        /* --- ACCORDIONS --- */
-        details {
-            background: #fff5f9; border-radius: 12px; margin-bottom: 10px;
-            border: 1px solid #fbcfe8;
+        .btn-trans {
+            background: white; border: 2px solid #bbdefb; color: #1565c0;
+            padding: 10px 20px; border-radius: 30px; font-weight: 700;
+            cursor: pointer; margin: 5px; transition: 0.2s; font-family: 'Quicksand';
         }
-        summary {
-            padding: 15px; font-weight: 700; cursor: pointer; list-style: none;
-            display: flex; justify-content: space-between; color: #9d174d;
-        }
-        summary:hover { background: #fce7f3; border-radius: 12px; }
-        .details-content { padding: 20px; border-top: 1px dashed #fbcfe8; color: #831843; }
+        .btn-trans:hover { border-color: var(--accent); background: var(--accent); color: white; }
 
-        /* --- FLASHCARD (FLIP) --- */
-        .flashcard-container { perspective: 1000px; width: 100%; height: 280px; cursor: pointer; }
-        .flashcard-inner {
-            position: relative; width: 100%; height: 100%; text-align: center;
-            transition: transform 0.6s; transform-style: preserve-3d;
+        /* --- NEUROBIOLOGIA --- */
+        .neuro-box {
+            display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; margin-top: 20px;
         }
-        .flashcard-container.flipped .flashcard-inner { transform: rotateY(180deg); }
-        
-        .flashcard-front, .flashcard-back {
+        .neuro-item {
+            flex: 1; min-width: 200px;
+            background: #fafafa; border: 1px solid #eee;
+            padding: 20px; border-radius: 15px;
+            text-align: center;
+        }
+        .neuro-item i { font-size: 2rem; color: var(--primary); margin-bottom: 10px; }
+        .neuro-item h4 { margin: 5px 0; font-size: 1rem; color: var(--primary-dark); }
+        .neuro-item p { font-size: 0.85rem; color: #666; margin: 0; }
+
+        /* --- FLIP CARDS --- */
+        .flip-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .flip-card {
+            background-color: transparent;
+            height: 300px;
+            perspective: 1000px;
+            cursor: pointer;
+            margin: 0 auto;
+            max-width: 350px;
+            width: 100%;
+        }
+
+        .flip-card-inner {
+            position: relative; width: 100%; height: 100%;
+            text-align: center; transition: transform 0.6s;
+            transform-style: preserve-3d;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+
+        .flip-front, .flip-back {
             position: absolute; width: 100%; height: 100%;
             -webkit-backface-visibility: hidden; backface-visibility: hidden;
-            border-radius: 16px; padding: 2rem;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            box-shadow: var(--shadow-paper); border: 2px solid;
-        }
-        
-        .flashcard-front {
-            background: #fff1f2; border-color: #fbcfe8; color: #be185d;
-        }
-        .flashcard-back {
-            background: #eff6ff; border-color: #bfdbfe; color: #1e3a8a;
-            transform: rotateY(180deg);
+            padding: 25px; border-radius: 15px; border: 2px solid #dfe6e9;
+            box-sizing: border-box;
         }
 
-        /* --- FOOTER PADRÃO --- */
+        .flip-front { background-color: white; color: #2d3436; }
+        .flip-back { background-color: var(--accent); color: white; transform: rotateY(180deg); border-color: var(--accent); }
+
+        /* Botão Voltar */
+        .btn-back {
+            display: block; margin: 30px auto; text-align: center; color: #b2bec3; text-decoration: none; font-weight: 600;
+        }
+        .btn-back:hover { color: var(--primary); }
+
+        /* --- FOOTER ADAPTADO --- */
         footer {
-            background-color: #ffffff;
-            border-top: 1px solid #e5e7eb;
-            padding: 2rem 0;
+            width: 100%;
+            background-color: white;
+            border-top: 1px dashed #b2bec3;
+            padding: 30px 20px;
             margin-top: auto;
         }
         .footer-container {
-            max-width: 1000px;
+            max-width: 900px;
             margin: 0 auto;
-            padding: 0 20px;
-            display: flex; justify-content: space-between; align-items: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .footer-brand { color: #64748b; font-size: 0.9rem; font-weight: 600; }
-        .social-links { display: flex; gap: 1.5rem; }
-        .social-links a { color: #94a3b8; font-size: 1.2rem; transition: color 0.2s; }
-        .social-links a:hover { color: var(--primary); }
+        .footer-brand { color: #636e72; font-weight: 700; font-size: 0.95rem; }
+        .social-links { display: flex; gap: 20px; }
+        .social-links a { color: #b2bec3; font-size: 1.4rem; transition: all 0.3s ease; }
+        .social-links a:hover { color: var(--primary); transform: translateY(-3px); }
 
-        @media (max-width: 640px) {
-            .footer-container { flex-direction: column; gap: 1rem; }
-            .persona-grid, .sticker-grid { grid-template-columns: 1fr; }
+        @media (max-width: 600px) {
+            .dual-symptoms { grid-template-columns: 1fr; }
+            .footer-container { flex-direction: column; gap: 15px; }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="header-content">
-            <h1 class="header-title">Autodisciplina</h1>
-            <p class="header-subtitle">Caderno de Psicoeducação</p>
-        </div>
+    <header data-aos="fade-down">
+        <h1>Autocontrole Insuficiente</h1>
+        <div class="subtitle">O desafio da autodisciplina</div>
     </header>
 
     <div class="main-container">
-
-        <div class="paper-card">
-            <div class="card-header">
-                <i class="fas fa-gamepad card-icon"></i>
-                <h2 class="card-title">O Esquema do "Eu Quero Agora"</h2>
-            </div>
-            <p>O Esquema de Autocontrole Insuficiente é a dificuldade em tolerar o desconforto ou o tédio para alcançar um objetivo maior. É o conflito eterno entre "o que eu devo fazer" e "o que eu tenho vontade de fazer".</p>
-            
-            <div class="post-it">
-                <i class="fas fa-thumbtack" style="color:#db2777; margin-right:10px;"></i>
-                "Eu sei que preciso fazer, mas não consigo começar. É muito chato. Vou fazer só mais tarde... (e o 'mais tarde' nunca chega)."
+        
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-gamepad"></i> O Esquema do "Eu Quero Agora"</div>
+            <p>Este esquema reflete a dificuldade em tolerar desconforto, tédio ou frustração para alcançar um objetivo maior. É o conflito eterno entre o prazer imediato e a recompensa futura.</p>
+            <div class="highlight-box">
+                <i class="fa-solid fa-clock"></i> <strong>A Voz da Criança:</strong> "Eu não quero fazer isso agora. É chato. Faço depois (e o depois nunca chega)."
             </div>
         </div>
 
-        <div class="paper-card" style="transform: rotate(0.5deg);">
-            <div class="card-header">
-                <i class="fas fa-users card-icon"></i>
-                <h2 class="card-title">Espelhos da Vida Real</h2>
-            </div>
-            <p>Como a falta de freio ou foco se manifesta:</p>
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-users"></i> Formas de Enfrentamento</div>
             
-            <div class="persona-grid">
-                <div class="persona-card">
-                    <div class="persona-header">
-                        <span class="persona-name">Davi</span>
-                        <span class="persona-tag tag-davi">O Impulsivo</span>
+            <div class="dual-symptoms">
+                <div class="symptom-column">
+                    <div class="symptom-item style-impulse">
+                        <span class="persona-tag tag-davi">Davi (O Impulsivo)</span>
+                        <div><strong>Comportamento:</strong> Age sem pensar. Compra, come ou fala no calor do momento.</div>
                     </div>
-                    <p>Davi age por impulso. Compra coisas que não pode pagar, come até passar mal e fala sem pensar. Ele tem muita dificuldade em dizer "não" para os próprios desejos momentâneos.</p>
-                    <p style="font-size:0.85rem; color:#be185d;"><strong>Comportamento:</strong> Rendição (Impulsividade)</p>
-                </div>
-
-                <div class="persona-card">
-                    <div class="persona-header">
-                        <span class="persona-name">Juliana</span>
-                        <span class="persona-tag tag-ju">A Procrastinadora</span>
+                    <div class="symptom-item style-impulse">
+                        <div><strong>Consequência:</strong> Dívidas, ganho de peso, arrependimento pós-ação.</div>
                     </div>
-                    <p>Juliana evita qualquer tarefa chata ou difícil. Ela acumula louça, contas e prazos. Ela vive fugindo do desconforto, buscando alívio imediato no celular ou dormindo.</p>
-                    <p style="font-size:0.85rem; color:#0369a1;"><strong>Comportamento:</strong> Evitação (Fuga)</p>
+                </div>
+
+                <div class="symptom-column">
+                    <div class="symptom-item style-procrast">
+                        <span class="persona-tag tag-ju">Juliana (A Procrastinadora)</span>
+                        <div><strong>Comportamento:</strong> Foge de qualquer desconforto. Evita tarefas chatas, acumula louça e prazos.</div>
+                    </div>
+                    <div class="symptom-item style-procrast">
+                        <div><strong>Consequência:</strong> Ansiedade acumulada, sensação de fracasso e "bola de neve".</div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="paper-card">
-            <div class="card-header">
-                <i class="fas fa-shapes card-icon"></i>
-                <h2 class="card-title">Sintomas da Falta de Limites</h2>
-            </div>
-            <div class="sticker-grid">
-                <div class="sticker-box">
-                    <span class="sticker-icon">💥</span>
-                    <h4>Impulsividade</h4>
-                    <p>Agir no calor do momento, sem pensar nas consequências futuras.</p>
-                </div>
-                <div class="sticker-box">
-                    <span class="sticker-icon">🥱</span>
-                    <h4>Baixa Tolerância</h4>
-                    <p>Desistir rapidamente assim que a tarefa fica difícil, chata ou frustrante.</p>
-                </div>
-                <div class="sticker-box">
-                    <span class="sticker-icon">🐌</span>
-                    <h4>Procrastinação</h4>
-                    <p>O hábito crônico de adiar o esforço, trocando o importante pelo prazeroso.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="paper-card" style="transform: rotate(-0.5deg);">
-            <div class="card-header">
-                <i class="fas fa-sync card-icon"></i>
-                <h2 class="card-title">Tradutor de Desculpas</h2>
-            </div>
-            <p>Seu cérebro inventa desculpas para fugir. Vamos traduzi-las para a realidade:</p>
-            
-            <div class="translator-area">
-                <p style="margin-bottom:15px; font-weight:700;">Qual é a desculpa hoje?</p>
-                <div>
-                    <button class="btn-translate" onclick="translateNeed('amanha')">"Faço amanhã, hoje estou cansado."</button>
-                    <button class="btn-translate" onclick="translateNeed('chato')">"Isso é muito chato, não aguento!"</button>
-                    <button class="btn-translate" onclick="translateNeed('mereco')">"Eu mereço um descanso agora."</button>
-                </div>
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-language"></i> Tradutor de Desculpas</div>
+            <div class="translator-container">
+                <p style="font-weight:700; color:#1565c0; margin-bottom:15px;">Seu cérebro inventa desculpas. Vamos traduzi-las:</p>
                 
-                <div id="translator-bubble" class="result-bubble">
-                    Toque em uma desculpa para traduzir...
+                <div>
+                    <button class="btn-trans" onclick="translateExcuse('amanha')">"Faço amanhã, hoje estou cansado."</button>
+                    <button class="btn-trans" onclick="translateExcuse('chato')">"Isso é muito chato, não aguento!"</button>
+                    <button class="btn-trans" onclick="translateExcuse('mereco')">"Eu mereço um descanso agora."</button>
+                </div>
+
+                <div class="translator-display" id="trans-res">
+                    <span style="color:#b0bec5; font-style:italic;">Clique na desculpa...</span>
                 </div>
             </div>
         </div>
 
-        <div class="paper-card">
-            <div class="card-header">
-                <i class="fas fa-brain card-icon"></i>
-                <h2 class="card-title">Conceitos Clínicos</h2>
-            </div>
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-brain"></i> O Cérebro Sem Freio</div>
             
-            <details>
-                <summary>🧠 Neurobiologia: O Freio Fraco <i class="fas fa-chevron-down"></i></summary>
-                <div class="details-content">
-                    <p>O seu Córtex Pré-Frontal (responsável pelo planejamento e freio) perde a batalha para o Sistema Límbico (responsável pelo prazer imediato). É como ter um carro com motor de Ferrari e freio de bicicleta.</p>
+            <div class="neuro-box">
+                <div class="neuro-item">
+                    <i class="fa-solid fa-traffic-light"></i>
+                    <h4>Pré-Frontal (Freio)</h4>
+                    <p>Responsável pelo planejamento e inibição. Neste esquema, ele perde a batalha para o sistema límbico.</p>
                 </div>
-            </details>
-
-            <details>
-                <summary>🌱 Como a Terapia Ajuda? <i class="fas fa-chevron-down"></i></summary>
-                <div class="details-content">
-                    <p>O foco é o <strong>Treino de Tolerância ao Desconforto</strong>. Não se trata de ter "força de vontade" mágica, mas de aprender técnicas para suportar o tédio e quebrar tarefas grandes em pedaços pequenos.</p>
+                <div class="neuro-item">
+                    <i class="fa-solid fa-rocket"></i>
+                    <h4>Sistema Límbico (Motor)</h4>
+                    <p>Busca prazer imediato e alívio da dor. Grita mais alto que a razão: "Quero agora!".</p>
                 </div>
-            </details>
-
-            <details>
-                <summary>⚠️ A Ilusão do "Amanhã" <i class="fas fa-chevron-down"></i></summary>
-                <div class="details-content">
-                    <p>Você acredita que amanhã terá mais vontade ou energia. Isso é mentira. Amanhã a tarefa será tão chata quanto hoje. A disciplina é fazer <em>sem</em> vontade.</p>
-                </div>
-            </details>
+            </div>
         </div>
 
-        <div class="paper-card">
-            <div class="card-header">
-                <i class="fas fa-adjust card-icon"></i>
-                <h2 class="card-title">Vire o Pensamento</h2>
-            </div>
-            <p>Toque no cartão quando sentir vontade de desistir:</p>
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-rotate"></i> Vire o Pensamento</div>
+            <p style="margin-bottom:20px; text-align:center; font-size:0.9rem; color:#aaa;">Toque no cartão para ativar o Adulto Saudável</p>
             
-            <div class="flashcard-container" onclick="this.classList.toggle('flipped')">
-                <div class="flashcard-inner">
-                    <div class="flashcard-front">
-                        <h3 style="font-family:'Patrick Hand'; font-size:1.5rem;">Voz da Criança Impulsiva</h3>
-                        <p style="margin-top:10px;">"Não quero fazer isso! É muito difícil. Quero ver TV. Ninguém pode me obrigar. Vou parar agora!"</p>
-                        <i class="fas fa-hand-pointer" style="margin-top:20px; color:#db2777; font-size:1.5rem;"></i>
-                    </div>
-                    <div class="flashcard-back">
-                        <h3 style="font-family:'Patrick Hand'; font-size:1.5rem;">Voz do Adulto Saudável</h3>
-                        <p style="margin-top:10px;">"Eu sei que é chato, mas é necessário. O desconforto é temporário, mas o orgulho de ter feito dura muito mais. Vou fazer só por 10 minutos."</p>
+            <div class="flip-grid">
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-front">
+                            <i class="fa-solid fa-child-reaching" style="font-size:2.5rem; color:#dfe6e9; margin-bottom:15px;"></i>
+                            <h3 style="font-size:1.1rem; color:#2d3436;">Criança Impulsiva</h3>
+                            <p style="margin-top:10px; font-size:0.9rem; color:#555;">"Não quero fazer! É difícil. Ninguém pode me obrigar. Vou parar agora!"</p>
+                        </div>
+                        <div class="flip-back">
+                            <h3 style="font-size:1.1rem; margin-bottom:10px;">Adulto Saudável</h3>
+                            <p style="font-size:0.9rem;">"Eu sei que é chato, mas é necessário. O desconforto é temporário, mas o orgulho de ter feito dura muito mais. Vou fazer só por 10 minutos."</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <center>
+            <a href="../../listaferramentas.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Voltar para Ferramentas</a>
+        </center>
 
     </div>
 
@@ -420,31 +371,39 @@
                 &copy; 2026 Bruno de Souza
             </div>
             <div class="social-links">
-                <a href="https://www.instagram.com/psi.brunosg/" target="_blank"><i class="fab fa-instagram"></i></a>
-                <a href="https://wa.me/5553991898309" target="_blank"><i class="fab fa-whatsapp"></i></a>
-                <a href="https://www.linkedin.com/in/psi-bsouza/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                <a href="https://www.instagram.com/psi.brunosg/" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://wa.me/5553991898309" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.linkedin.com/in/psi-bsouza/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
             </div>
         </div>
     </footer>
 
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        function translateNeed(type) {
-            const bubble = document.getElementById('translator-bubble');
+        AOS.init();
+
+        function translateExcuse(type) {
+            const display = document.getElementById('trans-res');
             let text = "";
+            let color = "";
             
             if (type === 'amanha') {
-                text = "✨ Tradução: 'Amanhã eu não terei mais vontade. Procrastinar só aumenta minha ansiedade e culpa. Vou fazer 5 minutos agora.'";
+                text = "✨ <strong>Tradução:</strong> 'Amanhã eu não terei mais vontade. Procrastinar só aumenta minha ansiedade e culpa. Vou fazer 5 minutos agora.'";
+                color = "#1976d2";
             } else if (type === 'chato') {
-                text = "✨ Tradução: 'A vida tem partes chatas. Eu sou adulto e consigo tolerar o tédio para alcançar meus objetivos.'";
+                text = "✨ <strong>Tradução:</strong> 'A vida tem partes chatas. Eu sou adulto e consigo tolerar o tédio para alcançar meus objetivos.'";
+                color = "#e65100";
             } else if (type === 'mereco') {
-                text = "✨ Tradução: 'Eu mereço o resultado de ter a tarefa cumprida, não o alívio passageiro de fugir dela.'";
+                text = "✨ <strong>Tradução:</strong> 'Eu mereço o resultado de ter a tarefa cumprida, não o alívio passageiro de fugir dela.'";
+                color = "#d81b60";
             }
             
-            bubble.style.opacity = 0;
+            display.style.opacity = 0;
+            display.style.borderTop = `5px solid ${color}`;
+            
             setTimeout(() => {
-                bubble.innerHTML = text;
-                bubble.style.opacity = 1;
-                bubble.style.transition = "opacity 0.3s";
+                display.innerHTML = `<p style="font-size:1.1rem; color:#2d3436;">${text}</p>`;
+                display.style.opacity = 1;
             }, 200);
         }
     </script>
