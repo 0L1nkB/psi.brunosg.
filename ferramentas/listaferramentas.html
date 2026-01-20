@@ -25,6 +25,10 @@
             --color-aval: #00b894;
         }
 
+        * {
+            box-sizing: border-box; /* Garante que bordas e padding não estourem o tamanho */
+        }
+
         body {
             font-family: 'Quicksand', sans-serif;
             background-color: var(--bg-color);
@@ -34,35 +38,35 @@
             padding: 20px;
             min-height: 100vh;
             color: var(--text);
-            overflow-x: hidden; /* Evita rolagem lateral indesejada */
+            overflow-x: hidden;
         }
 
         /* --- CABEÇALHO --- */
         header {
             text-align: center;
-            margin: 20px auto 60px auto; /* Mais espaço embaixo do header */
+            margin: 30px auto 80px auto; /* Aumentado para não colar nos cards */
             background: white;
-            padding: 30px 20px;
+            padding: 40px 20px;
             border-radius: 25px;
             border: 3px dashed var(--primary);
             box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
             position: relative;
-            max-width: 800px;
+            max-width: 900px;
             z-index: 10;
         }
 
         header::before {
             content: ""; 
             position: absolute; top: -15px; left: 50%; transform: translateX(-50%) rotate(-1deg);
-            width: 140px; height: 35px; 
-            background-color: rgba(255, 118, 117, 0.8);
+            width: 160px; height: 40px; 
+            background-color: rgba(255, 118, 117, 0.9);
             border: 1px solid rgba(0,0,0,0.05); 
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             z-index: 11;
         }
 
         header h1 {
-            font-size: 2rem;
+            font-size: 2.2rem;
             color: var(--primary);
             text-transform: uppercase;
             margin: 0;
@@ -70,27 +74,27 @@
         }
 
         .subtitle {
-            margin-top: 5px; color: #636e72; font-weight: 600; font-size: 1rem;
+            margin-top: 8px; color: #636e72; font-weight: 600; font-size: 1.1rem;
         }
 
         #btn-sair {
-            position: absolute; top: 15px; right: 20px;
+            position: absolute; top: 20px; right: 25px;
             text-decoration: none; color: #b2bec3;
-            font-size: 0.85rem; font-weight: 700; transition: 0.3s;
+            font-size: 0.95rem; font-weight: 700; transition: 0.3s;
         }
         #btn-sair:hover { color: var(--primary); }
 
-        /* --- CONTAINER E GRID (CORREÇÃO DE SOBREPOSIÇÃO) --- */
+        /* --- CONTAINER E GRID --- */
         .dashboard-container {
-            max-width: 1200px;
+            max-width: 1250px;
             margin: 0 auto;
-            padding: 0 20px 80px 20px; /* Padding lateral e inferior */
+            padding: 0 20px 100px 20px;
         }
 
         .section-label {
-            font-size: 1.4rem; font-weight: 800;
-            margin: 60px 0 30px; /* Margem generosa */
-            display: flex; align-items: center; gap: 12px;
+            font-size: 1.5rem; font-weight: 800;
+            margin: 80px 0 40px; /* Muito espaço acima para evitar sobreposição */
+            display: flex; align-items: center; gap: 15px;
             padding-left: 10px; text-transform: uppercase; letter-spacing: 1px;
             border-bottom: 2px dashed rgba(0,0,0,0.1);
             padding-bottom: 15px;
@@ -98,10 +102,11 @@
 
         .grid {
             display: grid;
-            /* AUMENTADO: Largura mínima 260px para evitar esmagamento */
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            /* AUMENTADO: Espaço maior entre os itens */
-            gap: 35px;
+            /* Auto-fit cria colunas responsivas. Minmax garante largura mínima saudável */
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            /* Espaçamento generoso entre colunas e linhas */
+            gap: 30px; 
+            row-gap: 50px; /* Espaço extra vertical para evitar colisão de sombras */
             width: 100%;
         }
 
@@ -110,53 +115,51 @@
             background: white;
             border: 2px dashed #b2bec3;
             border-radius: 20px;
-            padding: 30px 20px; /* Padding interno maior */
+            padding: 35px 20px;
             text-decoration: none;
             color: var(--text);
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            box-shadow: 0 4px 0 rgba(0,0,0,0.05);
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
+            box-shadow: 0 5px 0 rgba(0,0,0,0.05); /* Sombra sólida vertical */
             display: flex; flex-direction: column; align-items: center; text-align: center;
-            height: 100%; /* Garante altura igual na linha */
             position: relative;
-            background-clip: padding-box;
-            z-index: 1;
+            height: 100%; /* Faz todos da linha terem a mesma altura */
         }
 
-        /* Correção Visual: Ao passar o mouse, o card vem para frente (Z-Index) */
+        /* Efeito Hover */
         .tool-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+            transform: translateY(-10px); /* Sobe mais */
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1); /* Sombra difusa suave */
             border-color: var(--primary);
-            background-color: #fff;
-            z-index: 10; /* Fica por cima dos vizinhos se houver conflito */
+            z-index: 5; /* Garante que fique por cima se houver dúvida */
         }
 
         .card-icon {
-            font-size: 2.2rem; margin-bottom: 15px; transition: 0.3s;
+            font-size: 2.5rem; margin-bottom: 15px; transition: 0.3s;
         }
 
-        .tool-card:hover .card-icon { transform: scale(1.15) rotate(5deg); }
+        .tool-card:hover .card-icon { transform: scale(1.1) rotate(5deg); }
 
         .card-title {
-            font-weight: 700; font-size: 1.1rem; margin-bottom: 8px; color: #2d3436;
+            font-weight: 700; font-size: 1.15rem; margin-bottom: 8px; color: #2d3436;
         }
 
         .card-desc {
-            font-size: 0.85rem; color: #636e72; line-height: 1.5;
+            font-size: 0.9rem; color: #636e72; line-height: 1.5;
         }
 
         footer {
-            text-align: center; margin-top: 80px; color: #b2bec3; font-size: 0.9rem; font-weight: 600;
+            text-align: center; margin-top: 100px; color: #b2bec3; font-size: 0.9rem; font-weight: 600;
         }
 
-        /* Responsividade Extrema */
+        /* Responsividade */
         @media (max-width: 600px) {
             .grid { 
-                grid-template-columns: 1fr; /* 1 coluna em celulares */
-                gap: 25px;
+                grid-template-columns: 1fr; /* 1 card por linha no celular */
+                row-gap: 30px;
             }
-            .tool-card { padding: 20px; }
-            header { margin-bottom: 40px; }
+            .section-label { font-size: 1.2rem; margin: 50px 0 20px; }
+            header { padding: 30px 15px; }
+            header h1 { font-size: 1.6rem; }
         }
     </style>
 </head>
@@ -255,6 +258,11 @@
                 <div class="card-title">Termômetro</div>
                 <div class="card-desc">Nível de Autoestima</div>
             </a>
+            <a href="caderno-autoestima.html" class="tool-card">
+                <div class="card-icon" style="color: var(--color-jogos);"><i class="fa-solid fa-book-heart"></i></div>
+                <div class="card-title">Caderno Autoestima</div>
+                <div class="card-desc">Exercícios Práticos</div>
+            </a>
             <a href="mindfulness-video.html" class="tool-card">
                 <div class="card-icon" style="color: var(--color-jogos);"><i class="fa-solid fa-spa"></i></div>
                 <div class="card-title">Mindfulness</div>
@@ -270,6 +278,16 @@
                 <div class="card-icon" style="color: var(--color-baralhos);"><i class="fa-solid fa-comment-dots"></i></div>
                 <div class="card-title">Puxa Conversa</div>
                 <div class="card-desc">Quebra-Gelo</div>
+            </a>
+            <a href="baralhos/baralho-100-perguntas.html" class="tool-card">
+                <div class="card-icon" style="color: var(--color-baralhos);"><i class="fa-solid fa-circle-question"></i></div>
+                <div class="card-title">100 Perguntas</div>
+                <div class="card-desc">Exploração Pessoal</div>
+            </a>
+            <a href="baralhos/baralho-autoconhecimento.html" class="tool-card">
+                <div class="card-icon" style="color: var(--color-baralhos);"><i class="fa-solid fa-user-astronaut"></i></div>
+                <div class="card-title">Autoconhecimento</div>
+                <div class="card-desc">Jornada Interior</div>
             </a>
             <a href="baralhos/baralho-dialogando-casal.html" class="tool-card">
                 <div class="card-icon" style="color: var(--color-baralhos);"><i class="fa-solid fa-heart-pulse"></i></div>
@@ -301,6 +319,11 @@
                 <div class="card-title">Distorções</div>
                 <div class="card-desc">Erros Cognitivos</div>
             </a>
+             <a href="baralhos/baralho-modelo-cognitivo.html" class="tool-card">
+                <div class="card-icon" style="color: var(--color-baralhos);"><i class="fa-solid fa-brain"></i></div>
+                <div class="card-title">Modelo Cognitivo</div>
+                <div class="card-desc">Baralho Prático</div>
+            </a>
             <a href="baralhos/baralhotdah.html" class="tool-card">
                 <div class="card-icon" style="color: var(--color-baralhos);"><i class="fa-solid fa-bolt"></i></div>
                 <div class="card-title">Baralho TDAH</div>
@@ -321,6 +344,11 @@
                 <div class="card-icon" style="color: var(--color-tcc);"><i class="fa-solid fa-pen-to-square"></i></div>
                 <div class="card-title">RPD</div>
                 <div class="card-desc">Registro de Pensamentos</div>
+            </a>
+            <a href="psicoeducacao/tcc/tcc.html" class="tool-card">
+                <div class="card-icon" style="color: var(--color-tcc);"><i class="fa-solid fa-circle-info"></i></div>
+                <div class="card-title">Sobre a TCC</div>
+                <div class="card-desc">Fundamentos</div>
             </a>
             <a href="psicoeducacao/tcc/pensamentos-automaticos.html" class="tool-card">
                 <div class="card-icon" style="color: var(--color-tcc);"><i class="fa-solid fa-comments"></i></div>
@@ -343,6 +371,16 @@
             <i class="fa-solid fa-puzzle-piece"></i> Terapia do Esquema
         </div>
         <div class="grid">
+            <a href="psicoeducacao/te/esquema.html" class="tool-card">
+                <div class="card-icon" style="color: var(--color-esquema);"><i class="fa-solid fa-book"></i></div>
+                <div class="card-title">Guia dos Esquemas</div>
+                <div class="card-desc">Todos os 18 Esquemas</div>
+            </a>
+             <a href="psicoeducacao/te/modos.html" class="tool-card">
+                <div class="card-icon" style="color: var(--color-esquema);"><i class="fa-solid fa-masks-theater"></i></div>
+                <div class="card-title">Guia dos Modos</div>
+                <div class="card-desc">Explicação dos Modos</div>
+            </a>
             <a href="escalas-te/smi.html" class="tool-card">
                 <div class="card-icon" style="color: var(--color-esquema);"><i class="fa-solid fa-chart-pie"></i></div>
                 <div class="card-title">SMI (Modos)</div>
@@ -388,6 +426,11 @@
                 <div class="card-icon" style="color: var(--color-aval);"><i class="fa-solid fa-cloud-rain"></i></div>
                 <div class="card-title">BHS</div>
                 <div class="card-desc">Desesperança</div>
+            </a>
+            <a href="escalas/bpq.html" class="tool-card">
+                <div class="card-icon" style="color: var(--color-aval);"><i class="fa-solid fa-clipboard-question"></i></div>
+                <div class="card-title">BPQ</div>
+                <div class="card-desc">Preocupação (Penn)</div>
             </a>
             <a href="escalas/asrs18.html" class="tool-card">
                 <div class="card-icon" style="color: var(--color-aval);"><i class="fa-solid fa-user-check"></i></div>
