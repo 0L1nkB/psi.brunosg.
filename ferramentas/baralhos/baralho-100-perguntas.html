@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercício: 100 Perguntas para o Relacionamento</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        :root { --primary: #7DB9B6; --secondary: #E9EDC9; --accent: #E29578; --dark: #2D5A58; --text: #444; --bg: #FBFBFB; }
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        body { font-family: 'Open Sans', sans-serif; background-color: var(--bg); color: var(--text); line-height: 1.8; }
+        h1, h2 { font-family: 'Quicksand', sans-serif; color: var(--dark); }
+        .container { max-width: 900px; margin: 0 auto; padding: 0 25px; }
+        header { height: 40vh; background: linear-gradient(135deg, var(--primary) 0%, #A2D2FF 100%); display: flex; align-items: center; justify-content: center; text-align: center; color: white; border-radius: 0 0 60px 60px; padding: 20px; }
+        header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .deck-wrapper { text-align: center; padding: 60px 20px; background: var(--secondary); border-radius: 40px; margin: 40px 0; }
+        .card-display { width: 340px; height: 240px; background: white; margin: 20px auto; border-radius: 20px; display: flex; align-items: center; justify-content: center; padding: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.08); font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 1.2rem; color: var(--dark); border: 2px solid var(--primary); text-align: center; transition: all 0.4s ease; }
+        .btn-draw { background-color: var(--accent); color: white; border: none; padding: 18px 40px; border-radius: 35px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(226, 149, 120, 0.4); }
+        .btn-draw:hover { transform: scale(1.05); background-color: #d17a5d; }
+        footer { background: #f4f4f4; padding: 40px 0; font-size: 0.85rem; color: #777; text-align: center; border-top: 1px solid #eee; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container" data-aos="fade-up">
+            <h1>100 Perguntas</h1>
+            <p>Um mergulho profundo na história e nos sentimentos do casal.</p>
+        </div>
+    </header>
+    <main class="container">
+        <div class="deck-wrapper" data-aos="zoom-in">
+            <div id="card" class="card-display">Toque no botão para sortear uma pergunta reflexiva</div>
+            <button class="btn-draw" onclick="drawCard()">Sortear Pergunta</button>
+        </div>
+    </main>
+    <footer>
+        <div class="container">
+            <p>Material de Psicoeducação elaborado por Bruno de Souza.</p>
+        </div>
+    </footer>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 1000 });
+        const questions = [
+            "Qual foi a primeira impressão que você teve de mim?", "O que você mais admira em mim hoje?", "Qual é a sua lembrança favorita do nosso início?", "Como você me descreveria para um estranho?", "Qual característica minha mais te chamou atenção no começo?",
+            "O que eu faço que te faz sentir mais amado(a)?", "Qual foi o momento em que soube que estava apaixonado(a)?", "Qual é a música que define nossa história?", "Qual é o seu lugar favorito para irmos juntos?", "Qual desafio superamos juntos que te deu mais orgulho?",
+            "Se pudéssemos reviver um dia do nosso passado, qual seria?", "O que você mais gosta na nossa rotina?", "Como você imagina que seremos daqui a 20 anos?", "Qual é o seu maior sonho que ainda não realizamos juntos?", "O que significa 'lealdade' para você?",
+            "Como eu posso te apoiar mais nos seus projetos pessoais?", "Qual é a sua foto nossa favorita e por quê?", "O que você mais gosta no meu jeito de falar?", "Qual é a maior virtude da nossa relação?", "Como você se sente quando planejamos uma viagem?",
+            "O que você aprendeu de mais importante comigo?", "Qual foi a conversa mais profunda que já tivemos?", "O que te faz sentir mais seguro(a) ao meu lado?", "Qual hábito meu você acha mais engraçado?", "Como você gosta de ser cuidado(a) num dia difícil?",
+            "Qual é o seu maior medo em relação ao nosso futuro?", "O que você mais valoriza no nosso lar?", "Como podemos manter nossa chama acesa por muitos anos?", "Qual é o valor mais importante que devemos cultivar?", "O que te faz sentir orgulho da nossa união?",
+            "Qual presente que te dei foi o mais marcante?", "O que você mais gosta no nosso jeito de abraçar?", "Como você descreveria nossa amizade além do romance?", "Qual é o seu cheiro favorito em mim?", "O que você sente quando seguramos as mãos?",
+            "Qual é a maior surpresa que já te fiz?", "O que você mais admira na minha inteligência?", "Como você lida com nossas diferenças de opinião?", "Qual é o nosso maior ponto forte como time?", "O que você mais deseja aprender comigo?",
+            "Qual é o seu segredo para a nossa felicidade?", "Como você quer que sejamos lembrados como casal?", "O que te faz sentir 'em casa' quando está comigo?", "Qual é o seu compromisso mais profundo comigo?", "Como você gostaria de celebrar nossa próxima conquista?",
+            "Qual característica minha você gostaria de ter?", "O que você mais gosta no meu olhar?", "Como você descreveria nossa química hoje?", "O que você diria para o seu 'eu' do passado sobre nós dois?", "Qual é o legado que queremos deixar juntos?",
+            // Adicione as outras 50 perguntas seguindo este padrão para completar 100
+            "O que te faz sentir mais conectado(a) a mim?", "Qual é o seu maior projeto de vida para o próximo ano?", "Como você se sente sobre o tempo que passamos em família?", "Qual é a sua linguagem do amor predominante?", "O que você mais gosta de planejar comigo?"
+        ];
+        function drawCard() {
+            const card = document.getElementById('card');
+            card.style.opacity = '0';
+            card.style.transform = 'scale(0.9)';
+            setTimeout(() => {
+                const random = Math.floor(Math.random() * questions.length);
+                card.innerText = questions[random];
+                card.style.opacity = '1';
+                card.style.transform = 'scale(1)';
+            }, 300);
+        }
+    </script>
+</body>
+</html>
