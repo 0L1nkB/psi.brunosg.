@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Burnout - Esgotamento Profissional | Bruno de Souza</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Identidade Visual - Tema "Fogo/Cinzas" */
+            --bg-color: #fff3e0;      /* Laranja muito pálido */
+            --primary: #ff6f00;       /* Laranja Queimado (Estresse/Alerta) */
+            --primary-dark: #e65100;
+            --accent: #546e7a;        /* Cinza Azulado (Cinzas/Apatia) */
+            --text: #2d3436;
+            --card-border: #b0bec5;
+            
+            /* Cores Específicas */
+            --high-energy: #4caf50;   /* Verde */
+            --low-energy: #d32f2f;    /* Vermelho */
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#ffcc80 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* --- CABEÇALHO --- */
+        header {
+            text-align: center;
+            margin: 20px auto 40px auto;
+            background: white;
+            padding: 30px 20px;
+            border-radius: 25px;
+            border: 3px dashed var(--primary);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            position: relative;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        header::before {
+            content: ""; 
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%) rotate(-1deg);
+            width: 140px; height: 35px; 
+            background-color: rgba(255, 111, 0, 0.2); 
+            border: 1px solid rgba(0,0,0,0.05); 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            margin: 0;
+            font-weight: 800;
+        }
+
+        .subtitle { margin-top: 5px; color: #636e72; font-weight: 600; }
+
+        /* --- CONTAINER --- */
+        .main-container {
+            max-width: 850px;
+            width: 100%;
+            margin-bottom: 80px;
+        }
+
+        /* --- CARDS DE CONTEÚDO --- */
+        .content-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.05);
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .content-card:hover {
+            border-color: var(--card-border);
+            transform: translateY(-2px);
+        }
+
+        .card-title {
+            color: var(--primary-dark);
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px dashed #eee;
+            padding-bottom: 10px;
+        }
+
+        .highlight-box {
+            background: #eceff1;
+            border-left: 5px solid var(--accent);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 1rem;
+            color: #455a64;
+        }
+
+        /* --- GRID DE SINTOMAS (DUAL) --- */
+        .dual-symptoms {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .symptom-column h4 {
+            text-align: center; margin-bottom: 15px; font-weight: 800; text-transform: uppercase; font-size: 0.9rem;
+        }
+
+        .symptom-item {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 12px;
+            display: flex; align-items: flex-start; gap: 10px;
+            margin-bottom: 10px;
+            border-left: 4px solid;
+        }
+        
+        .sym-exaust { border-color: var(--primary); }
+        .sym-exaust i { color: var(--primary); }
+        
+        .sym-cynic { border-color: var(--accent); }
+        .sym-cynic i { color: var(--accent); }
+
+        .symptom-item strong { display: block; color: var(--text); font-size: 0.9rem; }
+        .symptom-item span { font-size: 0.8rem; color: #636e72; }
+
+        /* --- WIDGET BATERIA (Energy Check) --- */
+        .battery-container {
+            text-align: center;
+            background: #cfd8dc;
+            padding: 25px;
+            border-radius: 20px;
+            border: 2px dashed #90a4ae;
+        }
+
+        .battery-display {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: 0.3s;
+        }
+
+        .btn-bat {
+            background: white; border: 2px solid #b0bec5; color: #455a64;
+            padding: 10px 20px; border-radius: 30px; font-weight: 700;
+            cursor: pointer; margin: 5px; transition: 0.2s; font-family: 'Quicksand';
+        }
+        .btn-bat:hover { transform: translateY(-2px); }
+        .btn-bat.low:hover { background: #ffebee; border-color: #ef5350; color: #c62828; }
+        .btn-bat.med:hover { background: #fff3e0; border-color: #ff9800; color: #ef6c00; }
+        .btn-bat.high:hover { background: #e8f5e9; border-color: #4caf50; color: #2e7d32; }
+
+        /* --- CICLO DO BURNOUT --- */
+        .cycle-wrapper {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .cycle-step {
+            flex: 1; min-width: 140px;
+            background: white; border: 2px solid #eee;
+            border-radius: 15px; padding: 15px; text-align: center;
+            position: relative;
+        }
+
+        .cs-1 { border-top: 5px solid #4caf50; } /* Compulsão em provar */
+        .cs-2 { border-top: 5px solid #ff9800; } /* Negligência */
+        .cs-3 { border-top: 5px solid #e53935; } /* Cinismo */
+        .cs-4 { border-top: 5px solid #455a64; } /* Colapso */
+
+        .cycle-step h5 { margin: 0 0 5px 0; font-size: 0.9rem; font-weight: 800; color: #2d3436; }
+        .cycle-step p { margin: 0; font-size: 0.8rem; color: #636e72; }
+
+        /* --- FLIP CARDS (MITOS) --- */
+        .flip-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 30px;
+        }
+
+        .flip-card {
+            background-color: transparent;
+            height: 300px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .flip-card-inner {
+            position: relative; width: 100%; height: 100%;
+            text-align: center; transition: transform 0.6s;
+            transform-style: preserve-3d;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+
+        .flip-front, .flip-back {
+            position: absolute; width: 100%; height: 100%;
+            -webkit-backface-visibility: hidden; backface-visibility: hidden;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 25px; border-radius: 15px; border: 2px solid #dfe6e9;
+            box-sizing: border-box;
+        }
+
+        .flip-front { background-color: white; color: #2d3436; }
+        .flip-back { background-color: var(--primary); color: white; transform: rotateY(180deg); border-color: var(--primary); }
+
+        /* Botão Voltar */
+        .btn-back {
+            display: block; margin: 30px auto; text-align: center; color: #b2bec3; text-decoration: none; font-weight: 600;
+        }
+        .btn-back:hover { color: var(--primary); }
+
+        @media (max-width: 600px) {
+            .dual-symptoms { grid-template-columns: 1fr; }
+            .cycle-wrapper { flex-direction: column; }
+            .flip-card { height: 320px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header data-aos="fade-down">
+        <h1>Burnout</h1>
+        <div class="subtitle">Síndrome do Esgotamento Profissional</div>
+    </header>
+
+    <div class="main-container">
+        
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-battery-empty"></i> O que é o Burnout?</div>
+            <p>Não é apenas "cansaço" ou "estresse do dia a dia". É um estado de exaustão vital crônica causada pelo trabalho.</p>
+            <div class="highlight-box">
+                <i class="fa-solid fa-triangle-exclamation"></i> <strong>A Tríade do Burnout:</strong><br>
+                1. Exaustão emocional extrema.<br>
+                2. Despersonalização (Cinismo/Distanciamento).<br>
+                3. Baixa realização profissional (Ineficácia).
+            </div>
+        </div>
+
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-list-ul"></i> Sinais de Alerta</div>
+            
+            <div class="dual-symptoms">
+                <div class="symptom-column">
+                    <h4 style="color:var(--primary);">Exaustão (O Fogo)</h4>
+                    <div class="symptom-item sym-exaust">
+                        <i class="fa-solid fa-fire"></i>
+                        <div><strong>Fadiga Crônica</strong><span>Dormir não resolve. Você acorda cansado.</span></div>
+                    </div>
+                    <div class="symptom-item sym-exaust">
+                        <i class="fa-solid fa-brain"></i>
+                        <div><strong>Névoa Mental</strong><span>Esquecimentos, dificuldade de foco.</span></div>
+                    </div>
+                    <div class="symptom-item sym-exaust">
+                        <i class="fa-solid fa-heart-pulse"></i>
+                        <div><strong>Sintomas Físicos</strong><span>Dores de cabeça, gastrite, taquicardia.</span></div>
+                    </div>
+                </div>
+
+                <div class="symptom-column">
+                    <h4 style="color:var(--accent);">Cinismo (As Cinzas)</h4>
+                    <div class="symptom-item sym-cynic">
+                        <i class="fa-solid fa-robot"></i>
+                        <div><strong>Despersonalização</strong><span>Tratar pessoas/clientes como objetos ou números.</span></div>
+                    </div>
+                    <div class="symptom-item sym-cynic">
+                        <i class="fa-solid fa-face-frown-open"></i>
+                        <div><strong>Apatia</strong><span>"Tanto faz", perda de empatia e propósito.</span></div>
+                    </div>
+                    <div class="symptom-item sym-cynic">
+                        <i class="fa-solid fa-user-xmark"></i>
+                        <div><strong>Isolamento</strong><span>Evitar almoçar com colegas, querer sumir.</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-charging-station"></i> Checagem de Bateria</div>
+            <div class="battery-container">
+                <p style="font-weight:700; color:#455a64; margin-bottom:15px;">Como está sua energia agora?</p>
+                
+                <div>
+                    <button class="btn-bat low" onclick="checkBattery('low')">🪫 10% (Crítico)</button>
+                    <button class="btn-bat med" onclick="checkBattery('med')">🔋 50% (Alerta)</button>
+                    <button class="btn-bat high" onclick="checkBattery('high')">⚡ 90% (Fluindo)</button>
+                </div>
+
+                <div class="battery-display" id="bat-res">
+                    <span style="color:#b0bec5; font-style:italic;">Selecione uma carga...</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-stairs"></i> A Rota do Colapso</div>
+            <p>O Burnout não acontece da noite para o dia. É um processo gradual (Freudenberger).</p>
+            
+            <div class="cycle-wrapper">
+                <div class="cycle-step cs-1">
+                    <h5>1. Compulsão</h5>
+                    <p>Necessidade de provar valor. Trabalhar muito.</p>
+                </div>
+                <div class="cycle-step cs-2">
+                    <h5>2. Negligência</h5>
+                    <p>Deixar de dormir, comer mal, sem lazer.</p>
+                </div>
+                <div class="cycle-step cs-3">
+                    <h5>3. Distanciamento</h5>
+                    <p>Cinismo, crítica, perda de valores.</p>
+                </div>
+                <div class="cycle-step cs-4">
+                    <h5>4. Colapso</h5>
+                    <p>Esgotamento total. Corpo e mente param.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-mask"></i> Mitos do Burnout</div>
+            <p style="margin-bottom:20px; text-align:center; font-size:0.9rem; color:#aaa;">Toque nos cartões para virar</p>
+            
+            <div class="flip-grid">
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-front">
+                            <i class="fa-solid fa-plane-departure" style="font-size:2.5rem; color:#dfe6e9; margin-bottom:15px;"></i>
+                            <h3 style="font-size:1.1rem; color:#2d3436;">"Férias resolvem"</h3>
+                        </div>
+                        <div class="flip-back">
+                            <h3 style="font-size:1rem; margin-bottom:10px;">Não é suficiente</h3>
+                            <p style="font-size:0.9rem;">Férias ajudam no estresse agudo. No Burnout, a pessoa volta e os sintomas retornam em dias. É necessária mudança estrutural.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-front">
+                            <i class="fa-solid fa-bed" style="font-size:2.5rem; color:#dfe6e9; margin-bottom:15px;"></i>
+                            <h3 style="font-size:1.1rem; color:#2d3436;">"É preguiça"</h3>
+                        </div>
+                        <div class="flip-back">
+                            <h3 style="font-size:1rem; margin-bottom:10px;">É Colapso</h3>
+                            <p style="font-size:0.9rem;">Burnout geralmente atinge os funcionários mais engajados e dedicados, que "vestem a camisa" até a exaustão.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-front">
+                            <i class="fa-solid fa-briefcase" style="font-size:2.5rem; color:#dfe6e9; margin-bottom:15px;"></i>
+                            <h3 style="font-size:1.1rem; color:#2d3436;">"Odeia o trabalho"</h3>
+                        </div>
+                        <div class="flip-back">
+                            <h3 style="font-size:1rem; margin-bottom:10px;">Paixão que queima</h3>
+                            <p style="font-size:0.9rem;">Você pode amar o que faz e ainda ter Burnout. Muitas vezes é o excesso de cuidado e a falta de limites que causam.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <center>
+            <a href="../listaferramentas.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Voltar para Ferramentas</a>
+        </center>
+
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        function checkBattery(type) {
+            const display = document.getElementById('bat-res');
+            let title = "";
+            let text = "";
+            let icon = "";
+            let color = "";
+
+            if(type === 'low') {
+                title = "Modo de Emergência";
+                text = "Pare tudo que não for vital. Seu sistema está em colapso. Priorize: Sono, Hidratação e Silêncio. Não tome decisões importantes hoje.";
+                icon = '<i class="fa-solid fa-battery-empty" style="font-size:2rem; margin-bottom:10px;"></i>';
+                color = "#d32f2f";
+            } else if(type === 'med') {
+                title = "Economia de Energia";
+                text = "Você está funcional, mas vulnerável. Faça pausas a cada 50 min. Diga 'não' para novas tarefas hoje. Saia no horário.";
+                icon = '<i class="fa-solid fa-battery-half" style="font-size:2rem; margin-bottom:10px;"></i>';
+                color = "#f57c00";
+            } else if(type === 'high') {
+                title = "Fluxo Saudável";
+                text = "Ótimo! Aproveite para organizar a semana e prevenir o estresse futuro. Mantenha os hobbies ativos.";
+                icon = '<i class="fa-solid fa-battery-full" style="font-size:2rem; margin-bottom:10px;"></i>';
+                color = "#388e3c";
+            }
+
+            display.style.borderTop = `5px solid ${color}`;
+            display.innerHTML = `
+                <div style="color:${color}">${icon}</div>
+                <h3 style="margin:0 0 5px 0; color:#2d3436;">${title}</h3>
+                <p style="margin:0; font-size:0.9rem; color:#636e72; text-align:center;">${text}</p>
+            `;
+        }
+    </script>
+
+</body>
+</html>
