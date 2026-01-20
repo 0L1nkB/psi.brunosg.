@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HCL-32 - Hipomania | Bruno de Souza</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Identidade Visual - Tema "Energia/Hipomania" */
+            --bg-color: #f3e5f5;      /* Lilás muito claro */
+            --primary: #8e44ad;       /* Roxo Vibrante */
+            --primary-dark: #6c3483;
+            --accent: #00b894;        /* Verde (Ativação) */
+            --text: #2d3436;
+            --card-border: #b2bec3;
+            
+            /* Botões */
+            --btn-yes: #9b59b6;
+            --btn-no: #bdc3c7;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#d7bde2 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* --- CABEÇALHO --- */
+        header {
+            text-align: center;
+            margin: 20px auto 40px auto;
+            background: white;
+            padding: 30px 20px;
+            border-radius: 25px;
+            border: 3px dashed var(--primary);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            position: relative;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        header::before {
+            content: ""; 
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%) rotate(-1deg);
+            width: 140px; height: 35px; 
+            background-color: rgba(142, 68, 173, 0.2); 
+            border: 1px solid rgba(0,0,0,0.05); 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            margin: 0;
+            font-weight: 800;
+        }
+
+        .subtitle { margin-top: 5px; color: #636e72; font-weight: 600; }
+
+        /* --- INSTRUÇÕES --- */
+        .instruction-box {
+            background: #fff;
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 6px solid var(--primary);
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+            text-align: left;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.05);
+            max-width: 800px;
+            line-height: 1.6;
+        }
+
+        /* --- CONTAINER --- */
+        .main-container {
+            max-width: 800px;
+            width: 100%;
+            margin-bottom: 80px;
+        }
+
+        /* --- LISTA DE ITENS --- */
+        .question-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .item-card {
+            background: white;
+            border-radius: 15px;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border: 1px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .item-card:hover {
+            border-color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .item-text {
+            flex: 1;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-right: 15px;
+            color: #2d3436;
+        }
+
+        .item-num {
+            font-weight: 800;
+            color: var(--primary);
+            margin-right: 10px;
+            font-size: 0.9rem;
+        }
+
+        /* --- BOTÕES SIM/NÃO --- */
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-option {
+            width: 50px;
+            height: 40px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+            background: #f1f2f6;
+            color: #b2bec3;
+        }
+
+        .btn-option:hover { transform: scale(1.05); }
+
+        .btn-yes.selected {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 10px rgba(142, 68, 173, 0.4);
+        }
+
+        .btn-no.selected {
+            background: #95a5a6;
+            color: white;
+        }
+
+        input[type="radio"] { display: none; }
+
+        /* --- BOTÃO CALCULAR --- */
+        .btn-calc {
+            display: block; width: 100%;
+            margin-top: 40px; padding: 18px;
+            background: var(--primary); color: white;
+            border: none; border-radius: 50px;
+            font-size: 1.2rem; font-weight: 800; font-family: 'Quicksand', sans-serif;
+            cursor: pointer; box-shadow: 0 10px 20px rgba(142, 68, 173, 0.3);
+            transition: transform 0.2s;
+        }
+        .btn-calc:hover { transform: translateY(-3px); background: var(--primary-dark); }
+
+        /* --- RESULTADOS --- */
+        .result-section {
+            display: none;
+            margin-top: 50px;
+            background: white;
+            border-radius: 25px;
+            padding: 40px;
+            border: 3px dashed var(--primary);
+            text-align: center;
+        }
+
+        .score-val { font-size: 4rem; font-weight: 900; color: var(--primary); line-height: 1; margin: 10px 0; }
+        
+        .score-badge {
+            display: inline-block;
+            padding: 8px 25px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+        
+        .risk-high { background: #ff7675; color: white; }
+        .risk-low { background: #00b894; color: white; }
+
+        /* Botão Voltar */
+        .btn-back {
+            display: block; margin-top: 30px; text-align: center; color: #b2bec3; text-decoration: none; font-weight: 600;
+        }
+        .btn-back:hover { color: var(--primary); }
+
+        @media (max-width: 600px) {
+            .item-card { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .btn-group { width: 100%; justify-content: flex-end; }
+            .btn-option { flex: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <header data-aos="fade-down">
+        <h1>HCL-32</h1>
+        <div class="subtitle">Lista de Hipomania (32 Itens)</div>
+    </header>
+
+    <div class="main-container">
+        
+        <div class="instruction-box">
+            <p style="margin-top:0;"><strong>Contexto:</strong> Em algum momento da sua vida, você já teve períodos em que se sentiu "alto" (muito feliz, eufórico) ou "hiper" (irritável, agitado) e que as outras pessoas acharam que você não era o seu "eu" normal?</p>
+            <p style="margin-bottom:0;">Se <strong>SIM</strong>, responda abaixo como você se sente ou se comporta <strong>durante esses períodos</strong>:</p>
+        </div>
+
+        <form id="hclForm">
+            <div class="question-list" id="questions-container"></div>
+        </form>
+
+        <button class="btn-calc" onclick="calculateResults()">
+            <i class="fa-solid fa-bolt"></i> CALCULAR RESULTADO
+        </button>
+
+        <div class="result-section" id="result-area">
+            <h3 style="color:#636e72; text-transform:uppercase; font-size:0.9rem;">Pontuação Total (Sintomas Afirmativos)</h3>
+            
+            <div class="score-val" id="total-score">0</div>
+            <div class="score-badge" id="interpretation">...</div>
+
+            <div style="margin-top:30px; font-size:0.9rem; color:#636e72; text-align:left; background:#f8f9fa; padding:15px; border-radius:10px;">
+                <strong>Interpretação Clínica:</strong><br>
+                O ponto de corte usual é <strong>14 pontos</strong>. Scores iguais ou superiores a 14 sugerem uma possível hipomania (característica do Transtorno Bipolar Tipo II), diferenciando-a da Depressão Unipolar.
+            </div>
+
+            <button class="btn-calc" style="background:#2d3436; margin-top:30px; font-size:1rem;" onclick="window.print()">
+                <i class="fa-solid fa-print"></i> Salvar PDF
+            </button>
+        </div>
+
+        <center>
+            <a href="../listaferramentas.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Voltar para Ferramentas</a>
+        </center>
+
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        const questions = [
+            "Preciso de menos sono.",
+            "Sinto-me com mais energia.",
+            "Tenho mais autoconfiança.",
+            "Gosto mais do meu trabalho.",
+            "Sou mais sociável.",
+            "Quero viajar mais.",
+            "Tenho tendência a dirigir mais rápido.",
+            "Gasto mais dinheiro.",
+            "Corro mais riscos.",
+            "Sou fisicamente mais ativo.",
+            "Planejo mais atividades.",
+            "Tenho mais ideias.",
+            "Sou menos tímido.",
+            "Visto-me de forma mais colorida ou extravagante.",
+            "Quero conhecer mais pessoas.",
+            "Tenho mais interesse sexual.",
+            "Flerto mais.",
+            "Falo mais.",
+            "Penso mais rápido.",
+            "Faço mais piadas ou trocadilhos.",
+            "Distraio-me mais facilmente.",
+            "Envolvo-me em muitas coisas novas.",
+            "Meus pensamentos pulam de um assunto para outro.",
+            "Faço as coisas mais rápido.",
+            "Sou mais impaciente.",
+            "Posso ser cansativo ou irritante para os outros.",
+            "Entro em mais discussões.",
+            "Meu humor fica mais eufórico e otimista.",
+            "Bebo mais café.",
+            "Fumo mais cigarros.",
+            "Bebo mais álcool.",
+            "Uso mais medicamentos (calmantes/estimulantes) ou outras drogas."
+        ];
+
+        const container = document.getElementById('questions-container');
+
+        // Renderizar Perguntas
+        questions.forEach((text, index) => {
+            const card = document.createElement('div');
+            card.className = 'item-card';
+            card.setAttribute('data-aos', 'fade-up');
+
+            card.innerHTML = `
+                <div style="display:flex; align-items:center; flex:1;">
+                    <span class="item-num">${index + 1}.</span>
+                    <span class="item-text">${text}</span>
+                </div>
+                <div class="btn-group">
+                    <div class="btn-option btn-yes" id="btn-y-${index}" onclick="selectOption(${index}, 1)">SIM</div>
+                    <div class="btn-option btn-no" id="btn-n-${index}" onclick="selectOption(${index}, 0)">NÃO</div>
+                    <input type="radio" name="q${index}" id="inp-${index}" value="0">
+                </div>
+            `;
+            container.appendChild(card);
+        });
+
+        function selectOption(index, val) {
+            // Atualiza visual
+            const btnY = document.getElementById(`btn-y-${index}`);
+            const btnN = document.getElementById(`btn-n-${index}`);
+            
+            btnY.classList.remove('selected');
+            btnN.classList.remove('selected');
+            
+            if(val === 1) btnY.classList.add('selected');
+            else btnN.classList.add('selected');
+
+            // Atualiza input escondido para cálculo
+            document.getElementById(`inp-${index}`).value = val;
+        }
+
+        function calculateResults() {
+            let total = 0;
+            let answered = 0; // Neste caso simplificado, assumimos 0 como padrão se não clicado, mas ideal é forçar
+            
+            // Verifica se clicou visualmente em algo (opcional, aqui vou somar direto)
+            const inputs = document.querySelectorAll('input[type="radio"]');
+            inputs.forEach(inp => {
+                total += parseInt(inp.value);
+            });
+
+            // Se o usuário não clicou em nada, o total será 0 (pois o default do input hidden seria 0 se não atualizado, 
+            // mas aqui atualizamos o value do input via JS). 
+            // Para garantir UX, vamos verificar se as classes 'selected' existem.
+            
+            const selectedCount = document.querySelectorAll('.selected').length;
+            if(selectedCount < 32) {
+                if(!confirm(`Você respondeu apenas ${selectedCount} de 32 itens. O resultado pode ser impreciso. Continuar?`)) return;
+            }
+
+            // Exibir Resultados
+            document.getElementById('total-score').innerText = total;
+            const interp = document.getElementById('interpretation');
+            
+            if (total >= 14) {
+                interp.innerText = "RISCO DE HIPOMANIA";
+                interp.className = "score-badge risk-high";
+            } else {
+                interp.innerText = "BAIXA PROBABILIDADE";
+                interp.className = "score-badge risk-low";
+            }
+
+            const resultArea = document.getElementById('result-area');
+            resultArea.style.display = 'block';
+            resultArea.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+
+</body>
+</html>
