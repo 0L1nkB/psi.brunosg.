@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercício: 100 Cards de Interação</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        :root { --primary: #FFC8DD; --secondary: #BDE0FE; --accent: #FFA69E; --dark: #4A4E69; --text: #444; --bg: #FBFBFB; }
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        body { font-family: 'Open Sans', sans-serif; background-color: var(--bg); color: var(--text); line-height: 1.8; }
+        h1, h2 { font-family: 'Quicksand', sans-serif; color: var(--dark); }
+        .container { max-width: 900px; margin: 0 auto; padding: 0 25px; }
+        header { height: 40vh; background: linear-gradient(135deg, #FFC8DD 0%, #A2D2FF 100%); display: flex; align-items: center; justify-content: center; text-align: center; color: white; border-radius: 0 0 60px 60px; padding: 20px; }
+        header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .deck-wrapper { text-align: center; padding: 60px 20px; background: #fdf0f4; border-radius: 40px; margin: 40px 0; border: 2px dashed #FFC8DD; }
+        .card-display { width: 340px; height: 240px; background: white; margin: 20px auto; border-radius: 20px; display: flex; align-items: center; justify-content: center; padding: 30px; box-shadow: 0 15px 35px rgba(255, 200, 221, 0.3); font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 1.2rem; color: var(--dark); border: 2px solid #FFC8DD; text-align: center; transition: all 0.4s ease; }
+        .btn-draw { background-color: #A2D2FF; color: var(--dark); border: none; padding: 18px 40px; border-radius: 35px; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(162, 210, 255, 0.4); }
+        .btn-draw:hover { transform: scale(1.05); background-color: #BDE0FE; }
+        footer { background: #f4f4f4; padding: 40px 0; font-size: 0.85rem; color: #777; text-align: center; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container" data-aos="fade-up">
+            <h1>100 Cards de Ação</h1>
+            <p>Dinâmicas e frases para completar que fortalecem a conexão imediata.</p>
+        </div>
+    </header>
+    <main class="container">
+        <div class="deck-wrapper" data-aos="zoom-in">
+            <div id="card" class="card-display">Toque no botão para tirar um card de interação</div>
+            <button class="btn-draw" onclick="drawCard()">Tirar uma Carta</button>
+        </div>
+    </main>
+    <footer>
+        <div class="container">
+            <p>Material de Psicoeducação elaborado por Bruno de Souza.</p>
+        </div>
+    </footer>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 1000 });
+        const cards = [
+            "Complete a frase: 'O que eu mais amo em nós dois é...'", "Segure as mãos do seu parceiro e faça um elogio sincero agora.", "Cante um trecho de uma música que lembre o início de vocês.", "Dê um abraço de 30 segundos no seu parceiro, sentindo a respiração dele.", "Complete: 'Eu me sinto mais seguro(a) quando você...'",
+            "Olhe nos olhos do seu parceiro e diga uma coisa que você nunca quer que mude nele.", "Diga três coisas pelas quais você é grato(a) na nossa relação hoje.", "Complete a frase: 'Meu dia fica muito melhor quando você...'", "Lembre o parceiro de uma qualidade dele que ele costuma esquecer.", "Faça um carinho no rosto do seu parceiro e sorria.",
+            "Complete: 'Um sonho que eu quero muito realizar ao seu lado é...'", "Diga algo que você admira no jeito que o parceiro lida com as outras pessoas.", "Complete a frase: 'Eu sabia que éramos certos um para o outro quando...'", "Conte um segredo bobo ou um pensamento engraçado que teve hoje.", "Complete: 'Se fôssemos fugir para algum lugar agora, eu escolheria...'",
+            "Dê um beijo na mão do seu parceiro e diga 'obrigado(a) por estar aqui'.", "Complete: 'A coisa mais fofa que você já fez por mim foi...'", "Diga ao seu parceiro qual é a sua parte favorita do corpo dele.", "Complete a frase: 'Amar você me ensinou que...'", "Faça uma promessa de um pequeno gesto gentil que você fará amanhã.",
+            "Complete: 'A nossa melhor viagem foi para... porque...'", "Diga o que você mais gosta no nosso estilo de vida como casal.", "Complete a frase: 'Eu me sinto mais conectado(a) a você quando...'", "Descreva o seu parceiro em apenas três palavras positivas.", "Complete: 'Eu amo quando você me olha com esse jeito de...'",
+            "Peça um abraço e conte como foi a melhor parte do seu dia.", "Complete a frase: 'Uma coisa que temos em comum e que eu adoro é...'", "Lembre ao parceiro de uma superação que ele teve recentemente.", "Complete: 'Eu me sinto muito orgulhoso(a) de você quando...'", "Diga qual é o seu 'lugar de paz' dentro da nossa relação.",
+            "Complete a frase: 'Nossa química é especial porque...'", "Dê uma risada lembrando de algo engraçado que aconteceu com vocês.", "Complete: 'Eu quero que nossa casa sempre tenha o cheiro de...'", "Diga algo que você quer que façamos juntos no próximo final de semana.", "Complete a frase: 'Você me faz uma pessoa melhor quando...'",
+            "Faça uma massagem rápida nos ombros do seu parceiro agora.", "Complete: 'O que eu mais quero te dar hoje é...'", "Diga uma coisa que você aprendeu com o jeito de ser do parceiro.", "Complete a frase: 'Minha vida mudou para melhor desde que você...'", "Faça um plano para uma noite romântica 'surpresa' (mesmo que conte agora).",
+            "Complete: 'O melhor elogio que eu já recebi de você foi...'", "Diga o que você mais sente falta quando passamos muito tempo longe.", "Complete a frase: 'Nosso maior ponto forte é nossa capacidade de...'", "Relembre uma piada interna que só vocês dois entendem.", "Complete: 'Eu me sinto amado(a) quando chegamos em casa e...'",
+            "Dê um selinho demorado e diga 'eu te amo'.", "Complete a frase: 'Um valor que eu nunca quero perder na nossa união é...'", "Diga qual característica do parceiro você quer que os filhos herdem.", "Complete: 'O que eu mais admiira na sua força é...'", "Diga uma frase de carinho que você gostaria de ouvir com mais frequência."
+        ];
+        function drawCard() {
+            const card = document.getElementById('card');
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            setTimeout(() => {
+                const random = Math.floor(Math.random() * cards.length);
+                card.innerText = cards[random];
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 300);
+        }
+    </script>
+</body>
+</html>
