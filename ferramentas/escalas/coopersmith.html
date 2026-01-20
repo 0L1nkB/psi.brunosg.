@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coopersmith (SEI) - Autoestima | Bruno de Souza</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Identidade Visual - Tema "Confiança/Solar" */
+            --bg-color: #fffbf0;      /* Creme */
+            --primary: #f39c12;       /* Laranja Solar */
+            --primary-dark: #d35400;  /* Laranja Escuro */
+            --secondary: #27ae60;     /* Verde */
+            --accent: #f1c40f;        /* Amarelo */
+            --text: #2d3436;
+            --card-border: #b2bec3;
+            
+            /* Botões */
+            --btn-like: #00b894;      /* Igual a mim */
+            --btn-unlike: #ff7675;    /* Diferente de mim */
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#e6dab3 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* --- CABEÇALHO (Estilo Fita Adesiva) --- */
+        header {
+            text-align: center;
+            margin: 20px auto 40px auto;
+            background: white;
+            padding: 30px 20px;
+            border-radius: 25px;
+            border: 3px dashed var(--primary);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            position: relative;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        header::before {
+            content: ""; 
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%) rotate(-1deg);
+            width: 140px; height: 35px; 
+            background-color: rgba(243, 156, 18, 0.3); 
+            border: 1px solid rgba(0,0,0,0.05); 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2rem;
+            color: var(--primary-dark);
+            text-transform: uppercase;
+            margin: 0;
+            font-weight: 800;
+        }
+
+        .subtitle { margin-top: 5px; color: #636e72; font-weight: 600; }
+
+        /* --- INSTRUÇÕES --- */
+        .instruction-box {
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid var(--primary);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1rem;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        /* --- CONTAINER --- */
+        .main-container {
+            max-width: 800px;
+            width: 100%;
+            margin-bottom: 80px;
+        }
+
+        /* --- CARTÃO DE PERGUNTA --- */
+        .question-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.05);
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .question-card:hover {
+            border-color: var(--card-border);
+            transform: translateY(-2px);
+        }
+
+        .q-header {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .q-number {
+            background: var(--bg-color);
+            color: var(--primary-dark);
+            font-weight: 800;
+            min-width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            border: 2px solid var(--primary);
+        }
+
+        .q-text {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #2d3436;
+            line-height: 1.4;
+        }
+
+        /* --- BOTÕES DE RESPOSTA --- */
+        .options-row {
+            display: flex;
+            gap: 15px;
+            margin-top: 5px;
+        }
+
+        .option-label {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.2s;
+            border: 2px solid #dfe6e9;
+            background: #f8f9fa;
+            color: #636e72;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .opt-icon { font-size: 1.2rem; margin-bottom: 5px; }
+
+        /* Estilo Botão IGUAL A MIM */
+        .btn-like:hover { background: #e0fcf4; border-color: var(--btn-like); color: var(--btn-like); }
+        .btn-like:has(input:checked) {
+            background-color: var(--btn-like);
+            color: white;
+            border-color: var(--btn-like);
+            box-shadow: 0 4px 0 #00896f;
+            transform: translateY(-2px);
+        }
+
+        /* Estilo Botão DIFERENTE DE MIM */
+        .btn-unlike:hover { background: #ffebeb; border-color: var(--btn-unlike); color: var(--btn-unlike); }
+        .btn-unlike:has(input:checked) {
+            background-color: var(--btn-unlike);
+            color: white;
+            border-color: var(--btn-unlike);
+            box-shadow: 0 4px 0 #d63031;
+            transform: translateY(-2px);
+        }
+
+        input[type="radio"] { display: none; }
+
+        /* --- BOTÃO CALCULAR --- */
+        .btn-calc {
+            display: block; width: 100%;
+            margin-top: 40px; padding: 18px;
+            background: var(--text); color: white;
+            border: none; border-radius: 50px;
+            font-size: 1.2rem; font-weight: 800; font-family: 'Quicksand', sans-serif;
+            cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .btn-calc:hover { transform: translateY(-3px); }
+
+        /* --- RESULTADOS --- */
+        .result-section {
+            display: none;
+            margin-top: 50px;
+            background: white;
+            border-radius: 25px;
+            padding: 40px;
+            border: 3px dashed var(--primary);
+            text-align: center;
+        }
+
+        .score-val { font-size: 3.5rem; font-weight: 800; color: var(--primary); line-height: 1; margin: 10px 0; }
+        .score-desc { font-size: 1.2rem; font-weight: 700; color: #636e72; margin-bottom: 20px; }
+        
+        .result-detail {
+            background: #fffbf0;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        /* Botão Voltar */
+        .btn-back {
+            display: block; margin-top: 30px; text-align: center; color: #b2bec3; text-decoration: none; font-weight: 600;
+        }
+        .btn-back:hover { color: var(--primary); }
+
+        @media (max-width: 600px) {
+            .options-row { gap: 10px; }
+            .option-label { font-size: 0.9rem; padding: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header data-aos="fade-down">
+        <h1>Coopersmith (SEI)</h1>
+        <div class="subtitle">Inventário de Autoestima (Escolar)</div>
+    </header>
+
+    <div class="main-container">
+        
+        <div class="instruction-box">
+            Leia cada frase e marque se ela descreve como você geralmente se sente: 
+            <strong>"Igual a mim"</strong> ou <strong>"Diferente de mim"</strong>.
+        </div>
+
+        <form id="coopersmithForm">
+            <div id="questions-container"></div>
+        </form>
+
+        <button class="btn-calc" onclick="calculateResults()">
+            <i class="fa-solid fa-star"></i> CALCULAR AUTOESTIMA
+        </button>
+
+        <div class="result-section" id="result-area">
+            <h3 style="color:#636e72; text-transform:uppercase; font-size:1rem;">Pontuação Bruta (x 4)</h3>
+            <div class="score-val" id="total-score">0</div>
+            <div class="score-desc" id="interpretation">...</div>
+            
+            <div class="result-detail">
+                <p><strong>Nota:</strong> A pontuação foi multiplicada por 4 para gerar uma escala de 0 a 100.</p>
+                <p style="margin-top:5px; font-size:0.8rem;">
+                    &lt; 50: Baixa | 50-75: Média | &gt; 75: Alta
+                </p>
+            </div>
+
+            <button class="btn-calc" style="background:#2d3436; margin-top:30px; font-size:1rem;" onclick="window.print()">
+                <i class="fa-solid fa-print"></i> Salvar PDF
+            </button>
+        </div>
+
+        <center>
+            <a href="../listaferramentas.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Voltar para Ferramentas</a>
+        </center>
+
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        /* ITENS DO COOPERSMITH SHORT FORM (25 Itens)
+           target: 'L' (Like Me / Igual a mim) ou 'U' (Unlike Me / Diferente de mim)
+           Se a resposta do usuário bater com o 'target', ganha 1 ponto.
+        */
+        const questions = [
+            { t: "As coisas costumam me incomodar.", target: "U" },
+            { t: "Acho muito difícil falar na frente da turma.", target: "U" },
+            { t: "Se eu pudesse, mudaria muitas coisas em mim.", target: "U" },
+            { t: "Posso tomar decisões sozinho(a) facilmente.", target: "L" },
+            { t: "Sou uma pessoa divertida de se estar junto.", target: "L" },
+            { t: "Em casa, fico chateado(a) facilmente.", target: "U" },
+            { t: "Levo muito tempo para me acostumar com coisas novas.", target: "U" },
+            { t: "Sou popular entre as crianças da minha idade.", target: "L" },
+            { t: "Meus pais geralmente consideram meus sentimentos.", target: "L" },
+            { t: "Desisto facilmente.", target: "U" },
+            { t: "Meus pais esperam demais de mim.", target: "U" },
+            { t: "É muito difícil ser eu mesmo(a).", target: "U" },
+            { t: "Minha vida é bem bagunçada.", target: "U" },
+            { t: "As outras crianças geralmente seguem minhas ideias.", target: "L" },
+            { t: "Tenho uma opinião ruim sobre mim mesmo.", target: "U" },
+            { t: "Muitas vezes gostaria de ser outra pessoa.", target: "U" },
+            { t: "Sinto que minha família me pressiona.", target: "U" },
+            { t: "Não sou tão bonito(a) quanto a maioria das pessoas.", target: "U" },
+            { t: "Se tenho algo a dizer, geralmente digo.", target: "L" },
+            { t: "Meus pais me entendem.", target: "L" },
+            { t: "A maioria das pessoas é mais querida do que eu.", target: "U" },
+            { t: "Sinto que meus pais exigem demais de mim.", target: "U" },
+            { t: "Muitas vezes fico desanimado na escola.", target: "U" },
+            { t: "Gostaria de ser mais jovem.", target: "U" }, // Item adaptado do original "wish I was younger"
+            { t: "Não tenho confiança em mim mesmo.", target: "U" }
+        ];
+
+        const container = document.getElementById('questions-container');
+
+        questions.forEach((q, index) => {
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            card.setAttribute('data-aos', 'fade-up');
+
+            card.innerHTML = `
+                <div class="q-header">
+                    <div class="q-number">${index + 1}</div>
+                    <div class="q-text">${q.t}</div>
+                </div>
+                <div class="options-row">
+                    <label class="option-label btn-like">
+                        <input type="radio" name="q${index}" value="L">
+                        <i class="fa-regular fa-thumbs-up opt-icon"></i>
+                        Igual a mim
+                    </label>
+                    <label class="option-label btn-unlike">
+                        <input type="radio" name="q${index}" value="U">
+                        <i class="fa-regular fa-thumbs-down opt-icon"></i>
+                        Diferente de mim
+                    </label>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+
+        function calculateResults() {
+            let rawScore = 0;
+            let answered = 0;
+            const form = document.getElementById('coopersmithForm');
+            const formData = new FormData(form);
+
+            // Verificar respostas
+            const inputs = form.querySelectorAll('input[type="radio"]:checked');
+            inputs.forEach(input => {
+                const idx = parseInt(input.name.substring(1)); // q0 -> 0
+                const val = input.value;
+                const target = questions[idx].target;
+
+                if (val === target) {
+                    rawScore++;
+                }
+                answered++;
+            });
+
+            if (answered < questions.length) {
+                alert(`Você respondeu ${answered} de ${questions.length} perguntas. Por favor, responda a todas.`);
+                return;
+            }
+
+            // Cálculo final (Score Bruto x 4 para base 100)
+            const finalScore = rawScore * 4;
+
+            const scoreDisplay = document.getElementById('total-score');
+            const interpretation = document.getElementById('interpretation');
+            const resultArea = document.getElementById('result-area');
+
+            scoreDisplay.innerText = finalScore;
+
+            if (finalScore < 50) {
+                interpretation.innerText = "Indicativo de Baixa Autoestima";
+                interpretation.style.color = "#ff7675";
+            } else if (finalScore <= 75) {
+                interpretation.innerText = "Autoestima Média";
+                interpretation.style.color = "#f1c40f";
+            } else {
+                interpretation.innerText = "Alta Autoestima";
+                interpretation.style.color = "#00b894";
+            }
+
+            resultArea.style.display = 'block';
+            resultArea.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+
+</body>
+</html>
