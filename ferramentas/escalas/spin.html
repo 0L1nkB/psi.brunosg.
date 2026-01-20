@@ -3,191 +3,247 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SPIN - Fobia Social | Caderno Incrível</title>
+    <title>SPIN - Fobia Social | Bruno de Souza</title>
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
     <style>
         :root {
-            /* Paleta Lúdica */
-            --bg-color: #f0f8ff;
-            --paper: #ffffff;
-            --primary: #5f27cd; /* Roxo Profundo */
-            --secondary: #48dbfb; /* Azul Claro */
-            --accent: #ff9f43; /* Laranja */
+            /* Identidade Visual */
+            --bg-color: #f3e5f5;      /* Roxo Muito Claro */
+            --primary: #5f27cd;       /* Roxo Profundo (Tema Fobia Social) */
+            --primary-dark: #341f97;
+            --secondary: #48dbfb;     /* Azul Claro */
+            --accent: #ff9f43;        /* Laranja */
             --text: #2d3436;
-            --shadow: rgba(0,0,0,0.1);
+            --card-border: #b2bec3;
+            
+            /* Botões */
+            --btn-0: #c8d6e5;
+            --btn-1: #81ecec;
+            --btn-2: #74b9ff;
+            --btn-3: #fdcb6e;
+            --btn-4: #ff7675;
         }
 
         body {
-            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+            font-family: 'Quicksand', sans-serif;
             background-color: var(--bg-color);
-            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
+            background-image: radial-gradient(#d1c4e9 2px, transparent 2px);
             background-size: 20px 20px;
             margin: 0;
             padding: 20px;
+            min-height: 100vh;
             color: var(--text);
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .container {
-            width: 100%;
-            max-width: 850px;
-            background: var(--paper);
-            padding: 40px;
-            border-radius: 25px;
-            box-shadow: 10px 10px 0 var(--shadow);
-            border: 3px solid var(--text);
-            position: relative;
-        }
-
-        /* CABEÇALHO */
+        /* --- CABEÇALHO (Estilo Fita Adesiva) --- */
         header {
             text-align: center;
-            margin-bottom: 40px;
+            margin: 20px auto 40px auto;
+            background: white;
+            padding: 30px 20px;
+            border-radius: 25px;
+            border: 3px dashed var(--primary);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
             position: relative;
+            max-width: 800px;
+            width: 100%;
         }
 
         header::before {
-            content: ""; position: absolute; top: -55px; left: 50%; transform: translateX(-50%) rotate(2deg);
-            width: 180px; height: 40px; background-color: rgba(95, 39, 205, 0.7);
+            content: ""; 
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%) rotate(2deg);
+            width: 140px; height: 35px; 
+            background-color: rgba(95, 39, 205, 0.3); 
+            border: 1px solid rgba(0,0,0,0.05); 
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        h1 { margin: 0; color: var(--primary); font-size: 2rem; text-transform: uppercase; }
-        .instruction { font-size: 1.1rem; color: #636e72; margin-top: 15px; }
+        header h1 {
+            font-size: 2rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            margin: 0;
+            font-weight: 800;
+        }
 
-        /* LISTA DE PERGUNTAS */
-        .question-item {
-            background: #fff;
+        .subtitle { margin-top: 5px; color: #636e72; font-weight: 600; }
+
+        /* --- CONTAINER PRINCIPAL --- */
+        .main-container {
+            max-width: 850px;
+            width: 100%;
+            margin-bottom: 80px;
+        }
+
+        /* --- CARTÃO DE PERGUNTA --- */
+        .question-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px 25px;
             margin-bottom: 20px;
-            padding: 20px;
-            border-radius: 15px;
-            border: 2px dashed #b2bec3;
-            transition: background 0.2s;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.05);
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
             display: flex;
             flex-direction: column;
             gap: 15px;
         }
 
-        .question-item:hover { border-color: var(--primary); background-color: #f4f0ff; }
-
-        .q-text { 
-            font-size: 1.1rem; 
-            font-weight: bold; 
-            display: flex; 
-            gap: 10px; 
-            align-items: center; 
-        }
-        
-        .q-number { 
-            background: var(--accent); 
-            color: white; 
-            min-width: 30px; height: 30px; 
-            border-radius: 50%; 
-            display: flex; align-items: center; justify-content: center; 
-            font-size: 0.9rem; border: 2px solid white; box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+        .question-card:hover {
+            border-color: var(--card-border);
+            transform: translateY(-2px);
         }
 
-        /* OPÇÕES DE RESPOSTA */
+        .q-header {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .q-number {
+            background: var(--bg-color);
+            color: var(--primary);
+            font-weight: 800;
+            min-width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            border: 2px solid var(--primary);
+        }
+
+        .q-text {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #2d3436;
+            line-height: 1.4;
+        }
+
+        /* --- BOTÕES DE RESPOSTA --- */
         .options-row {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            grid-template-columns: repeat(5, 1fr);
             gap: 8px;
         }
 
         .option-label {
+            padding: 10px 2px;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+            background: #f8f9fa;
+            color: #636e72;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 10px 5px;
-            border-radius: 10px;
-            border: 1px solid #dfe6e9;
-            cursor: pointer;
-            font-size: 0.85rem;
-            text-align: center;
-            transition: all 0.2s;
-            background: white;
-            color: #636e72;
         }
 
-        .option-label input { display: none; }
+        .opt-val { font-size: 1.2rem; margin-bottom: 2px; }
+        .opt-text { font-size: 0.7rem; font-weight: 600; opacity: 0.8; text-transform: uppercase; }
 
-        /* Estilos de Seleção */
-        .option-label:has(input:checked) {
-            background-color: var(--primary);
+        /* Estilos Específicos por Valor */
+        .btn-0:hover { background: #ecf0f1; border-color: var(--btn-0); }
+        .btn-0:has(input:checked) { background: var(--btn-0); color: #2d3436; border-color: #95a5a6; }
+
+        .btn-1:hover { background: #e0fcfc; border-color: var(--btn-1); }
+        .btn-1:has(input:checked) { background: var(--btn-1); color: #006266; border-color: #00cec9; }
+
+        .btn-2:hover { background: #e3f2fd; border-color: var(--btn-2); }
+        .btn-2:has(input:checked) { background: var(--btn-2); color: white; border-color: #0984e3; }
+
+        .btn-3:hover { background: #fff8e1; border-color: var(--btn-3); }
+        .btn-3:has(input:checked) { background: var(--btn-3); color: white; border-color: #e17055; }
+
+        .btn-4:hover { background: #ffebee; border-color: var(--btn-4); }
+        .btn-4:has(input:checked) { background: var(--btn-4); color: white; border-color: #d63031; }
+
+        input[type="radio"] { display: none; }
+
+        /* --- BARRA DE RESULTADOS (Fixa) --- */
+        .result-bar {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2d3436;
             color: white;
-            border-color: var(--primary);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 0 #341f97;
-            font-weight: bold;
-        }
-
-        .val-indicator { font-size: 1.2rem; margin-bottom: 2px; }
-
-        /* RODAPÉ E RESULTADO */
-        .result-box {
-            margin-top: 40px;
-            background: #c8d6e5;
-            padding: 30px;
-            border-radius: 20px;
+            padding: 15px 40px;
+            border-radius: 50px;
             text-align: center;
-            border: 3px solid var(--text);
+            font-size: 1.1rem;
+            font-weight: 700;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
             display: none;
+            z-index: 100;
+            border: 2px solid white;
+            animation: slideUp 0.3s ease-out;
+            white-space: nowrap;
+            min-width: 300px;
         }
 
-        .score-display { font-size: 3rem; color: var(--primary); font-weight: 800; margin: 10px 0; }
-        
-        /* BOTÃO SALVAR */
-        .btn-action {
-            display: block; width: 100%;
-            margin-top: 30px; padding: 15px;
-            background-color: var(--primary); color: white;
-            border: none; border-radius: 50px;
-            font-size: 1.3rem; font-weight: bold; font-family: inherit;
-            cursor: pointer; box-shadow: 0 6px 0 #341f97;
-            transition: transform 0.1s;
+        @keyframes slideUp {
+            from { transform: translate(-50%, 100px); }
+            to { transform: translate(-50%, 0); }
         }
-        .btn-action:hover { transform: translateY(-3px); }
-        .btn-action:active { transform: translateY(3px); box-shadow: none; }
 
-        @media print {
-            body { background: white; padding: 0; }
-            .container { box-shadow: none; border: none; width: 100%; }
-            .btn-action { display: none; }
-            .question-item { page-break-inside: avoid; border: 1px solid #ccc; background: none; }
-            .option-label { border: 1px solid #000; color: #000 !important; box-shadow: none !important; }
-            .option-label:has(input:checked) { background: #ddd !important; border: 2px solid black; }
+        /* Botão Voltar */
+        .btn-back {
+            display: inline-block; margin-top: 20px; color: #b2bec3; text-decoration: none; font-weight: 600; transition: 0.3s;
+        }
+        .btn-back:hover { color: var(--primary); }
+
+        @media (max-width: 600px) {
+            .q-text { font-size: 1rem; }
+            .option-label { padding: 8px 2px; }
+            .opt-text { display: none; } /* Esconde texto em telas pequenas */
+            .result-bar { width: 90%; font-size: 1rem; padding: 15px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <header>
-            <h1>SPIN - Fobia Social</h1>
-            <p class="instruction">
-                Indique quanto os seguintes problemas incomodaram você <strong>durante a última semana</strong>.
-            </p>
-        </header>
+    <header data-aos="fade-down">
+        <h1>SPIN - Fobia Social</h1>
+        <div class="subtitle">Inventário de Fobia Social</div>
+    </header>
 
-        <form id="spin-form">
-            <div id="questions-container"></div>
-        </form>
-
-        <div class="result-box" id="result-area">
-            <h3 style="margin:0; text-transform: uppercase;">Pontuação Total</h3>
-            <div class="score-display" id="total-score">0</div>
-            <p style="font-size: 0.9rem; color: #555;">(Interpretação clínica reservada ao psicólogo)</p>
+    <div class="main-container">
+        
+        <div style="text-align: center; margin-bottom: 30px; font-weight: 600; color: #636e72;">
+            Quanto os seguintes problemas incomodaram você <strong>na última semana</strong>?
         </div>
 
-        <button class="btn-action" onclick="window.print()">
-            <i class="fa-solid fa-print"></i> IMPRIMIR / SALVAR PDF
-        </button>
+        <form id="spinForm">
+            <div id="quiz-area"></div>
+        </form>
+
+        <center>
+            <a href="../listaferramentas.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Voltar para Ferramentas</a>
+        </center>
     </div>
 
+    <div class="result-bar" id="resultBar">
+        <i class="fa-solid fa-calculator"></i> Total: <span id="scoreVal">0</span> pts
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // DADOS DO SPIN (PDF)
+        AOS.init();
+
         const questions = [
             "Tenho medo de autoridades",
             "Incomodo-me por ficar vermelho na frente das pessoas",
@@ -210,63 +266,60 @@
 
         const options = [
             { val: 0, text: "Nada" },
-            { val: 1, text: "Um pouco" },
-            { val: 2, text: "Moderado" },
-            { val: 3, text: "Bastante" },
-            { val: 4, text: "Extremamente" }
+            { val: 1, text: "Pouco" },
+            { val: 2, text: "Médio" },
+            { val: 3, text: "Muito" },
+            { val: 4, text: "Extremo" }
         ];
 
-        const container = document.getElementById('questions-container');
+        const area = document.getElementById('quiz-area');
 
-        // GERAR PERGUNTAS
         questions.forEach((q, index) => {
-            const div = document.createElement('div');
-            div.className = 'question-item';
-            
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            card.setAttribute('data-aos', 'fade-up');
+
             let optionsHTML = '';
             options.forEach(opt => {
                 optionsHTML += `
-                    <label class="option-label">
-                        <input type="radio" name="q${index}" value="${opt.val}" onchange="calculateScore()">
-                        <span class="val-indicator">${opt.val}</span>
-                        <span>${opt.text}</span>
+                    <label class="option-label btn-${opt.val}">
+                        <input type="radio" name="q${index}" value="${opt.val}" onchange="calcTotal()">
+                        <span class="opt-val">${opt.val}</span>
+                        <span class="opt-text">${opt.text}</span>
                     </label>
                 `;
             });
 
-            div.innerHTML = `
-                <div class="q-text">
-                    <span class="q-number">${index + 1}</span>
-                    ${q}
+            card.innerHTML = `
+                <div class="q-header">
+                    <div class="q-number">${index + 1}</div>
+                    <div class="q-text">${q}</div>
                 </div>
-                <div class="options-row">
-                    ${optionsHTML}
-                </div>
+                <div class="options-row">${optionsHTML}</div>
             `;
-            container.appendChild(div);
+            area.appendChild(card);
         });
 
-        // CALCULAR PONTUAÇÃO
-        function calculateScore() {
+        function calcTotal() {
             let total = 0;
-            let answeredCount = 0;
-            const form = document.getElementById('spin-form');
+            let count = 0;
+            const form = document.getElementById('spinForm');
             const formData = new FormData(form);
 
             for (let pair of formData.entries()) {
                 total += parseInt(pair[1]);
-                answeredCount++;
+                count++;
             }
 
-            // Exibir se começou a responder
-            const resultArea = document.getElementById('result-area');
-            const scoreDisplay = document.getElementById('total-score');
+            const resultBar = document.getElementById('resultBar');
+            const scoreSpan = document.getElementById('scoreVal');
             
-            if (answeredCount > 0) {
-                resultArea.style.display = 'block';
-                scoreDisplay.innerText = total;
+            if (count > 0) {
+                resultBar.style.display = 'block';
+                scoreSpan.innerText = total;
             }
         }
     </script>
+
 </body>
 </html>
