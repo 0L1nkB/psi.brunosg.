@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Me Dê 3 Soluções | Bruno de Souza</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #f0f8ff;
+            --primary: #0984e3;      /* Azul vibrante (cor da capa do PDF) */
+            --secondary: #fdcb6e;    /* Amarelo (cor do texto da capa) */
+            --accent: #00b894;       /* Verde para detalhes */
+            --text: #2d3436;
+            --card-border: #b2bec3;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* --- CABEÇALHO (Padrão Fita Adesiva) --- */
+        header {
+            text-align: center;
+            margin: 20px auto 40px auto;
+            background: white;
+            padding: 30px 20px;
+            border-radius: 25px;
+            border: 3px dashed var(--primary);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            position: relative;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        header::before {
+            content: ""; 
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%) rotate(-1deg);
+            width: 140px; height: 35px; 
+            background-color: rgba(255, 118, 117, 0.8);
+            border: 1px solid rgba(0,0,0,0.05); 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            margin: 0;
+            font-weight: 800;
+            text-shadow: 2px 2px 0 var(--secondary); /* Referência à capa azul/amarela */
+        }
+
+        .subtitle {
+            margin-top: 5px; color: #636e72; font-weight: 600;
+        }
+
+        /* --- ÁREA DO JOGO --- */
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        /* O CARTÃO PRINCIPAL */
+        .flashcard {
+            background: white;
+            width: 100%;
+            min-height: 350px; /* Altura fixa para não pular */
+            border-radius: 30px;
+            border: 4px dashed var(--primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 10px 0 rgba(0,0,0,0.05);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            cursor: pointer;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .flashcard:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 0 rgba(0,0,0,0.05);
+        }
+
+        /* Texto da Situação */
+        .situation-text {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1.3;
+        }
+
+        /* Ícone decorativo */
+        .card-icon {
+            font-size: 4rem;
+            color: #dfe6e9;
+            margin-bottom: 20px;
+        }
+
+        /* Número da carta */
+        .card-number {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--secondary);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        /* Instrução abaixo */
+        .instruction-box {
+            background: #fffce0; /* Amarelinho */
+            border: 2px dashed var(--secondary);
+            padding: 15px 25px;
+            border-radius: 15px;
+            text-align: center;
+            color: #2d3436;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        /* Botão de Ação */
+        .btn-draw {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #0c2461; /* Sombra azul escura */
+            transition: all 0.1s;
+            font-family: 'Quicksand', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-draw:active {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
+
+        .btn-draw:hover {
+            background-color: #3498db;
+        }
+
+        /* Animação de entrada */
+        .pop-in {
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Voltar */
+        .btn-back {
+            margin-top: 30px;
+            color: #b2bec3;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .btn-back:hover { color: var(--primary); }
+
+        @media (max-width: 500px) {
+            .situation-text { font-size: 1.5rem; }
+            .flashcard { min-height: 280px; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header data-aos="fade-down">
+        <h1>Me Dê 3 Soluções</h1>
+        <div class="subtitle">Treino de Flexibilidade Cognitiva</div>
+    </header>
+
+    <div class="game-container">
+        
+        <div class="instruction-box" data-aos="fade-up">
+            <i class="fa-regular fa-lightbulb"></i> &nbsp; Para o problema abaixo, diga <strong>3 formas diferentes</strong> de resolver.
+        </div>
+
+        <div class="flashcard" id="card-display" onclick="drawCard()">
+            <div class="card-number" id="card-id">#00</div>
+            <div class="card-icon"><i class="fa-solid fa-question"></i></div>
+            <div class="situation-text" id="text-content">Clique no botão para sacar uma carta!</div>
+        </div>
+
+        <button class="btn-draw" onclick="drawCard()">
+            <i class="fa-solid fa-shuffle"></i> Sacar Carta
+        </button>
+
+        <a href="../listaferramentas.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Voltar para Ferramentas</a>
+
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        // Dados extraídos do PDF 
+        const situations = [
+            "Estou com dor.",
+            "O bebê começou a chorar.",
+            "Estou com saudade de uma pessoa.",
+            "Quebrei meu celular.",
+            "Escorreguei no chão molhado e caí.",
+            "Acabou a luz aqui em casa.",
+            "Estou com frio.",
+            "Fiquei queimado do sol.",
+            "Meu cachorro está fedendo.",
+            "Encontrei um cachorro zangado na rua.",
+            "Vi alguém se engasgando ao beber um suco.",
+            "Estou com calor.",
+            "Papai esqueceu a chave de casa na empresa.",
+            "Minha casa está com muitos problemas e precisa de reforma.",
+            "Estou com um problemão.",
+            "Fui à praia esperando sol e não para de chover.",
+            "Fui ao banheiro e não tem papel higiênico.",
+            "Estávamos viajando e o carro quebrou na estrada.",
+            "Estou com sede.",
+            "Alguém contou uma piada (e eu não entendi/gostei).",
+            "O despertador tocou, mas ainda estou com sono.",
+            "Preciso fazer ginástica, mas tenho preguiça.",
+            "Minha calça está apertada.",
+            "Minha casa está precisando de uma limpeza maior.",
+            "A noiva desistiu do casamento.",
+            "Paula quebrou a perna.",
+            "Preciso organizar a viagem de férias.",
+            "Estou procurando um livro e não acho.",
+            "Fiquei preso no elevador.",
+            "Estou muito cansado.",
+            "Meu pai me olhou com uma cara esquisita.",
+            "O voo da mãe atrasou e ela tem reunião em outra cidade.",
+            "Saí de casa, choveu e esqueci o guarda-chuva.",
+            "Enfiei o dedão do pé na quina do sofá.",
+            "Fui mal na prova.",
+            "A água da banheira está muito quente.",
+            "Tem uma barata no meu quarto.",
+            "Tenho muita coisa para fazer e fiquei nervoso.",
+            "Um carro passou na poça e espirrou água em mim.",
+            "A cabeleireira cortou meu cabelo errado.",
+            "Meu pai deixou a chave do carro cair num bueiro.",
+            "Estou atrasado para a aula.",
+            "O prédio começou a pegar fogo.",
+            "O céu ficou escuro. Uma tempestade está chegando.",
+            "Estou doente.",
+            "Faz tempo que espero uma ligação e a pessoa não liga.",
+            "Há um vazamento no banheiro.",
+            "Tudo começou a girar. Estou tonto.",
+            "Meu pai ronca muito.",
+            "Minha mãe foi pagar com cartão e a senha não funcionou."
+        ];
+
+        const icons = [
+            "fa-face-dizzy", "fa-bolt", "fa-cloud-rain", "fa-house-crack", 
+            "fa-mobile-screen-button", "fa-person-falling", "fa-temperature-arrow-down",
+            "fa-dog", "fa-droplet", "fa-key", "fa-car-burst"
+        ];
+
+        function drawCard() {
+            const display = document.getElementById('card-display');
+            const textContent = document.getElementById('text-content');
+            const cardId = document.getElementById('card-id');
+            const iconDisplay = display.querySelector('.card-icon i');
+
+            // Remover classe de animação para poder adicionar novamente
+            display.classList.remove('pop-in');
+            
+            // Forçar reflow (reiniciar animação)
+            void display.offsetWidth;
+
+            // Lógica Random
+            const randomIndex = Math.floor(Math.random() * situations.length);
+            const randomIcon = Math.floor(Math.random() * icons.length);
+            
+            // Atualizar Conteúdo
+            textContent.innerText = situations[randomIndex];
+            cardId.innerText = "#" + (randomIndex + 1);
+            
+            // Mudar ícone aleatoriamente para dar dinamismo visual
+            iconDisplay.className = "fa-solid " + icons[randomIcon];
+
+            // Adicionar animação
+            display.classList.add('pop-in');
+
+            // Mudar cor da borda aleatoriamente entre as cores do tema
+            const colors = ['#0984e3', '#fdcb6e', '#00b894', '#d63031', '#6c5ce7'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            display.style.borderColor = randomColor;
+        }
+    </script>
+</body>
+</html>
