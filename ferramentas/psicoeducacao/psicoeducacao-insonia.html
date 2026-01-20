@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insônia - O Sono Perdido | Bruno de Souza</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Identidade Visual - Tema "Noite/Vigília" */
+            --bg-color: #e8eaf6;      /* Índigo Muito Pálido */
+            --primary: #1a237e;       /* Azul Noite (Profundidade) */
+            --primary-dark: #000051;
+            --accent: #ffd600;        /* Amarelo Lua (Alerta/Luz) */
+            --text: #2d3436;
+            --card-border: #9fa8da;
+            
+            /* Cores Específicas */
+            --sleep-color: #3949ab;   /* Sono */
+            --awake-color: #f57f17;   /* Vigília/Ansiedade */
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#c5cae9 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* --- CABEÇALHO --- */
+        header {
+            text-align: center;
+            margin: 20px auto 40px auto;
+            background: white;
+            padding: 30px 20px;
+            border-radius: 25px;
+            border: 3px dashed var(--primary);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            position: relative;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        header::before {
+            content: ""; 
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%) rotate(-1deg);
+            width: 140px; height: 35px; 
+            background-color: rgba(26, 35, 126, 0.2); 
+            border: 1px solid rgba(0,0,0,0.05); 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            margin: 0;
+            font-weight: 800;
+        }
+
+        .subtitle { margin-top: 5px; color: #636e72; font-weight: 600; }
+
+        /* --- CONTAINER --- */
+        .main-container {
+            max-width: 850px;
+            width: 100%;
+            margin-bottom: 80px;
+        }
+
+        /* --- CARDS DE CONTEÚDO --- */
+        .content-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.05);
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .content-card:hover {
+            border-color: var(--card-border);
+            transform: translateY(-2px);
+        }
+
+        .card-title {
+            color: var(--primary-dark);
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px dashed #eee;
+            padding-bottom: 10px;
+        }
+
+        .highlight-box {
+            background: #fff9c4;
+            border-left: 5px solid var(--accent);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 1rem;
+            color: #555;
+        }
+
+        /* --- GRID DE SINTOMAS --- */
+        .symptoms-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .symptom-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            border: 2px solid transparent;
+        }
+        
+        .symptom-item i { color: var(--primary); margin-top: 3px; }
+        .symptom-item strong { display: block; color: var(--text); font-size: 0.95rem; }
+        .symptom-item span { font-size: 0.85rem; color: #636e72; }
+
+        /* --- WIDGET: GERADOR DE RITUAL (Wind Down) --- */
+        .sleep-container {
+            text-align: center;
+            background: #283593; /* Fundo escuro para simular noite */
+            color: white;
+            padding: 25px;
+            border-radius: 20px;
+            border: 2px dashed #7986cb;
+        }
+
+        .sleep-display {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: 0.3s;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .btn-sleep {
+            background: var(--accent); color: #283593;
+            border: none; padding: 12px 30px; border-radius: 50px;
+            font-weight: 800; cursor: pointer; font-family: 'Quicksand';
+            transition: 0.2s;
+            margin-top: 15px;
+        }
+        .btn-sleep:hover { transform: translateY(-3px); box-shadow: 0 0 15px rgba(255, 214, 0, 0.5); }
+
+        /* --- CICLO DA INSÔNIA --- */
+        .cycle-wrapper {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .cycle-step {
+            flex: 1; min-width: 140px;
+            background: white; border: 2px solid #eee;
+            border-radius: 15px; padding: 15px; text-align: center;
+            position: relative;
+        }
+
+        .cs-1 { border-top: 5px solid #fbc02d; } /* Ansiedade */
+        .cs-2 { border-top: 5px solid #e65100; } /* Hiperalerta */
+        .cs-3 { border-top: 5px solid #283593; } /* Esforço para dormir */
+        .cs-4 { border-top: 5px solid #c62828; } /* Frustração/Fadiga */
+
+        .cycle-step h5 { margin: 0 0 5px 0; font-size: 0.9rem; font-weight: 800; color: #2d3436; }
+        .cycle-step p { margin: 0; font-size: 0.8rem; color: #636e72; }
+
+        /* --- NEUROBIOLOGIA --- */
+        .neuro-box {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .neuro-item {
+            flex: 1; min-width: 200px;
+            background: #fafafa; border: 1px solid #eee;
+            padding: 20px; border-radius: 15px;
+            text-align: center;
+        }
+        .neuro-item i { font-size: 2rem; color: var(--primary); margin-bottom: 10px; }
+        .neuro-item h4 { margin: 5px 0; font-size: 1rem; color: var(--primary-dark); }
+        .neuro-item p { font-size: 0.85rem; color: #666; margin: 0; }
+
+        /* --- FLIP CARDS (MITOS) --- */
+        .flip-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 30px;
+        }
+
+        .flip-card {
+            background-color: transparent;
+            height: 300px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .flip-card-inner {
+            position: relative; width: 100%; height: 100%;
+            text-align: center; transition: transform 0.6s;
+            transform-style: preserve-3d;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+
+        .flip-front, .flip-back {
+            position: absolute; width: 100%; height: 100%;
+            -webkit-backface-visibility: hidden; backface-visibility: hidden;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 25px; border-radius: 15px; border: 2px solid #dfe6e9;
+            box-sizing: border-box;
+        }
+
+        .flip-front { background-color: white; color: #2d3436; }
+        .flip-back { background-color: var(--primary); color: white; transform: rotateY(180deg); border-color: var(--primary); }
+
+        /* Botão Voltar */
+        .btn-back {
+            display: block; margin: 30px auto; text-align: center; color: #b2bec3; text-decoration: none; font-weight: 600;
+        }
+        .btn-back:hover { color: var(--primary); }
+
+        @media (max-width: 600px) {
+            .symptoms-grid { grid-template-columns: 1fr; }
+            .cycle-wrapper { flex-direction: column; }
+            .flip-card { height: 320px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header data-aos="fade-down">
+        <h1>Insônia</h1>
+        <div class="subtitle">Quando a mente não desliga</div>
+    </header>
+
+    <div class="main-container">
+        
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-moon"></i> Critérios Clínicos</div>
+            <p>Insônia é a dificuldade persistente de iniciar, manter ou ter um sono reparador, mesmo com oportunidade adequada para dormir.</p>
+            <div class="highlight-box">
+                <i class="fa-solid fa-clock"></i> <strong>A Regra dos 3:</strong> Ocorre pelo menos <strong>3 noites</strong> por semana, por pelo menos <strong>3 meses</strong>, e causa prejuízo no dia seguinte.
+            </div>
+        </div>
+
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-bed"></i> Tipos de Insônia</div>
+            
+            <div class="symptoms-grid">
+                <div class="symptom-item">
+                    <i class="fa-solid fa-hourglass-start"></i>
+                    <div><strong>Inical:</strong> Dificuldade em "pegar no sono" (mais de 30 min rolando na cama).</div>
+                </div>
+                <div class="symptom-item">
+                    <i class="fa-solid fa-stairs"></i>
+                    <div><strong>Manutenção:</strong> Acordar várias vezes à noite e demorar a voltar a dormir.</div>
+                </div>
+                <div class="symptom-item">
+                    <i class="fa-solid fa-sun"></i>
+                    <div><strong>Terminal:</strong> Acordar muito antes do despertador e não dormir mais.</div>
+                </div>
+                <div class="symptom-item">
+                    <i class="fa-solid fa-battery-quarter"></i>
+                    <div><strong>Não Reparadora:</strong> Dormir as horas certas, mas acordar exausto (sono de má qualidade).</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-cloud-moon"></i> Gerador de Desaceleração</div>
+            <div class="sleep-container">
+                <p style="font-weight:400; color:#c5cae9; margin-bottom:15px;">Seu cérebro precisa de um "pouso suave" antes de dormir. Gere uma atividade relaxante:</p>
+                
+                <div class="sleep-display" id="sleep-res">
+                    <span style="color:#e8eaf6; font-style:italic;">Clique no botão abaixo...</span>
+                </div>
+
+                <button class="btn-sleep" onclick="generateRoutine()">Gerar Atividade</button>
+            </div>
+        </div>
+
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-rotate-right"></i> O Ciclo do Medo de Não Dormir</div>
+            <p>O maior inimigo do sono é o esforço para dormir.</p>
+            
+            <div class="cycle-wrapper">
+                <div class="cycle-step cs-1">
+                    <h5>1. Noite Ruim</h5>
+                    <p>Você dorme mal uma noite (estresse normal).</p>
+                </div>
+                <div class="cycle-step cs-2">
+                    <h5>2. Ansiedade</h5>
+                    <p>No dia seguinte, você se preocupa: "E se eu não dormir hoje?".</p>
+                </div>
+                <div class="cycle-step cs-3">
+                    <h5>3. Hiperalerta</h5>
+                    <p>Ao deitar, o cérebro monitora o sono ("Já dormi?"). Isso libera cortisol.</p>
+                </div>
+                <div class="cycle-step cs-4">
+                    <h5>4. Condicionamento</h5>
+                    <p>A cama vira gatilho de estresse, não de descanso.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-brain"></i> Mecânica do Sono</div>
+            <p>Dois sistemas controlam seu sono. Na insônia, eles estão desalinhados.</p>
+            
+            <div class="neuro-box">
+                <div class="neuro-item">
+                    <i class="fa-solid fa-battery-full"></i>
+                    <h4>Pressão do Sono</h4>
+                    <p>O acúmulo de <strong>Adenosina</strong> durante o dia cria a vontade de dormir. Cochilos e cafeína "roubam" essa pressão.</p>
+                </div>
+                <div class="neuro-item">
+                    <i class="fa-solid fa-clock"></i>
+                    <h4>Ritmo Circadiano</h4>
+                    <p>Seu relógio biológico. Luz azul à noite atrasa a melatonina, fazendo o cérebro achar que ainda é dia.</p>
+                </div>
+                <div class="neuro-item">
+                    <i class="fa-solid fa-bolt"></i>
+                    <h4>Hiperalerta</h4>
+                    <p>Cérebros insones têm metabolismo acelerado à noite. É como tentar estacionar um carro a 100km/h.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-mask"></i> Mitos do Sono</div>
+            <p style="margin-bottom:20px; text-align:center; font-size:0.9rem; color:#aaa;">Toque nos cartões para virar</p>
+            
+            <div class="flip-grid">
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-front">
+                            <i class="fa-solid fa-wine-glass" style="font-size:2.5rem; color:#dfe6e9; margin-bottom:15px;"></i>
+                            <h3 style="font-size:1.1rem; color:#2d3436;">"Álcool ajuda"</h3>
+                        </div>
+                        <div class="flip-back">
+                            <h3 style="font-size:1rem; margin-bottom:10px;">Sono Fragmentado</h3>
+                            <p style="font-size:0.9rem;">O álcool faz você "apagar" rápido (sedação), mas destrói a arquitetura do sono (REM), causando despertares na madrugada e sono não reparador.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-front">
+                            <i class="fa-solid fa-bed" style="font-size:2.5rem; color:#dfe6e9; margin-bottom:15px;"></i>
+                            <h3 style="font-size:1.1rem; color:#2d3436;">"Ficar na cama"</h3>
+                        </div>
+                        <div class="flip-back">
+                            <h3 style="font-size:1rem; margin-bottom:10px;">Pior Erro</h3>
+                            <p style="font-size:0.9rem;">Ficar na cama acordado "tentando" dormir ensina seu cérebro que Cama = Tédio e Ansiedade. Se não dormir em 20min, levante-se.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-front">
+                            <i class="fa-solid fa-calculator" style="font-size:2.5rem; color:#dfe6e9; margin-bottom:15px;"></i>
+                            <h3 style="font-size:1.1rem; color:#2d3436;">"Preciso de 8 horas"</h3>
+                        </div>
+                        <div class="flip-back">
+                            <h3 style="font-size:1rem; margin-bottom:10px;">Individualidade</h3>
+                            <p style="font-size:0.9rem;">8 horas é uma média, não uma lei. Algumas pessoas precisam de 7h, outras de 9h. Forçar 8h pode gerar ansiedade de performance.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-notes-medical"></i> TCC para Insônia (TCC-I)</div>
+            <p>O tratamento padrão-ouro (melhor que remédios a longo prazo) envolve:</p>
+            <ul style="line-height:1.8; color:#555; margin-top:10px;">
+                <li><strong>Controle de Estímulos:</strong> Usar a cama apenas para dormir e sexo.</li>
+                <li><strong>Restrição de Sono:</strong> Limitar o tempo na cama para aumentar a "fome de sono" (Consolidar).</li>
+                <li><strong>Higiene do Sono:</strong> Rotina, ambiente escuro/frio, evitar telas.</li>
+                <li><strong>Técnicas de Relaxamento:</strong> Respiração e mindfulness para baixar o "hiperalerta".</li>
+            </ul>
+        </div>
+
+        <center>
+            <a href="../listaferramentas.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Voltar para Ferramentas</a>
+        </center>
+
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        const routines = [
+            { t: "Banho Morno", d: "A queda de temperatura corporal pós-banho sinaliza ao corpo que é hora de dormir." },
+            { t: "Leitura Física", d: "Leia um livro de papel (nada de telas/luz azul) com luz amarela fraca." },
+            { t: "Brain Dump", d: "Escreva num papel tudo que te preocupa para tirar da cabeça e passar para o papel." },
+            { t: "Respiração 4-7-8", d: "Inspire em 4s, segure 7s, solte em 8s. Repita 4 vezes para sedar o sistema nervoso." },
+            { t: "Alongamento Suave", d: "Faça alongamentos lentos no chão ou na cama para soltar a tensão muscular." },
+            { t: "Podcast ou Audio", d: "Ouça um podcast monótono ou ruído branco (chuva/ventilador) de olhos fechados." }
+        ];
+
+        function generateRoutine() {
+            const display = document.getElementById('sleep-res');
+            display.style.opacity = 0;
+            
+            setTimeout(() => {
+                const randomR = routines[Math.floor(Math.random() * routines.length)];
+                
+                display.innerHTML = `
+                    <h3 style="margin:0 0 10px 0; color:#ffd600; font-size:1.3rem;">${randomR.t}</h3>
+                    <p style="margin:0; font-size:1rem; color:#e8eaf6;">${randomR.d}</p>
+                `;
+                display.style.opacity = 1;
+                display.style.transform = "scale(1.05)";
+                setTimeout(() => display.style.transform = "scale(1)", 200);
+            }, 300);
+        }
+    </script>
+
+</body>
+</html>
