@@ -3,415 +3,365 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Autossacrifício - Caderno Terapêutico</title>
+    <title>Autossacrifício | Bruno de Souza</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <style>
         :root {
-            /* Paleta "O Peso da Bondade" */
-            --paper-line: #ecfdf5;    /* Linhas verdes bem claras */
-            --paper-bg: #fafffd;      
-            --ink-color: #064e3b;
+            /* Identidade Visual - Tema "Cuidado/Limites" */
+            --bg-color: #f0fdf4;      /* Verde muito suave */
+            --primary: #00897b;       /* Verde Esmeralda (Cuidado/Saúde) */
+            --primary-dark: #004d40;
+            --accent: #d84315;        /* Terracota (Limites/Peso) */
+            --text: #2d3436;
+            --card-border: #b0bec5;
             
-            /* Cores do Esquema (Doação -> Limites) */
-            --primary: #059669;       /* Verde Esmeralda (Cura/Ajuda) */
-            --primary-hover: #047857;
-            --burden: #b45309;        /* Terracota (O Peso) */
-            
-            /* Tags de Personas */
-            --tag-alice-bg: #d1fae5; --tag-alice-text: #065f46; /* Verde (Cuidadora) */
-            --tag-bruno-bg: #ffedd5; --tag-bruno-text: #9a3412; /* Laranja (Mártir) */
-
-            --radius: 16px;
-            --shadow-paper: 3px 3px 10px rgba(0,0,0,0.06);
+            /* Cores Específicas */
+            --give-color: #4caf50;    /* Verde (Doação/Alice) */
+            --resent-color: #ff5722;  /* Laranja (Ressentimento/Bruno) */
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Nunito', sans-serif;
-            color: var(--ink-color);
-            line-height: 1.6;
-            background-color: var(--paper-bg);
-            /* Efeito Papel Pautado */
-            background-image: linear-gradient(var(--paper-line) 1px, transparent 1px);
-            background-size: 100% 2rem;
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#c8e6c9 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            color: var(--text);
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            align-items: center;
         }
 
-        h1, h2, h3, h4 {
-            font-family: 'Patrick Hand', cursive;
-            color: #064e3b;
-        }
-
-        /* --- HEADER --- */
+        /* --- CABEÇALHO --- */
         header {
-            background-color: rgba(255, 255, 255, 0.95);
-            border-bottom: 2px dashed #6ee7b7;
-            padding: 2rem 0;
-            margin-bottom: 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);
-        }
-
-        .header-content {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0 20px;
             text-align: center;
+            margin: 20px auto 40px auto;
+            background: white;
+            padding: 30px 20px;
+            border-radius: 25px;
+            border: 3px dashed var(--primary);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            position: relative;
+            max-width: 800px;
+            width: 100%;
         }
 
-        .header-title {
-            font-size: 2.5rem;
+        header::before {
+            content: ""; 
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%) rotate(-1deg);
+            width: 140px; height: 35px; 
+            background-color: rgba(0, 137, 123, 0.2); 
+            border: 1px solid rgba(0,0,0,0.05); 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2rem;
             color: var(--primary);
-            margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 0px #d1fae5;
+            text-transform: uppercase;
+            margin: 0;
+            font-weight: 800;
         }
 
-        .header-subtitle {
-            font-size: 1.2rem;
-            color: #047857;
-            font-family: 'Patrick Hand', cursive;
-        }
+        .subtitle { margin-top: 5px; color: #636e72; font-weight: 600; }
 
         /* --- CONTAINER --- */
         .main-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0 20px;
+            max-width: 850px;
             width: 100%;
-            display: grid;
-            gap: 35px;
-            margin-bottom: 60px;
+            margin-bottom: 80px;
         }
 
-        /* --- CARDS (PAPEL) --- */
-        .paper-card {
-            background-color: #ffffff;
-            border-radius: 2px;
-            box-shadow: var(--shadow-paper);
-            border: 1px solid #d1fae5;
-            padding: 2rem;
-            position: relative;
-            transform: rotate(-0.5deg);
-            transition: transform 0.3s;
-        }
-        
-        .paper-card:hover { transform: rotate(0deg) translateY(-3px); }
-        
-        /* Esparadrapo Decorativo (Simbolizando cura/ferida) */
-        .paper-card::before {
-            content: '';
-            position: absolute;
-            top: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90px;
-            height: 25px;
-            background-color: #fcd34d; /* Amarelo esparadrapo */
-            border: 1px solid #fbbf24;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            opacity: 0.8;
-            border-radius: 4px;
+        /* --- CARDS DE CONTEÚDO --- */
+        .content-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.05);
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
         }
 
-        .card-header {
+        .content-card:hover {
+            border-color: var(--card-border);
+            transform: translateY(-2px);
+        }
+
+        .card-title {
+            color: var(--primary-dark);
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid var(--paper-line);
+            gap: 10px;
+            border-bottom: 2px dashed #eee;
             padding-bottom: 10px;
         }
 
-        .card-icon { font-size: 1.8rem; color: var(--primary); }
-        .card-title { font-size: 1.8rem; margin: 0; }
-
-        /* --- POST-IT (DEFINIÇÃO) --- */
-        .post-it {
-            background-color: #d1fae5; /* Verde Água */
-            padding: 1.5rem;
-            border-radius: 2px 2px 16px 2px;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
-            font-family: 'Patrick Hand', cursive;
-            font-size: 1.3rem;
-            color: #064e3b;
-            transform: rotate(1deg);
-            margin: 20px 0;
-            border-left: 5px solid #059669;
-        }
-
-        /* --- PERSONAS --- */
-        .persona-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-        }
-
-        .persona-card {
-            background: #fff;
+        .highlight-box {
+            background: #e0f2f1;
+            border-left: 5px solid var(--primary);
             padding: 20px;
-            border: 2px dashed #6ee7b7;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 1rem;
+            color: #004d40;
+        }
+
+        /* --- GRID DE PERSONAS (DUAL) --- */
+        .dual-symptoms {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .symptom-column h4 {
+            text-align: center; margin-bottom: 15px; font-weight: 800; text-transform: uppercase; font-size: 0.9rem;
+        }
+
+        .symptom-item {
+            background: #f8f9fa;
+            padding: 15px;
             border-radius: 12px;
+            display: flex; flex-direction: column; gap: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid;
         }
         
-        .persona-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .persona-name { font-size: 1.4rem; font-weight: 700; color: #047857; }
-        .persona-tag { font-family: 'Nunito', sans-serif; font-size: 0.8rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; }
-        
-        .tag-alice { background: var(--tag-alice-bg); color: var(--tag-alice-text); }
-        .tag-bruno { background: var(--tag-bruno-bg); color: var(--tag-bruno-text); }
+        .style-give { border-color: var(--give-color); }
+        .style-resent { border-color: var(--resent-color); }
 
-        /* --- STICKERS (3 DIMENSÕES) --- */
-        .sticker-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;
+        .persona-tag {
+            font-size: 0.75rem; text-transform: uppercase; font-weight: 800;
+            padding: 4px 10px; border-radius: 20px; width: fit-content;
         }
-        
-        .sticker-box {
-            background: white; padding: 1.5rem; border-radius: 12px;
-            border: 2px solid #ecfdf5; text-align: center;
-            transition: all 0.3s;
-        }
-        .sticker-box:hover { border-color: var(--primary); transform: scale(1.02); }
-        .sticker-icon { font-size: 2rem; margin-bottom: 10px; display: block; }
+        .tag-alice { background: #e8f5e9; color: var(--give-color); }
+        .tag-bruno { background: #fbe9e7; color: var(--resent-color); }
 
-        /* --- TRADUTOR INTERATIVO --- */
-        .translator-area {
-            background-color: #fff7ed; /* Laranja muito claro */
-            padding: 2rem; border-radius: 20px;
-            border: 2px dashed #fdba74; text-align: center;
+        /* --- WIDGET: TRADUTOR DE LIMITES --- */
+        .translator-container {
+            text-align: center;
+            background: #fbe9e7; /* Fundo levemente avermelhado/laranja */
+            padding: 25px;
+            border-radius: 20px;
+            border: 2px dashed #ffab91;
         }
 
-        .btn-translate {
-            background: white; border: 2px solid #fed7aa;
-            padding: 10px 20px; margin: 5px; border-radius: 30px;
-            font-family: 'Nunito', sans-serif; font-weight: 700; color: #c2410c;
-            cursor: pointer; transition: all 0.2s;
-            box-shadow: 0 4px 0 #fed7aa;
-        }
-        
-        .btn-translate:active { box-shadow: 0 0 0 #fed7aa; transform: translateY(4px); }
-        .btn-translate:hover { background: #fff; border-color: var(--burden); color: var(--burden); }
-
-        .result-bubble {
-            background: white; padding: 20px; border-radius: 20px;
-            margin-top: 20px; border: 2px solid #fdba74;
-            font-family: 'Patrick Hand', cursive; font-size: 1.3rem;
-            color: #9a3412; min-height: 100px; display: flex; align-items: center; justify-content: center;
+        .translator-display {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: 0.3s;
         }
 
-        /* --- ACCORDIONS --- */
-        details {
-            background: #f0fdf4; border-radius: 12px; margin-bottom: 10px;
-            border: 1px solid #86efac;
+        .btn-trans {
+            background: white; border: 2px solid #ffccbc; color: #d84315;
+            padding: 10px 20px; border-radius: 30px; font-weight: 700;
+            cursor: pointer; margin: 5px; transition: 0.2s; font-family: 'Quicksand';
         }
-        summary {
-            padding: 15px; font-weight: 700; cursor: pointer; list-style: none;
-            display: flex; justify-content: space-between; color: #166534;
-        }
-        summary:hover { background: #dcfce7; border-radius: 12px; }
-        .details-content { padding: 20px; border-top: 1px dashed #86efac; color: #14532d; }
+        .btn-trans:hover { border-color: var(--accent); background: var(--accent); color: white; }
 
-        /* --- FLASHCARD (FLIP) --- */
-        .flashcard-container { perspective: 1000px; width: 100%; height: 280px; cursor: pointer; }
-        .flashcard-inner {
-            position: relative; width: 100%; height: 100%; text-align: center;
-            transition: transform 0.6s; transform-style: preserve-3d;
+        /* --- NEUROBIOLOGIA --- */
+        .neuro-box {
+            display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; margin-top: 20px;
         }
-        .flashcard-container.flipped .flashcard-inner { transform: rotateY(180deg); }
-        
-        .flashcard-front, .flashcard-back {
+        .neuro-item {
+            flex: 1; min-width: 200px;
+            background: #fafafa; border: 1px solid #eee;
+            padding: 20px; border-radius: 15px;
+            text-align: center;
+        }
+        .neuro-item i { font-size: 2rem; color: var(--primary); margin-bottom: 10px; }
+        .neuro-item h4 { margin: 5px 0; font-size: 1rem; color: var(--primary-dark); }
+        .neuro-item p { font-size: 0.85rem; color: #666; margin: 0; }
+
+        /* --- FLIP CARDS --- */
+        .flip-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .flip-card {
+            background-color: transparent;
+            height: 300px;
+            perspective: 1000px;
+            cursor: pointer;
+            margin: 0 auto;
+            max-width: 350px;
+            width: 100%;
+        }
+
+        .flip-card-inner {
+            position: relative; width: 100%; height: 100%;
+            text-align: center; transition: transform 0.6s;
+            transform-style: preserve-3d;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+
+        .flip-front, .flip-back {
             position: absolute; width: 100%; height: 100%;
             -webkit-backface-visibility: hidden; backface-visibility: hidden;
-            border-radius: 16px; padding: 2rem;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            box-shadow: var(--shadow-paper); border: 2px solid;
-        }
-        
-        .flashcard-front {
-            background: #fff7ed; border-color: #ffedd5; color: #9a3412;
-        }
-        .flashcard-back {
-            background: #ecfdf5; border-color: #6ee7b7; color: #047857;
-            transform: rotateY(180deg);
+            padding: 25px; border-radius: 15px; border: 2px solid #dfe6e9;
+            box-sizing: border-box;
         }
 
-        /* --- FOOTER PADRÃO --- */
+        .flip-front { background-color: white; color: #2d3436; }
+        .flip-back { background-color: var(--accent); color: white; transform: rotateY(180deg); border-color: var(--accent); }
+
+        /* Botão Voltar */
+        .btn-back {
+            display: block; margin: 30px auto; text-align: center; color: #b2bec3; text-decoration: none; font-weight: 600;
+        }
+        .btn-back:hover { color: var(--primary); }
+
+        /* --- FOOTER ADAPTADO --- */
         footer {
-            background-color: #ffffff;
-            border-top: 1px solid #e5e7eb;
-            padding: 2rem 0;
+            width: 100%;
+            background-color: white;
+            border-top: 1px dashed #b2bec3;
+            padding: 30px 20px;
             margin-top: auto;
         }
         .footer-container {
-            max-width: 1000px;
+            max-width: 900px;
             margin: 0 auto;
-            padding: 0 20px;
-            display: flex; justify-content: space-between; align-items: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .footer-brand { color: #64748b; font-size: 0.9rem; font-weight: 600; }
-        .social-links { display: flex; gap: 1.5rem; }
-        .social-links a { color: #94a3b8; font-size: 1.2rem; transition: color 0.2s; }
-        .social-links a:hover { color: var(--primary); }
+        .footer-brand { color: #636e72; font-weight: 700; font-size: 0.95rem; }
+        .social-links { display: flex; gap: 20px; }
+        .social-links a { color: #b2bec3; font-size: 1.4rem; transition: all 0.3s ease; }
+        .social-links a:hover { color: var(--primary); transform: translateY(-3px); }
 
-        @media (max-width: 640px) {
-            .footer-container { flex-direction: column; gap: 1rem; }
-            .persona-grid, .sticker-grid { grid-template-columns: 1fr; }
+        @media (max-width: 600px) {
+            .dual-symptoms { grid-template-columns: 1fr; }
+            .footer-container { flex-direction: column; gap: 15px; }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="header-content">
-            <h1 class="header-title">Autossacrifício</h1>
-            <p class="header-subtitle">Caderno de Psicoeducação</p>
-        </div>
+    <header data-aos="fade-down">
+        <h1>Autossacrifício</h1>
+        <div class="subtitle">O peso da bondade excessiva</div>
     </header>
 
     <div class="main-container">
-
-        <div class="paper-card">
-            <div class="card-header">
-                <i class="fas fa-hand-holding-heart card-icon"></i>
-                <h2 class="card-title">O Peso da Bondade</h2>
-            </div>
-            <p>O Esquema de Autossacrifício é a crença de que você deve, voluntariamente, priorizar as necessidades dos outros em detrimento das suas, para evitar sentir culpa ou para manter a conexão.</p>
-            
-            <div class="post-it">
-                <i class="fas fa-thumbtack" style="color:#047857; margin-right:10px;"></i>
-                "Se eu não ajudar, quem vai? Eles precisam de mim. Seria egoísmo da minha parte dizer não e cuidar de mim agora."
+        
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-hand-holding-heart"></i> O Que é Isso?</div>
+            <p>É a crença de que você deve priorizar as necessidades dos outros em detrimento das suas, para evitar sentir culpa ou para manter a conexão. É um foco excessivo e voluntário no bem-estar alheio.</p>
+            <div class="highlight-box">
+                <i class="fa-solid fa-circle-exclamation"></i> <strong>A Voz da Culpa:</strong> "Se eu não ajudar, quem vai? Eles precisam de mim. Seria egoísmo dizer não."
             </div>
         </div>
 
-        <div class="paper-card" style="transform: rotate(0.5deg);">
-            <div class="card-header">
-                <i class="fas fa-users card-icon"></i>
-                <h2 class="card-title">Espelhos da Vida Real</h2>
-            </div>
-            <p>Como o excesso de doação se manifesta:</p>
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-users"></i> Formas de Enfrentamento</div>
             
-            <div class="persona-grid">
-                <div class="persona-card">
-                    <div class="persona-header">
-                        <span class="persona-name">Alice</span>
-                        <span class="persona-tag tag-alice">A "Mãe" de Todos</span>
+            <div class="dual-symptoms">
+                <div class="symptom-column">
+                    <div class="symptom-item style-give">
+                        <span class="persona-tag tag-alice">Alice (A Cuidadora)</span>
+                        <div><strong>Comportamento:</strong> Faz tudo por todos. Organiza festas, empresta dinheiro, ouve desabafos de madrugada.</div>
                     </div>
-                    <p>Alice é quem organiza as festas, ouve os desabafos de madrugada e empresta dinheiro. Ela cancela o próprio médico para ajudar uma amiga na mudança. Ela sente que sua missão é servir.</p>
-                    <p style="font-size:0.85rem; color:#047857;"><strong>Comportamento:</strong> Rendição (Doação Total)</p>
-                </div>
-
-                <div class="persona-card">
-                    <div class="persona-header">
-                        <span class="persona-name">Bruno</span>
-                        <span class="persona-tag tag-bruno">O Mártir</span>
+                    <div class="symptom-item style-give">
+                        <div><strong>Consequência:</strong> Exaustão física, negligência das próprias necessidades (saúde, lazer).</div>
                     </div>
-                    <p>Bruno faz tudo pela família, mas vive suspirando e batendo portas. Ele espera que os outros notem seu sacrifício e retribuam, mas como ele não pede, ninguém faz. Ele acumula muita raiva.</p>
-                    <p style="font-size:0.85rem; color:#c2410c;"><strong>Comportamento:</strong> Passivo-Agressivo (Exaustão)</p>
+                </div>
+
+                <div class="symptom-column">
+                    <div class="symptom-item style-resent">
+                        <span class="persona-tag tag-bruno">Bruno (O Mártir)</span>
+                        <div><strong>Comportamento:</strong> Faz tudo, mas reclama e suspira. Espera que os outros notem o sacrifício e retribuam.</div>
+                    </div>
+                    <div class="symptom-item style-resent">
+                        <div><strong>Consequência:</strong> Raiva acumulada, passividade-agressiva, sensação de não ser valorizado.</div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="paper-card">
-            <div class="card-header">
-                <i class="fas fa-shapes card-icon"></i>
-                <h2 class="card-title">O Custo do Sacrifício</h2>
-            </div>
-            <div class="sticker-grid">
-                <div class="sticker-box">
-                    <span class="sticker-icon">😞</span>
-                    <h4>Culpa Tóxica</h4>
-                    <p>Sentir-se uma pessoa ruim ou egoísta ao pensar em fazer algo apenas para si mesmo.</p>
-                </div>
-                <div class="sticker-box">
-                    <span class="sticker-icon">🥀</span>
-                    <h4>Negligência</h4>
-                    <p>Esquecer de comer, dormir mal ou ignorar sintomas de saúde porque estava "ocupado cuidando dos outros".</p>
-                </div>
-                <div class="sticker-box">
-                    <span class="sticker-icon">🦸</span>
-                    <h4>Onipotência</h4>
-                    <p>Achar que você é o único capaz de salvar, resolver ou aliviar a dor alheia.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="paper-card" style="transform: rotate(-0.5deg);">
-            <div class="card-header">
-                <i class="fas fa-sync card-icon"></i>
-                <h2 class="card-title">Tradutor de Limites</h2>
-            </div>
-            <p>A culpa mente para você. Vamos traduzir o "Sacrifício" em "Autocuidado":</p>
-            
-            <div class="translator-area">
-                <p style="margin-bottom:15px; font-weight:700;">O que a culpa diz?</p>
-                <div>
-                    <button class="btn-translate" onclick="translateNeed('egoismo')">"Sou egoísta se disser não."</button>
-                    <button class="btn-translate" onclick="translateNeed('sozinho')">"Eles não conseguem sem mim."</button>
-                    <button class="btn-translate" onclick="translateNeed('pena')">"Tenho pena, não consigo ver ele sofrer."</button>
-                </div>
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-language"></i> Tradutor de Limites</div>
+            <div class="translator-container">
+                <p style="font-weight:700; color:#d84315; margin-bottom:15px;">A culpa mente para você. Vamos traduzi-la:</p>
                 
-                <div id="translator-bubble" class="result-bubble">
-                    Toque em uma frase para traduzir...
+                <div>
+                    <button class="btn-trans" onclick="translateNeed('egoismo')">"Sou egoísta se disser não."</button>
+                    <button class="btn-trans" onclick="translateNeed('sozinho')">"Eles não conseguem sem mim."</button>
+                    <button class="btn-trans" onclick="translateNeed('pena')">"Tenho pena de ver ele sofrer."</button>
+                </div>
+
+                <div class="translator-display" id="trans-res">
+                    <span style="color:#b0bec5; font-style:italic;">Clique na culpa...</span>
                 </div>
             </div>
         </div>
 
-        <div class="paper-card">
-            <div class="card-header">
-                <i class="fas fa-brain card-icon"></i>
-                <h2 class="card-title">Conceitos Clínicos</h2>
-            </div>
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-brain"></i> Por Dentro da Mente</div>
             
-            <details>
-                <summary>🧠 Neurobiologia: A Empatia Hiperativa <i class="fas fa-chevron-down"></i></summary>
-                <div class="details-content">
-                    <p>Você tem uma "contágio emocional" alto. Quando vê alguém sofrendo, seu cérebro ativa a área da dor como se a dor fosse sua. Ajudar o outro é a forma mais rápida de aliviar a <em>sua</em> própria angústia.</p>
+            <div class="neuro-box">
+                <div class="neuro-item">
+                    <i class="fa-solid fa-heart-pulse"></i>
+                    <h4>Empatia Hiperativa</h4>
+                    <p>Seu cérebro tem um "contágio emocional" alto. A dor do outro ativa seus centros de dor. Ajudar é a forma mais rápida de aliviar a <em>sua</em> angústia.</p>
                 </div>
-            </details>
-
-            <details>
-                <summary>🌱 Como a Terapia Ajuda? <i class="fas fa-chevron-down"></i></summary>
-                <div class="details-content">
-                    <p>O objetivo é o <strong>Equilíbrio</strong>. Aprender que você também tem necessidades e que elas são tão importantes quanto as dos outros. Trabalhamos a capacidade de tolerar a culpa de dizer "não" sem se sentir uma pessoa ruim.</p>
+                <div class="neuro-item">
+                    <i class="fa-solid fa-anchor"></i>
+                    <h4>Dependência</h4>
+                    <p>Ao fazer tudo pelo outro, você impede que ele cresça. A ajuda saudável empodera; o sacrifício mantém a dependência mútua.</p>
                 </div>
-            </details>
-
-            <details>
-                <summary>⚠️ A Armadilha da Dependência <i class="fas fa-chevron-down"></i></summary>
-                <div class="details-content">
-                    <p>Ao fazer tudo pelo outro, você impede que ele cresça e aprenda a se virar. Seu sacrifício, muitas vezes, mantém a dependência da outra pessoa e a sua exaustão. A ajuda saudável empodera, não resolve tudo.</p>
-                </div>
-            </details>
+            </div>
         </div>
 
-        <div class="paper-card">
-            <div class="card-header">
-                <i class="fas fa-adjust card-icon"></i>
-                <h2 class="card-title">Vire o Pensamento</h2>
-            </div>
-            <p>Toque no cartão quando sentir culpa por descansar:</p>
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-rotate"></i> Vire o Pensamento</div>
+            <p style="margin-bottom:20px; text-align:center; font-size:0.9rem; color:#aaa;">Toque no cartão para ativar o Adulto Saudável</p>
             
-            <div class="flashcard-container" onclick="this.classList.toggle('flipped')">
-                <div class="flashcard-inner">
-                    <div class="flashcard-front">
-                        <h3 style="font-family:'Patrick Hand'; font-size:1.5rem;">Voz da Culpa</h3>
-                        <p style="margin-top:10px;">"Como posso estar aqui descansando enquanto ele está com problemas? Eu deveria estar lá ajudando. Sou uma pessoa horrível por pensar em mim agora."</p>
-                        <i class="fas fa-hand-pointer" style="margin-top:20px; color:#b45309; font-size:1.5rem;"></i>
-                    </div>
-                    <div class="flashcard-back">
-                        <h3 style="font-family:'Patrick Hand'; font-size:1.5rem;">Voz do Adulto Saudável</h3>
-                        <p style="margin-top:10px;">"Eu não sou onipotente. Eu preciso recarregar minhas energias para continuar sendo útil. Dizer não para ele agora é dizer sim para a minha saúde. Ele é um adulto e pode lidar com isso."</p>
+            <div class="flip-grid">
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-front">
+                            <i class="fa-solid fa-cloud-rain" style="font-size:2.5rem; color:#dfe6e9; margin-bottom:15px;"></i>
+                            <h3 style="font-size:1.1rem; color:#2d3436;">Voz da Culpa</h3>
+                            <p style="margin-top:10px; font-size:0.9rem; color:#555;">"Como posso descansar enquanto ele está com problemas? Sou uma pessoa horrível por pensar em mim agora."</p>
+                        </div>
+                        <div class="flip-back">
+                            <h3 style="font-size:1.1rem; margin-bottom:10px;">Adulto Saudável</h3>
+                            <p style="font-size:0.9rem;">"Eu não sou onipotente. Preciso recarregar para ser útil. Dizer não para ele agora é dizer sim para minha saúde. Ele é adulto e pode lidar com isso."</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <center>
+            <a href="../../listaferramentas.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Voltar para Ferramentas</a>
+        </center>
 
     </div>
 
@@ -421,31 +371,39 @@
                 &copy; 2026 Bruno de Souza
             </div>
             <div class="social-links">
-                <a href="https://www.instagram.com/psi.brunosg/" target="_blank"><i class="fab fa-instagram"></i></a>
-                <a href="https://wa.me/5553991898309" target="_blank"><i class="fab fa-whatsapp"></i></a>
-                <a href="https://www.linkedin.com/in/psi-bsouza/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                <a href="https://www.instagram.com/psi.brunosg/" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://wa.me/5553991898309" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.linkedin.com/in/psi-bsouza/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
             </div>
         </div>
     </footer>
 
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
+        AOS.init();
+
         function translateNeed(type) {
-            const bubble = document.getElementById('translator-bubble');
+            const display = document.getElementById('trans-res');
             let text = "";
+            let color = "";
             
             if (type === 'egoismo') {
-                text = "✨ Tradução: 'Autocuidado não é egoísmo. Colocar a máscara de oxigênio em mim primeiro é a única forma de ajudar alguém.'";
+                text = "✨ <strong>Tradução:</strong> 'Autocuidado não é egoísmo. Colocar a máscara de oxigênio em mim primeiro é a única forma de ajudar alguém.'";
+                color = "#d84315";
             } else if (type === 'sozinho') {
-                text = "✨ Tradução: 'Eles são mais capazes do que eu imagino. Se eu fizer tudo, tiro a oportunidade deles de aprender.'";
+                text = "✨ <strong>Tradução:</strong> 'Eles são mais capazes do que eu imagino. Se eu fizer tudo, tiro a oportunidade deles de aprender e crescer.'";
+                color = "#00897b";
             } else if (type === 'pena') {
-                text = "✨ Tradução: 'A dor dele é dele. Eu posso ser empático e estar junto, sem precisar carregar o problema nas costas.'";
+                text = "✨ <strong>Tradução:</strong> 'A dor dele é dele. Eu posso ser empático e estar junto, sem precisar carregar o problema nas costas.'";
+                color = "#f57c00";
             }
             
-            bubble.style.opacity = 0;
+            display.style.opacity = 0;
+            display.style.borderTop = `5px solid ${color}`;
+            
             setTimeout(() => {
-                bubble.innerHTML = text;
-                bubble.style.opacity = 1;
-                bubble.style.transition = "opacity 0.3s";
+                display.innerHTML = `<p style="font-size:1.1rem; color:#2d3436;">${text}</p>`;
+                display.style.opacity = 1;
             }, 200);
         }
     </script>
