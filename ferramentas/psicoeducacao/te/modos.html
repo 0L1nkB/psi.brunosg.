@@ -3,315 +3,337 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modos Esquemáticos - O Teatro da Mente</title>
+    <title>Modos Esquemáticos | Bruno de Souza</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <style>
         :root {
-            /* Paleta Base */
-            --paper-line: #f1f5f9;
-            --paper-bg: #ffffff;
-            --ink-color: #1e293b;
+            /* Identidade Visual Geral */
+            --bg-color: #f0f8ff;
+            --primary: #a29bfe;       /* Roxo (Tema Esquema) */
+            --primary-dark: #6c5ce7;
+            --text: #2d3436;
+            --card-border: #b2bec3;
             
-            /* Cores das Categorias de Modos */
-            --child-mode: #f43f5e;    /* Criança (Emoção/Rosa) */
-            --child-bg: #fff1f2;
+            /* Cores Específicas dos Modos */
+            --child-color: #ff7675;   /* Rosa/Vermelho */
+            --child-bg: #fff0f0;
             
-            --parent-mode: #475569;   /* Pais (Crítica/Cinza) */
-            --parent-bg: #f8fafc;
+            --parent-color: #636e72;  /* Cinza Escuro */
+            --parent-bg: #f1f2f6;
             
-            --coping-mode: #d97706;   /* Enfrentamento (Defesa/Laranja) */
-            --coping-bg: #fffbeb;
+            --coping-color: #e17055;  /* Laranja Queimado */
+            --coping-bg: #fff3e0;
             
-            --adult-mode: #10b981;    /* Adulto (Saúde/Verde) */
-            --adult-bg: #ecfdf5;
-
-            --radius: 16px;
-            --shadow-paper: 3px 3px 0px rgba(0,0,0,0.1);
+            --adult-color: #00b894;   /* Verde */
+            --adult-bg: #e0fcf6;
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Nunito', sans-serif;
-            color: var(--ink-color);
-            line-height: 1.6;
-            background-color: #f3f4f6;
-            background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
             background-size: 20px 20px;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            color: var(--text);
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            align-items: center;
         }
 
-        h1, h2, h3 {
-            font-family: 'Patrick Hand', cursive;
-        }
-
-        /* --- HEADER --- */
+        /* --- CABEÇALHO (Estilo Fita Adesiva) --- */
         header {
-            background-color: #fff;
-            border-bottom: 3px solid #cbd5e1;
-            padding: 3rem 0;
-            margin-bottom: 2rem;
             text-align: center;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            margin: 20px auto 40px auto;
+            background: white;
+            padding: 30px 20px;
+            border-radius: 25px;
+            border: 3px dashed var(--primary);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            position: relative;
+            max-width: 900px;
+            width: 100%;
         }
 
-        .header-title { font-size: 3rem; color: #3b82f6; margin-bottom: 0.5rem; }
-        .header-subtitle { font-size: 1.2rem; color: #64748b; background: #f1f5f9; padding: 5px 15px; border-radius: 20px; display: inline-block; }
+        header::before {
+            content: ""; 
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%) rotate(-1deg);
+            width: 140px; height: 35px; 
+            background-color: rgba(162, 155, 254, 0.3); 
+            border: 1px solid rgba(0,0,0,0.05); 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            color: var(--primary-dark);
+            text-transform: uppercase;
+            margin: 0;
+            font-weight: 800;
+        }
+
+        .subtitle { margin-top: 5px; color: #636e72; font-weight: 600; }
 
         /* --- CONTAINER --- */
         .main-container {
             max-width: 1000px;
-            margin: 0 auto;
-            padding: 0 20px;
             width: 100%;
             display: grid;
-            gap: 40px;
+            gap: 30px;
             margin-bottom: 80px;
         }
 
         /* --- INTRO CARD --- */
         .intro-card {
-            background: #fff;
-            padding: 2rem;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow-paper);
-            border: 2px solid #e2e8f0;
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 2px dashed var(--card-border);
             text-align: center;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.05);
         }
+
+        .intro-card h3 { color: var(--primary-dark); margin-bottom: 10px; font-size: 1.5rem; }
 
         /* --- SEÇÕES DE MODOS --- */
         .mode-section {
-            border-radius: var(--radius);
-            overflow: hidden;
-            box-shadow: var(--shadow-paper);
-            border: 2px solid;
             background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.05);
+            border: 2px solid transparent; /* Para cor da borda */
+            transition: transform 0.3s;
         }
 
         .mode-header {
-            padding: 20px;
+            padding: 20px 25px;
             display: flex;
             align-items: center;
             gap: 15px;
-            border-bottom: 2px solid rgba(0,0,0,0.05);
+            font-weight: 800;
+            font-size: 1.2rem;
         }
 
         .mode-icon-box {
             width: 50px; height: 50px;
             border-radius: 50%;
+            background: white;
             display: flex; align-items: center; justify-content: center;
             font-size: 1.5rem;
-            background: white;
-            border: 2px solid rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
         .mode-content { padding: 25px; }
 
-        /* Estilização Específica */
-        .section-child { border-color: var(--child-mode); }
-        .section-child .mode-header { background: var(--child-bg); color: var(--child-mode); }
-        
-        .section-parent { border-color: var(--parent-mode); }
-        .section-parent .mode-header { background: var(--parent-bg); color: var(--parent-mode); }
-        
-        .section-coping { border-color: var(--coping-mode); }
-        .section-coping .mode-header { background: var(--coping-bg); color: var(--coping-mode); }
-        
-        .section-adult { border-color: var(--adult-mode); }
-        .section-adult .mode-header { background: var(--adult-bg); color: var(--adult-mode); }
+        /* Estilização Específica por Tipo */
+        /* Criança */
+        .section-child { border-color: var(--child-color); }
+        .section-child .mode-header { background: var(--child-bg); color: var(--child-color); }
+        .section-child .mode-icon-box { color: var(--child-color); }
+
+        /* Pais */
+        .section-parent { border-color: var(--parent-color); }
+        .section-parent .mode-header { background: var(--parent-bg); color: var(--parent-color); }
+        .section-parent .mode-icon-box { color: var(--parent-color); }
+
+        /* Enfrentamento */
+        .section-coping { border-color: var(--coping-color); }
+        .section-coping .mode-header { background: var(--coping-bg); color: var(--coping-color); }
+        .section-coping .mode-icon-box { color: var(--coping-color); }
+
+        /* Adulto */
+        .section-adult { border-color: var(--adult-color); }
+        .section-adult .mode-header { background: var(--adult-bg); color: var(--adult-color); }
+        .section-adult .mode-icon-box { color: var(--adult-color); }
 
         /* GRID DE SUB-MODOS */
         .submode-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 15px;
         }
 
         .submode-card {
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px solid #e2e8f0;
-            text-align: center;
-            transition: transform 0.2s;
-        }
-        .submode-card:hover { transform: translateY(-3px); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        
-        .submode-title { font-weight: 700; margin-bottom: 5px; font-family: 'Patrick Hand'; font-size: 1.2rem; }
-        .submode-desc { font-size: 0.85rem; color: #64748b; }
-
-        /* --- FERRAMENTA INTERATIVA (QUEM ESTÁ NO COMANDO) --- */
-        .interactive-area {
             background: #fff;
-            padding: 2rem;
-            border-radius: var(--radius);
-            border: 2px dashed #94a3b8;
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px dashed #ced6e0;
             text-align: center;
+            transition: all 0.2s;
+        }
+        .submode-card:hover { transform: translateY(-3px); border-style: solid; }
+
+        .submode-title { font-weight: 800; margin-bottom: 5px; font-size: 1rem; }
+        .submode-desc { font-size: 0.85rem; color: #636e72; line-height: 1.4; }
+
+        /* --- DETECTOR INTERATIVO --- */
+        .interactive-area {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 2px dashed var(--primary);
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .buttons-container {
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 20px;
         }
 
         .btn-check {
-            margin: 5px; padding: 10px 20px;
-            border-radius: 30px; border: 2px solid #cbd5e1;
-            background: white; cursor: pointer; font-weight: 700; color: #475569;
+            padding: 12px 25px;
+            border-radius: 30px; 
+            border: 2px solid var(--primary);
+            background: white; 
+            cursor: pointer; 
+            font-weight: 700; 
+            color: var(--text);
+            font-family: 'Quicksand', sans-serif;
             transition: all 0.2s;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.05);
         }
-        .btn-check:hover { background: #f1f5f9; transform: scale(1.05); }
+        .btn-check:hover { background: var(--primary); color: white; transform: translateY(-2px); box-shadow: 0 6px 0 rgba(0,0,0,0.1); }
 
         .result-box {
-            margin-top: 20px; padding: 20px;
-            border-radius: 12px; background: #f8fafc;
-            min-height: 80px; display: flex; align-items: center; justify-content: center;
-            font-family: 'Patrick Hand'; font-size: 1.3rem; color: #334155;
+            margin-top: 25px; padding: 20px;
+            border-radius: 15px; background: #f8f9fa;
+            min-height: 60px; display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 1.1rem; color: var(--primary-dark);
+            border: 1px solid #dfe6e9;
         }
 
-        /* --- FOOTER --- */
-        footer {
-            background-color: #fff;
-            border-top: 1px solid #e2e8f0;
-            padding: 3rem 0;
-            margin-top: auto;
+        /* Botão Voltar */
+        .btn-back {
+            display: block; margin: 40px auto; text-align: center; color: #b2bec3; text-decoration: none; font-weight: 600;
         }
-        .footer-container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .footer-brand { color: #64748b; font-size: 0.9rem; font-weight: 600; }
-        .social-links { display: flex; gap: 1.5rem; }
-        .social-links a { color: #94a3b8; font-size: 1.2rem; transition: color 0.2s; }
-        .social-links a:hover { color: #3b82f6; }
+        .btn-back:hover { color: var(--primary); }
 
-        @media (max-width: 640px) {
-            .footer-container { flex-direction: column; gap: 1rem; }
-            .header-title { font-size: 2.2rem; }
+        @media (max-width: 600px) {
+            header h1 { font-size: 1.8rem; }
+            .mode-header { font-size: 1.1rem; padding: 15px; }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="header-content">
-            <h1 class="header-title">O Teatro da Mente</h1>
-            <p class="header-subtitle">Entendendo os Modos Esquemáticos</p>
-        </div>
+    <header data-aos="fade-down">
+        <h1>O Teatro da Mente</h1>
+        <div class="subtitle">Entendendo os Modos Esquemáticos</div>
     </header>
 
     <div class="main-container">
 
-        <div class="intro-card">
-            <h3>🎭 Quem está no palco agora?</h3>
-            <p>Os <strong>Modos</strong> são os "estados" em que entramos. É como se, dentro de você, existissem vários personagens. Às vezes, uma criança assustada assume o controle. Às vezes, um juiz severo. O objetivo é colocar o <strong>Adulto Saudável</strong> na direção.</p>
+        <div class="intro-card" data-aos="fade-up">
+            <h3><i class="fas fa-masks-theater"></i> Quem está no palco agora?</h3>
+            <p>Os <strong>Modos</strong> são os "estados" em que entramos temporariamente. É como se, dentro de você, existissem vários personagens. Às vezes, uma criança assustada assume o controle; outras vezes, um juiz severo. O objetivo é colocar o <strong>Adulto Saudável</strong> na direção.</p>
         </div>
 
-        <div class="mode-section section-child">
+        <div class="mode-section section-child" data-aos="fade-up">
             <div class="mode-header">
                 <div class="mode-icon-box"><i class="fas fa-baby"></i></div>
-                <div>
-                    <h2 style="margin:0;">Modos Criança</h2>
-                    <span style="font-size:0.9rem; opacity:0.8;">A parte que SENTE (Dores e Necessidades)</span>
-                </div>
+                <div>Modos Criança <br><span style="font-size:0.8rem; font-weight:500; opacity:0.8;">A parte que SENTE (Dores e Necessidades)</span></div>
             </div>
             <div class="mode-content">
                 <div class="submode-grid">
                     <div class="submode-card">
-                        <div class="submode-title" style="color:var(--child-mode);">Criança Vulnerável</div>
-                        <p class="submode-desc">Sente-se sozinha, triste, incompreendida, com medo ou defeituosa. É o núcleo da dor.</p>
+                        <div class="submode-title" style="color:var(--child-color);">Criança Vulnerável</div>
+                        <p class="submode-desc">Sente-se sozinha, triste, incompreendida ou com medo. É o núcleo da dor.</p>
                     </div>
                     <div class="submode-card">
-                        <div class="submode-title" style="color:var(--child-mode);">Criança Zangada</div>
+                        <div class="submode-title" style="color:var(--child-color);">Criança Zangada</div>
                         <p class="submode-desc">Faz birra, grita ou sente raiva intensa porque suas necessidades não foram atendidas.</p>
                     </div>
                     <div class="submode-card">
-                        <div class="submode-title" style="color:var(--child-mode);">Criança Impulsiva</div>
-                        <p class="submode-desc">Age sem pensar, quer tudo "agora", tem dificuldade com limites e gratificação.</p>
+                        <div class="submode-title" style="color:var(--child-color);">Criança Impulsiva</div>
+                        <p class="submode-desc">Age sem pensar, quer tudo "agora", tem dificuldade com limites.</p>
                     </div>
-                    <div class="submode-card" style="border-color:#fce7f3; background:#fff1f2;">
-                        <div class="submode-title" style="color:#be123c;">Criança Feliz</div>
+                    <div class="submode-card" style="background:#fff0f0; border-color:#ff7675;">
+                        <div class="submode-title" style="color:#d63031;">Criança Feliz</div>
                         <p class="submode-desc">O objetivo! Sente-se amada, contente, brinca e é espontânea.</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="mode-section section-parent">
+        <div class="mode-section section-parent" data-aos="fade-up">
             <div class="mode-header">
                 <div class="mode-icon-box"><i class="fas fa-gavel"></i></div>
-                <div>
-                    <h2 style="margin:0;">Modos Pais Disfuncionais</h2>
-                    <span style="font-size:0.9rem; opacity:0.8;">A parte que JULGA e CRITICA (Internalizada)</span>
-                </div>
+                <div>Modos Pais Disfuncionais <br><span style="font-size:0.8rem; font-weight:500; opacity:0.8;">A parte que JULGA e CRITICA</span></div>
             </div>
             <div class="mode-content">
                 <div class="submode-grid">
                     <div class="submode-card">
-                        <div class="submode-title" style="color:var(--parent-mode);">Pai Punitivo</div>
-                        <p class="submode-desc">Diz que você é "mau", deve ser punido ou não tem valor. Gera culpa e vergonha.</p>
+                        <div class="submode-title" style="color:var(--parent-color);">Pai Punitivo</div>
+                        <p class="submode-desc">Diz que você é "mau", deve ser punido ou não tem valor. Gera culpa.</p>
                     </div>
                     <div class="submode-card">
-                        <div class="submode-title" style="color:var(--parent-mode);">Pai Exigente</div>
-                        <p class="submode-desc">Nunca está satisfeito. "Você deveria ter feito mais". Gera pressão e perfeccionismo.</p>
+                        <div class="submode-title" style="color:var(--parent-color);">Pai Exigente</div>
+                        <p class="submode-desc">Nunca está satisfeito. "Você deveria ter feito mais". Gera pressão.</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="mode-section section-coping">
+        <div class="mode-section section-coping" data-aos="fade-up">
             <div class="mode-header">
-                <div class="mode-icon-box"><i class="fas fa-shield-alt"></i></div>
-                <div>
-                    <h2 style="margin:0;">Modos de Enfrentamento</h2>
-                    <span style="font-size:0.9rem; opacity:0.8;">A parte que SOBREVIVE (Defesas)</span>
-                </div>
+                <div class="mode-icon-box"><i class="fas fa-shield-halved"></i></div>
+                <div>Modos de Enfrentamento <br><span style="font-size:0.8rem; font-weight:500; opacity:0.8;">A parte que SOBREVIVE (Defesas)</span></div>
             </div>
             <div class="mode-content">
                 <div class="submode-grid">
                     <div class="submode-card">
-                        <div class="submode-title" style="color:var(--coping-mode);">Rendição (Complacente)</div>
-                        <p class="submode-desc">Diz "sim" para tudo, submete-se aos outros para evitar conflito. Acalma o agressor.</p>
+                        <div class="submode-title" style="color:var(--coping-color);">Rendição (Complacente)</div>
+                        <p class="submode-desc">Diz "sim" para tudo, submete-se para evitar conflito. Acalma o agressor.</p>
                     </div>
                     <div class="submode-card">
-                        <div class="submode-title" style="color:var(--coping-mode);">Protetor Desligado</div>
-                        <p class="submode-desc">"Apaga" as emoções. Fica robótico, usa drogas/álcool ou se distrai para não sentir.</p>
+                        <div class="submode-title" style="color:var(--coping-color);">Protetor Desligado</div>
+                        <p class="submode-desc">"Apaga" as emoções. Fica robótico, usa distrações para não sentir.</p>
                     </div>
                     <div class="submode-card">
-                        <div class="submode-title" style="color:var(--coping-mode);">Hipercompensador</div>
-                        <p class="submode-desc">Ataca, controla, critica ou busca status para não se sentir inferior ou vulnerável.</p>
+                        <div class="submode-title" style="color:var(--coping-color);">Hipercompensador</div>
+                        <p class="submode-desc">Ataca, controla ou critica para não se sentir vulnerável.</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="mode-section section-adult">
+        <div class="mode-section section-adult" data-aos="fade-up">
             <div class="mode-header">
                 <div class="mode-icon-box"><i class="fas fa-user-check"></i></div>
-                <div>
-                    <h2 style="margin:0;">Adulto Saudável</h2>
-                    <span style="font-size:0.9rem; opacity:0.8;">A parte que CURA e GERENCIA</span>
-                </div>
+                <div>Adulto Saudável <br><span style="font-size:0.8rem; font-weight:500; opacity:0.8;">A parte que CURA e GERENCIA</span></div>
             </div>
             <div class="mode-content">
-                <p>O objetivo da terapia é fortalecer este modo. O Adulto Saudável:</p>
-                <ul style="list-style: none; padding: 0;">
-                    <li style="margin-bottom: 10px;"><i class="fas fa-check-circle" style="color:var(--adult-mode);"></i> <strong>Acolhe</strong> a Criança Vulnerável.</li>
-                    <li style="margin-bottom: 10px;"><i class="fas fa-check-circle" style="color:var(--adult-mode);"></i> <strong>Cala</strong> o Pai Crítico.</li>
-                    <li style="margin-bottom: 10px;"><i class="fas fa-check-circle" style="color:var(--adult-mode);"></i> <strong>Substitui</strong> os Modos de Enfrentamento por ações reais.</li>
-                </ul>
+                <p style="text-align: center; margin-bottom: 15px;">O objetivo da terapia é fortalecer este modo. Ele:</p>
+                <div class="submode-grid">
+                    <div class="submode-card" style="border-color: var(--adult-color); background: #f0fdf4;">
+                        <i class="fas fa-heart" style="color:var(--adult-color); margin-bottom:5px;"></i>
+                        <br><strong>Acolhe</strong> a Criança Vulnerável.
+                    </div>
+                    <div class="submode-card" style="border-color: var(--adult-color); background: #f0fdf4;">
+                        <i class="fas fa-ban" style="color:var(--adult-color); margin-bottom:5px;"></i>
+                        <br><strong>Cala</strong> o Pai Crítico.
+                    </div>
+                    <div class="submode-card" style="border-color: var(--adult-color); background: #f0fdf4;">
+                        <i class="fas fa-hand-holding-heart" style="color:var(--adult-color); margin-bottom:5px;"></i>
+                        <br><strong>Substitui</strong> defesas por ações reais.
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="interactive-area">
-            <h3><i class="fas fa-search"></i> Detector de Modos</h3>
+        <div class="interactive-area" data-aos="fade-up">
+            <h3><i class="fas fa-magnifying-glass"></i> Detector de Modos</h3>
             <p>O que você está sentindo agora? Clique para identificar:</p>
-            <div>
+            
+            <div class="buttons-container">
                 <button class="btn-check" onclick="checkMode('culpa')">"Sinto que fiz tudo errado"</button>
                 <button class="btn-check" onclick="checkMode('nada')">"Não sinto nada / Quero sumir"</button>
-                <button class="btn-check" onclick="checkMode('raiva')">"Eles vão ver com quem mexeram!"</button>
+                <button class="btn-check" onclick="checkMode('raiva')">"Eles vão ver só!"</button>
                 <button class="btn-check" onclick="checkMode('choro')">"Ninguém gosta de mim"</button>
             </div>
             
@@ -322,43 +344,34 @@
 
     </div>
 
-    <footer>
-        <div class="footer-container">
-            <div class="footer-brand">
-                &copy; 2026 Bruno de Souza
-            </div>
-            <div class="social-links">
-                <a href="https://www.instagram.com/psi.brunosg/" target="_blank"><i class="fab fa-instagram"></i></a>
-                <a href="https://wa.me/5553991898309" target="_blank"><i class="fab fa-whatsapp"></i></a>
-                <a href="https://www.linkedin.com/in/psi-bsouza/" target="_blank"><i class="fab fa-linkedin"></i></a>
-            </div>
-        </div>
-    </footer>
-
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
+        AOS.init();
+
         function checkMode(type) {
             const display = document.getElementById('mode-result');
             let text = "";
-            let color = "#334155";
+            let color = "#2d3436";
 
             if (type === 'culpa') {
                 text = "⚠️ Modo Pai Punitivo ou Exigente. Você está se autoatacando.";
-                color = "#475569";
+                color = "#636e72";
             } else if (type === 'nada') {
-                text = "🛡️ Modo Protetor Desligado (Enfrentamento). Você está se desconectando para não doer.";
-                color = "#d97706";
+                text = "🛡️ Modo Protetor Desligado. Você está se desconectando para não doer.";
+                color = "#e17055";
             } else if (type === 'raiva') {
                 text = "⚔️ Modo Hipercompensador ou Criança Zangada. Ataque como defesa.";
-                color = "#be123c";
+                color = "#d63031";
             } else if (type === 'choro') {
                 text = "👶 Modo Criança Vulnerável. Sua necessidade de afeto não foi atendida.";
-                color = "#f43f5e";
+                color = "#ff7675";
             }
 
             display.style.opacity = 0;
             setTimeout(() => {
                 display.innerHTML = text;
                 display.style.color = color;
+                display.style.borderColor = color;
                 display.style.opacity = 1;
                 display.style.transition = "opacity 0.3s";
             }, 200);
