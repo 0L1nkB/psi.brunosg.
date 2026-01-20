@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alzheimer | Bruno de Souza</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Identidade Visual - Tema "Memória/Cuidado" */
+            --bg-color: #f3e5f5;      /* Lilás muito pálido */
+            --primary: #7b1fa2;       /* Roxo (Cérebro/Memória) */
+            --primary-dark: #4a148c;
+            --accent: #ff8a65;        /* Pêssego (Cuidado/Afeto) */
+            --text: #2d3436;
+            --card-border: #b0bec5;
+            
+            /* Cores Específicas */
+            --mild-color: #9575cd;    /* Estágio Leve */
+            --mod-color: #7e57c2;     /* Estágio Moderado */
+            --sev-color: #512da8;     /* Estágio Grave */
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#d1c4e9 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* --- CABEÇALHO --- */
+        header {
+            text-align: center;
+            margin: 20px auto 40px auto;
+            background: white;
+            padding: 30px 20px;
+            border-radius: 25px;
+            border: 3px dashed var(--primary);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            position: relative;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        header::before {
+            content: ""; 
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%) rotate(-1deg);
+            width: 140px; height: 35px; 
+            background-color: rgba(123, 31, 162, 0.2); 
+            border: 1px solid rgba(0,0,0,0.05); 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            margin: 0;
+            font-weight: 800;
+        }
+
+        .subtitle { margin-top: 5px; color: #636e72; font-weight: 600; }
+
+        /* --- CONTAINER --- */
+        .main-container {
+            max-width: 850px;
+            width: 100%;
+            margin-bottom: 80px;
+        }
+
+        /* --- CARDS DE CONTEÚDO --- */
+        .content-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.05);
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .content-card:hover {
+            border-color: var(--card-border);
+            transform: translateY(-2px);
+        }
+
+        .card-title {
+            color: var(--primary-dark);
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px dashed #eee;
+            padding-bottom: 10px;
+        }
+
+        .highlight-box {
+            background: #ede7f6;
+            border-left: 5px solid var(--accent);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 1rem;
+            color: #4527a0;
+        }
+
+        /* --- LINHA DO TEMPO (Fases) --- */
+        .timeline-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .phase-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            border-left: 6px solid;
+            position: relative;
+        }
+
+        .ph-1 { border-color: var(--mild-color); }
+        .ph-2 { border-color: var(--mod-color); }
+        .ph-3 { border-color: var(--sev-color); }
+
+        .phase-title { font-weight: 800; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 5px; }
+        .ph-1 .phase-title { color: var(--mild-color); }
+        .ph-2 .phase-title { color: var(--mod-color); }
+        .ph-3 .phase-title { color: var(--sev-color); }
+
+        /* --- WIDGET: BÚSSOLA DO CUIDADOR --- */
+        .care-container {
+            text-align: center;
+            background: #fbe9e7;
+            padding: 25px;
+            border-radius: 20px;
+            border: 2px dashed #ffab91;
+        }
+
+        .care-display {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            min-height: 130px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: 0.3s;
+        }
+
+        .btn-care {
+            background: white; border: 2px solid #ffccbc; color: #d84315;
+            padding: 10px 20px; border-radius: 30px; font-weight: 700;
+            cursor: pointer; margin: 5px; transition: 0.2s; font-family: 'Quicksand';
+        }
+        .btn-care:hover { border-color: var(--accent); background: var(--accent); color: white; }
+
+        /* --- NEUROBIOLOGIA --- */
+        .neuro-box {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .neuro-item {
+            flex: 1; min-width: 200px;
+            background: #fafafa; border: 1px solid #eee;
+            padding: 20px; border-radius: 15px;
+            text-align: center;
+        }
+        .neuro-item i { font-size: 2rem; color: var(--primary); margin-bottom: 10px; }
+        .neuro-item h4 { margin: 5px 0; font-size: 1rem; color: var(--primary-dark); }
+        .neuro-item p { font-size: 0.85rem; color: #666; margin: 0; }
+
+        /* --- FLIP CARDS (MITOS) --- */
+        .flip-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 30px;
+        }
+
+        .flip-card {
+            background-color: transparent;
+            height: 300px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .flip-card-inner {
+            position: relative; width: 100%; height: 100%;
+            text-align: center; transition: transform 0.6s;
+            transform-style: preserve-3d;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+
+        .flip-front, .flip-back {
+            position: absolute; width: 100%; height: 100%;
+            -webkit-backface-visibility: hidden; backface-visibility: hidden;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 25px; border-radius: 15px; border: 2px solid #dfe6e9;
+            box-sizing: border-box;
+        }
+
+        .flip-front { background-color: white; color: #2d3436; }
+        .flip-back { background-color: var(--primary); color: white; transform: rotateY(180deg); border-color: var(--primary); }
+
+        /* Botão Voltar */
+        .btn-back {
+            display: block; margin: 30px auto; text-align: center; color: #b2bec3; text-decoration: none; font-weight: 600;
+        }
+        .btn-back:hover { color: var(--primary); }
+
+        @media (max-width: 600px) {
+            .flip-card { height: 320px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header data-aos="fade-down">
+        <h1>Alzheimer</h1>
+        <div class="subtitle">Preservando a Essência além do Esquecimento</div>
+    </header>
+
+    <div class="main-container">
+        
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-brain"></i> O que é a Doença?</div>
+            <p>O Alzheimer é uma doença neurodegenerativa progressiva que afeta a memória, o pensamento e o comportamento. É a forma mais comum de demência.</p>
+            <div class="highlight-box">
+                <i class="fa-solid fa-triangle-exclamation"></i> <strong>Não é "coisa da idade".</strong> O esquecimento normal é lembrar depois. No Alzheimer, a informação é apagada. O diagnóstico precoce ajuda a preservar a qualidade de vida.
+            </div>
+        </div>
+
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-stairs"></i> As Fases da Doença</div>
+            
+            <div class="timeline-container">
+                <div class="phase-card ph-1">
+                    <div class="phase-title">Fase Inicial (Leve)</div>
+                    <p>Pequenos esquecimentos recentes (o que comeu hoje), repetição de perguntas, desorientação leve no tempo e espaço. A autonomia ainda é preservada.</p>
+                </div>
+                <div class="phase-card ph-2">
+                    <div class="phase-title">Fase Intermediária (Moderada)</div>
+                    <p>Esquecimento de fatos importantes, dificuldade em reconhecer familiares, alterações de comportamento (agitação, alucinações), necessidade de ajuda para higiene/vestir.</p>
+                </div>
+                <div class="phase-card ph-3">
+                    <div class="phase-title">Fase Avançada (Grave)</div>
+                    <p>Dependência total para cuidados diários, perda da fala e da mobilidade, dificuldade para engolir. O foco é conforto e afeto.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-compass"></i> Bússola do Cuidador</div>
+            <div class="care-container">
+                <p style="font-weight:700; color:#d84315; margin-bottom:15px;">O paciente está agitado? O que fazer:</p>
+                
+                <div>
+                    <button class="btn-care" onclick="careTips('repeat')">Repete Pergunta</button>
+                    <button class="btn-care" onclick="careTips('aggressive')">Agressividade</button>
+                    <button class="btn-care" onclick="careTips('home')">"Quero ir pra casa"</button>
+                    <button class="btn-care" onclick="careTips('eat')">Recusa Comida</button>
+                </div>
+
+                <div class="care-display" id="care-res">
+                    <span style="color:#b0bec5; font-style:italic;">Selecione um comportamento...</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-microscope"></i> O que acontece no Cérebro?</div>
+            <p>Duas alterações principais causam a morte dos neurônios:</p>
+            
+            <div class="neuro-box">
+                <div class="neuro-item">
+                    <i class="fa-solid fa-network-wired"></i>
+                    <h4>Placas Amiloides</h4>
+                    <p>Proteínas que se acumulam <strong>fora</strong> dos neurônios, bloqueando a comunicação entre eles como uma "sujeira" nas sinapses.</p>
+                </div>
+                <div class="neuro-item">
+                    <i class="fa-solid fa-ban"></i>
+                    <h4>Emaranhados Tau</h4>
+                    <p>Proteínas que colapsam <strong>dentro</strong> dos neurônios, destruindo o sistema de transporte de nutrientes da célula, levando à sua morte.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-mask"></i> Mitos Comuns</div>
+            <p style="margin-bottom:20px; text-align:center; font-size:0.9rem; color:#aaa;">Toque nos cartões para virar</p>
+            
+            <div class="flip-grid">
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-front">
+                            <i class="fa-solid fa-dna" style="font-size:2.5rem; color:#dfe6e9; margin-bottom:15px;"></i>
+                            <h3 style="font-size:1.1rem; color:#2d3436;">"É hereditário"</h3>
+                        </div>
+                        <div class="flip-back">
+                            <h3 style="font-size:1rem; margin-bottom:10px;">Nem sempre</h3>
+                            <p style="font-size:0.9rem;">A maioria dos casos (95%) ocorre esporadicamente após os 65 anos. A forma puramente genética (familiar) é rara e precoce.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-front">
+                            <i class="fa-solid fa-pills" style="font-size:2.5rem; color:#dfe6e9; margin-bottom:15px;"></i>
+                            <h3 style="font-size:1.1rem; color:#2d3436;">"Alumínio causa"</h3>
+                        </div>
+                        <div class="flip-back">
+                            <h3 style="font-size:1rem; margin-bottom:10px;">Mito Antigo</h3>
+                            <p style="font-size:0.9rem;">Estudos nos anos 60 sugeriram ligação com panelas de alumínio, mas pesquisas modernas não confirmaram essa relação como causa direta.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-front">
+                            <i class="fa-solid fa-calendar-xmark" style="font-size:2.5rem; color:#dfe6e9; margin-bottom:15px;"></i>
+                            <h3 style="font-size:1.1rem; color:#2d3436;">"Não há o que fazer"</h3>
+                        </div>
+                        <div class="flip-back">
+                            <h3 style="font-size:1rem; margin-bottom:10px;">Tratamento existe</h3>
+                            <p style="font-size:0.9rem;">Remédios (anticolinesterásicos) e estimulação cognitiva podem retardar a evolução e melhorar muito a qualidade de vida.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-hands-holding-child"></i> Pilares do Tratamento</div>
+            <ul style="line-height:1.8; color:#555;">
+                <li><strong>Farmacológico:</strong> Medicamentos para preservar a memória e controlar agitação/insônia.</li>
+                <li><strong>Estimulação Cognitiva:</strong> Jogos, música antiga, ver fotos e socialização mantêm o cérebro ativo.</li>
+                <li><strong>Cuidado com o Cuidador:</strong> Quem cuida também adoece. É essencial ter rede de apoio e rodízio.</li>
+            </ul>
+        </div>
+
+        <center>
+            <a href="../listaferramentas.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Voltar para Ferramentas</a>
+        </center>
+
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        function careTips(type) {
+            const display = document.getElementById('care-res');
+            let title = "";
+            let text = "";
+            let icon = "";
+            let color = "";
+
+            if(type === 'repeat') {
+                title = "Repetição";
+                text = "Não diga 'já te falei'. Responda pacientemente como se fosse a primeira vez ou distraia com outro assunto. Ele realmente esqueceu.";
+                icon = '<i class="fa-solid fa-rotate-right" style="font-size:2rem; margin-bottom:10px;"></i>';
+                color = "#9575cd";
+            } else if(type === 'aggressive') {
+                title = "Agressividade";
+                text = "Não confronte. Mantenha a calma, verifique se há dor física ou desconforto (fralda, fome). Mude o foco da atenção suavemente.";
+                icon = '<i class="fa-solid fa-hand-fist" style="font-size:2rem; margin-bottom:10px;"></i>';
+                color = "#e53935";
+            } else if(type === 'home') {
+                title = "'Quero ir pra casa'";
+                text = "Geralmente significa 'quero segurança'. Não discuta a realidade. Diga: 'Estamos seguros aqui, logo vamos'. Abrace e valide o sentimento.";
+                icon = '<i class="fa-solid fa-house-chimney" style="font-size:2rem; margin-bottom:10px;"></i>';
+                color = "#ff9800";
+            } else if(type === 'eat') {
+                title = "Recusa Alimentar";
+                text = "Tente finger foods (comidas de mão). Ofereça porções pequenas e doces (o paladar doce dura mais). Evite brigar para comer.";
+                icon = '<i class="fa-solid fa-utensils" style="font-size:2rem; margin-bottom:10px;"></i>';
+                color = "#4caf50";
+            }
+
+            display.style.borderTop = `5px solid ${color}`;
+            display.innerHTML = `
+                <div style="color:${color}">${icon}</div>
+                <h3 style="margin:0 0 5px 0; color:#2d3436;">${title}</h3>
+                <p style="margin:0; font-size:0.9rem; color:#636e72; text-align:center;">${text}</p>
+            `;
+        }
+    </script>
+
+</body>
+</html>
