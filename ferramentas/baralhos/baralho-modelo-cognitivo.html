@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baralho do Modelo Cognitivo</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --situation-accent: #00bcd4; /* Cor de Situação no PDF */
+            --thought-accent: #4caf50;   /* Cor de Pensamento no PDF */
+            --emotion-accent: #ff9800;   /* Cor de Emoção no PDF */
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* --- Navegação --- */
+        .nav-header {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .btn-back {
+            text-decoration: none;
+            color: #666;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: 0.3s;
+        }
+
+        .btn-back:hover { color: var(--text-color); }
+
+        /* --- Container Principal --- */
+        .main-container {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 600px;
+            border-radius: 20px;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        h1 { margin-bottom: 30px; font-size: 1.8rem; }
+
+        /* --- Abas de Seleção --- */
+        .deck-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 40px;
+        }
+
+        .tab-btn {
+            border: none;
+            padding: 12px 5px;
+            border-radius: 12px;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            background: #eee;
+            color: #888;
+        }
+
+        .tab-btn.active[data-type="sit"] { background: var(--situation-accent); color: white; }
+        .tab-btn.active[data-type="tho"] { background: var(--thought-accent); color: white; }
+        .tab-btn.active[data-type="emo"] { background: var(--emotion-accent); color: white; }
+
+        /* --- Área da Carta --- */
+        .display-area {
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+            border-radius: 15px;
+            padding: 30px;
+            background: #fdfdfd;
+            border: 2px dashed #ddd;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .instruction-prompt {
+            font-size: 0.9rem;
+            color: #888;
+            margin-bottom: 20px;
+            min-height: 40px;
+        }
+
+        .card-content {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-color);
+        }
+
+        /* --- Botão Principal --- */
+        .btn-action {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: 0.3s;
+        }
+
+        .btn-action:hover { transform: scale(1.05); }
+
+        footer {
+            margin-top: 40px;
+            font-size: 0.8rem;
+            color: #aaa;
+            text-align: center;
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 1.5rem; }
+            .card-content { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="nav-header">
+        <a href="listaferramentas.html" class="btn-back">← Voltar</a>
+    </div>
+
+    <main class="main-container" data-aos="zoom-in">
+        <h1>Modelo Cognitivo</h1>
+
+        <div class="deck-selector">
+            <button class="tab-btn active" data-type="sit" onclick="switchDeck('sit')">SITUAÇÃO</button>
+            <button class="tab-btn" data-type="tho" onclick="switchDeck('tho')">PENSAMENTO</button>
+            <button class="tab-btn" data-type="emo" onclick="switchDeck('emo')">EMOÇÃO</button>
+        </div>
+
+        <div class="display-area" id="displayArea">
+            <p class="instruction-prompt" id="promptText">Diga o pensamento, emoção e comportamento:</p>
+            <div class="card-content" id="cardText">Sorteie uma carta para começar</div>
+        </div>
+
+        <button class="btn-action" onclick="drawCard()">SORTEAR CARTA</button>
+    </main>
+
+    <footer>
+        Psicólogo Bruno de Souza • CRP 07/44472<br>
+        Baseado no Baralho de Psicoeducação do Modelo Cognitivo
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true });
+
+        const decks = {
+            sit: {
+                prompt: "O que você pensaria, sentiria e faria nesta situação? [cite: 15]",
+                color: "var(--situation-accent)",
+                items: [
+                    "Apresentação de trabalho escolar ou profissional [cite: 197]",
+                    "Amigo(a) diz que está chateado(a) com você [cite: 199]",
+                    "Garçom serve um prato queimado [cite: 204]",
+                    "Supervisor fala que seu trabalho ficou horrível [cite: 207]",
+                    "Professor fala que você tem que tirar melhores notas [cite: 210]",
+                    "Saber que amigo(a) falou mal de você pelas costas [cite: 211]",
+                    "Tropeçar e cair em público [cite: 214]",
+                    "Tirar uma nota ruim na prova [cite: 215]",
+                    "Roubam seu celular na rua [cite: 221]",
+                    "Celular quebra e para de funcionar [cite: 224]",
+                    "Demissão [cite: 227]",
+                    "Motorista bate na traseira do seu carro [cite: 234]",
+                    "Trânsito parado [cite: 236]",
+                    "Ver companheiro(a) conversando e rindo com outra pessoa [cite: 239]",
+                    "Ser criticado ou repreendido pelos pais [cite: 248]",
+                    "Ver amigos em festa que você não foi convidado(a) [cite: 250]",
+                    "Pessoa que você gosta te faz um elogio [cite: 253]",
+                    "Chegar em casa e não achar a chave [cite: 257]",
+                    "Soltar um peido sem querer em público [cite: 259]",
+                    "Promoção no trabalho [cite: 262]",
+                    "Reviram os olhos quando você está falando [cite: 267]",
+                    "Comeram seu chocolate sem pedir [cite: 268]",
+                    "Bagunçaram seu quarto [cite: 269]",
+                    "Sozinho(a) em casa e escuta barulho [cite: 276]"
+                ]
+            },
+            tho: {
+                prompt: "Qual emoção e comportamento você teria diante deste pensamento? [cite: 16]",
+                color: "var(--thought-accent)",
+                items: [
+                    "Eu não deveria ter dito aquilo. [cite: 47]",
+                    "Ninguém nunca vai gostar de mim. [cite: 51]",
+                    "E se eu não conseguir resolver tudo? [cite: 48]",
+                    "Só estão dizendo isso pra me agradar. [cite: 52]",
+                    "Não consigo resolver isso. [cite: 54]",
+                    "Ficarei sem saber o que falar no meio das pessoas. [cite: 56]",
+                    "Não conseguirei apresentar esse trabalho. [cite: 57]",
+                    "Ele é um idiota, fica me ligando a todo momento. [cite: 66]",
+                    "Devem ter pensado que sou mal-educado(a). [cite: 67]",
+                    "Que pessoa ridícula, não gostei mesmo sem conhecer. [cite: 69]",
+                    "Acho que nunca conseguirei ser feliz nessa vida. [cite: 70]",
+                    "Terei que fazer hora extra de novo. Sou muito explorado! [cite: 72]",
+                    "E se não gostarem de mim? [cite: 73]",
+                    "Não conseguirei passar nessa prova. [cite: 75]",
+                    "Me preparei muito pra esse tarefa. Farei um ótimo trabalho. [cite: 76]",
+                    "Ninguém pode falar assim comigo! Quem ele(a) pensa que é? [cite: 85]",
+                    "Nunca vi alguém que falasse tanta besteira como ele(a). [cite: 90]",
+                    "Se eu voltasse no tempo, faria tudo diferente. [cite: 92]",
+                    "Jamais serei alguém nessa vida. [cite: 95]",
+                    "Vai passar, vai dar tudo certo. [cite: 96]",
+                    "Vão perceber que sou tímido(a) e vão me humilhar. [cite: 103]",
+                    "Nunca nada dá certo. De que adianta continuar tentando? [cite: 106]",
+                    "Algo ruim está prestes a acontecer. [cite: 107]",
+                    "Sou um verdadeiro fracasso. Nem minha família se importa comigo. [cite: 109]",
+                    "Sempre colocam outro(a) no meu lugar. [cite: 121]",
+                    "Tenho certeza que conseguirei resolver esse problema. [cite: 127]"
+                ]
+            },
+            emo: {
+                prompt: "Que situações te fazem sentir isso? O que você pensa e faz? [cite: 17]",
+                color: "var(--emotion-accent)",
+                items: [
+                    "INVEJA [cite: 141]", "TRISTEZA [cite: 149]", "VERGONHA [cite: 143]",
+                    "NOJO [cite: 144]", "RAIVA [cite: 145]", "INDIGNAÇÃO [cite: 151]",
+                    "REPULSA [cite: 152]", "ALEGRIA [cite: 153]", "CONFUSÃO [cite: 159]",
+                    "SOLIDÃO [cite: 160]", "EMPATIA [cite: 161]", "CULPA [cite: 167]",
+                    "IRRITAÇÃO [cite: 169]", "MEDO [cite: 170]", "ESTRESSE [cite: 171]",
+                    "PREOCUPAÇÃO [cite: 177]", "CIÚMES [cite: 183]", "ESPERANÇA [cite: 185]",
+                    "DESESPERO [cite: 187]", "DESCONFIANÇA [cite: 179]", "ORGULHO [cite: 180]"
+                ]
+            }
+        };
+
+        let currentType = 'sit';
+
+        function switchDeck(type) {
+            currentType = type;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.tab-btn[data-type="${type}"]`).classList.add('active');
+            
+            const area = document.getElementById('displayArea');
+            area.style.borderColor = decks[type].color;
+            document.getElementById('promptText').innerText = decks[type].prompt;
+            document.getElementById('cardText').innerText = "Sorteie uma carta de " + type.toUpperCase();
+        }
+
+        function drawCard() {
+            const cardText = document.getElementById('cardText');
+            const area = document.getElementById('displayArea');
+            
+            area.style.transform = "scale(0.95)";
+            area.style.opacity = "0.5";
+
+            setTimeout(() => {
+                const list = decks[currentType].items;
+                const randomItem = list[Math.floor(Math.random() * list.length)];
+                cardText.innerText = randomItem;
+                area.style.transform = "scale(1)";
+                area.style.opacity = "1";
+            }, 200);
+        }
+
+        switchDeck('sit');
+    </script>
+</body>
+</html>
