@@ -6,7 +6,7 @@
     <title>Esquema de Abandono - Caderno Terapêutico</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
     <style>
         :root {
@@ -263,7 +263,29 @@
         summary:hover { color: var(--primary); background: #f1f5f9; border-radius: 12px; }
         .details-content { padding: 20px; border-top: 1px dashed #cbd5e1; }
 
-        /* --- FOOTER SOLICITADO --- */
+        /* Botão Voltar (Estilo Caderno) */
+        .btn-back-notebook {
+            display: inline-block;
+            margin: 30px auto;
+            padding: 12px 35px;
+            background: #fff;
+            border: 2px dashed #9ca3af;
+            /* Forma orgânica desenhada à mão */
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+            font-family: 'Patrick Hand', cursive;
+            font-size: 1.3rem;
+            color: #64748b;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+        }
+        .btn-back-notebook:hover {
+            color: var(--primary);
+            border-color: var(--primary);
+            transform: rotate(-2deg) scale(1.05);
+        }
+
+        /* --- FOOTER --- */
         footer {
             background-color: #ffffff;
             border-top: 1px solid #e2e8f0;
@@ -370,7 +392,7 @@
                 <i class="fas fa-language card-icon"></i>
                 <h2 class="card-title">Tradutor de Necessidades</h2>
             </div>
-            <p>Quando o esquema ativa, tendemos a cobrar ou atacar. Use esta ferramenta para traduzir o "Pânico" em "Pedido Saudável".:</p>
+            <p>Quando o esquema ativa, tendemos a cobrar ou atacar. Use esta ferramenta para traduzir o "Pânico" em "Pedido Saudável":</p>
             
             <div class="translator-area">
                 <p style="margin-bottom:15px; font-weight:700;">O que você quer gritar?</p>
@@ -439,6 +461,12 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div style="text-align: center; width: 100%; margin-top: 40px;">
+            <a href="../../listaferramentas.html" class="btn-back-notebook">
+                <i class="fas fa-arrow-left"></i> Voltar para Ferramentas
+            </a>
         </div>
 
     </div>
