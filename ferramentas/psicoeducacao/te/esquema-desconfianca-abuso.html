@@ -3,413 +3,365 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desconfiança e Abuso - Caderno Terapêutico</title>
+    <title>Desconfiança e Abuso | Bruno de Souza</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <style>
         :root {
-            /* Paleta "Dossiê Seguro" */
-            --paper-line: #e5e7eb;    
-            --paper-bg: #f9fafb;      
-            --ink-color: #374151;
+            /* Identidade Visual - Tema "Alerta/Proteção" */
+            --bg-color: #fff7ed;      /* Laranja muito suave */
+            --primary: #f97316;       /* Laranja Queimado (Alerta/Vigilância) */
+            --primary-dark: #c2410c;
+            --accent: #475569;        /* Cinza Chumbo (Proteção/Armadura) */
+            --text: #2d3436;
+            --card-border: #b0bec5;
             
-            /* Cores do Esquema (Alerta e Proteção) */
-            --primary: #f97316;       /* Laranja Queimado */
-            --primary-hover: #ea580c;
-            --secondary: #475569;     /* Cinza Chumbo */
-            
-            /* Tags de Personas */
-            --tag-lucas-bg: #ffedd5; --tag-lucas-text: #9a3412;
-            --tag-julia-bg: #e2e8f0; --tag-julia-text: #475569;
-
-            --radius: 16px;
-            --shadow-paper: 3px 3px 10px rgba(0,0,0,0.06);
+            /* Cores Específicas */
+            --attack-color: #ea580c;  /* Laranja Escuro (Ataque/Lucas) */
+            --submit-color: #64748b;  /* Cinza Azulado (Rendição/Júlia) */
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Nunito', sans-serif;
-            color: var(--ink-color);
-            line-height: 1.6;
-            background-color: var(--paper-bg);
-            /* Efeito Papel Pautado */
-            background-image: linear-gradient(var(--paper-line) 1px, transparent 1px);
-            background-size: 100% 2rem;
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#ffedd5 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            color: var(--text);
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            align-items: center;
         }
 
-        h1, h2, h3, h4 {
-            font-family: 'Patrick Hand', cursive;
-            color: #1e293b;
-        }
-
-        /* --- HEADER --- */
+        /* --- CABEÇALHO --- */
         header {
-            background-color: rgba(255, 255, 255, 0.95);
-            border-bottom: 2px dashed #cbd5e1;
-            padding: 2rem 0;
-            margin-bottom: 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);
-        }
-
-        .header-content {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0 20px;
             text-align: center;
+            margin: 20px auto 40px auto;
+            background: white;
+            padding: 30px 20px;
+            border-radius: 25px;
+            border: 3px dashed var(--primary);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            position: relative;
+            max-width: 800px;
+            width: 100%;
         }
 
-        .header-title {
-            font-size: 2.5rem;
-            color: var(--secondary);
-            margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 0px #e2e8f0;
+        header::before {
+            content: ""; 
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%) rotate(-1deg);
+            width: 140px; height: 35px; 
+            background-color: rgba(249, 115, 22, 0.2); 
+            border: 1px solid rgba(0,0,0,0.05); 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        .header-subtitle {
-            font-size: 1.2rem;
+        header h1 {
+            font-size: 2rem;
             color: var(--primary);
-            font-family: 'Patrick Hand', cursive;
+            text-transform: uppercase;
+            margin: 0;
+            font-weight: 800;
         }
+
+        .subtitle { margin-top: 5px; color: #636e72; font-weight: 600; }
 
         /* --- CONTAINER --- */
         .main-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0 20px;
+            max-width: 850px;
             width: 100%;
-            display: grid;
-            gap: 35px;
-            margin-bottom: 60px;
+            margin-bottom: 80px;
         }
 
-        /* --- CARDS (PAPEL) --- */
-        .paper-card {
-            background-color: #ffffff;
-            border-radius: 2px;
-            box-shadow: var(--shadow-paper);
-            border: 1px solid #e5e7eb;
-            padding: 2rem;
-            position: relative;
-            transform: rotate(-0.5deg);
-            transition: transform 0.3s;
-        }
-        
-        .paper-card:hover { transform: rotate(0deg) translateY(-3px); }
-        
-        /* Clipe de Papel Decorativo */
-        .paper-card::before {
-            content: '';
-            position: absolute;
-            top: -10px;
-            right: 20px;
-            width: 20px;
-            height: 40px;
-            background-color: #94a3b8;
-            border-radius: 10px;
-            opacity: 0.5;
-            z-index: 2;
+        /* --- CARDS DE CONTEÚDO --- */
+        .content-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.05);
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
         }
 
-        .card-header {
+        .content-card:hover {
+            border-color: var(--card-border);
+            transform: translateY(-2px);
+        }
+
+        .card-title {
+            color: var(--primary-dark);
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid var(--paper-line);
+            gap: 10px;
+            border-bottom: 2px dashed #eee;
             padding-bottom: 10px;
         }
 
-        .card-icon { font-size: 1.8rem; color: var(--primary); }
-        .card-title { font-size: 1.8rem; margin: 0; }
-
-        /* --- POST-IT (ALERTA) --- */
-        .post-it {
-            background-color: #fff7ed; /* Laranja bem claro */
-            padding: 1.5rem;
-            border-radius: 2px 2px 16px 2px;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
-            font-family: 'Patrick Hand', cursive;
-            font-size: 1.3rem;
-            color: #9a3412;
-            transform: rotate(1deg);
-            margin: 20px 0;
-            border-left: 5px solid #fb923c;
-        }
-
-        /* --- PERSONAS --- */
-        .persona-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-        }
-
-        .persona-card {
-            background: #fff;
+        .highlight-box {
+            background: #fff7ed;
+            border-left: 5px solid var(--primary);
             padding: 20px;
-            border: 2px dashed #cbd5e1;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 1rem;
+            color: #c2410c;
+        }
+
+        /* --- GRID DE PERSONAS (DUAL) --- */
+        .dual-symptoms {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .symptom-column h4 {
+            text-align: center; margin-bottom: 15px; font-weight: 800; text-transform: uppercase; font-size: 0.9rem;
+        }
+
+        .symptom-item {
+            background: #f8f9fa;
+            padding: 15px;
             border-radius: 12px;
+            display: flex; flex-direction: column; gap: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid;
         }
         
-        .persona-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .persona-name { font-size: 1.4rem; font-weight: 700; color: var(--secondary); }
-        .persona-tag { font-family: 'Nunito', sans-serif; font-size: 0.8rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; }
-        
-        .tag-lucas { background: var(--tag-lucas-bg); color: var(--tag-lucas-text); }
-        .tag-julia { background: var(--tag-julia-bg); color: var(--tag-julia-text); }
+        .style-attack { border-color: var(--attack-color); }
+        .style-submit { border-color: var(--submit-color); }
 
-        /* --- STICKERS (3 SINAIS) --- */
-        .sticker-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;
+        .persona-tag {
+            font-size: 0.75rem; text-transform: uppercase; font-weight: 800;
+            padding: 4px 10px; border-radius: 20px; width: fit-content;
         }
-        
-        .sticker-box {
-            background: white; padding: 1.5rem; border-radius: 12px;
-            border: 2px solid #f3f4f6; text-align: center;
-            transition: all 0.3s;
-        }
-        .sticker-box:hover { border-color: var(--primary); transform: scale(1.02); }
-        .sticker-icon { font-size: 2rem; margin-bottom: 10px; display: block; }
+        .tag-lucas { background: #ffedd5; color: var(--attack-color); }
+        .tag-julia { background: #f1f5f9; color: var(--submit-color); }
 
-        /* --- DETECTOR DE BANDEIRAS --- */
-        .detector-area {
-            background-color: #f1f5f9;
-            padding: 2rem; border-radius: 20px;
-            border: 2px dashed #94a3b8; text-align: center;
+        /* --- WIDGET: DETECTOR DE BANDEIRAS --- */
+        .detector-container {
+            text-align: center;
+            background: #f1f5f9;
+            padding: 25px;
+            border-radius: 20px;
+            border: 2px dashed #94a3b8;
+        }
+
+        .detector-display {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: 0.3s;
         }
 
         .btn-flag {
-            background: white; border: 2px solid #cbd5e1;
-            padding: 10px 20px; margin: 5px; border-radius: 30px;
-            font-family: 'Nunito', sans-serif; font-weight: 700; color: #475569;
-            cursor: pointer; transition: all 0.2s;
-            box-shadow: 0 4px 0 #cbd5e1;
+            background: white; border: 2px solid #cbd5e1; color: #475569;
+            padding: 10px 20px; border-radius: 30px; font-weight: 700;
+            cursor: pointer; margin: 5px; transition: 0.2s; font-family: 'Quicksand';
         }
-        
-        .btn-flag:active { box-shadow: 0 0 0 #cbd5e1; transform: translateY(4px); }
-        .btn-flag:hover { background: #fff; border-color: var(--primary); color: var(--primary); }
+        .btn-flag:hover { border-color: var(--primary); background: var(--primary); color: white; }
 
-        .result-bubble {
-            background: white; padding: 20px; border-radius: 20px;
-            margin-top: 20px; border: 2px solid #e2e8f0;
-            font-family: 'Patrick Hand', cursive; font-size: 1.3rem;
-            color: #334155; min-height: 100px; display: flex; align-items: center; justify-content: center;
+        /* --- NEUROBIOLOGIA --- */
+        .neuro-box {
+            display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; margin-top: 20px;
+        }
+        .neuro-item {
+            flex: 1; min-width: 200px;
+            background: #fafafa; border: 1px solid #eee;
+            padding: 20px; border-radius: 15px;
+            text-align: center;
+        }
+        .neuro-item i { font-size: 2rem; color: var(--primary); margin-bottom: 10px; }
+        .neuro-item h4 { margin: 5px 0; font-size: 1rem; color: var(--primary-dark); }
+        .neuro-item p { font-size: 0.85rem; color: #666; margin: 0; }
+
+        /* --- FLIP CARDS --- */
+        .flip-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            justify-content: center;
+            gap: 30px;
         }
 
-        /* --- ACCORDIONS --- */
-        details {
-            background: #fff7ed; border-radius: 12px; margin-bottom: 10px;
-            border: 1px solid #fed7aa;
+        .flip-card {
+            background-color: transparent;
+            height: 300px;
+            perspective: 1000px;
+            cursor: pointer;
+            margin: 0 auto;
+            max-width: 350px;
+            width: 100%;
         }
-        summary {
-            padding: 15px; font-weight: 700; cursor: pointer; list-style: none;
-            display: flex; justify-content: space-between; color: #c2410c;
-        }
-        summary:hover { background: #ffedd5; border-radius: 12px; }
-        .details-content { padding: 20px; border-top: 1px dashed #fed7aa; color: #4b5563; }
 
-        /* --- FLASHCARD (FLIP) --- */
-        .flashcard-container { perspective: 1000px; width: 100%; height: 280px; cursor: pointer; }
-        .flashcard-inner {
-            position: relative; width: 100%; height: 100%; text-align: center;
-            transition: transform 0.6s; transform-style: preserve-3d;
+        .flip-card-inner {
+            position: relative; width: 100%; height: 100%;
+            text-align: center; transition: transform 0.6s;
+            transform-style: preserve-3d;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-        .flashcard-container.flipped .flashcard-inner { transform: rotateY(180deg); }
-        
-        .flashcard-front, .flashcard-back {
+
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+
+        .flip-front, .flip-back {
             position: absolute; width: 100%; height: 100%;
             -webkit-backface-visibility: hidden; backface-visibility: hidden;
-            border-radius: 16px; padding: 2rem;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            box-shadow: var(--shadow-paper); border: 2px solid;
-        }
-        
-        .flashcard-front {
-            background: #f8fafc; border-color: #cbd5e1; color: #334155;
-        }
-        .flashcard-back {
-            background: #ecfdf5; border-color: #6ee7b7; color: #047857;
-            transform: rotateY(180deg);
+            padding: 25px; border-radius: 15px; border: 2px solid #dfe6e9;
+            box-sizing: border-box;
         }
 
-        /* --- FOOTER PADRÃO --- */
+        .flip-front { background-color: white; color: #2d3436; }
+        .flip-back { background-color: var(--accent); color: white; transform: rotateY(180deg); border-color: var(--accent); }
+
+        /* Botão Voltar */
+        .btn-back {
+            display: block; margin: 30px auto; text-align: center; color: #b2bec3; text-decoration: none; font-weight: 600;
+        }
+        .btn-back:hover { color: var(--primary); }
+
+        /* --- FOOTER ADAPTADO --- */
         footer {
-            background-color: #ffffff;
-            border-top: 1px solid #e5e7eb;
-            padding: 2rem 0;
+            width: 100%;
+            background-color: white;
+            border-top: 1px dashed #b2bec3;
+            padding: 30px 20px;
             margin-top: auto;
         }
         .footer-container {
-            max-width: 1000px;
+            max-width: 900px;
             margin: 0 auto;
-            padding: 0 20px;
-            display: flex; justify-content: space-between; align-items: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .footer-brand { color: #64748b; font-size: 0.9rem; font-weight: 600; }
-        .social-links { display: flex; gap: 1.5rem; }
-        .social-links a { color: #94a3b8; font-size: 1.2rem; transition: color 0.2s; }
-        .social-links a:hover { color: var(--primary); }
+        .footer-brand { color: #636e72; font-weight: 700; font-size: 0.95rem; }
+        .social-links { display: flex; gap: 20px; }
+        .social-links a { color: #b2bec3; font-size: 1.4rem; transition: all 0.3s ease; }
+        .social-links a:hover { color: var(--primary); transform: translateY(-3px); }
 
-        @media (max-width: 640px) {
-            .footer-container { flex-direction: column; gap: 1rem; }
-            .persona-grid, .sticker-grid { grid-template-columns: 1fr; }
+        @media (max-width: 600px) {
+            .dual-symptoms { grid-template-columns: 1fr; }
+            .footer-container { flex-direction: column; gap: 15px; }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="header-content">
-            <h1 class="header-title">Desconfiança e Abuso</h1>
-            <p class="header-subtitle">Caderno de Psicoeducação</p>
-        </div>
+    <header data-aos="fade-down">
+        <h1>Desconfiança e Abuso</h1>
+        <div class="subtitle">A fortaleza contra o mundo perigoso</div>
     </header>
 
     <div class="main-container">
-
-        <div class="paper-card">
-            <div class="card-header">
-                <i class="fas fa-shield-alt card-icon"></i>
-                <h2 class="card-title">A Fortaleza Mental</h2>
-            </div>
-            <p>Este esquema é a crença de que o mundo é perigoso e as pessoas têm más intenções. É viver em estado de guerra constante, esperando ser machucado.</p>
-            
-            <div class="post-it">
-                <i class="fas fa-thumbtack" style="color:#c2410c; margin-right:10px;"></i>
-                "Se eu baixar a guarda, eles vão me usar, me manipular ou me trair. É comer ou ser comido."
+        
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-shield-halved"></i> A Fortaleza Mental</div>
+            <p>É a crença de que o mundo é perigoso e as pessoas têm más intenções. É viver em estado de guerra constante, esperando ser machucado, traído ou manipulado.</p>
+            <div class="highlight-box">
+                <i class="fa-solid fa-eye"></i> <strong>A Regra de Ouro:</strong> "Não baixe a guarda. Se eu relaxar, eles vão me usar. É comer ou ser comido."
             </div>
         </div>
 
-        <div class="paper-card" style="transform: rotate(0.5deg);">
-            <div class="card-header">
-                <i class="fas fa-mask card-icon"></i>
-                <h2 class="card-title">Espelhos da Vida Real</h2>
-            </div>
-            <p>Veja como esse esquema se protege de formas diferentes:</p>
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-users"></i> Formas de Enfrentamento</div>
             
-            <div class="persona-grid">
-                <div class="persona-card">
-                    <div class="persona-header">
-                        <span class="persona-name">Lucas</span>
-                        <span class="persona-tag tag-lucas">O Detetive</span>
+            <div class="dual-symptoms">
+                <div class="symptom-column">
+                    <div class="symptom-item style-attack">
+                        <span class="persona-tag tag-lucas">Lucas (O Detetive)</span>
+                        <div><strong>Comportamento:</strong> Testar as pessoas ("armadilhas"), vigiar o parceiro, atacar preventivamente. "A melhor defesa é o ataque".</div>
                     </div>
-                    <p>Lucas não confia em ninguém. Ele "testa" os amigos para ver se eles mentem. Se alguém comete um erro pequeno, ele corta relações ou se vinga. "A melhor defesa é o ataque".</p>
-                    <p style="font-size:0.85rem; color:#9a3412;"><strong>Comportamento:</strong> Ataque (Vigilância)</p>
-                </div>
-
-                <div class="persona-card">
-                    <div class="persona-header">
-                        <span class="persona-name">Júlia</span>
-                        <span class="persona-tag tag-julia">A Refém</span>
+                    <div class="symptom-item style-attack">
+                        <div><strong>Consequência:</strong> Destrói relações saudáveis, solidão por isolamento preventivo.</div>
                     </div>
-                    <p>Júlia aprendeu que "resistir é inútil". Ela acaba se relacionando com pessoas controladoras ou abusivas porque isso confirma sua visão de mundo. Ela se encolhe e guarda segredos.</p>
-                    <p style="font-size:0.85rem; color:#475569;"><strong>Comportamento:</strong> Rendição (Vitimismo)</p>
+                </div>
+
+                <div class="symptom-column">
+                    <div class="symptom-item style-submit">
+                        <span class="persona-tag tag-julia">Júlia (A Refém)</span>
+                        <div><strong>Comportamento:</strong> Escolhe parceiros abusivos (confirma o esquema). Acredita que não merece ser bem tratada e guarda segredos.</div>
+                    </div>
+                    <div class="symptom-item style-submit">
+                        <div><strong>Consequência:</strong> Ciclo de revitimização, sensação de impotência e medo constante.</div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="paper-card">
-            <div class="card-header">
-                <i class="fas fa-exclamation-triangle card-icon"></i>
-                <h2 class="card-title">O Radar Ligado</h2>
-            </div>
-            <div class="sticker-grid">
-                <div class="sticker-box">
-                    <span class="sticker-icon">👀</span>
-                    <h4>Hipervigilância</h4>
-                    <p>Entrar numa sala e procurar saídas ou sinais de perigo. Ler microexpressões faciais o tempo todo.</p>
-                </div>
-                <div class="sticker-box">
-                    <span class="sticker-icon">🤔</span>
-                    <h4>Suspeita Crônica</h4>
-                    <p>Achar que elogios são manipulações e que favores serão cobrados caro depois.</p>
-                </div>
-                <div class="sticker-box">
-                    <span class="sticker-icon">🤐</span>
-                    <h4>Segredo</h4>
-                    <p>Não compartilhar nada pessoal para que as informações não sejam usadas contra você.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="paper-card" style="transform: rotate(-0.5deg);">
-            <div class="card-header">
-                <i class="fas fa-flag card-icon"></i>
-                <h2 class="card-title">Detector de Bandeiras</h2>
-            </div>
-            <p>Seu radar pode estar desregulado, vendo perigo onde não existe (ou ignorando o real). Vamos calibrar:</p>
-            
-            <div class="detector-area">
-                <p style="margin-bottom:15px; font-weight:700;">Analise este comportamento:</p>
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-flag"></i> Detector de Bandeiras</div>
+            <div class="detector-container">
+                <p style="font-weight:700; color:#475569; margin-bottom:15px;">Seu radar pode estar desregulado. Vamos calibrar:</p>
+                
                 <div>
-                    <button class="btn-flag" onclick="checkFlag('erro')">"A pessoa admitiu um erro e pediu desculpas"</button>
+                    <button class="btn-flag" onclick="checkFlag('erro')">"Admitiu erro e pediu desculpas"</button>
                     <button class="btn-flag" onclick="checkFlag('mentira')">"Pequenas mentiras constantes"</button>
                     <button class="btn-flag" onclick="checkFlag('limite')">"Respeitou meu 'não' sem insistir"</button>
                 </div>
-                
-                <div id="detector-bubble" class="result-bubble">
-                    Clique em uma opção para analisar...
+
+                <div class="detector-display" id="detect-res">
+                    <span style="color:#b0bec5; font-style:italic;">Clique para analisar...</span>
                 </div>
             </div>
         </div>
 
-        <div class="paper-card">
-            <div class="card-header">
-                <i class="fas fa-brain card-icon"></i>
-                <h2 class="card-title">Conceitos Clínicos</h2>
-            </div>
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-brain"></i> Por Dentro da Mente</div>
             
-            <details>
-                <summary>🧠 Neurobiologia: O Estresse <i class="fas fa-chevron-down"></i></summary>
-                <div class="details-content">
-                    <p><strong>Eixo HPA (Estresse):</strong> Pessoas com este esquema têm o sistema de estresse cronicamente ativado. O corpo libera cortisol o tempo todo, como se estivesse em uma trincheira de guerra, o que gera exaustão física.</p>
+            <div class="neuro-box">
+                <div class="neuro-item">
+                    <i class="fa-solid fa-fire-extinguisher"></i>
+                    <h4>Hipervigilância</h4>
+                    <p>Seu sistema de alarme (Eixo HPA) está travado no modo "Ligado". O corpo libera cortisol constantemente, gerando exaustão física.</p>
                 </div>
-            </details>
-
-            <details>
-                <summary>🌱 Como a Terapia Ajuda? <i class="fas fa-chevron-down"></i></summary>
-                <div class="details-content">
-                    <p>O terapeuta precisa ganhar sua confiança (o que leva tempo). O objetivo é aprender a diferenciar quem é confiável de quem não é, em vez de desconfiar de todos (Generalização).</p>
+                <div class="neuro-item">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <h4>Viés de Confirmação</h4>
+                    <p>Seu cérebro ignora gestos de bondade e foca apenas nos sinais de perigo, reforçando a crença de que "ninguém presta".</p>
                 </div>
-            </details>
-
-            <details>
-                <summary>🔄 A Profecia Autorrealizável <i class="fas fa-chevron-down"></i></summary>
-                <div class="details-content">
-                    <p><strong>O Teste:</strong> Você acusa o parceiro injustamente ou fica frio para "testá-lo". A pessoa saudável se cansa de ser julgada e vai embora. Seu esquema diz: "Viu? Eu sabia que ela não prestava." Você criou o abandono que temia.</p>
-                </div>
-            </details>
+            </div>
         </div>
 
-        <div class="paper-card">
-            <div class="card-header">
-                <i class="fas fa-sync-alt card-icon"></i>
-                <h2 class="card-title">Vire o Pensamento</h2>
-            </div>
-            <p>Toque no cartão quando sentir vontade de acusar alguém:</p>
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-rotate"></i> Vire o Pensamento</div>
+            <p style="margin-bottom:20px; text-align:center; font-size:0.9rem; color:#aaa;">Toque no cartão para ativar o Adulto Saudável</p>
             
-            <div class="flashcard-container" onclick="this.classList.toggle('flipped')">
-                <div class="flashcard-inner">
-                    <div class="flashcard-front">
-                        <h3 style="font-family:'Patrick Hand'; font-size:1.5rem;">Voz da Desconfiança</h3>
-                        <p style="margin-top:10px;">"Ele está sendo legal demais. O que ele quer em troca? Com certeza está mentindo ou tentando me manipular. Vou atacar antes que ele me engane!"</p>
-                        <i class="fas fa-hand-pointer" style="margin-top:20px; color:#f97316; font-size:1.5rem;"></i>
-                    </div>
-                    <div class="flashcard-back">
-                        <h3 style="font-family:'Patrick Hand'; font-size:1.5rem;">Voz do Adulto Saudável</h3>
-                        <p style="margin-top:10px;">"Essa pessoa não é meu agressor do passado. Ainda não tenho provas de que ela quer meu mal. Posso me proteger sem atacar. Vou observar os fatos, não meus medos."</p>
+            <div class="flip-grid">
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-front">
+                            <i class="fa-solid fa-user-secret" style="font-size:2.5rem; color:#dfe6e9; margin-bottom:15px;"></i>
+                            <h3 style="font-size:1.1rem; color:#2d3436;">Voz da Desconfiança</h3>
+                            <p style="margin-top:10px; font-size:0.9rem; color:#555;">"Ele está sendo legal demais. O que ele quer? Com certeza vai me trair. Vou atacar antes que ele me engane!"</p>
+                        </div>
+                        <div class="flip-back">
+                            <h3 style="font-size:1.1rem; margin-bottom:10px;">Adulto Saudável</h3>
+                            <p style="font-size:0.9rem;">"Essa pessoa não é meu agressor do passado. Ainda não tenho provas de maldade. Posso me proteger sem atacar. Vou observar os fatos, não meus medos."</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <center>
+            <a href="../../listaferramentas.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Voltar para Ferramentas</a>
+        </center>
 
     </div>
 
@@ -419,36 +371,39 @@
                 &copy; 2026 Bruno de Souza
             </div>
             <div class="social-links">
-                <a href="https://www.instagram.com/psi.brunosg/" target="_blank"><i class="fab fa-instagram"></i></a>
-                <a href="https://wa.me/5553991898309" target="_blank"><i class="fab fa-whatsapp"></i></a>
-                <a href="https://www.linkedin.com/in/psi-bsouza/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                <a href="https://www.instagram.com/psi.brunosg/" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://wa.me/5553991898309" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.linkedin.com/in/psi-bsouza/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
             </div>
         </div>
     </footer>
 
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
+        AOS.init();
+
         function checkFlag(type) {
-            const bubble = document.getElementById('detector-bubble');
+            const display = document.getElementById('detect-res');
             let text = "";
-            let color = "#334155";
+            let color = "";
             
             if (type === 'erro') {
                 text = "✅ <strong>BANDEIRA VERDE:</strong> Assumir erros é sinal de segurança e maturidade. Pessoas abusivas geralmente culpam os outros.";
-                color = "#047857";
+                color = "#2e7d32";
             } else if (type === 'mentira') {
-                text = "🚩 <strong>BANDEIRA VERMELHA:</strong> Mentiras constantes (mesmo pequenas) destroem a confiança. Cuidado.";
-                color = "#b91c1c";
+                text = "🚩 <strong>BANDEIRA VERMELHA:</strong> Mentiras constantes (mesmo pequenas) destroem a base da confiança. Cuidado.";
+                color = "#c62828";
             } else if (type === 'limite') {
                 text = "✅ <strong>BANDEIRA VERDE:</strong> Respeitar limites sem fazer chantagem emocional é o maior sinal de uma relação saudável.";
-                color = "#047857";
+                color = "#2e7d32";
             }
             
-            bubble.style.opacity = 0;
+            display.style.opacity = 0;
+            display.style.borderTop = `5px solid ${color}`;
+            
             setTimeout(() => {
-                bubble.innerHTML = text;
-                bubble.style.color = color;
-                bubble.style.opacity = 1;
-                bubble.style.transition = "opacity 0.3s";
+                display.innerHTML = `<p style="font-size:1.1rem; color:#2d3436;">${text}</p>`;
+                display.style.opacity = 1;
             }, 200);
         }
     </script>
