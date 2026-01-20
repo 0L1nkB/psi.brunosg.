@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOC - Entendendo o Ciclo | Bruno de Souza</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Identidade Visual - Tema "Controle/Liberdade" */
+            --bg-color: #f0f7f7;      /* Ciano muito pálido */
+            --primary: #00838f;       /* Ciano Escuro (Foco/Estrutura) */
+            --primary-dark: #006064;
+            --accent: #ff7043;        /* Laranja Queimado (Alerta/Obsessão) */
+            --text: #2d3436;
+            --card-border: #b0bec5;
+            
+            /* Cores Específicas */
+            --obs-color: #d32f2f;     /* Vermelho (Obsessão) */
+            --comp-color: #1976d2;    /* Azul (Compulsão) */
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#b2ebf2 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* --- CABEÇALHO --- */
+        header {
+            text-align: center;
+            margin: 20px auto 40px auto;
+            background: white;
+            padding: 30px 20px;
+            border-radius: 25px;
+            border: 3px dashed var(--primary);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            position: relative;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        header::before {
+            content: ""; 
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%) rotate(-1deg);
+            width: 140px; height: 35px; 
+            background-color: rgba(0, 131, 143, 0.2); 
+            border: 1px solid rgba(0,0,0,0.05); 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            margin: 0;
+            font-weight: 800;
+        }
+
+        .subtitle { margin-top: 5px; color: #636e72; font-weight: 600; }
+
+        /* --- CONTAINER --- */
+        .main-container {
+            max-width: 850px;
+            width: 100%;
+            margin-bottom: 80px;
+        }
+
+        /* --- CARDS DE CONTEÚDO --- */
+        .content-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.05);
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .content-card:hover {
+            border-color: var(--card-border);
+            transform: translateY(-2px);
+        }
+
+        .card-title {
+            color: var(--primary-dark);
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px dashed #eee;
+            padding-bottom: 10px;
+        }
+
+        .highlight-box {
+            background: #e0f7fa;
+            border-left: 5px solid var(--accent);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 1rem;
+            color: #006064;
+        }
+
+        /* --- GRID DE SINTOMAS (DUAL) --- */
+        .dual-symptoms {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .symptom-column h4 {
+            text-align: center; margin-bottom: 15px; font-weight: 800; text-transform: uppercase; font-size: 0.9rem;
+        }
+
+        .symptom-item {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 12px;
+            display: flex; align-items: flex-start; gap: 10px;
+            margin-bottom: 10px;
+            border-left: 4px solid;
+        }
+        
+        .sym-obs { border-color: var(--obs-color); }
+        .sym-obs i { color: var(--obs-color); }
+        
+        .sym-comp { border-color: var(--comp-color); }
+        .sym-comp i { color: var(--comp-color); }
+
+        .symptom-item strong { display: block; color: var(--text); font-size: 0.9rem; }
+        .symptom-item span { font-size: 0.8rem; color: #636e72; }
+
+        /* --- WIDGET EPR (Timer de Prevenção) --- */
+        .epr-container {
+            text-align: center;
+            background: #eceff1;
+            padding: 25px;
+            border-radius: 20px;
+            border: 2px dashed #90a4ae;
+        }
+
+        .epr-display {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: 0.3s;
+        }
+
+        .btn-epr {
+            background: white; border: 2px solid #b0bec5; color: #455a64;
+            padding: 10px 20px; border-radius: 30px; font-weight: 700;
+            cursor: pointer; margin: 5px; transition: 0.2s; font-family: 'Quicksand';
+        }
+        .btn-epr:hover { border-color: var(--primary); background: var(--primary); color: white; }
+
+        /* --- CICLO DO TOC (Loop Infinito) --- */
+        .cycle-wrapper {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .cycle-step {
+            flex: 1; min-width: 140px;
+            background: white; border: 2px solid #eee;
+            border-radius: 15px; padding: 15px; text-align: center;
+            position: relative;
+        }
+
+        .cs-1 { border-top: 5px solid #d32f2f; } /* Obsessão */
+        .cs-2 { border-top: 5px solid #f57c00; } /* Ansiedade */
+        .cs-3 { border-top: 5px solid #1976d2; } /* Compulsão */
+        .cs-4 { border-top: 5px solid #388e3c; } /* Alívio Temporário */
+
+        .cycle-step h5 { margin: 0 0 5px 0; font-size: 0.9rem; font-weight: 800; color: #2d3436; }
+        .cycle-step p { margin: 0; font-size: 0.8rem; color: #636e72; }
+
+        /* --- NEUROBIOLOGIA --- */
+        .neuro-box {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .neuro-item {
+            flex: 1; min-width: 200px;
+            background: #fafafa; border: 1px solid #eee;
+            padding: 20px; border-radius: 15px;
+            text-align: center;
+        }
+        .neuro-item i { font-size: 2rem; color: var(--primary); margin-bottom: 10px; }
+        .neuro-item h4 { margin: 5px 0; font-size: 1rem; color: var(--primary-dark); }
+        .neuro-item p { font-size: 0.85rem; color: #666; margin: 0; }
+
+        /* --- FLIP CARDS (MITOS) --- */
+        .flip-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 30px;
+        }
+
+        .flip-card {
+            background-color: transparent;
+            height: 300px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .flip-card-inner {
+            position: relative; width: 100%; height: 100%;
+            text-align: center; transition: transform 0.6s;
+            transform-style: preserve-3d;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+
+        .flip-front, .flip-back {
+            position: absolute; width: 100%; height: 100%;
+            -webkit-backface-visibility: hidden; backface-visibility: hidden;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 25px; border-radius: 15px; border: 2px solid #dfe6e9;
+            box-sizing: border-box;
+        }
+
+        .flip-front { background-color: white; color: #2d3436; }
+        .flip-back { background-color: var(--primary); color: white; transform: rotateY(180deg); border-color: var(--primary); }
+
+        /* Botão Voltar */
+        .btn-back {
+            display: block; margin: 30px auto; text-align: center; color: #b2bec3; text-decoration: none; font-weight: 600;
+        }
+        .btn-back:hover { color: var(--primary); }
+
+        @media (max-width: 600px) {
+            .dual-symptoms { grid-template-columns: 1fr; }
+            .cycle-wrapper { flex-direction: column; }
+            .flip-card { height: 320px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header data-aos="fade-down">
+        <h1>TOC</h1>
+        <div class="subtitle">Transtorno Obsessivo-Compulsivo</div>
+    </header>
+
+    <div class="main-container">
+        
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-rotate"></i> O que é o TOC?</div>
+            <p>O TOC é caracterizado pela presença de <strong>Obsessões</strong> (pensamentos intrusivos) e/ou <strong>Compulsões</strong> (rituais repetitivos) que consomem tempo e causam sofrimento.</p>
+            <div class="highlight-box">
+                <i class="fa-solid fa-circle-exclamation"></i> <strong>Não é mania de limpeza.</strong> O TOC pode envolver medo de contaminação, mas também dúvidas, pensamentos proibidos, simetria ou acumulação.
+            </div>
+        </div>
+
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-list-check"></i> Obsessão vs. Compulsão</div>
+            
+            <div class="dual-symptoms">
+                <div class="symptom-column">
+                    <h4 style="color:var(--obs-color);">Obsessões (Pensamento)</h4>
+                    <div class="symptom-item sym-obs">
+                        <i class="fa-solid fa-bug"></i>
+                        <div><strong>Contaminação</strong><span>Medo excessivo de germes, sujeira ou doenças.</span></div>
+                    </div>
+                    <div class="symptom-item sym-obs">
+                        <i class="fa-solid fa-question"></i>
+                        <div><strong>Dúvida Patológica</strong><span>"Será que tranquei a porta? Será que atropelei alguém?"</span></div>
+                    </div>
+                    <div class="symptom-item sym-obs">
+                        <i class="fa-solid fa-ban"></i>
+                        <div><strong>Pensamentos Intrusivos</strong><span>Imagens violentas ou sexuais indesejadas (TOC Tabu).</span></div>
+                    </div>
+                </div>
+
+                <div class="symptom-column">
+                    <h4 style="color:var(--comp-color);">Compulsões (Ritual)</h4>
+                    <div class="symptom-item sym-comp">
+                        <i class="fa-solid fa-hands-bubbles"></i>
+                        <div><strong>Limpeza/Lavagem</strong><span>Lavar as mãos até ferir a pele ou banhos longos.</span></div>
+                    </div>
+                    <div class="symptom-item sym-comp">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <div><strong>Verificação</strong><span>Checar portas, gás ou e-mails repetidamente.</span></div>
+                    </div>
+                    <div class="symptom-item sym-comp">
+                        <i class="fa-solid fa-arrow-rotate-right"></i>
+                        <div><strong>Rituais Mentais</strong><span>Contar, rezar ou repetir frases para "anular" o pensamento ruim.</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-shield-halved"></i> Prevenção de Resposta</div>
+            <div class="epr-container">
+                <p style="font-weight:700; color:#455a64; margin-bottom:15px;">Sente vontade de realizar um ritual agora? Tente adiar:</p>
+                
+                <div>
+                    <button class="btn-epr" onclick="startTimer(1)">⏱️ Adiar 1 min</button>
+                    <button class="btn-epr" onclick="startTimer(5)">⏱️ Adiar 5 min</button>
+                    <button class="btn-epr" onclick="startTimer(10)">⏱️ Adiar 10 min</button>
+                </div>
+
+                <div class="epr-display" id="epr-res">
+                    <span style="color:#b0bec5; font-style:italic;">Selecione um tempo para o desafio...</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-arrows-spin"></i> O Ciclo Vicioso</div>
+            <p>Por que fazer o ritual só piora a ansiedade a longo prazo?</p>
+            
+            <div class="cycle-wrapper">
+                <div class="cycle-step cs-1">
+                    <h5>1. Obsessão</h5>
+                    <p>Pensamento intrusivo gera medo.</p>
+                </div>
+                <div class="cycle-step cs-2">
+                    <h5>2. Ansiedade</h5>
+                    <p>Desconforto intenso e urgência.</p>
+                </div>
+                <div class="cycle-step cs-3">
+                    <h5>3. Compulsão</h5>
+                    <p>Realiza o ritual para "aliviar".</p>
+                </div>
+                <div class="cycle-step cs-4">
+                    <h5>4. Reforço</h5>
+                    <p>O cérebro aprende que o ritual é a única saída.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-brain"></i> O Cérebro no TOC</div>
+            <p>Falha no circuito "Cortico-Estriado-Tálamo-Cortical" (CSTC).</p>
+            
+            <div class="neuro-box">
+                <div class="neuro-item">
+                    <i class="fa-solid fa-traffic-light"></i>
+                    <h4>Falha no "Pare"</h4>
+                    <p>O córtex orbitofrontal (que detecta erros) envia um sinal de "perigo". O núcleo caudado (que deveria filtrar) falha e deixa o sinal passar.</p>
+                </div>
+                <div class="neuro-item">
+                    <i class="fa-solid fa-repeat"></i>
+                    <h4>O Loop Infinito</h4>
+                    <p>Como o filtro falhou, a sensação de "algo está errado" fica presa em loop, gerando a repetição incessante (Hiccup cerebral).</p>
+                </div>
+                <div class="neuro-item">
+                    <i class="fa-solid fa-flask"></i>
+                    <h4>Serotonina</h4>
+                    <p>Baixos níveis de serotonina contribuem para a rigidez mental e a incapacidade de "deixar pra lá".</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-mask"></i> Mitos Comuns</div>
+            <p style="margin-bottom:20px; text-align:center; font-size:0.9rem; color:#aaa;">Toque nos cartões para virar</p>
+            
+            <div class="flip-grid">
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-front">
+                            <i class="fa-solid fa-broom" style="font-size:2.5rem; color:#dfe6e9; margin-bottom:15px;"></i>
+                            <h3 style="font-size:1.1rem; color:#2d3436;">"Gosta de Limpeza"</h3>
+                        </div>
+                        <div class="flip-back">
+                            <h3 style="font-size:1rem; margin-bottom:10px;">Não é Gosto</h3>
+                            <p style="font-size:0.9rem;">Quem tem TOC não limpa porque gosta, limpa porque sente um terror absoluto se não o fizer. É sofrimento, não hobby.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-front">
+                            <i class="fa-solid fa-handcuffs" style="font-size:2.5rem; color:#dfe6e9; margin-bottom:15px;"></i>
+                            <h3 style="font-size:1.1rem; color:#2d3436;">"Pensamento Perigoso"</h3>
+                        </div>
+                        <div class="flip-back">
+                            <h3 style="font-size:1rem; margin-bottom:10px;">Pensar ≠ Fazer</h3>
+                            <p style="font-size:0.9rem;">Ter um pensamento intrusivo violento não significa que você vai agir. Na verdade, quem tem TOC é quem menos age, pois tem horror a esses pensamentos.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-front">
+                            <i class="fa-solid fa-stop" style="font-size:2.5rem; color:#dfe6e9; margin-bottom:15px;"></i>
+                            <h3 style="font-size:1.1rem; color:#2d3436;">"É só parar"</h3>
+                        </div>
+                        <div class="flip-back">
+                            <h3 style="font-size:1rem; margin-bottom:10px;">Incontrolável</h3>
+                            <p style="font-size:0.9rem;">Sem tratamento, resistir à compulsão gera uma ansiedade insuportável. A EPR (Terapia) ensina o cérebro a tolerar esse desconforto gradualmente.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <center>
+            <a href="../listaferramentas.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Voltar para Ferramentas</a>
+        </center>
+
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        let timerInterval;
+
+        function startTimer(minutes) {
+            const display = document.getElementById('epr-res');
+            clearInterval(timerInterval);
+            
+            let seconds = minutes * 60;
+            
+            display.innerHTML = `
+                <div style="font-size:2rem; font-weight:800; color:#00838f;">${formatTime(seconds)}</div>
+                <p style="margin-top:10px; color:#546e7a;">Respire. A ansiedade vai subir, mas depois vai descer sozinha. Aguente firme.</p>
+            `;
+
+            timerInterval = setInterval(() => {
+                seconds--;
+                if (seconds < 0) {
+                    clearInterval(timerInterval);
+                    display.innerHTML = `
+                        <i class="fa-solid fa-trophy" style="font-size:3rem; color:#fbc02d; margin-bottom:10px;"></i>
+                        <h3 style="margin:0; color:#2d3436;">Você conseguiu!</h3>
+                        <p>Você provou ao seu cérebro que pode tolerar o desconforto.</p>
+                    `;
+                } else {
+                    display.querySelector('div').textContent = formatTime(seconds);
+                }
+            }, 1000);
+        }
+
+        function formatTime(sec) {
+            const m = Math.floor(sec / 60);
+            const s = sec % 60;
+            return `${m}:${s < 10 ? '0' : ''}${s}`;
+        }
+    </script>
+
+</body>
+</html>
