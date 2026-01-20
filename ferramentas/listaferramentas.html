@@ -132,8 +132,24 @@
         .card-title { font-weight: 700; font-size: 1.15rem; margin-bottom: 8px; color: #2d3436; }
         .card-desc { font-size: 0.9rem; color: #636e72; line-height: 1.5; }
 
-        footer { text-align: center; margin-top: 100px; color: #b2bec3; font-size: 0.9rem; font-weight: 600; }
-
+        footer {
+            width: 100%;
+            background-color: white;
+            border-top: 1px dashed #b2bec3;
+            padding: 30px 20px;
+            margin-top: auto;
+        }
+        .footer-container {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .footer-brand { color: #636e72; font-weight: 700; font-size: 0.95rem; }
+        .social-links { display: flex; gap: 20px; }
+        .social-links a { color: #b2bec3; font-size: 1.4rem; transition: all 0.3s ease; }
+        .social-links a:hover { color: var(--primary); transform: translateY(-3px); }
         @media (max-width: 600px) {
             .grid { grid-template-columns: 1fr; row-gap: 30px; }
             .section-label { font-size: 1.2rem; margin: 50px 0 20px; }
