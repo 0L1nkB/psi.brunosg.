@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TPOC - Personalidade Obsessivo-Compulsiva | Bruno de Souza</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Identidade Visual - Tema "Rigidez/Flexibilidade" */
+            --bg-color: #eceff1;      /* Cinza Azulado Claro */
+            --primary: #37474f;       /* Cinza Chumbo (Estrutura/Regras) */
+            --primary-dark: #263238;
+            --accent: #ffca28;        /* Amarelo Ouro (Flexibilidade/Luz) */
+            --text: #2d3436;
+            --card-border: #cfd8dc;
+            
+            /* Cores Específicas */
+            --order-color: #546e7a;   /* Ordem */
+            --control-color: #d84315; /* Controle Excessivo */
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#b0bec5 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* --- CABEÇALHO --- */
+        header {
+            text-align: center;
+            margin: 20px auto 40px auto;
+            background: white;
+            padding: 30px 20px;
+            border-radius: 25px;
+            border: 3px dashed var(--primary);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            position: relative;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        header::before {
+            content: ""; 
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%) rotate(-1deg);
+            width: 140px; height: 35px; 
+            background-color: rgba(55, 71, 79, 0.2); 
+            border: 1px solid rgba(0,0,0,0.05); 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            margin: 0;
+            font-weight: 800;
+        }
+
+        .subtitle { margin-top: 5px; color: #636e72; font-weight: 600; }
+
+        /* --- CONTAINER --- */
+        .main-container {
+            max-width: 850px;
+            width: 100%;
+            margin-bottom: 80px;
+        }
+
+        /* --- CARDS DE CONTEÚDO --- */
+        .content-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.05);
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .content-card:hover {
+            border-color: var(--card-border);
+            transform: translateY(-2px);
+        }
+
+        .card-title {
+            color: var(--primary-dark);
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px dashed #eee;
+            padding-bottom: 10px;
+        }
+
+        .highlight-box {
+            background: #fff8e1;
+            border-left: 5px solid var(--accent);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 1rem;
+            color: #555;
+        }
+
+        /* --- GRID DE SINTOMAS --- */
+        .symptoms-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .symptom-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            border: 2px solid transparent;
+        }
+        
+        .symptom-item i { color: var(--primary); margin-top: 3px; }
+        .symptom-item strong { display: block; color: var(--text); font-size: 0.95rem; }
+        .symptom-item span { font-size: 0.85rem; color: #636e72; }
+
+        /* --- COMPARAÇÃO TOC vs TPOC (Tabela Visual) --- */
+        .comparison-table {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .comp-col {
+            flex: 1;
+            min-width: 250px;
+            background: #fcfcfc;
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid #eee;
+        }
+        .comp-col h4 { text-align: center; text-transform: uppercase; font-weight: 800; margin-bottom: 15px; }
+        .comp-toc h4 { color: #d32f2f; }
+        .comp-tpoc h4 { color: #37474f; }
+        
+        .comp-list li { margin-bottom: 10px; font-size: 0.9rem; list-style: none; display: flex; gap: 10px; }
+        .comp-list li i { margin-top: 4px; }
+
+        /* --- WIDGET: GERADOR DE IMPERFEIÇÃO --- */
+        .imperfection-container {
+            text-align: center;
+            background: #eceff1;
+            padding: 25px;
+            border-radius: 20px;
+            border: 2px dashed #90a4ae;
+        }
+
+        .imperfection-display {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: 0.3s;
+        }
+
+        .btn-mistake {
+            background: var(--primary); color: white;
+            border: none; padding: 12px 30px; border-radius: 50px;
+            font-weight: 700; cursor: pointer; font-family: 'Quicksand';
+            transition: 0.2s;
+        }
+        .btn-mistake:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(55, 71, 79, 0.3); }
+
+        /* --- FLIP CARDS (MITOS) --- */
+        .flip-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 30px;
+        }
+
+        .flip-card {
+            background-color: transparent;
+            height: 300px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .flip-card-inner {
+            position: relative; width: 100%; height: 100%;
+            text-align: center; transition: transform 0.6s;
+            transform-style: preserve-3d;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+
+        .flip-front, .flip-back {
+            position: absolute; width: 100%; height: 100%;
+            -webkit-backface-visibility: hidden; backface-visibility: hidden;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 25px; border-radius: 15px; border: 2px solid #dfe6e9;
+            box-sizing: border-box;
+        }
+
+        .flip-front { background-color: white; color: #2d3436; }
+        .flip-back { background-color: var(--primary); color: white; transform: rotateY(180deg); border-color: var(--primary); }
+
+        /* Botão Voltar */
+        .btn-back {
+            display: block; margin: 30px auto; text-align: center; color: #b2bec3; text-decoration: none; font-weight: 600;
+        }
+        .btn-back:hover { color: var(--primary); }
+
+        @media (max-width: 600px) {
+            .symptoms-grid { grid-template-columns: 1fr; }
+            .comparison-table { flex-direction: column; }
+            .flip-card { height: 320px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header data-aos="fade-down">
+        <h1>TPOC</h1>
+        <div class="subtitle">Transtorno de Personalidade Obsessivo-Compulsiva</div>
+    </header>
+
+    <div class="main-container">
+        
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-ruler-combined"></i> Ordem vs. Sofrimento</div>
+            <p>O TPOC é um padrão persistente de preocupação excessiva com ordem, perfeccionismo e controle mental/interpessoal, às custas de flexibilidade e eficiência.</p>
+            <div class="highlight-box">
+                <i class="fa-solid fa-circle-check"></i> <strong>A Diferença Chave:</strong> A pessoa com TPOC geralmente acha que seus padrões estão <strong>certos</strong> e que os outros é que são desleixados (Ego-sintônico).
+            </div>
+        </div>
+
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-scale-balanced"></i> TOC vs. TPOC</div>
+            <p style="margin-bottom:20px;">Embora os nomes sejam parecidos, são condições distintas.</p>
+            
+            <div class="comparison-table">
+                <div class="comp-col comp-toc">
+                    <h4>TOC (Ansiedade)</h4>
+                    <ul class="comp-list">
+                        <li><i class="fa-solid fa-xmark" style="color:#d32f2f;"></i> <strong>Intrusivo:</strong> A pessoa não quer ter aqueles pensamentos.</li>
+                        <li><i class="fa-solid fa-rotate-right"></i> <strong>Rituais:</strong> Faz coisas repetitivas para aliviar a ansiedade.</li>
+                        <li><i class="fa-regular fa-face-sad-tear"></i> <strong>Sofrimento:</strong> Sabe que não faz sentido, mas não consegue parar.</li>
+                    </ul>
+                </div>
+                <div class="comp-col comp-tpoc">
+                    <h4>TPOC (Personalidade)</h4>
+                    <ul class="comp-list">
+                        <li><i class="fa-solid fa-check" style="color:#388e3c;"></i> <strong>Voluntário:</strong> A pessoa gosta da ordem e das regras.</li>
+                        <li><i class="fa-solid fa-list-check"></i> <strong>Estilo de Vida:</strong> Perfeccionismo em todas as áreas (trabalho, lazer).</li>
+                        <li><i class="fa-solid fa-hand-point-right"></i> <strong>Conflito:</strong> Acha que os outros estão errados em não seguir suas regras.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-clipboard-list"></i> Sinais de Alerta</div>
+            
+            <div class="symptoms-grid">
+                <div class="symptom-item">
+                    <i class="fa-solid fa-list-ol"></i>
+                    <div><strong>Detalhes:</strong> Preocupação com listas e regras a ponto de perder o objetivo principal da atividade.</div>
+                </div>
+                <div class="symptom-item">
+                    <i class="fa-solid fa-user-clock"></i>
+                    <div><strong>Perfeccionismo:</strong> Padrões tão altos que a tarefa nunca é finalizada ou entregue.</div>
+                </div>
+                <div class="symptom-item">
+                    <i class="fa-solid fa-briefcase"></i>
+                    <div><strong>Workaholic:</strong> Devoção excessiva ao trabalho, excluindo lazer e amizades.</div>
+                </div>
+                <div class="symptom-item">
+                    <i class="fa-solid fa-hand-holding-hand"></i>
+                    <div><strong>Não delega:</strong> "Se quer algo bem feito, faça você mesmo". Dificuldade em confiar nos outros.</div>
+                </div>
+                <div class="symptom-item">
+                    <i class="fa-solid fa-box-archive"></i>
+                    <div><strong>Acumulação:</strong> Dificuldade em descartar objetos velhos ou sem valor.</div>
+                </div>
+                <div class="symptom-item">
+                    <i class="fa-solid fa-piggy-bank"></i>
+                    <div><strong>Avareza:</strong> Visão do dinheiro como algo a ser acumulado para catástrofes futuras, não usufruído.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-shuffle"></i> Desafio de Flexibilidade</div>
+            <div class="imperfection-container">
+                <p style="font-weight:700; color:#455a64; margin-bottom:15px;">O tratamento envolve aceitar a imperfeição. Gere um desafio:</p>
+                
+                <div class="imperfection-display" id="imp-res">
+                    <span style="color:#b0bec5; font-style:italic;">Clique para gerar um "erro proposital"...</span>
+                </div>
+
+                <button class="btn-mistake" onclick="generateMistake()">Gerar Desafio</button>
+            </div>
+        </div>
+
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-mask"></i> Mitos Comuns</div>
+            <p style="margin-bottom:20px; text-align:center; font-size:0.9rem; color:#aaa;">Toque nos cartões para virar</p>
+            
+            <div class="flip-grid">
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-front">
+                            <i class="fa-solid fa-medal" style="font-size:2.5rem; color:#cfd8dc; margin-bottom:15px;"></i>
+                            <h3 style="font-size:1.1rem; color:#2d3436;">"É uma virtude"</h3>
+                        </div>
+                        <div class="flip-back">
+                            <h3 style="font-size:1rem; margin-bottom:10px;">É Paralisante</h3>
+                            <p style="font-size:0.9rem;">Organização é virtude. TPOC é quando a organização impede a vida de acontecer, destrói relacionamentos e causa burnout.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-front">
+                            <i class="fa-solid fa-hand-spock" style="font-size:2.5rem; color:#cfd8dc; margin-bottom:15px;"></i>
+                            <h3 style="font-size:1.1rem; color:#2d3436;">"Não tem emoção"</h3>
+                        </div>
+                        <div class="flip-back">
+                            <h3 style="font-size:1rem; margin-bottom:10px;">Emoção Reprimida</h3>
+                            <p style="font-size:0.9rem;">Pessoas com TPOC sentem muito, mas controlam rigidamente a expressão das emoções por medo de perder o controle.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-front">
+                            <i class="fa-solid fa-check-double" style="font-size:2.5rem; color:#cfd8dc; margin-bottom:15px;"></i>
+                            <h3 style="font-size:1.1rem; color:#2d3436;">"É igual TOC"</h3>
+                        </div>
+                        <div class="flip-back">
+                            <h3 style="font-size:1rem; margin-bottom:10px;">Muito Diferente</h3>
+                            <p style="font-size:0.9rem;">No TOC, a pessoa sofre com rituais. No TPOC, a pessoa sofre porque os OUTROS não seguem seus rituais e padrões.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-route"></i> Caminhos de Tratamento</div>
+            <p>O foco é aumentar a flexibilidade psicológica.</p>
+            <ul style="line-height:1.8; color:#555; margin-top:10px;">
+                <li><strong>Terapia Cognitivo-Comportamental (TCC):</strong> Desafiar crenças de "tudo ou nada" e "deveria".</li>
+                <li><strong>RO-DBT (DBT Radicalmente Aberta):</strong> Focada especificamente em transtornos de supercontrole, ensinando relaxamento e conexão social.</li>
+                <li><strong>Treino de Delegação:</strong> Aprender a aceitar que "feito é melhor que perfeito".</li>
+            </ul>
+        </div>
+
+        <center>
+            <a href="../listaferramentas.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Voltar para Ferramentas</a>
+        </center>
+
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        const mistakes = [
+            { t: "E-mail Imperfeito", d: "Envie uma mensagem curta para um amigo sem reler ou corrigir a pontuação." },
+            { t: "Louça na Pia", d: "Deixe um copo sujo na pia e vá dormir sem lavar. O mundo não vai acabar." },
+            { t: "Roupa Descombinada", d: "Use meias que não combinam perfeitamente dentro de casa hoje." },
+            { t: "Atraso Programado", d: "Chegue propositalmente 2 minutos atrasado em um compromisso não essencial." },
+            { t: "Delegação Real", d: "Peça para alguém fazer uma tarefa simples e NÃO refaça ou critique o resultado." },
+            { t: "Leitura Dinâmica", d: "Leia um artigo pulando parágrafos, sem precisar entender 100% de cada palavra." }
+        ];
+
+        function generateMistake() {
+            const display = document.getElementById('imp-res');
+            display.style.opacity = 0;
+            
+            setTimeout(() => {
+                const randomM = mistakes[Math.floor(Math.random() * mistakes.length)];
+                
+                display.innerHTML = `
+                    <h3 style="margin:0 0 10px 0; color:#d84315; font-size:1.1rem;">${randomM.t}</h3>
+                    <p style="margin:0; font-size:0.95rem; color:#455a64;">${randomM.d}</p>
+                `;
+                display.style.opacity = 1;
+                display.style.transform = "scale(1.05)";
+                setTimeout(() => display.style.transform = "scale(1)", 200);
+            }, 300);
+        }
+    </script>
+
+</body>
+</html>
