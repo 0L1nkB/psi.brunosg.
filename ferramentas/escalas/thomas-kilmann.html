@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thomas-Kilmann (TKI) | Bruno de Souza</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Identidade Visual - Tema "Diplomacia/Estratégia" */
+            --bg-color: #f3f0ff;
+            --primary: #6c5ce7;       /* Roxo (Estratégia) */
+            --primary-dark: #4834d4;
+            --secondary: #a29bfe;
+            --text: #2d3436;
+            --card-border: #b2bec3;
+            
+            /* Cores dos 5 Modos */
+            --comp: #ff7675; /* Competição (Vermelho) */
+            --colab: #00b894; /* Colaboração (Verde) */
+            --conc: #fdcb6e; /* Conciliação (Amarelo) */
+            --evit: #b2bec3; /* Evitação (Cinza) */
+            --acom: #0984e3; /* Acomodação (Azul) */
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#d1c4e9 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* --- CABEÇALHO --- */
+        header {
+            text-align: center;
+            margin: 20px auto 40px auto;
+            background: white;
+            padding: 30px 20px;
+            border-radius: 25px;
+            border: 3px dashed var(--primary);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            position: relative;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        header::before {
+            content: ""; 
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%) rotate(-1deg);
+            width: 140px; height: 35px; 
+            background-color: rgba(108, 92, 231, 0.2); 
+            border: 1px solid rgba(0,0,0,0.05); 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2rem;
+            color: var(--primary-dark);
+            text-transform: uppercase;
+            margin: 0;
+            font-weight: 800;
+        }
+
+        .subtitle { margin-top: 5px; color: #636e72; font-weight: 600; }
+
+        .instruction-box {
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid var(--primary);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+            max-width: 800px;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.05);
+        }
+
+        /* --- CONTAINER --- */
+        .main-container {
+            max-width: 800px;
+            width: 100%;
+            margin-bottom: 80px;
+        }
+
+        /* --- CARTÃO DE PERGUNTA --- */
+        .question-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.05);
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .question-card:hover {
+            border-color: var(--card-border);
+            transform: translateY(-2px);
+        }
+
+        .q-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .q-num {
+            background: #f1f2f6;
+            width: 30px; height: 30px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        /* --- OPÇÕES A/B --- */
+        .options-col {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+            color: #636e72;
+        }
+
+        .option-label:hover {
+            background: #ece9ff;
+            border-color: #d1c4e9;
+        }
+
+        .option-label:has(input:checked) {
+            background: #eef2ff;
+            border-color: var(--primary);
+            color: var(--primary-dark);
+            font-weight: 700;
+            box-shadow: 0 4px 10px rgba(108, 92, 231, 0.2);
+        }
+
+        .opt-letter {
+            font-weight: 800;
+            color: var(--primary-dark);
+            background: rgba(255,255,255,0.8);
+            padding: 2px 8px;
+            border-radius: 5px;
+        }
+
+        input[type="radio"] { display: none; }
+
+        /* --- BOTÃO CALCULAR --- */
+        .btn-calc {
+            display: block; width: 100%;
+            margin-top: 40px; padding: 18px;
+            background: var(--text); color: white;
+            border: none; border-radius: 50px;
+            font-size: 1.2rem; font-weight: 800; font-family: 'Quicksand', sans-serif;
+            cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .btn-calc:hover { transform: translateY(-3px); }
+
+        /* --- RESULTADOS --- */
+        .result-section {
+            display: none;
+            margin-top: 50px;
+            background: white;
+            border-radius: 25px;
+            padding: 40px;
+            border: 3px dashed var(--primary);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        .style-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .style-card {
+            padding: 15px;
+            border-radius: 12px;
+            background: #f8f9fa;
+            border-left: 5px solid #ccc;
+        }
+
+        .st-name { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: #b2bec3; }
+        .st-val { font-size: 1.5rem; font-weight: 800; color: var(--text); }
+        .st-desc { font-size: 0.8rem; margin-top: 5px; color: #636e72; }
+
+        /* Botão Voltar */
+        .btn-back {
+            display: block; margin-top: 30px; text-align: center; color: #b2bec3; text-decoration: none; font-weight: 600;
+        }
+        .btn-back:hover { color: var(--primary); }
+
+        @media (max-width: 600px) {
+            header h1 { font-size: 1.6rem; }
+            .option-label { font-size: 0.9rem; padding: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header data-aos="fade-down">
+        <h1>Thomas-Kilmann</h1>
+        <div class="subtitle">Instrumento de Modos de Conflito (TKI)</div>
+    </header>
+
+    <div class="main-container">
+        
+        <div class="instruction-box">
+            Para cada item, escolha a afirmação (A ou B) que melhor descreve seu comportamento típico em situações de conflito.
+        </div>
+
+        <form id="tkiForm">
+            <div id="questions-container"></div>
+        </form>
+
+        <button class="btn-calc" onclick="calculateResults()">
+            <i class="fa-solid fa-chart-radar"></i> CALCULAR PERFIL
+        </button>
+
+        <div class="result-section" id="result-area">
+            <h3 style="text-align:center; color:#636e72; text-transform:uppercase;">Seu Estilo de Gestão</h3>
+            
+            <div class="chart-container">
+                <canvas id="tkiChart"></canvas>
+            </div>
+
+            <div class="style-grid" id="style-container">
+                </div>
+
+            <button class="btn-calc" style="background:#2d3436; margin-top:30px; font-size:1rem;" onclick="window.print()">
+                <i class="fa-solid fa-print"></i> Salvar PDF
+            </button>
+        </div>
+
+        <center>
+            <a href="../listaferramentas.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Voltar para Ferramentas</a>
+        </center>
+
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        /*
+          MODOS:
+          1. Competir (Competing) - Assertivo / Não Cooperativo
+          2. Colaborar (Collaborating) - Assertivo / Cooperativo
+          3. Conciliar (Compromising) - Médio / Médio
+          4. Evitar (Avoiding) - Não Assertivo / Não Cooperativo
+          5. Acomodar (Accommodating) - Não Assertivo / Cooperativo
+        */
+
+        const questions = [
+            { a: {t: "Tem vezes que deixo os outros assumirem a responsabilidade de resolver o problema.", m: "evit"}, b: {t: "Ao invés de discutir sobre os pontos que discordamos, tento ressaltar as coisas em que concordamos.", m: "acom"} },
+            { a: {t: "Tento encontrar uma solução de compromisso (meio-termo).", m: "conc"}, b: {t: "Tento lidar com todos os interesses, os dele e os meus.", m: "colab"} },
+            { a: {t: "Geralmente sou firme na busca dos meus objetivos.", m: "comp"}, b: {t: "Posso tentar acalmar os sentimentos da outra pessoa para preservar nosso relacionamento.", m: "acom"} },
+            { a: {t: "Tento encontrar uma solução de compromisso (meio-termo).", m: "conc"}, b: {t: "Às vezes, sacrifico meus próprios desejos para satisfazer os desejos da outra pessoa.", m: "acom"} },
+            { a: {t: "Busco consistentemente a ajuda do outro para encontrar uma solução.", m: "colab"}, b: {t: "Tento fazer o que é necessário para evitar tensões inúteis.", m: "evit"} },
+            { a: {t: "Tento evitar criar situações desagradáveis para mim.", m: "evit"}, b: {t: "Tento impor minha posição.", m: "comp"} },
+            { a: {t: "Tento adiar a questão até que tenha tido algum tempo para pensar.", m: "evit"}, b: {t: "Abro mão de alguns pontos em troca de outros.", m: "conc"} },
+            { a: {t: "Geralmente sou firme na busca dos meus objetivos.", m: "comp"}, b: {t: "Tento colocar todas as preocupações e problemas na mesa imediatamente.", m: "colab"} },
+            { a: {t: "Sinto que nem sempre vale a pena se preocupar com as diferenças.", m: "evit"}, b: {t: "Eu me esforço para conseguir o que quero.", m: "comp"} },
+            { a: {t: "Sou firme na busca dos meus objetivos.", m: "comp"}, b: {t: "Tento encontrar uma solução de compromisso (meio-termo).", m: "conc"} },
+            { a: {t: "Tento colocar todas as preocupações e problemas na mesa imediatamente.", m: "colab"}, b: {t: "Posso tentar acalmar os sentimentos da outra pessoa para preservar nosso relacionamento.", m: "acom"} },
+            { a: {t: "Às vezes evito tomar posições que possam criar controvérsias.", m: "evit"}, b: {t: "Eu deixo ele(a) manter algumas de suas posições se ele(a) me deixar manter algumas das minhas.", m: "conc"} },
+            { a: {t: "Eu proponho um meio-termo.", m: "conc"}, b: {t: "Eu pressiono para que meus pontos de vista sejam aceitos.", m: "comp"} },
+            { a: {t: "Digo minhas idéias e peço as dele(a).", m: "colab"}, b: {t: "Tento mostrar a ele(a) a lógica e os benefícios da minha posição.", m: "comp"} },
+            { a: {t: "Posso tentar acalmar os sentimentos da outra pessoa para preservar nosso relacionamento.", m: "acom"}, b: {t: "Tento fazer o que é necessário para evitar tensões.", m: "evit"} },
+            { a: {t: "Tento não ferir os sentimentos do outro.", m: "acom"}, b: {t: "Tento convencer a outra pessoa dos méritos da minha posição.", m: "comp"} },
+            { a: {t: "Geralmente sou firme na busca dos meus objetivos.", m: "comp"}, b: {t: "Tento fazer o que é necessário para evitar tensões inúteis.", m: "evit"} },
+            { a: {t: "Se isso faz a outra pessoa feliz, posso deixá-la manter suas opiniões.", m: "acom"}, b: {t: "Eu deixo ele(a) manter algumas de suas posições se ele(a) me deixar manter algumas das minhas.", m: "conc"} },
+            { a: {t: "Tento colocar todas as preocupações e problemas na mesa imediatamente.", m: "colab"}, b: {t: "Tento adiar a questão até que tenha tido algum tempo para pensar.", m: "evit"} },
+            { a: {t: "Tento resolver nossas diferenças imediatamente.", m: "colab"}, b: {t: "Tento encontrar uma combinação justa de perdas e ganhos para ambos.", m: "conc"} },
+            { a: {t: "Ao abordar negociações, tento ser atencioso com os desejos da outra pessoa.", m: "acom"}, b: {t: "Sempre me inclino para uma discussão direta do problema.", m: "colab"} },
+            { a: {t: "Tento encontrar uma posição que seja intermediária entre a dele(a) e a minha.", m: "conc"}, b: {t: "Eu defendo meus desejos.", m: "comp"} },
+            { a: {t: "Muitas vezes me preocupo em satisfazer todos os nossos desejos.", m: "colab"}, b: {t: "Tem vezes que deixo os outros assumirem a responsabilidade de resolver o problema.", m: "evit"} },
+            { a: {t: "Se a posição dele(a) parece muito importante para ele(a), eu tento atender aos seus desejos.", m: "acom"}, b: {t: "Tento fazer com que ele(a) se contente com um meio-termo.", m: "conc"} },
+            { a: {t: "Tento mostrar a ele(a) a lógica e os benefícios da minha posição.", m: "comp"}, b: {t: "Ao abordar negociações, tento ser atencioso com os desejos da outra pessoa.", m: "acom"} },
+            { a: {t: "Eu proponho um meio-termo.", m: "conc"}, b: {t: "Estou quase sempre preocupado em satisfazer todos os nossos desejos.", m: "colab"} },
+            { a: {t: "Às vezes evito tomar posições que possam criar controvérsias.", m: "evit"}, b: {t: "Se isso faz a outra pessoa feliz, posso deixá-la manter suas opiniões.", m: "acom"} },
+            { a: {t: "Geralmente sou firme na busca dos meus objetivos.", m: "comp"}, b: {t: "Geralmente busco a ajuda do outro para encontrar uma solução.", m: "colab"} },
+            { a: {t: "Eu proponho um meio-termo.", m: "conc"}, b: {t: "Sinto que nem sempre vale a pena se preocupar com as diferenças.", m: "evit"} },
+            { a: {t: "Tento não ferir os sentimentos do outro.", m: "acom"}, b: {t: "Sempre compartilho o problema com a outra pessoa para que possamos resolvê-lo.", m: "colab"} }
+        ];
+
+        const modesInfo = {
+            comp: { name: "Competição", color: "#ff7675", desc: "Assertivo e não cooperativo. Busca ganhar." },
+            colab: { name: "Colaboração", color: "#00b894", desc: "Assertivo e cooperativo. Busca solução que satisfaça a ambos." },
+            conc: { name: "Conciliação", color: "#fdcb6e", desc: "Meio-termo. Ambos cedem um pouco." },
+            evit: { name: "Evitação", color: "#b2bec3", desc: "Não assertivo e não cooperativo. Adia ou se retira." },
+            acom: { name: "Acomodação", color: "#0984e3", desc: "Não assertivo e cooperativo. Cede ao outro." }
+        };
+
+        const container = document.getElementById('questions-container');
+
+        questions.forEach((q, index) => {
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            card.setAttribute('data-aos', 'fade-up');
+
+            card.innerHTML = `
+                <div class="q-header">
+                    <div class="q-num">${index + 1}</div>
+                    <div>Escolha uma opção:</div>
+                </div>
+                <div class="options-col">
+                    <label class="option-label">
+                        <input type="radio" name="q${index}" value="${q.a.m}">
+                        <span class="opt-letter">A</span>
+                        <span>${q.a.t}</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q${index}" value="${q.b.m}">
+                        <span class="opt-letter">B</span>
+                        <span>${q.b.t}</span>
+                    </label>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+
+        let myChart = null;
+
+        function calculateResults() {
+            let scores = { comp: 0, colab: 0, conc: 0, evit: 0, acom: 0 };
+            let answered = 0;
+
+            const form = document.getElementById('tkiForm');
+            const inputs = form.querySelectorAll('input[type="radio"]:checked');
+
+            inputs.forEach(input => {
+                scores[input.value]++;
+                answered++;
+            });
+
+            if (answered < 30) {
+                alert(`Você respondeu ${answered} de 30 itens. Por favor, responda a todos.`);
+                return;
+            }
+
+            // Exibir Resultados
+            document.getElementById('result-area').style.display = 'block';
+            renderGrid(scores);
+            renderChart(scores);
+            
+            document.getElementById('result-area').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function renderGrid(scores) {
+            const container = document.getElementById('style-container');
+            container.innerHTML = '';
+
+            // Ordem específica para lógica
+            const order = ['comp', 'colab', 'conc', 'evit', 'acom'];
+
+            order.forEach(key => {
+                const info = modesInfo[key];
+                container.innerHTML += `
+                    <div class="style-card" style="border-left-color: ${info.color}">
+                        <div class="st-name">${info.name}</div>
+                        <div class="st-val" style="color:${info.color}">${scores[key]}</div>
+                        <div class="st-desc">${info.desc}</div>
+                    </div>
+                `;
+            });
+        }
+
+        function renderChart(scores) {
+            const ctx = document.getElementById('tkiChart').getContext('2d');
+            
+            const labels = ['Competição', 'Colaboração', 'Conciliação', 'Evitação', 'Acomodação'];
+            const data = [scores.comp, scores.colab, scores.conc, scores.evit, scores.acom];
+            const colors = [
+                modesInfo.comp.color,
+                modesInfo.colab.color,
+                modesInfo.conc.color,
+                modesInfo.evit.color,
+                modesInfo.acom.color
+            ];
+
+            if (myChart) myChart.destroy();
+
+            myChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Perfil de Conflito',
+                        data: data,
+                        backgroundColor: 'rgba(108, 92, 231, 0.2)',
+                        borderColor: '#6c5ce7',
+                        pointBackgroundColor: colors,
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: colors,
+                        pointRadius: 5
+                    }]
+                },
+                options: {
+                    scales: {
+                        r: {
+                            angleLines: { display: false },
+                            suggestedMin: 0,
+                            suggestedMax: 12
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>
