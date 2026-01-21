@@ -3,409 +3,365 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Punição - Caderno Terapêutico</title>
+    <title>Punição | Bruno de Souza</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <style>
         :root {
-            /* Paleta "Crime e Castigo" */
-            --paper-line: #fef2f2;    /* Linhas avermelhadas bem claras */
-            --paper-bg: #fffafa;      
-            --ink-color: #450a0a;
+            /* Identidade Visual - Tema "Punição/Compaixão" */
+            --bg-color: #fffafa;      /* Branco avermelhado muito pálido */
+            --primary: #b91c1c;       /* Vermelho Sangue (Juiz/Severidade) */
+            --primary-dark: #7f1d1d;
+            --accent: #fca5a5;        /* Rosa Suave (Perdão/Compaixão) */
+            --text: #2d3436;
+            --card-border: #fecaca;
             
-            /* Cores do Esquema (Punição -> Compaixão) */
-            --primary: #b91c1c;       /* Vermelho Sangue (A Severidade) */
-            --primary-hover: #991b1b;
-            --mercy: #fca5a5;         /* Rosa Suave (O Perdão) */
-            
-            /* Tags de Personas */
-            --tag-ricardo-bg: #fee2e2; --tag-ricardo-text: #7f1d1d; /* Vermelho Escuro (Juiz) */
-            --tag-amanda-bg: #f3f4f6; --tag-amanda-text: #4b5563; /* Cinza (Culpada) */
-
-            --radius: 16px;
-            --shadow-paper: 3px 3px 10px rgba(0,0,0,0.06);
+            /* Cores Específicas */
+            --punish-other: #991b1b;  /* Vermelho Escuro (Punir Outros/Ricardo) */
+            --punish-self: #4b5563;   /* Cinza Escuro (Autopunição/Amanda) */
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Nunito', sans-serif;
-            color: var(--ink-color);
-            line-height: 1.6;
-            background-color: var(--paper-bg);
-            /* Efeito Papel Pautado */
-            background-image: linear-gradient(var(--paper-line) 1px, transparent 1px);
-            background-size: 100% 2rem;
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#fecaca 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            color: var(--text);
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            align-items: center;
         }
 
-        h1, h2, h3, h4 {
-            font-family: 'Patrick Hand', cursive;
-            color: #7f1d1d;
-        }
-
-        /* --- HEADER --- */
+        /* --- CABEÇALHO --- */
         header {
-            background-color: rgba(255, 255, 255, 0.95);
-            border-bottom: 2px dashed #fca5a5;
-            padding: 2rem 0;
-            margin-bottom: 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);
-        }
-
-        .header-content {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0 20px;
             text-align: center;
+            margin: 20px auto 40px auto;
+            background: white;
+            padding: 30px 20px;
+            border-radius: 25px;
+            border: 3px dashed var(--primary);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            position: relative;
+            max-width: 800px;
+            width: 100%;
         }
 
-        .header-title {
-            font-size: 2.5rem;
+        header::before {
+            content: ""; 
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%) rotate(-1deg);
+            width: 140px; height: 35px; 
+            background-color: rgba(185, 28, 28, 0.2); 
+            border: 1px solid rgba(0,0,0,0.05); 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2rem;
             color: var(--primary);
-            margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 0px #fee2e2;
+            text-transform: uppercase;
+            margin: 0;
+            font-weight: 800;
         }
 
-        .header-subtitle {
-            font-size: 1.2rem;
-            color: #991b1b;
-            font-family: 'Patrick Hand', cursive;
-        }
+        .subtitle { margin-top: 5px; color: #636e72; font-weight: 600; }
 
         /* --- CONTAINER --- */
         .main-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0 20px;
+            max-width: 850px;
             width: 100%;
-            display: grid;
-            gap: 35px;
-            margin-bottom: 60px;
+            margin-bottom: 80px;
         }
 
-        /* --- CARDS (PAPEL) --- */
-        .paper-card {
-            background-color: #ffffff;
-            border-radius: 2px;
-            box-shadow: var(--shadow-paper);
-            border: 1px solid #fecaca;
-            padding: 2rem;
-            position: relative;
-            transform: rotate(-0.5deg);
-            transition: transform 0.3s;
-        }
-        
-        .paper-card:hover { transform: rotate(0deg) translateY(-3px); }
-        
-        /* Martelo de Juiz Decorativo */
-        .paper-card::before {
-            content: '⚖️';
-            position: absolute;
-            top: -20px;
-            left: 20px;
-            font-size: 2rem;
-            z-index: 2;
+        /* --- CARDS DE CONTEÚDO --- */
+        .content-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.05);
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
         }
 
-        .card-header {
+        .content-card:hover {
+            border-color: var(--card-border);
+            transform: translateY(-2px);
+        }
+
+        .card-title {
+            color: var(--primary-dark);
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid var(--paper-line);
+            gap: 10px;
+            border-bottom: 2px dashed #eee;
             padding-bottom: 10px;
         }
 
-        .card-icon { font-size: 1.8rem; color: var(--primary); }
-        .card-title { font-size: 1.8rem; margin: 0; }
-
-        /* --- POST-IT (DEFINIÇÃO) --- */
-        .post-it {
-            background-color: #fee2e2; /* Vermelho Pálido */
-            padding: 1.5rem;
-            border-radius: 2px 2px 16px 2px;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
-            font-family: 'Patrick Hand', cursive;
-            font-size: 1.3rem;
-            color: #7f1d1d;
-            transform: rotate(1deg);
-            margin: 20px 0;
-            border-left: 5px solid #b91c1c;
-        }
-
-        /* --- PERSONAS --- */
-        .persona-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-        }
-
-        .persona-card {
-            background: #fff;
+        .highlight-box {
+            background: #fef2f2;
+            border-left: 5px solid var(--primary);
             padding: 20px;
-            border: 2px dashed #fca5a5;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 1rem;
+            color: #7f1d1d;
+        }
+
+        /* --- GRID DE PERSONAS (DUAL) --- */
+        .dual-symptoms {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .symptom-column h4 {
+            text-align: center; margin-bottom: 15px; font-weight: 800; text-transform: uppercase; font-size: 0.9rem;
+        }
+
+        .symptom-item {
+            background: #f8f9fa;
+            padding: 15px;
             border-radius: 12px;
+            display: flex; flex-direction: column; gap: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid;
         }
         
-        .persona-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .persona-name { font-size: 1.4rem; font-weight: 700; color: #991b1b; }
-        .persona-tag { font-family: 'Nunito', sans-serif; font-size: 0.8rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; }
-        
-        .tag-ricardo { background: var(--tag-ricardo-bg); color: var(--tag-ricardo-text); }
-        .tag-amanda { background: var(--tag-amanda-bg); color: var(--tag-amanda-text); }
+        .style-other { border-color: var(--punish-other); }
+        .style-self { border-color: var(--punish-self); }
 
-        /* --- STICKERS (3 DIMENSÕES) --- */
-        .sticker-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;
+        .persona-tag {
+            font-size: 0.75rem; text-transform: uppercase; font-weight: 800;
+            padding: 4px 10px; border-radius: 20px; width: fit-content;
         }
-        
-        .sticker-box {
-            background: white; padding: 1.5rem; border-radius: 12px;
-            border: 2px solid #fff1f2; text-align: center;
-            transition: all 0.3s;
-        }
-        .sticker-box:hover { border-color: var(--primary); transform: scale(1.02); }
-        .sticker-icon { font-size: 2rem; margin-bottom: 10px; display: block; }
+        .tag-ricardo { background: #fee2e2; color: var(--punish-other); }
+        .tag-amanda { background: #f3f4f6; color: var(--punish-self); }
 
-        /* --- TRADUTOR INTERATIVO --- */
-        .translator-area {
-            background-color: #fff5f5; /* Vermelho muito claro */
-            padding: 2rem; border-radius: 20px;
-            border: 2px dashed #fda4af; text-align: center;
+        /* --- WIDGET: TRADUTOR DE PERDÃO --- */
+        .translator-container {
+            text-align: center;
+            background: #fff5f5; /* Vermelho muito claro */
+            padding: 25px;
+            border-radius: 20px;
+            border: 2px dashed #fda4af;
         }
 
-        .btn-translate {
-            background: white; border: 2px solid #fecaca;
-            padding: 10px 20px; margin: 5px; border-radius: 30px;
-            font-family: 'Nunito', sans-serif; font-weight: 700; color: #b91c1c;
-            cursor: pointer; transition: all 0.2s;
-            box-shadow: 0 4px 0 #fecaca;
-        }
-        
-        .btn-translate:active { box-shadow: 0 0 0 #fecaca; transform: translateY(4px); }
-        .btn-translate:hover { background: #fff; border-color: var(--primary); color: var(--primary); }
-
-        .result-bubble {
-            background: white; padding: 20px; border-radius: 20px;
-            margin-top: 20px; border: 2px solid #fca5a5;
-            font-family: 'Patrick Hand', cursive; font-size: 1.3rem;
-            color: #7f1d1d; min-height: 100px; display: flex; align-items: center; justify-content: center;
+        .translator-display {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: 0.3s;
         }
 
-        /* --- ACCORDIONS --- */
-        details {
-            background: #fff1f2; border-radius: 12px; margin-bottom: 10px;
-            border: 1px solid #fecaca;
+        .btn-trans {
+            background: white; border: 2px solid #fecaca; color: #b91c1c;
+            padding: 10px 20px; border-radius: 30px; font-weight: 700;
+            cursor: pointer; margin: 5px; transition: 0.2s; font-family: 'Quicksand';
         }
-        summary {
-            padding: 15px; font-weight: 700; cursor: pointer; list-style: none;
-            display: flex; justify-content: space-between; color: #991b1b;
-        }
-        summary:hover { background: #fee2e2; border-radius: 12px; }
-        .details-content { padding: 20px; border-top: 1px dashed #fecaca; color: #450a0a; }
+        .btn-trans:hover { border-color: var(--accent); background: var(--accent); color: white; }
 
-        /* --- FLASHCARD (FLIP) --- */
-        .flashcard-container { perspective: 1000px; width: 100%; height: 280px; cursor: pointer; }
-        .flashcard-inner {
-            position: relative; width: 100%; height: 100%; text-align: center;
-            transition: transform 0.6s; transform-style: preserve-3d;
+        /* --- NEUROBIOLOGIA --- */
+        .neuro-box {
+            display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; margin-top: 20px;
         }
-        .flashcard-container.flipped .flashcard-inner { transform: rotateY(180deg); }
-        
-        .flashcard-front, .flashcard-back {
+        .neuro-item {
+            flex: 1; min-width: 200px;
+            background: #fafafa; border: 1px solid #eee;
+            padding: 20px; border-radius: 15px;
+            text-align: center;
+        }
+        .neuro-item i { font-size: 2rem; color: var(--primary); margin-bottom: 10px; }
+        .neuro-item h4 { margin: 5px 0; font-size: 1rem; color: var(--primary-dark); }
+        .neuro-item p { font-size: 0.85rem; color: #666; margin: 0; }
+
+        /* --- FLIP CARDS --- */
+        .flip-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .flip-card {
+            background-color: transparent;
+            height: 300px;
+            perspective: 1000px;
+            cursor: pointer;
+            margin: 0 auto;
+            max-width: 350px;
+            width: 100%;
+        }
+
+        .flip-card-inner {
+            position: relative; width: 100%; height: 100%;
+            text-align: center; transition: transform 0.6s;
+            transform-style: preserve-3d;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+
+        .flip-front, .flip-back {
             position: absolute; width: 100%; height: 100%;
             -webkit-backface-visibility: hidden; backface-visibility: hidden;
-            border-radius: 16px; padding: 2rem;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            box-shadow: var(--shadow-paper); border: 2px solid;
-        }
-        
-        .flashcard-front {
-            background: #fff5f5; border-color: #fecaca; color: #7f1d1d;
-        }
-        .flashcard-back {
-            background: #fdf2f8; border-color: #fbcfe8; color: #db2777; /* Rosa Compaixão */
-            transform: rotateY(180deg);
+            padding: 25px; border-radius: 15px; border: 2px solid #dfe6e9;
+            box-sizing: border-box;
         }
 
-        /* --- FOOTER PADRÃO --- */
+        .flip-front { background-color: white; color: #2d3436; }
+        .flip-back { background-color: var(--accent); color: white; transform: rotateY(180deg); border-color: var(--accent); }
+
+        /* Botão Voltar */
+        .btn-back {
+            display: block; margin: 30px auto; text-align: center; color: #b2bec3; text-decoration: none; font-weight: 600;
+        }
+        .btn-back:hover { color: var(--primary); }
+
+        /* --- FOOTER ADAPTADO --- */
         footer {
-            background-color: #ffffff;
-            border-top: 1px solid #e5e7eb;
-            padding: 2rem 0;
+            width: 100%;
+            background-color: white;
+            border-top: 1px dashed #b2bec3;
+            padding: 30px 20px;
             margin-top: auto;
         }
         .footer-container {
-            max-width: 1000px;
+            max-width: 900px;
             margin: 0 auto;
-            padding: 0 20px;
-            display: flex; justify-content: space-between; align-items: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .footer-brand { color: #64748b; font-size: 0.9rem; font-weight: 600; }
-        .social-links { display: flex; gap: 1.5rem; }
-        .social-links a { color: #94a3b8; font-size: 1.2rem; transition: color 0.2s; }
-        .social-links a:hover { color: var(--primary); }
+        .footer-brand { color: #636e72; font-weight: 700; font-size: 0.95rem; }
+        .social-links { display: flex; gap: 20px; }
+        .social-links a { color: #b2bec3; font-size: 1.4rem; transition: all 0.3s ease; }
+        .social-links a:hover { color: var(--primary); transform: translateY(-3px); }
 
-        @media (max-width: 640px) {
-            .footer-container { flex-direction: column; gap: 1rem; }
-            .persona-grid, .sticker-grid { grid-template-columns: 1fr; }
+        @media (max-width: 600px) {
+            .dual-symptoms { grid-template-columns: 1fr; }
+            .footer-container { flex-direction: column; gap: 15px; }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="header-content">
-            <h1 class="header-title">Punição</h1>
-            <p class="header-subtitle">Caderno de Psicoeducação</p>
-        </div>
+    <header data-aos="fade-down">
+        <h1>Punição</h1>
+        <div class="subtitle">O juiz implacável</div>
     </header>
 
     <div class="main-container">
-
-        <div class="paper-card">
-            <div class="card-header">
-                <i class="fas fa-gavel card-icon"></i>
-                <h2 class="card-title">O Juiz Implacável</h2>
-            </div>
+        
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-gavel"></i> O Juiz Interior</div>
             <p>O Esquema de Punição é a crença de que as pessoas (incluindo você) devem ser duramente punidas por seus erros. Não há espaço para o perdão, apenas para a sentença.</p>
-            
-            <div class="post-it">
-                <i class="fas fa-thumbtack" style="color:#b91c1c; margin-right:10px;"></i>
-                "Errar não é humano, é inaceitável. Se você fez algo errado, deve pagar por isso. Não existem 'acidentes', apenas incompetência ou maldade."
+            <div class="highlight-box">
+                <i class="fa-solid fa-triangle-exclamation"></i> <strong>A Regra Dura:</strong> "Errar não é humano, é inaceitável. Se você fez algo errado, deve pagar. Não existem 'acidentes', apenas incompetência ou maldade."
             </div>
         </div>
 
-        <div class="paper-card" style="transform: rotate(0.5deg);">
-            <div class="card-header">
-                <i class="fas fa-users card-icon"></i>
-                <h2 class="card-title">Espelhos da Vida Real</h2>
-            </div>
-            <p>Como a intolerância se manifesta:</p>
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-users"></i> Formas de Enfrentamento</div>
             
-            <div class="persona-grid">
-                <div class="persona-card">
-                    <div class="persona-header">
-                        <span class="persona-name">Ricardo</span>
-                        <span class="persona-tag tag-ricardo">O Verdugo</span>
+            <div class="dual-symptoms">
+                <div class="symptom-column">
+                    <div class="symptom-item style-other">
+                        <span class="persona-tag tag-ricardo">Ricardo (O Verdugo)</span>
+                        <div><strong>Comportamento:</strong> Não tolera erros. Humilha garçons, pune funcionários, guarda rancores de anos. Vê o perdão como fraqueza.</div>
                     </div>
-                    <p>Ricardo não tolera erros. Se o garçom troca o pedido, ele humilha. Se um funcionário atrasa, ele pune. Ele guarda rancores de 10 anos atrás. Para ele, perdoar é ser fraco ou trouxa.</p>
-                    <p style="font-size:0.85rem; color:#991b1b;"><strong>Comportamento:</strong> Agressividade (Punir os Outros)</p>
-                </div>
-
-                <div class="persona-card">
-                    <div class="persona-header">
-                        <span class="persona-name">Amanda</span>
-                        <span class="persona-tag tag-amanda">A Penitente</span>
+                    <div class="symptom-item style-other">
+                        <div><strong>Consequência:</strong> Raiva crônica, isolamento (as pessoas têm medo dele), ambiente hostil.</div>
                     </div>
-                    <p>Amanda é cruel consigo mesma. Se come um doce na dieta, fica sem jantar. Se diz algo "errado", passa a noite acordada se xingando de estúpida. Ela não se permite ser imperfeita.</p>
-                    <p style="font-size:0.85rem; color:#4b5563;"><strong>Comportamento:</strong> Autocastigo (Culpa Tóxica)</p>
+                </div>
+
+                <div class="symptom-column">
+                    <div class="symptom-item style-self">
+                        <span class="persona-tag tag-amanda">Amanda (A Penitente)</span>
+                        <div><strong>Comportamento:</strong> Cruel consigo mesma. Se come um doce, fica sem jantar. Se erra, se xinga mentalmente. Não se permite ser imperfeita.</div>
+                    </div>
+                    <div class="symptom-item style-self">
+                        <div><strong>Consequência:</strong> Baixa autoestima, ansiedade, depressão por culpa tóxica.</div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="paper-card">
-            <div class="card-header">
-                <i class="fas fa-shapes card-icon"></i>
-                <h2 class="card-title">Sintomas da Rigidez</h2>
-            </div>
-            <div class="sticker-grid">
-                <div class="sticker-box">
-                    <span class="sticker-icon">😡</span>
-                    <h4>Intolerância</h4>
-                    <p>Ficar furioso com erros pequenos, acidentes ou esquecimentos. Reação desproporcional.</p>
-                </div>
-                <div class="sticker-box">
-                    <span class="sticker-icon">🏴</span>
-                    <h4>Preto no Branco</h4>
-                    <p>Visão moral rígida: ou é certo, ou é errado. Não considera o contexto, a intenção ou as circunstâncias.</p>
-                </div>
-                <div class="sticker-box">
-                    <span class="sticker-icon">⛓️</span>
-                    <h4>Rancor</h4>
-                    <p>Dificuldade extrema em perdoar. O erro define a pessoa para sempre ("Ele é um mentiroso").</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="paper-card" style="transform: rotate(-0.5deg);">
-            <div class="card-header">
-                <i class="fas fa-sync card-icon"></i>
-                <h2 class="card-title">Tradutor de Perdão</h2>
-            </div>
-            <p>O juiz grita "Culpado!". O adulto saudável diz "Humano". Vamos traduzir:</p>
-            
-            <div class="translator-area">
-                <p style="margin-bottom:15px; font-weight:700;">O que o juiz diz?</p>
-                <div>
-                    <button class="btn-translate" onclick="translateNeed('idiota')">"Sou um idiota por ter errado isso."</button>
-                    <button class="btn-translate" onclick="translateNeed('sofrer')">"Ele merece sofrer pelo que fez."</button>
-                    <button class="btn-translate" onclick="translateNeed('desculpa')">"Não tem desculpa para isso!"</button>
-                </div>
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-language"></i> Tradutor de Perdão</div>
+            <div class="translator-container">
+                <p style="font-weight:700; color:#b91c1c; margin-bottom:15px;">O juiz grita "Culpado!". O adulto traduz:</p>
                 
-                <div id="translator-bubble" class="result-bubble">
-                    Toque em uma sentença para traduzir...
+                <div>
+                    <button class="btn-trans" onclick="translateNeed('idiota')">"Sou um idiota por ter errado isso."</button>
+                    <button class="btn-trans" onclick="translateNeed('sofrer')">"Ele merece sofrer pelo que fez."</button>
+                    <button class="btn-trans" onclick="translateNeed('desculpa')">"Não tem desculpa para isso!"</button>
+                </div>
+
+                <div class="translator-display" id="trans-res">
+                    <span style="color:#b0bec5; font-style:italic;">Clique na sentença...</span>
                 </div>
             </div>
         </div>
 
-        <div class="paper-card">
-            <div class="card-header">
-                <i class="fas fa-brain card-icon"></i>
-                <h2 class="card-title">Conceitos Clínicos</h2>
-            </div>
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-brain"></i> Por Dentro da Mente</div>
             
-            <details>
-                <summary>🧠 Neurobiologia: O Cérebro Répitil <i class="fas fa-chevron-down"></i></summary>
-                <div class="details-content">
-                    <p>Quando você vê um erro, seu cérebro ativa a área de "ameaça e ataque", não a de "compreensão social". A punição gera uma descarga de raiva que, momentaneamente, dá sensação de poder e controle.</p>
+            <div class="neuro-box">
+                <div class="neuro-item">
+                    <i class="fa-solid fa-dragon"></i>
+                    <h4>Cérebro Répitil</h4>
+                    <p>Ao ver um erro, seu cérebro ativa a área de "ameaça e ataque". A punição gera uma descarga de raiva que dá uma falsa sensação de poder e controle.</p>
                 </div>
-            </details>
-
-            <details>
-                <summary>🌱 Como a Terapia Ajuda? <i class="fas fa-chevron-down"></i></summary>
-                <div class="details-content">
-                    <p>O foco é a <strong>Autocompaixão</strong> e a <strong>Empatia</strong>. Aprendemos que punir não ensina, apenas amedronta. Entendemos que por trás do "erro" muitas vezes existe uma necessidade não atendida ou uma falta de habilidade, não maldade.</p>
+                <div class="neuro-item">
+                    <i class="fa-solid fa-hand-holding-heart"></i>
+                    <h4>Falta de Empatia</h4>
+                    <p>O foco no julgamento moral ("certo/errado") bloqueia a capacidade de entender as razões humanas ou contextuais por trás do comportamento.</p>
                 </div>
-            </details>
-
-            <details>
-                <summary>⚠️ O Preço da Justiça <i class="fas fa-chevron-down"></i></summary>
-                <div class="details-content">
-                    <p>Viver julgando é exaustivo. Você afasta as pessoas, pois ninguém gosta de pisar em ovos. E você vive tenso, pois sabe que, se errar, terá que se punir também.</p>
-                </div>
-            </details>
+            </div>
         </div>
 
-        <div class="paper-card">
-            <div class="card-header">
-                <i class="fas fa-adjust card-icon"></i>
-                <h2 class="card-title">Vire o Pensamento</h2>
-            </div>
-            <p>Toque no cartão quando sentir vontade de punir:</p>
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-rotate"></i> Vire o Pensamento</div>
+            <p style="margin-bottom:20px; text-align:center; font-size:0.9rem; color:#aaa;">Toque no cartão para ativar o Adulto Saudável</p>
             
-            <div class="flashcard-container" onclick="this.classList.toggle('flipped')">
-                <div class="flashcard-inner">
-                    <div class="flashcard-front">
-                        <h3 style="font-family:'Patrick Hand'; font-size:1.5rem;">Voz da Punição</h3>
-                        <p style="margin-top:10px;">"Isso é imperdoável! Que estupidez! Você estragou tudo. Agora vai ter que pagar. Não vou deixar isso passar barato!"</p>
-                        <i class="fas fa-hand-pointer" style="margin-top:20px; color:#b91c1c; font-size:1.5rem;"></i>
-                    </div>
-                    <div class="flashcard-back">
-                        <h3 style="font-family:'Patrick Hand'; font-size:1.5rem;">Voz do Adulto Saudável</h3>
-                        <p style="margin-top:10px;">"Todos erram, inclusive eu. O erro já aconteceu, punir não vai voltar o tempo. O que posso aprender com isso? Vou consertar o que der e seguir em frente com gentileza."</p>
+            <div class="flip-grid">
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-front">
+                            <i class="fa-solid fa-bolt" style="font-size:2.5rem; color:#dfe6e9; margin-bottom:15px;"></i>
+                            <h3 style="font-size:1.1rem; color:#2d3436;">Voz da Punição</h3>
+                            <p style="margin-top:10px; font-size:0.9rem; color:#555;">"Isso é imperdoável! Que estupidez! Você estragou tudo. Agora vai ter que pagar. Não vou deixar isso passar barato!"</p>
+                        </div>
+                        <div class="flip-back">
+                            <h3 style="font-size:1.1rem; margin-bottom:10px;">Adulto Saudável</h3>
+                            <p style="font-size:0.9rem;">"Todos erram, inclusive eu. O erro já aconteceu, punir não vai voltar o tempo. O que posso aprender com isso? Vou consertar o que der e seguir em frente com gentileza."</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <center>
+            <a href="../../listaferramentas.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Voltar para Ferramentas</a>
+        </center>
 
     </div>
 
@@ -415,31 +371,39 @@
                 &copy; 2026 Bruno de Souza
             </div>
             <div class="social-links">
-                <a href="https://www.instagram.com/psi.brunosg/" target="_blank"><i class="fab fa-instagram"></i></a>
-                <a href="https://wa.me/5553991898309" target="_blank"><i class="fab fa-whatsapp"></i></a>
-                <a href="https://www.linkedin.com/in/psi-bsouza/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                <a href="https://www.instagram.com/psi.brunosg/" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://wa.me/5553991898309" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.linkedin.com/in/psi-bsouza/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
             </div>
         </div>
     </footer>
 
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
+        AOS.init();
+
         function translateNeed(type) {
-            const bubble = document.getElementById('translator-bubble');
+            const display = document.getElementById('trans-res');
             let text = "";
+            let color = "";
             
             if (type === 'idiota') {
-                text = "✨ Tradução: 'Eu não sou idiota, sou um ser humano aprendendo. Cometi um erro, mas meu valor como pessoa continua o mesmo.'";
+                text = "✨ <strong>Tradução:</strong> 'Eu não sou idiota, sou um ser humano aprendendo. Cometi um erro, mas meu valor como pessoa continua o mesmo.'";
+                color = "#4b5563";
             } else if (type === 'sofrer') {
-                text = "✨ Tradução: 'Ele errou, mas fazê-lo sofrer não vai curar a minha dor. Posso colocar limites sem ser cruel.'";
+                text = "✨ <strong>Tradução:</strong> 'Ele errou, mas fazê-lo sofrer não vai curar a minha dor. Posso colocar limites firmes sem ser cruel.'";
+                color = "#991b1b";
             } else if (type === 'desculpa') {
-                text = "✨ Tradução: 'Talvez haja uma razão que eu não estou vendo. Vou tentar ouvir antes de sentenciar. O contexto importa.'";
+                text = "✨ <strong>Tradução:</strong> 'Talvez haja uma razão que eu não estou vendo. Vou tentar ouvir antes de sentenciar. O contexto importa.'";
+                color = "#b91c1c";
             }
             
-            bubble.style.opacity = 0;
+            display.style.opacity = 0;
+            display.style.borderTop = `5px solid ${color}`;
+            
             setTimeout(() => {
-                bubble.innerHTML = text;
-                bubble.style.opacity = 1;
-                bubble.style.transition = "opacity 0.3s";
+                display.innerHTML = `<p style="font-size:1.1rem; color:#2d3436;">${text}</p>`;
+                display.style.opacity = 1;
             }, 200);
         }
     </script>
