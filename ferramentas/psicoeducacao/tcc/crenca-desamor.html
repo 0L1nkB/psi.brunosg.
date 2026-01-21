@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crença de Desamor | Bruno de Souza</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Identidade Visual - Tema "Frio/Calor" */
+            --bg-color: #f0f9ff;      /* Azul muito pálido */
+            --primary: #0288d1;       /* Azul Gelo (A Crença/Solidão) */
+            --primary-dark: #01579b;
+            --accent: #ff7043;        /* Laranja Suave (Afeto/Conexão) */
+            --text: #2d3436;
+            --card-border: #b3e5fc;
+            
+            /* Cores Específicas */
+            --pleaser-color: #e91e63; /* Rosa (Agradadora/Júlia) */
+            --loner-color: #455a64;   /* Cinza Azulado (Solitário/Lucas) */
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#e1f5fe 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* --- CABEÇALHO --- */
+        header {
+            text-align: center;
+            margin: 20px auto 40px auto;
+            background: white;
+            padding: 30px 20px;
+            border-radius: 25px;
+            border: 3px dashed var(--primary);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            position: relative;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        header::before {
+            content: ""; 
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%) rotate(-1deg);
+            width: 140px; height: 35px; 
+            background-color: rgba(2, 136, 209, 0.2); 
+            border: 1px solid rgba(0,0,0,0.05); 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            margin: 0;
+            font-weight: 800;
+        }
+
+        .subtitle { margin-top: 5px; color: #636e72; font-weight: 600; }
+
+        /* --- CONTAINER --- */
+        .main-container {
+            max-width: 850px;
+            width: 100%;
+            margin-bottom: 80px;
+        }
+
+        /* --- CARDS DE CONTEÚDO --- */
+        .content-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.05);
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .content-card:hover {
+            border-color: var(--card-border);
+            transform: translateY(-2px);
+        }
+
+        .card-title {
+            color: var(--primary-dark);
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px dashed #eee;
+            padding-bottom: 10px;
+        }
+
+        .highlight-box {
+            background: #e1f5fe;
+            border-left: 5px solid var(--accent);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 1rem;
+            color: #0277bd;
+        }
+
+        /* --- GRID DE PERSONAS (DUAL) --- */
+        .dual-symptoms {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .symptom-column h4 {
+            text-align: center; margin-bottom: 15px; font-weight: 800; text-transform: uppercase; font-size: 0.9rem;
+        }
+
+        .symptom-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 12px;
+            display: flex; flex-direction: column; gap: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid;
+        }
+        
+        .style-pleaser { border-color: var(--pleaser-color); }
+        .style-loner { border-color: var(--loner-color); }
+
+        .persona-tag {
+            font-size: 0.75rem; text-transform: uppercase; font-weight: 800;
+            padding: 4px 10px; border-radius: 20px; width: fit-content;
+        }
+        .tag-julia { background: #fce4ec; color: var(--pleaser-color); }
+        .tag-lucas { background: #eceff1; color: var(--loner-color); }
+
+        /* --- WIDGET: REESTRUTURAÇÃO --- */
+        .translator-container {
+            text-align: center;
+            background: #fff3e0; /* Laranja muito claro */
+            padding: 25px;
+            border-radius: 20px;
+            border: 2px dashed #ffab91;
+        }
+
+        .translator-display {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: 0.3s;
+        }
+
+        .btn-trans {
+            background: white; border: 2px solid #ffccbc; color: #d84315;
+            padding: 10px 20px; border-radius: 30px; font-weight: 700;
+            cursor: pointer; margin: 5px; transition: 0.2s; font-family: 'Quicksand';
+        }
+        .btn-trans:hover { border-color: var(--primary); background: var(--primary); color: white; }
+
+        /* --- NEUROBIOLOGIA --- */
+        .neuro-box {
+            display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; margin-top: 20px;
+        }
+        .neuro-item {
+            flex: 1; min-width: 200px;
+            background: #fafafa; border: 1px solid #eee;
+            padding: 20px; border-radius: 15px;
+            text-align: center;
+        }
+        .neuro-item i { font-size: 2rem; color: var(--primary); margin-bottom: 10px; }
+        .neuro-item h4 { margin: 5px 0; font-size: 1rem; color: var(--primary-dark); }
+        .neuro-item p { font-size: 0.85rem; color: #666; margin: 0; }
+
+        /* --- FLIP CARDS --- */
+        .flip-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .flip-card {
+            background-color: transparent;
+            height: 300px;
+            perspective: 1000px;
+            cursor: pointer;
+            margin: 0 auto;
+            max-width: 350px;
+            width: 100%;
+        }
+
+        .flip-card-inner {
+            position: relative; width: 100%; height: 100%;
+            text-align: center; transition: transform 0.6s;
+            transform-style: preserve-3d;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+
+        .flip-front, .flip-back {
+            position: absolute; width: 100%; height: 100%;
+            -webkit-backface-visibility: hidden; backface-visibility: hidden;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 25px; border-radius: 15px; border: 2px solid #dfe6e9;
+            box-sizing: border-box;
+        }
+
+        .flip-front { background-color: white; color: #2d3436; }
+        .flip-back { background-color: var(--accent); color: white; transform: rotateY(180deg); border-color: var(--accent); }
+
+        /* Botão Voltar */
+        .btn-back {
+            display: block; margin: 30px auto; text-align: center; color: #b2bec3; text-decoration: none; font-weight: 600;
+        }
+        .btn-back:hover { color: var(--primary); }
+
+        /* --- FOOTER ADAPTADO --- */
+        footer {
+            width: 100%;
+            background-color: white;
+            border-top: 1px dashed #b2bec3;
+            padding: 30px 20px;
+            margin-top: auto;
+        }
+        .footer-container {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .footer-brand { color: #636e72; font-weight: 700; font-size: 0.95rem; }
+        .social-links { display: flex; gap: 20px; }
+        .social-links a { color: #b2bec3; font-size: 1.4rem; transition: all 0.3s ease; }
+        .social-links a:hover { color: var(--primary); transform: translateY(-3px); }
+
+        @media (max-width: 600px) {
+            .dual-symptoms { grid-template-columns: 1fr; }
+            .footer-container { flex-direction: column; gap: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header data-aos="fade-down">
+        <h1>Crença de Desamor</h1>
+        <div class="subtitle">A ilusão de não ser amável</div>
+    </header>
+
+    <div class="main-container">
+        
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-heart-crack"></i> O Coração Gelado</div>
+            <p>A Crença Central de Desamor é a convicção profunda de que você não possui as qualidades necessárias para ser amado ou mantido em uma relação. É a certeza de que, inevitavelmente, você será rejeitado ou abandonado.</p>
+            <div class="highlight-box">
+                <i class="fa-solid fa-ban"></i> <strong>O Pensamento Central:</strong> "Há algo de errado comigo que me torna impossível de amar. Se eles me conhecerem de verdade, vão embora."
+            </div>
+        </div>
+
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-users"></i> Como isso se manifesta?</div>
+            
+            <div class="dual-symptoms">
+                <div class="symptom-column">
+                    <div class="symptom-item style-pleaser">
+                        <span class="persona-tag tag-julia">Júlia (A Camaleoa)</span>
+                        <div><strong>Comportamento:</strong> Faz de tudo para agradar. Molda sua personalidade ao gosto do parceiro. Tem pavor de dizer "não" e ser deixada.</div>
+                    </div>
+                    <div class="symptom-item style-pleaser">
+                        <div><strong>Lógica da Crença:</strong> "Eu não sou suficiente sendo eu mesma. Preciso comprar o amor sendo perfeita ou útil."</div>
+                    </div>
+                </div>
+
+                <div class="symptom-column">
+                    <div class="symptom-item style-loner">
+                        <span class="persona-tag tag-lucas">Lucas (A Muralha)</span>
+                        <div><strong>Comportamento:</strong> Evita intimidade. Termina relacionamentos quando começam a ficar sérios. Parece frio, mas é autoproteção.</div>
+                    </div>
+                    <div class="symptom-item style-loner">
+                        <div><strong>Lógica da Crença:</strong> "É melhor ficar sozinho do que sofrer a rejeição certa. Vou rejeitá-los antes que eles me rejeitem."</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-filter"></i> As Lentes do Desamor</div>
+            <p>A crença distorce como você vê o mundo:</p>
+            <div class="neuro-box">
+                <div class="neuro-item">
+                    <i class="fa-solid fa-magnifying-glass-minus"></i>
+                    <h4>Leitura Mental</h4>
+                    <p>Você tem "certeza" de que o silêncio do outro significa que ele está cansado de você ou te julgando mal.</p>
+                </div>
+                <div class="neuro-item">
+                    <i class="fa-solid fa-eraser"></i>
+                    <h4>Desqualificar o Positivo</h4>
+                    <p>Se alguém demonstra amor, você pensa: "Ele só quer algo de mim" ou "Ele ainda não me conhece direito".</p>
+                </div>
+                <div class="neuro-item">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <h4>Profecia Autorrealizável</h4>
+                    <p>Por medo de ser deixado, você age com ciúmes ou frieza, o que acaba afastando a pessoa, confirmando sua crença.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-scale-balanced"></i> Reestruturação Cognitiva</div>
+            <div class="translator-container">
+                <p style="font-weight:700; color:#d84315; margin-bottom:15px;">Vamos desafiar a rejeição:</p>
+                
+                <div>
+                    <button class="btn-trans" onclick="translateNeed('ninguem')">"Ninguém nunca vai me amar."</button>
+                    <button class="btn-trans" onclick="translateNeed('f fingir')">"Tenho que fingir para gostarem de mim."</button>
+                    <button class="btn-trans" onclick="translateNeed('defeito')">"Sou defeituoso."</button>
+                </div>
+
+                <div class="translator-display" id="trans-res">
+                    <span style="color:#b0bec5; font-style:italic;">Clique no pensamento negativo...</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-rotate"></i> Vire o Pensamento</div>
+            <p style="margin-bottom:20px; text-align:center; font-size:0.9rem; color:#aaa;">Toque para ativar o Adulto Saudável</p>
+            
+            <div class="flip-grid">
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-front">
+                            <i class="fa-solid fa-heart-crack" style="font-size:2.5rem; color:#dfe6e9; margin-bottom:15px;"></i>
+                            <h3 style="font-size:1.1rem; color:#2d3436;">Voz do Desamor</h3>
+                            <p style="margin-top:10px; font-size:0.9rem; color:#555;">"Não se apegue. Eles vão perceber quem você é e vão embora. Você não merece isso. É melhor ficar sozinho."</p>
+                        </div>
+                        <div class="flip-back">
+                            <h3 style="font-size:1.1rem; margin-bottom:10px;">Adulto Saudável</h3>
+                            <p style="font-size:0.9rem;">"Eu sou digno de amor com minhas qualidades e defeitos. Relações têm riscos, mas eu posso lidar com eles. Existem pessoas capazes de me amar de verdade."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <center>
+            <a href="../../listaferramentas.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Voltar para Ferramentas</a>
+        </center>
+
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-brand">
+                &copy; 2026 Bruno de Souza
+            </div>
+            <div class="social-links">
+                <a href="https://www.instagram.com/psi.brunosg/" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://wa.me/5553991898309" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.linkedin.com/in/psi-bsouza/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        function translateNeed(type) {
+            const display = document.getElementById('trans-res');
+            let text = "";
+            let color = "";
+            
+            if (type === 'ninguem') {
+                text = "✨ <strong>Reestruturação:</strong> 'Isso é uma generalização (Tudo ou Nada). Já tive pessoas que gostaram de mim. O futuro não está escrito.'";
+                color = "#0288d1";
+            } else if (type === 'fingir') {
+                text = "✨ <strong>Reestruturação:</strong> 'Se eu finjo, eles amam a máscara, não a mim. Ser autêntico é o único jeito de encontrar conexão real. Alguns vão ficar.'";
+                color = "#ff7043";
+            } else if (type === 'defeito') {
+                text = "✨ <strong>Reestruturação:</strong> 'Todos têm falhas. Minhas dificuldades não me tornam inamável. Sou um ser humano em construção, digno de afeto.'";
+                color = "#01579b";
+            }
+            
+            display.style.opacity = 0;
+            display.style.borderTop = `5px solid ${color}`;
+            
+            setTimeout(() => {
+                display.innerHTML = `<p style="font-size:1.1rem; color:#2d3436;">${text}</p>`;
+                display.style.opacity = 1;
+            }, 200);
+        }
+    </script>
+
+</body>
+</html>
