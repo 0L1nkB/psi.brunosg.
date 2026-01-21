@@ -3,413 +3,365 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privação Emocional - Caderno Terapêutico</title>
+    <title>Privação Emocional | Bruno de Souza</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <style>
         :root {
-            /* Paleta Lúdica "Nuvem Solitária" */
-            --paper-line: #eef2ff;    /* Linhas azuladas bem claras */
-            --paper-bg: #fdfbff;      /* Fundo quase branco levemente lilás */
-            --ink-color: #4b5563;
+            /* Identidade Visual - Tema "Vazio/Acolhimento" */
+            --bg-color: #f3e8ff;      /* Roxo muito pálido */
+            --primary: #8b5cf6;       /* Roxo Suave (Carência/Sensibilidade) */
+            --primary-dark: #5b21b6;
+            --accent: #6366f1;        /* Índigo (Acolhimento/Conexão) */
+            --text: #2d3436;
+            --card-border: #ddd6fe;
             
-            /* Cores do Esquema (Privação = Frio/Vazio -> Calor/Acolhimento) */
-            --primary: #8b5cf6;       /* Roxo Suave */
-            --primary-hover: #7c3aed;
-            --secondary: #6366f1;     /* Índigo */
-            
-            /* Tags de Personas */
-            --tag-diego-bg: #e0e7ff; --tag-diego-text: #3730a3;
-            --tag-clara-bg: #fce7f3; --tag-clara-text: #9d174d;
-
-            --radius: 16px;
-            --shadow-paper: 3px 3px 10px rgba(0,0,0,0.05);
+            /* Cores Específicas */
+            --invisible-color: #4338ca; /* Índigo Escuro (Invisível/Diego) */
+            --resent-color: #db2777;    /* Rosa Escuro (Ressentida/Clara) */
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Nunito', sans-serif;
-            color: var(--ink-color);
-            line-height: 1.6;
-            background-color: var(--paper-bg);
-            /* Efeito Papel Pautado */
-            background-image: linear-gradient(var(--paper-line) 1px, transparent 1px);
-            background-size: 100% 2rem;
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#d8b4fe 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            color: var(--text);
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            align-items: center;
         }
 
-        h1, h2, h3, h4 {
-            font-family: 'Patrick Hand', cursive;
-            color: #1f2937;
-        }
-
-        /* --- HEADER --- */
+        /* --- CABEÇALHO --- */
         header {
-            background-color: rgba(255, 255, 255, 0.95);
-            border-bottom: 2px dashed #c7d2fe;
-            padding: 2rem 0;
-            margin-bottom: 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);
-        }
-
-        .header-content {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0 20px;
             text-align: center;
+            margin: 20px auto 40px auto;
+            background: white;
+            padding: 30px 20px;
+            border-radius: 25px;
+            border: 3px dashed var(--primary);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            position: relative;
+            max-width: 800px;
+            width: 100%;
         }
 
-        .header-title {
-            font-size: 2.5rem;
+        header::before {
+            content: ""; 
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%) rotate(-1deg);
+            width: 140px; height: 35px; 
+            background-color: rgba(139, 92, 246, 0.2); 
+            border: 1px solid rgba(0,0,0,0.05); 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2rem;
             color: var(--primary);
-            margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 0px #f3e8ff;
+            text-transform: uppercase;
+            margin: 0;
+            font-weight: 800;
         }
 
-        .header-subtitle {
-            font-size: 1.2rem;
-            color: #6b7280;
-            font-family: 'Patrick Hand', cursive;
-        }
+        .subtitle { margin-top: 5px; color: #636e72; font-weight: 600; }
 
         /* --- CONTAINER --- */
         .main-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0 20px;
+            max-width: 850px;
             width: 100%;
-            display: grid;
-            gap: 35px;
-            margin-bottom: 60px;
+            margin-bottom: 80px;
         }
 
-        /* --- CARDS (PAPEL) --- */
-        .paper-card {
-            background-color: #ffffff;
-            border-radius: 2px;
-            box-shadow: var(--shadow-paper);
-            border: 1px solid #e5e7eb;
-            padding: 2rem;
-            position: relative;
-            transform: rotate(-0.5deg);
-            transition: transform 0.3s;
-        }
-        
-        .paper-card:hover { transform: rotate(0deg) translateY(-3px); }
-        
-        /* Fita Adesiva Decorativa */
-        .paper-card::before {
-            content: '';
-            position: absolute;
-            top: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 30px;
-            background-color: rgba(230, 230, 250, 0.6); /* Lavanda translúcido */
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            opacity: 0.8;
+        /* --- CARDS DE CONTEÚDO --- */
+        .content-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.05);
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
         }
 
-        .card-header {
+        .content-card:hover {
+            border-color: var(--card-border);
+            transform: translateY(-2px);
+        }
+
+        .card-title {
+            color: var(--primary-dark);
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid var(--paper-line);
+            gap: 10px;
+            border-bottom: 2px dashed #eee;
             padding-bottom: 10px;
         }
 
-        .card-icon { font-size: 1.8rem; color: var(--primary); }
-        .card-title { font-size: 1.8rem; margin: 0; }
-
-        /* --- POST-IT (DEFINIÇÃO) --- */
-        .post-it {
-            background-color: #e0e7ff; /* Azulzinho */
-            padding: 1.5rem;
-            border-radius: 2px 2px 16px 2px;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
-            font-family: 'Patrick Hand', cursive;
-            font-size: 1.3rem;
-            color: #312e81;
-            transform: rotate(1deg);
-            margin: 20px 0;
-            border-left: 5px solid #818cf8;
-        }
-
-        /* --- PERSONAS --- */
-        .persona-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-        }
-
-        .persona-card {
-            background: #fff;
+        .highlight-box {
+            background: #ede9fe;
+            border-left: 5px solid var(--primary);
             padding: 20px;
-            border: 2px dashed #c4b5fd;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 1rem;
+            color: #4338ca;
+        }
+
+        /* --- GRID DE PERSONAS (DUAL) --- */
+        .dual-symptoms {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .symptom-column h4 {
+            text-align: center; margin-bottom: 15px; font-weight: 800; text-transform: uppercase; font-size: 0.9rem;
+        }
+
+        .symptom-item {
+            background: #f8f9fa;
+            padding: 15px;
             border-radius: 12px;
+            display: flex; flex-direction: column; gap: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid;
         }
         
-        .persona-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .persona-name { font-size: 1.4rem; font-weight: 700; color: #4c1d95; }
-        .persona-tag { font-family: 'Nunito', sans-serif; font-size: 0.8rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; }
-        
-        .tag-diego { background: var(--tag-diego-bg); color: var(--tag-diego-text); }
-        .tag-clara { background: var(--tag-clara-bg); color: var(--tag-clara-text); }
+        .style-invisible { border-color: var(--invisible-color); }
+        .style-resent { border-color: var(--resent-color); }
 
-        /* --- STICKERS (3 DIMENSÕES) --- */
-        .sticker-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;
+        .persona-tag {
+            font-size: 0.75rem; text-transform: uppercase; font-weight: 800;
+            padding: 4px 10px; border-radius: 20px; width: fit-content;
         }
-        
-        .sticker-box {
-            background: white; padding: 1.5rem; border-radius: 12px;
-            border: 2px solid #f3f4f6; text-align: center;
-            transition: all 0.3s;
-        }
-        .sticker-box:hover { border-color: var(--primary); transform: scale(1.02); }
-        .sticker-icon { font-size: 2rem; margin-bottom: 10px; display: block; }
+        .tag-diego { background: #e0e7ff; color: var(--invisible-color); }
+        .tag-clara { background: #fce7f3; color: var(--resent-color); }
 
-        /* --- TRADUTOR INTERATIVO --- */
-        .translator-area {
-            background-color: #faf5ff; /* Roxo ultra claro */
-            padding: 2rem; border-radius: 20px;
-            border: 2px dashed #d8b4fe; text-align: center;
+        /* --- WIDGET: TRADUTOR DE NECESSIDADES --- */
+        .translator-container {
+            text-align: center;
+            background: #eef2ff; /* Índigo muito claro */
+            padding: 25px;
+            border-radius: 20px;
+            border: 2px dashed #818cf8;
         }
 
-        .btn-translate {
-            background: white; border: 2px solid #ddd6fe;
-            padding: 10px 20px; margin: 5px; border-radius: 30px;
-            font-family: 'Nunito', sans-serif; font-weight: 700; color: #5b21b6;
-            cursor: pointer; transition: all 0.2s;
-            box-shadow: 0 4px 0 #ddd6fe;
-        }
-        .btn-translate:active { box-shadow: 0 0 0 #ddd6fe; transform: translateY(4px); }
-        .btn-translate:hover { background: #fff; border-color: var(--primary); color: var(--primary); }
-
-        .result-bubble {
-            background: white; padding: 20px; border-radius: 20px;
-            margin-top: 20px; border: 2px solid #e9d5ff;
-            font-family: 'Patrick Hand', cursive; font-size: 1.3rem;
-            color: #4c1d95; min-height: 100px; display: flex; align-items: center; justify-content: center;
+        .translator-display {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: 0.3s;
         }
 
-        /* --- ACCORDIONS --- */
-        details {
-            background: #f5f3ff; border-radius: 12px; margin-bottom: 10px;
-            border: 1px solid #ddd6fe;
+        .btn-trans {
+            background: white; border: 2px solid #c7d2fe; color: #4338ca;
+            padding: 10px 20px; border-radius: 30px; font-weight: 700;
+            cursor: pointer; margin: 5px; transition: 0.2s; font-family: 'Quicksand';
         }
-        summary {
-            padding: 15px; font-weight: 700; cursor: pointer; list-style: none;
-            display: flex; justify-content: space-between; color: #5b21b6;
-        }
-        summary:hover { background: #ede9fe; border-radius: 12px; }
-        .details-content { padding: 20px; border-top: 1px dashed #ddd6fe; color: #4b5563; }
+        .btn-trans:hover { border-color: var(--accent); background: var(--accent); color: white; }
 
-        /* --- FLASHCARD --- */
-        .flashcard-container { perspective: 1000px; width: 100%; height: 280px; cursor: pointer; }
-        .flashcard-inner {
-            position: relative; width: 100%; height: 100%; text-align: center;
-            transition: transform 0.6s; transform-style: preserve-3d;
+        /* --- NEUROBIOLOGIA --- */
+        .neuro-box {
+            display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; margin-top: 20px;
         }
-        .flashcard-container.flipped .flashcard-inner { transform: rotateY(180deg); }
-        
-        .flashcard-front, .flashcard-back {
+        .neuro-item {
+            flex: 1; min-width: 200px;
+            background: #fafafa; border: 1px solid #eee;
+            padding: 20px; border-radius: 15px;
+            text-align: center;
+        }
+        .neuro-item i { font-size: 2rem; color: var(--primary); margin-bottom: 10px; }
+        .neuro-item h4 { margin: 5px 0; font-size: 1rem; color: var(--primary-dark); }
+        .neuro-item p { font-size: 0.85rem; color: #666; margin: 0; }
+
+        /* --- FLIP CARDS --- */
+        .flip-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .flip-card {
+            background-color: transparent;
+            height: 300px;
+            perspective: 1000px;
+            cursor: pointer;
+            margin: 0 auto;
+            max-width: 350px;
+            width: 100%;
+        }
+
+        .flip-card-inner {
+            position: relative; width: 100%; height: 100%;
+            text-align: center; transition: transform 0.6s;
+            transform-style: preserve-3d;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+
+        .flip-front, .flip-back {
             position: absolute; width: 100%; height: 100%;
             -webkit-backface-visibility: hidden; backface-visibility: hidden;
-            border-radius: 16px; padding: 2rem;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            box-shadow: var(--shadow-paper); border: 2px solid;
-        }
-        
-        .flashcard-front {
-            background: #f3e8ff; border-color: #d8b4fe; color: #6b21a8;
-        }
-        .flashcard-back {
-            background: #ecfdf5; border-color: #6ee7b7; color: #047857;
-            transform: rotateY(180deg);
+            padding: 25px; border-radius: 15px; border: 2px solid #dfe6e9;
+            box-sizing: border-box;
         }
 
-        /* --- FOOTER PADRÃO --- */
+        .flip-front { background-color: white; color: #2d3436; }
+        .flip-back { background-color: var(--accent); color: white; transform: rotateY(180deg); border-color: var(--accent); }
+
+        /* Botão Voltar */
+        .btn-back {
+            display: block; margin: 30px auto; text-align: center; color: #b2bec3; text-decoration: none; font-weight: 600;
+        }
+        .btn-back:hover { color: var(--primary); }
+
+        /* --- FOOTER ADAPTADO --- */
         footer {
-            background-color: #ffffff;
-            border-top: 1px solid #e5e7eb;
-            padding: 2rem 0;
+            width: 100%;
+            background-color: white;
+            border-top: 1px dashed #b2bec3;
+            padding: 30px 20px;
             margin-top: auto;
         }
         .footer-container {
-            max-width: 1000px;
+            max-width: 900px;
             margin: 0 auto;
-            padding: 0 20px;
-            display: flex; justify-content: space-between; align-items: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .footer-brand { color: #64748b; font-size: 0.9rem; font-weight: 600; }
-        .social-links { display: flex; gap: 1.5rem; }
-        .social-links a { color: #94a3b8; font-size: 1.2rem; transition: color 0.2s; }
-        .social-links a:hover { color: var(--primary); }
+        .footer-brand { color: #636e72; font-weight: 700; font-size: 0.95rem; }
+        .social-links { display: flex; gap: 20px; }
+        .social-links a { color: #b2bec3; font-size: 1.4rem; transition: all 0.3s ease; }
+        .social-links a:hover { color: var(--primary); transform: translateY(-3px); }
 
-        @media (max-width: 640px) {
-            .footer-container { flex-direction: column; gap: 1rem; }
-            .persona-grid, .sticker-grid { grid-template-columns: 1fr; }
+        @media (max-width: 600px) {
+            .dual-symptoms { grid-template-columns: 1fr; }
+            .footer-container { flex-direction: column; gap: 15px; }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="header-content">
-            <h1 class="header-title">Privação Emocional</h1>
-            <p class="header-subtitle">Caderno de Psicoeducação</p>
-        </div>
+    <header data-aos="fade-down">
+        <h1>Privação Emocional</h1>
+        <div class="subtitle">O vazio invisível</div>
     </header>
 
     <div class="main-container">
-
-        <div class="paper-card">
-            <div class="card-header">
-                <i class="fas fa-wind card-icon"></i>
-                <h2 class="card-title">O Vazio Invisível</h2>
-            </div>
+        
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-wind"></i> O Vazio Invisível</div>
             <p>Este é o esquema da solidão. Não é sobre o que fizeram de ruim com você, mas sobre o que <strong>deixaram de fazer</strong> (o afeto, a escuta e o apoio que faltaram).</p>
-            
-            <div class="post-it">
-                <i class="fas fa-thumbtack" style="color:#4338ca; margin-right:10px;"></i>
-                "Ninguém me entende de verdade. Eu cuido de todo mundo, mas quando eu preciso... não tem ninguém lá."
+            <div class="highlight-box">
+                <i class="fa-solid fa-heart-crack"></i> <strong>A Sensação Central:</strong> "Ninguém me entende de verdade. Eu cuido de todo mundo, mas quando eu preciso... não tem ninguém lá."
             </div>
         </div>
 
-        <div class="paper-card" style="transform: rotate(0.5deg);">
-            <div class="card-header">
-                <i class="fas fa-user-friends card-icon"></i>
-                <h2 class="card-title">Espelhos da Vida Real</h2>
-            </div>
-            <p>Quem tem esse esquema costuma agir de duas formas principais:</p>
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-users"></i> Formas de Enfrentamento</div>
             
-            <div class="persona-grid">
-                <div class="persona-card">
-                    <div class="persona-header">
-                        <span class="persona-name">Diego</span>
-                        <span class="persona-tag tag-diego">O Invisível</span>
+            <div class="dual-symptoms">
+                <div class="symptom-column">
+                    <div class="symptom-item style-invisible">
+                        <span class="persona-tag tag-diego">Diego (O Invisível)</span>
+                        <div><strong>Comportamento:</strong> Nunca pede nada. É o amigo "fácil de lidar". No fundo, sente-se sozinho e que seus sentimentos não importam.</div>
                     </div>
-                    <p>Diego nunca pede nada. Ele é o amigo "fácil de lidar". No fundo, sente-se sozinho e acredita que seus sentimentos não importam. Escolhe parceiras frias porque a solidão lhe é familiar.</p>
-                    <p style="font-size:0.85rem; color:#4338ca;"><strong>Comportamento:</strong> Rendição (Não pede)</p>
-                </div>
-
-                <div class="persona-card">
-                    <div class="persona-header">
-                        <span class="persona-name">Clara</span>
-                        <span class="persona-tag tag-clara">A Ressentida</span>
+                    <div class="symptom-item style-invisible">
+                        <div><strong>Consequência:</strong> Escolhe parceiros frios porque a solidão lhe é familiar.</div>
                     </div>
-                    <p>Clara faz tudo por todos, mas vive com raiva. Ela não pede ajuda, ela cobra: "Ninguém vê o que eu faço!". Ela ataca as pessoas por não adivinharem o que ela precisa.</p>
-                    <p style="font-size:0.85rem; color:#be185d;"><strong>Comportamento:</strong> Ataque (Cobra)</p>
+                </div>
+
+                <div class="symptom-column">
+                    <div class="symptom-item style-resent">
+                        <span class="persona-tag tag-clara">Clara (A Ressentida)</span>
+                        <div><strong>Comportamento:</strong> Faz tudo por todos, mas vive com raiva. Não pede ajuda, cobra: "Ninguém vê o que eu faço!".</div>
+                    </div>
+                    <div class="symptom-item style-resent">
+                        <div><strong>Consequência:</strong> Ataca as pessoas por não adivinharem suas necessidades, gerando conflito.</div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="paper-card">
-            <div class="card-header">
-                <i class="fas fa-layer-group card-icon"></i>
-                <h2 class="card-title">O Que Está Faltando?</h2>
-            </div>
-            <div class="sticker-grid">
-                <div class="sticker-box">
-                    <span class="sticker-icon">❤️</span>
-                    <h4>Cuidado</h4>
-                    <p>Falta de toque, abraço, carinho físico. A sensação de "colo".</p>
-                </div>
-                <div class="sticker-box">
-                    <span class="sticker-icon">👂</span>
-                    <h4>Empatia</h4>
-                    <p>Falta de alguém que escute e valide seus sentimentos ("Eu te entendo").</p>
-                </div>
-                <div class="sticker-box">
-                    <span class="sticker-icon">🛡️</span>
-                    <h4>Proteção</h4>
-                    <p>Falta de alguém para dar direção, conselhos ou segurança.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="paper-card" style="transform: rotate(-0.5deg);">
-            <div class="card-header">
-                <i class="fas fa-language card-icon"></i>
-                <h2 class="card-title">Tradutor de Necessidades</h2>
-            </div>
-            <p>Quem tem privação não pede, reclama. Transforme a "Queixa" em "Pedido":</p>
-            
-            <div class="translator-area">
-                <p style="margin-bottom:15px; font-weight:700;">Qual é a sua queixa hoje?</p>
-                <div>
-                    <button class="btn-translate" onclick="translateNeed('sozinho')">"Eu tenho que fazer tudo sozinho!"</button>
-                    <button class="btn-translate" onclick="translateNeed('entende')">"Você nunca me entende!"</button>
-                    <button class="btn-translate" onclick="translateNeed('frio')">"Você é uma pedra de gelo!"</button>
-                </div>
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-language"></i> Tradutor de Necessidades</div>
+            <div class="translator-container">
+                <p style="font-weight:700; color:#4338ca; margin-bottom:15px;">Quem tem privação não pede, reclama. Transforme a "Queixa" em "Pedido":</p>
                 
-                <div id="translator-bubble" class="result-bubble">
-                    Toque em uma queixa para traduzir...
+                <div>
+                    <button class="btn-trans" onclick="translateNeed('sozinho')">"Eu tenho que fazer tudo sozinho!"</button>
+                    <button class="btn-trans" onclick="translateNeed('entende')">"Você nunca me entende!"</button>
+                    <button class="btn-trans" onclick="translateNeed('frio')">"Você é uma pedra de gelo!"</button>
+                </div>
+
+                <div class="translator-display" id="trans-res">
+                    <span style="color:#b0bec5; font-style:italic;">Clique na queixa...</span>
                 </div>
             </div>
         </div>
 
-        <div class="paper-card">
-            <div class="card-header">
-                <i class="fas fa-brain card-icon"></i>
-                <h2 class="card-title">Conceitos Clínicos</h2>
-            </div>
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-brain"></i> Por Dentro da Mente</div>
             
-            <details>
-                <summary>🧠 Neurobiologia: O Espelho Quebrado <i class="fas fa-chevron-down"></i></summary>
-                <div class="details-content">
-                    <p><strong>Neurônios-Espelho:</strong> Quando criança, você precisava que alguém refletisse suas emoções para aprender a lidar com elas. Sem isso, o cérebro tem dificuldade em nomear o que sente (Alexitimia). Você sente um desconforto físico, mas não sabe dizer se é tristeza ou raiva.</p>
+            <div class="neuro-box">
+                <div class="neuro-item">
+                    <i class="fa-solid fa-mirror"></i>
+                    <h4>O Espelho Quebrado</h4>
+                    <p>Neurônios-Espelho precisam de validação externa para aprender a regular emoções. Sem isso, você sente desconforto, mas não sabe nomear (Alexitimia).</p>
                 </div>
-            </details>
-
-            <details>
-                <summary>🌱 Como a Terapia Ajuda? <i class="fas fa-chevron-down"></i></summary>
-                <div class="details-content">
-                    <p>O terapeuta atua como um "Espelho Corretivo". Ele valida suas necessidades e ensina você a pedir o que precisa de forma direta, sem ataques, quebrando o ciclo de isolamento.</p>
+                <div class="neuro-item">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <h4>Autossuficiência</h4>
+                    <p>Para não sofrer, você criou uma capa de "Eu não preciso de ninguém". Isso protege da decepção, mas impede que o amor entre.</p>
                 </div>
-            </details>
-
-            <details>
-                <summary>⚠️ A Armadilha da Autossuficiência <i class="fas fa-chevron-down"></i></summary>
-                <div class="details-content">
-                    <p>Para não sofrer com a falta, você criou uma capa de "Eu não preciso de ninguém". Isso protege você da decepção, mas também impede que o amor entre. O objetivo é baixar essa guarda com segurança.</p>
-                </div>
-            </details>
+            </div>
         </div>
 
-        <div class="paper-card">
-            <div class="card-header">
-                <i class="fas fa-sync-alt card-icon"></i>
-                <h2 class="card-title">Vire o Pensamento</h2>
-            </div>
-            <p>Toque no cartão quando sentir o vazio ou a raiva:</p>
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-rotate"></i> Vire o Pensamento</div>
+            <p style="margin-bottom:20px; text-align:center; font-size:0.9rem; color:#aaa;">Toque no cartão para ativar o Adulto Saudável</p>
             
-            <div class="flashcard-container" onclick="this.classList.toggle('flipped')">
-                <div class="flashcard-inner">
-                    <div class="flashcard-front">
-                        <h3 style="font-family:'Patrick Hand'; font-size:1.5rem;">Voz da Privação</h3>
-                        <p style="margin-top:10px;">"Não adianta pedir, ninguém liga pra mim. Eles deveriam saber o que eu preciso! Se eu tiver que pedir, não vale a pena."</p>
-                        <i class="fas fa-hand-pointer" style="margin-top:20px; color:#8b5cf6; font-size:1.5rem;"></i>
-                    </div>
-                    <div class="flashcard-back">
-                        <h3 style="font-family:'Patrick Hand'; font-size:1.5rem;">Voz do Adulto Saudável</h3>
-                        <p style="margin-top:10px;">"Minhas necessidades são válidas. As pessoas não leem mentes. Vou tentar pedir o que preciso de forma clara e vulnerável. Eu mereço ser cuidado."</p>
+            <div class="flip-grid">
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-front">
+                            <i class="fa-solid fa-comment-slash" style="font-size:2.5rem; color:#dfe6e9; margin-bottom:15px;"></i>
+                            <h3 style="font-size:1.1rem; color:#2d3436;">Voz da Privação</h3>
+                            <p style="margin-top:10px; font-size:0.9rem; color:#555;">"Não adianta pedir, ninguém liga pra mim. Eles deveriam saber o que eu preciso! Se eu tiver que pedir, não vale a pena."</p>
+                        </div>
+                        <div class="flip-back">
+                            <h3 style="font-size:1.1rem; margin-bottom:10px;">Adulto Saudável</h3>
+                            <p style="font-size:0.9rem;">"Minhas necessidades são válidas. As pessoas não leem mentes. Vou tentar pedir o que preciso de forma clara e vulnerável. Eu mereço ser cuidado."</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <center>
+            <a href="../../listaferramentas.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Voltar para Ferramentas</a>
+        </center>
 
     </div>
 
@@ -419,31 +371,39 @@
                 &copy; 2026 Bruno de Souza
             </div>
             <div class="social-links">
-                <a href="https://www.instagram.com/psi.brunosg/" target="_blank"><i class="fab fa-instagram"></i></a>
-                <a href="https://wa.me/5553991898309" target="_blank"><i class="fab fa-whatsapp"></i></a>
-                <a href="https://www.linkedin.com/in/psi-bsouza/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                <a href="https://www.instagram.com/psi.brunosg/" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://wa.me/5553991898309" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.linkedin.com/in/psi-bsouza/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
             </div>
         </div>
     </footer>
 
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
+        AOS.init();
+
         function translateNeed(type) {
-            const bubble = document.getElementById('translator-bubble');
+            const display = document.getElementById('trans-res');
             let text = "";
+            let color = "";
             
             if (type === 'sozinho') {
-                text = "✨ Tradução: 'Estou me sentindo sobrecarregado. Preciso de apoio e ajuda prática hoje.'";
+                text = "✨ <strong>Tradução:</strong> 'Estou me sentindo sobrecarregado. Preciso de apoio e ajuda prática hoje.'";
+                color = "#4338ca";
             } else if (type === 'entende') {
-                text = "✨ Tradução: 'Estou triste e preciso de empatia. Só quero que me escute sem tentar resolver.'";
+                text = "✨ <strong>Tradução:</strong> 'Estou triste e preciso de empatia. Só quero que me escute sem tentar resolver.'";
+                color = "#8b5cf6";
             } else if (type === 'frio') {
-                text = "✨ Tradução: 'Estou carente e preciso de afeto. Podemos ficar abraçados um pouco?'";
+                text = "✨ <strong>Tradução:</strong> 'Estou carente e preciso de afeto. Podemos ficar abraçados um pouco?'";
+                color = "#db2777";
             }
             
-            bubble.style.opacity = 0;
+            display.style.opacity = 0;
+            display.style.borderTop = `5px solid ${color}`;
+            
             setTimeout(() => {
-                bubble.innerHTML = text;
-                bubble.style.opacity = 1;
-                bubble.style.transition = "opacity 0.3s";
+                display.innerHTML = `<p style="font-size:1.1rem; color:#2d3436;">${text}</p>`;
+                display.style.opacity = 1;
             }, 200);
         }
     </script>
