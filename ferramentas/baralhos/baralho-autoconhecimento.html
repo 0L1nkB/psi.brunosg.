@@ -3,65 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Baralho Autoconhecimento | Caderno Incrível</title>
+    <title>Baralho Autoconhecimento | Bruno de Souza</title>
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
     <style>
         :root {
-            /* Paleta Lúdica */
-            --bg-color: #f0f8ff;
-            --primary: #6c5ce7; /* Roxo */
-            --secondary: #00b894; /* Verde */
-            --accent: #fdcb6e; /* Amarelo */
-            --card-back: linear-gradient(135deg, #0984e3, #6c5ce7); /* Azul para Roxo */
+            /* Paleta "Jornada Interior" */
+            --bg-color: #f3e8ff;      /* Roxo muito pálido */
+            --primary: #9333ea;       /* Roxo Vibrante */
+            --primary-dark: #7e22ce;
+            --accent: #f59e0b;        /* Dourado (Insight) */
             --text: #2d3436;
-            --shadow: rgba(0,0,0,0.1);
+            --card-front: #ffffff;
+            --card-back: #a855f7;     /* Roxo Médio */
         }
 
+        * { box-sizing: border-box; }
+
         body {
-            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+            font-family: 'Quicksand', sans-serif;
             background-color: var(--bg-color);
-            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
-            background-size: 20px 20px;
+            background-image: radial-gradient(#d8b4fe 2px, transparent 2px);
+            background-size: 25px 25px;
             margin: 0;
             padding: 20px;
+            min-height: 100vh;
+            color: var(--text);
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
-            color: var(--text);
-            overflow-x: hidden;
         }
 
         /* --- CABEÇALHO --- */
         header {
             text-align: center;
-            margin-bottom: 40px;
+            margin: 20px auto 40px auto;
             background: white;
-            padding: 20px 50px;
+            padding: 30px 20px;
             border-radius: 25px;
             border: 3px dashed var(--primary);
             box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
             position: relative;
-            max-width: 90%;
+            max-width: 800px;
+            width: 100%;
         }
 
-        /* Fita Adesiva */
         header::before {
-            content: ""; position: absolute; top: -15px; left: 50%; transform: translateX(-50%) rotate(-1deg);
-            width: 150px; height: 35px; background-color: rgba(255, 118, 117, 0.8);
-            border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            content: ""; 
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%) rotate(-1deg);
+            width: 140px; height: 35px; 
+            background-color: rgba(147, 51, 234, 0.2); 
+            border: 1px solid rgba(0,0,0,0.05); 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        h1 { margin: 0; color: var(--primary); font-size: 1.8rem; text-transform: uppercase; }
-        .subtitle { margin-top: 5px; color: #636e72; font-weight: bold; }
+        header h1 {
+            font-size: 2rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            margin: 0;
+            font-weight: 800;
+        }
+
+        .subtitle { margin-top: 5px; color: #636e72; font-weight: 600; }
 
         /* --- ÁREA DA CARTA --- */
         .card-container {
-            width: 320px;
-            height: 480px;
+            width: 100%;
+            max-width: 400px;
+            height: 550px;
             perspective: 1000px;
             margin-bottom: 30px;
             cursor: pointer;
+            position: relative;
         }
 
         .card {
@@ -69,9 +86,9 @@
             height: 100%;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             border-radius: 25px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
         }
 
         .card.flipped {
@@ -86,65 +103,77 @@
             border-radius: 25px;
             display: flex; flex-direction: column;
             justify-content: center; align-items: center;
-            padding: 30px;
+            padding: 40px;
             box-sizing: border-box;
             text-align: center;
             border: 8px solid white;
-            background: white;
         }
 
         /* VERSO (CAPA) */
-       .face-back {
-    background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
-    color: white;
-    transform: rotateY(0deg);
-}
+        .face-back {
+            background: linear-gradient(135deg, var(--primary) 0%, #d8b4fe 100%);
+            color: white;
+            transform: rotateY(0deg);
+        }
 
         .icon-box {
             font-size: 5rem;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             filter: drop-shadow(0 4px 4px rgba(0,0,0,0.2));
             background: rgba(255,255,255,0.2);
-            width: 100px; height: 100px;
+            width: 120px; height: 120px;
             display: flex; align-items: center; justify-content: center;
             border-radius: 50%;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
         }
 
         .deck-title {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 2px;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.1);
         }
 
         .tap-hint {
-            margin-top: 20px;
-            font-size: 0.9rem;
+            margin-top: 30px;
+            font-size: 0.95rem;
             opacity: 0.9;
-            background: rgba(255,255,255,0.2);
-            padding: 5px 15px;
+            background: rgba(0,0,0,0.2);
+            padding: 8px 20px;
             border-radius: 20px;
-            font-weight: bold;
+            font-weight: 700;
         }
 
         /* FRENTE (PERGUNTA) */
         .face-front {
             transform: rotateY(180deg);
-            background-color: #fffce0; /* Amarelo clarinho papel */
-            background-image: linear-gradient(#ffeaa7 1px, transparent 1px);
-            background-size: 100% 30px; /* Linhas de caderno */
-            align-items: center;
-            justify-content: center;
+            background-color: #fff;
+            /* Padrão sutil de estrelas/poeira */
+            background-image: radial-gradient(#f3e8ff 20%, transparent 20%);
+            background-size: 10px 10px;
+        }
+
+        .decoration {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+            filter: drop-shadow(0 2px 0 rgba(0,0,0,0.1));
         }
 
         .question-text {
             font-size: 1.5rem;
-            font-weight: bold;
+            font-weight: 700;
             color: #2d3436;
             line-height: 1.5;
-            transform: rotate(-1deg); /* Leve inclinação lúdica */
-            margin-top: 20px;
+            margin-top: 10px;
         }
 
         .card-number {
@@ -153,79 +182,73 @@
             right: 20px;
             font-size: 0.9rem;
             color: #b2bec3;
-            font-weight: bold;
-            background: white;
-            padding: 5px 10px;
-            border-radius: 10px;
-            border: 1px dashed #ccc;
+            font-weight: 700;
+            background: #f8f9fa;
+            padding: 5px 12px;
+            border-radius: 12px;
+            border: 1px solid #dfe6e9;
         }
 
-        /* Decoração de "Clips" ou Adesivo */
-        .clip {
-            position: absolute;
-            top: -15px; left: 50%; transform: translateX(-50%);
-            width: 40px; height: 80px;
-            background: #b2bec3;
-            border-radius: 20px;
-            opacity: 0.5;
-            z-index: -1;
-        }
-
-        .decoration {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            filter: drop-shadow(2px 2px 0 rgba(0,0,0,0.1));
-        }
-
-        /* BOTÃO */
+        /* BOTÃO E FOOTER */
         .btn-draw {
-            background-color: var(--secondary);
+            background-color: var(--accent);
             color: white;
             border: none;
-            padding: 15px 50px;
-            font-size: 1.3rem;
-            font-weight: bold;
-            font-family: inherit;
+            padding: 18px 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            font-family: 'Quicksand', sans-serif;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 6px 0 #00896f;
-            transition: transform 0.1s;
+            box-shadow: 0 4px 0 #d97706;
+            transition: all 0.2s;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            margin-bottom: 40px;
         }
 
-        .btn-draw:hover { transform: translateY(-3px); }
-        .btn-draw:active { transform: translateY(4px); box-shadow: none; }
+        .btn-draw:hover { transform: translateY(-3px); background-color: #fbbf24; }
+        .btn-draw:active { transform: translateY(2px); box-shadow: none; }
+
+        .back-link {
+            color: #b2bec3;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+            margin-top: auto;
+        }
+        .back-link:hover { color: var(--primary); }
 
         /* Responsividade */
         @media (max-width: 400px) {
-            .card-container { width: 90%; height: 420px; }
-            h1 { font-size: 1.5rem; }
+            .card-container { width: 100%; height: 450px; }
+            h1 { font-size: 1.6rem; }
             .question-text { font-size: 1.3rem; }
         }
     </style>
 </head>
 <body>
 
-    <header>
+    <header data-aos="fade-down">
         <h1>Autoconhecimento</h1>
         <div class="subtitle">O Espelho da Alma 🪞</div>
     </header>
 
-    <div class="card-container" onclick="flipCard()">
+    <div class="card-container" onclick="flipCard()" data-aos="zoom-in">
         <div class="card" id="card">
             
             <div class="card-face face-back">
-                <div class="icon-box"><i class="fa-solid fa-mirror"></i></div> <div class="deck-title">QUEM<br>SOU EU?</div>
+                <div class="icon-box"><i class="fa-solid fa-user-astronaut"></i></div> 
+                <div class="deck-title">QUEM<br>SOU EU?</div>
                 <div class="tap-hint">Toque para refletir</div>
             </div>
 
             <div class="card-face face-front">
-                <div class="decoration">💡</div>
+                <div class="decoration"><i class="fa-solid fa-lightbulb"></i></div>
                 <div class="card-number" id="counter">∞</div>
                 <div class="question-text" id="q-text">
-                    Clique no botão para retirar uma carta!
+                    Clique no botão abaixo para retirar uma carta e iniciar sua jornada!
                 </div>
             </div>
 
@@ -233,101 +256,103 @@
     </div>
 
     <button class="btn-draw" onclick="drawCard(event)">
-        <i class="fa-solid fa-wand-magic-sparkles"></i> TIRAR CARTA
+        <i class="fa-solid fa-wand-magic-sparkles"></i> Nova Carta
     </button>
 
+    <a href="../listaferramentas.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> Voltar para Ferramentas</a>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // BANCO DE DADOS (Extraído do PDF Baralho do Auto Conhecimento)
+        AOS.init();
+
         const questions = [
             "Como o mundo funciona e como viver melhor nele?",
             "O que eu tenho de melhor?",
-            "O que me faz feliz?",
-            "Estou maximizando meus talentos e trabalhando meus pontos fracos?",
-            "Quais são meus pontos fracos?",
-            "Quais são meus pontos fortes?",
-            "Qual a minha essência e onde me sinto melhor?",
-            "Estou no caminho certo?",
-            "Aonde quero chegar?",
-            "Quais livros eu gosto de ler?",
-            "Onde eu gosto de ir para me sentir feliz?",
-            "Onde me dá paz?",
-            "Quando quero sentir-me agitado, que lugares gosto de ir?",
-            "Qual a minha visão de futuro?",
-            "Quais estilos musicais eu gosto mais?",
-            "Quais são as músicas que marcaram a minha vida até hoje?",
-            "Quem sou eu?",
-            "Em que acredito? Porque acredito?",
-            "A vida perfeita pra mim é...",
-            "Do que eu não abro mão?",
-            "Se hoje fosse minha última semana de vida, o que faria de diferente?",
-            "O que eu amo nas pessoas?",
-            "Se pudesse mudar uma única coisa em mim, mas que mudaria tudo na minha vida... O que seria?",
-            "As coisas que acredito como Verdade... São verdades mesmo ou eu acho/alguém me ensinou?",
-            "Quais verdades novas seriam boas para mudar minha vida para melhor?",
-            "O que eu mereço?",
-            "As coisas nas quais eu acredito realmente fazem sentido para mim?",
+            "O que me faz feliz de verdade?",
+            "Estou maximizando meus talentos ou apenas sobrevivendo?",
+            "Quais são meus pontos fracos que preciso aceitar?",
+            "Quais são meus pontos fortes que preciso valorizar?",
+            "Qual a minha essência e onde me sinto 'em casa'?",
+            "Estou no caminho certo para mim?",
+            "Aonde quero chegar nos próximos 5 anos?",
+            "Quais livros mudaram a minha vida?",
+            "Onde eu gosto de ir para me sentir em paz?",
+            "O que me tira a paz instantaneamente?",
+            "Quando quero sentir energia, que lugares gosto de ir?",
+            "Qual a minha visão de futuro ideal?",
+            "Quais músicas contam a história da minha vida?",
+            "Quem sou eu quando ninguém está olhando?",
+            "Em que acredito? E por que acredito nisso?",
+            "A vida perfeita pra mim seria...",
+            "Do que eu não abro mão de jeito nenhum (valores)?",
+            "Se hoje fosse minha última semana de vida, o que faria?",
+            "O que eu mais amo nas pessoas próximas a mim?",
+            "Se pudesse mudar uma única coisa em mim, o que seria?",
+            "As verdades que carrego são minhas ou me foram ensinadas?",
+            "Quais novas crenças me ajudariam a viver melhor?",
+            "O que eu sinto que mereço da vida?",
             "O que me incomoda na minha personalidade?",
-            "O que outras pessoas dizem sobre mim que eu não concordo?",
-            "O que outras pessoas dizem sobre mim que eu concordo?",
+            "O que outras pessoas dizem sobre mim que eu discordo?",
+            "O que outras pessoas dizem sobre mim que é verdade?",
             "De quais características minhas eu me envergonho?",
-            "O que eu gosto na minha pessoa?",
-            "Em relação a quais características minhas eu sinto orgulho?",
-            "Em que aspectos eu me diferencio das outras pessoas?",
-            "Quanto eu amei?",
+            "O que eu mais gosto na minha aparência?",
+            "Em relação a quais conquistas eu sinto orgulho?",
+            "Em que aspectos eu me sinto diferente da maioria?",
+            "Quanto eu amei e fui amado até hoje?",
             "O que eu gosto de fazer e estou deixando de lado?",
-            "Que tipo de pessoa eu escolheria como companheira para a vida?",
-            "Onde eu quero viver?",
-            "O que eu desejo alcançar?",
-            "Que tipo de aventuras eu quero viver?",
-            "Quais são os meus fantasmas (medos)?",
-            "Quais são minhas memórias favoritas?",
+            "Que tipo de pessoa eu escolheria para dividir a vida hoje?",
+            "Onde eu realmente quero viver (cidade, campo, praia)?",
+            "O que eu desejo alcançar profissionalmente?",
+            "Que tipo de aventuras eu ainda quero viver?",
+            "Quais são os meus fantasmas (medos) mais antigos?",
+            "Quais são minhas 3 memórias favoritas?",
             "O que eu mais amo na vida?",
-            "O que mais me preocupa na vida?",
-            "Que tipo de pessoa me desanima?",
-            "Quais problemas posso ajudar a resolver?",
-            "Como tenho gerenciado meu tempo?",
-            "O que eu diria a quem eu amo se hoje fosse meu último dia de vida?",
+            "O que mais me preocupa atualmente?",
+            "Que tipo de pessoa drena minha energia?",
+            "Quais problemas do mundo eu gostaria de ajudar a resolver?",
+            "Como tenho gerenciado meu tempo? Com sabedoria?",
+            "O que eu diria a quem eu amo se hoje fosse o fim?",
             "O que faz com que eu me sinta mais vivo?",
-            "Quais são minhas memórias mais dolorosas?",
-            "O que tenho feito pela minha saúde física, emocional e espiritual?",
-            "O que me faz pensar?",
-            "O que eu faço que me faça suspirar?",
-            "Como tenho cuidado do meu corpo?",
-            "Do que eu posso me orgulhar até agora?",
+            "Quais são minhas memórias mais dolorosas e o que aprendi?",
+            "O que tenho feito pela minha saúde física?",
+            "O que me faz parar para pensar?",
+            "O que eu faço que me faz suspirar de alívio?",
+            "Como tenho cuidado da minha espiritualidade?",
+            "Do que eu posso me orgulhar hoje?",
             "O que eu gostaria de ler no meu epitáfio?",
-            "Quantos anos você teria se você não soubesse quantos anos você tem?",
-            "Você está fazendo o que você acredita, ou você se contenta com o que está fazendo?",
-            "Se a felicidade fosse a moeda nacional, que tipo de trabalho o tornaria rico?",
-            "Qual é a coisa que você mais gostaria de fazer para mudar o mundo?",
-            "Se a vida é tão curta, por que fazemos tantas coisas que não gostamos?",
-            "Quando tudo já está dito e feito, será que você disse mais do que fez?",
-            "Se você pudesse oferecer a um recém-nascido só um conselho, qual seria?",
-            "Pense em algo que você sabe e que você faria diferente da maioria das pessoas.",
+            "Quantos anos eu teria se não soubesse minha idade?",
+            "Estou fazendo o que acredito ou o que esperam de mim?",
+            "Se dinheiro não existisse, eu trabalharia com o quê?",
+            "Qual é a coisa que eu mais gostaria de mudar no mundo?",
+            "Por que faço coisas que não gosto? É necessário?",
+            "Será que eu falo mais do que faço?",
+            "Se pudesse dar um conselho a um recém-nascido, qual seria?",
+            "O que eu faria diferente da maioria das pessoas?",
             "O que é pior: falhar ou nunca tentar?",
-            "Como podem as coisas que fazem você feliz não fazerem todos felizes?",
-            "Qual a coisa que você não fez e que você realmente quer fazer? O que te prende?",
-            "Você está se apegando a algo que precisa deixar ir?",
-            "Se você tivesse que se mudar para longe agora, para onde iria e por quê?",
-            "Alguma vez o seu maior medo se tornou realidade?",
-            "Qual é a sua memória mais feliz da infância? O que a torna tão especial?",
-            "Caso você não tenha conseguido ainda, o que você tem a perder?",
-            "Você prefere ser um gênio preocupado ou uma pessoa simples e alegre?",
-            "Quais são os seus medos?",
-            "Em que momento nos últimos tempos você se sentiu mais apaixonado e vivo?",
-            "Se você ganhasse um milhão de dólares, você sairia do seu trabalho atual?",
-            "Por que você está onde está?",
-            "Se não for agora, então quando?",
-            "Se você soubesse que todos que você conhece morreriam amanhã, quem você visitaria hoje?",
+            "Por que o que me faz feliz não faz os outros felizes?",
+            "Qual a coisa que eu não fiz e que realmente quero fazer?",
+            "Estou me apegando a algo que preciso deixar ir?",
+            "Se tivesse que mudar de país agora, para onde iria?",
+            "Alguma vez meu maior medo se tornou realidade? E aí?",
+            "Qual é a minha memória mais feliz da infância?",
+            "O que eu tenho a perder se tentar meu sonho?",
+            "Prefiro ser um gênio preocupado ou um simples alegre?",
+            "Quais são os meus medos irracionais?",
+            "Em que momento recente me senti apaixonado pela vida?",
+            "Se ganhasse na loteria, eu continuaria trabalhando?",
+            "Por que estou onde estou hoje?",
+            "Se não for agora, quando será?",
+            "Se soubesse que todos morreriam amanhã, quem eu visitaria?",
             "Qual é a diferença entre estar vivo e realmente viver?",
-            "Quando é hora de parar de calcular riscos e ir em frente?",
-            "Se aprendermos com os nossos erros, por que temos medo de cometer um erro?",
-            "Quais são os lugares onde você sente-se bem?",
-            "Qual foi o último filme que vi?",
-            "Quando foi a última vez que você notou o som da sua própria respiração?",
-            "Como eu me vejo?",
-            "Qual foi o último livro que li?",
-            "Você toma suas decisões ou deixa que os outros tomem por você?",
-            "Como sou visto pelos outros?",
+            "Quando é hora de parar de calcular riscos e pular?",
+            "Se aprendemos com erros, por que tenho medo de errar?",
+            "Quais são os lugares onde me sinto bem-vindo?",
+            "Qual foi o último filme que me fez chorar?",
+            "Quando foi a última vez que ouvi minha respiração?",
+            "Como eu me vejo no espelho?",
+            "Qual foi o último livro que explodiu minha mente?",
+            "Eu tomo minhas decisões ou deixo os outros decidirem?",
+            "Como sou visto pelos outros (na minha opinião)?",
             "Onde eu fui e tenho vontade de voltar? Por quê?"
         ];
 
@@ -373,7 +398,6 @@
         function flipCard() {
             cardElement.classList.toggle('flipped');
         }
-
     </script>
 
 </body>
