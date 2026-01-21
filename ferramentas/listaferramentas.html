@@ -89,7 +89,7 @@
             max-width: 1250px;
             width: 100%;
             margin: 0 auto;
-            flex: 1; /* Empurra o footer para baixo se a tela for grande */
+            flex: 1;
         }
 
         .section-label {
@@ -99,6 +99,12 @@
             padding-left: 10px; text-transform: uppercase; letter-spacing: 1px;
             border-bottom: 2px dashed rgba(0,0,0,0.1);
             padding-bottom: 15px;
+        }
+
+        /* Sub-títulos para domínios */
+        .domain-label {
+            font-size: 1.1rem; font-weight: 700; color: #636e72;
+            margin: 30px 0 15px; text-transform: uppercase; letter-spacing: 1px;
         }
 
         .grid {
@@ -136,11 +142,11 @@
         .card-title { font-weight: 700; font-size: 1.15rem; margin-bottom: 8px; color: #2d3436; }
         .card-desc { font-size: 0.9rem; color: #636e72; line-height: 1.5; }
 
-        /* --- FOOTER (Estilo Cartão) --- */
+        /* --- FOOTER (Cartão) --- */
         footer {
             margin: 80px auto 40px auto;
             background: white;
-            border: 2px dashed #b2bec3; /* Mesmo estilo dos cards */
+            border: 2px dashed #b2bec3;
             border-radius: 20px;
             padding: 25px 40px;
             width: 100%;
@@ -184,12 +190,7 @@
             .section-label { font-size: 1.2rem; margin: 40px 0 20px; }
             header { padding: 30px 15px; }
             header h1 { font-size: 1.6rem; }
-            
-            footer { 
-                flex-direction: column; 
-                text-align: center; 
-                padding: 30px 20px;
-            }
+            footer { flex-direction: column; text-align: center; padding: 30px 20px; }
         }
     </style>
 </head>
@@ -203,8 +204,165 @@
 
     <div class="dashboard-container">
 
+        <div class="section-label" style="color: var(--color-esquema);">
+            <i class="fa-solid fa-puzzle-piece"></i> Terapia do Esquema
+        </div>
+        
+        <div class="domain-label"><i class="fa-solid fa-book"></i> Guias Gerais</div>
+        <div class="grid">
+            <a href="psicoeducacao/te/esquema.html" class="tool-card">
+                <div class="card-icon" style="color: var(--color-esquema);"><i class="fa-solid fa-book-open"></i></div>
+                <div class="card-title">Guia dos Esquemas</div>
+                <div class="card-desc">Visão Geral</div>
+            </a>
+            <a href="psicoeducacao/te/modos.html" class="tool-card">
+                <div class="card-icon" style="color: var(--color-esquema);"><i class="fa-solid fa-masks-theater"></i></div>
+                <div class="card-title">Guia dos Modos</div>
+                <div class="card-desc">Criança, Pais e Adulto</div>
+            </a>
+        </div>
+
+        <div class="domain-label">I. Desconexão e Rejeição</div>
+        <div class="grid">
+            <a href="psicoeducacao/te/esquema-abandono.html" class="tool-card">
+                <div class="card-icon" style="color: #ef5350;"><i class="fa-solid fa-heart-crack"></i></div>
+                <div class="card-title">Abandono</div>
+                <div class="card-desc">Instabilidade</div>
+            </a>
+            <a href="psicoeducacao/te/esquema-desconfianca.html" class="tool-card">
+                <div class="card-icon" style="color: #ef5350;"><i class="fa-solid fa-shield-halved"></i></div>
+                <div class="card-title">Desconfiança</div>
+                <div class="card-desc">Abuso</div>
+            </a>
+            <a href="psicoeducacao/te/esquema-privacao.html" class="tool-card">
+                <div class="card-icon" style="color: #ef5350;"><i class="fa-solid fa-battery-quarter"></i></div>
+                <div class="card-title">Privação Emocional</div>
+                <div class="card-desc">Vazio de Cuidado</div>
+            </a>
+            <a href="psicoeducacao/te/esquema-defectividade.html" class="tool-card">
+                <div class="card-icon" style="color: #ef5350;"><i class="fa-solid fa-mask"></i></div>
+                <div class="card-title">Defectividade</div>
+                <div class="card-desc">Vergonha</div>
+            </a>
+            <a href="psicoeducacao/te/esquema-isolamento.html" class="tool-card">
+                <div class="card-icon" style="color: #ef5350;"><i class="fa-solid fa-user-astronaut"></i></div>
+                <div class="card-title">Isolamento Social</div>
+                <div class="card-desc">Alienação</div>
+            </a>
+        </div>
+
+        <div class="domain-label">II. Autonomia e Desempenho</div>
+        <div class="grid">
+            <a href="psicoeducacao/te/esquema-dependencia.html" class="tool-card">
+                <div class="card-icon" style="color: #42a5f5;"><i class="fa-solid fa-baby-carriage"></i></div>
+                <div class="card-title">Dependência</div>
+                <div class="card-desc">Incompetência</div>
+            </a>
+            <a href="psicoeducacao/te/esquema-vulnerabilidade.html" class="tool-card">
+                <div class="card-icon" style="color: #42a5f5;"><i class="fa-solid fa-shield-virus"></i></div>
+                <div class="card-title">Vulnerabilidade</div>
+                <div class="card-desc">Medo de Catástrofe</div>
+            </a>
+            <a href="psicoeducacao/te/esquema-emaranhamento.html" class="tool-card">
+                <div class="card-icon" style="color: #42a5f5;"><i class="fa-solid fa-people-arrows"></i></div>
+                <div class="card-title">Emaranhamento</div>
+                <div class="card-desc">Self Subdesenvolvido</div>
+            </a>
+            <a href="psicoeducacao/te/esquema-fracasso.html" class="tool-card">
+                <div class="card-icon" style="color: #42a5f5;"><i class="fa-solid fa-chart-line-down"></i></div>
+                <div class="card-title">Fracasso</div>
+                <div class="card-desc">Sensação de Atraso</div>
+            </a>
+        </div>
+
+        <div class="domain-label">III. Limites Prejudicados</div>
+        <div class="grid">
+            <a href="psicoeducacao/te/esquema-merecimento.html" class="tool-card">
+                <div class="card-icon" style="color: #ec407a;"><i class="fa-solid fa-crown"></i></div>
+                <div class="card-title">Merecimento</div>
+                <div class="card-desc">Grandiosidade</div>
+            </a>
+            <a href="psicoeducacao/te/esquema-autocontrole.html" class="tool-card">
+                <div class="card-icon" style="color: #ec407a;"><i class="fa-solid fa-gamepad"></i></div>
+                <div class="card-title">Autocontrole</div>
+                <div class="card-desc">Insuficiente</div>
+            </a>
+        </div>
+
+        <div class="domain-label">IV. Direcionamento para o Outro</div>
+        <div class="grid">
+            <a href="psicoeducacao/te/esquema-subjugacao.html" class="tool-card">
+                <div class="card-icon" style="color: #66bb6a;"><i class="fa-solid fa-lock"></i></div>
+                <div class="card-title">Subjugação</div>
+                <div class="card-desc">Sacrifício do Eu</div>
+            </a>
+            <a href="psicoeducacao/te/esquema-autossacrificio.html" class="tool-card">
+                <div class="card-icon" style="color: #66bb6a;"><i class="fa-solid fa-hand-holding-heart"></i></div>
+                <div class="card-title">Autossacrifício</div>
+                <div class="card-desc">Cuidar Demais</div>
+            </a>
+            <a href="psicoeducacao/te/esquema-busca-aprovacao.html" class="tool-card">
+                <div class="card-icon" style="color: #66bb6a;"><i class="fa-solid fa-star"></i></div>
+                <div class="card-title">Busca de Aprovação</div>
+                <div class="card-desc">Reconhecimento</div>
+            </a>
+        </div>
+
+        <div class="domain-label">V. Supervigilância e Inibição</div>
+        <div class="grid">
+            <a href="psicoeducacao/te/esquema-negativismo.html" class="tool-card">
+                <div class="card-icon" style="color: #78909c;"><i class="fa-solid fa-cloud-showers-heavy"></i></div>
+                <div class="card-title">Negativismo</div>
+                <div class="card-desc">Pessimismo</div>
+            </a>
+            <a href="psicoeducacao/te/esquema-inibicao.html" class="tool-card">
+                <div class="card-icon" style="color: #78909c;"><i class="fa-solid fa-snowflake"></i></div>
+                <div class="card-title">Inibição Emocional</div>
+                <div class="card-desc">Bloqueio Afetivo</div>
+            </a>
+            <a href="psicoeducacao/te/esquema-padroes.html" class="tool-card">
+                <div class="card-icon" style="color: #78909c;"><i class="fa-solid fa-ruler-combined"></i></div>
+                <div class="card-title">Padrões Inflexíveis</div>
+                <div class="card-desc">Perfeccionismo</div>
+            </a>
+            <a href="psicoeducacao/te/esquema-punicao.html" class="tool-card">
+                <div class="card-icon" style="color: #78909c;"><i class="fa-solid fa-gavel"></i></div>
+                <div class="card-title">Punição</div>
+                <div class="card-desc">Intolerância ao Erro</div>
+            </a>
+        </div>
+
+        <div class="domain-label">Inventários</div>
+        <div class="grid">
+            <a href="escalas-te/ysqs3.html" class="tool-card">
+                <div class="card-icon" style="color: var(--color-esquema);"><i class="fa-solid fa-list-ol"></i></div>
+                <div class="card-title">YSQ-S3</div>
+                <div class="card-desc">Esquemas (Adulto)</div>
+            </a>
+            <a href="escalas-te/smi.html" class="tool-card">
+                <div class="card-icon" style="color: var(--color-esquema);"><i class="fa-solid fa-chart-pie"></i></div>
+                <div class="card-title">SMI (Modos)</div>
+                <div class="card-desc">Inventário de Modos</div>
+            </a>
+            <a href="escalas-te/yci.html" class="tool-card">
+                <div class="card-icon" style="color: var(--color-esquema);"><i class="fa-solid fa-child-reaching"></i></div>
+                <div class="card-title">YCI</div>
+                <div class="card-desc">Inventário para Crianças</div>
+            </a>
+            <a href="escalas-te/ypi.html" class="tool-card">
+                <div class="card-icon" style="color: var(--color-esquema);"><i class="fa-solid fa-user-group"></i></div>
+                <div class="card-title">YPI</div>
+                <div class="card-desc">Estilos Parentais</div>
+            </a>
+            <a href="escalas-te/yrai.html" class="tool-card">
+                <div class="card-icon" style="color: var(--color-esquema);"><i class="fa-solid fa-person-running"></i></div>
+                <div class="card-title">YRAI</div>
+                <div class="card-desc">Evitação</div>
+            </a>
+        </div>
+
         <div class="section-label" style="color: var(--color-psico);">
-            <i class="fa-solid fa-book-open"></i> Psicoeducação
+            <i class="fa-solid fa-book-open"></i> Psicoeducação Geral
         </div>
         <div class="grid">
             <a href="psicoeducacao/psicoeducacao-tag.html" class="tool-card">
@@ -442,139 +600,6 @@
             </a>
         </div>
 
-        <div class="section-label" style="color: var(--color-esquema);">
-            <i class="fa-solid fa-puzzle-piece"></i> Terapia do Esquema
-        </div>
-        <div class="grid">
-            <a href="psicoeducacao/te/esquema.html" class="tool-card">
-                <div class="card-icon" style="color: var(--color-esquema);"><i class="fa-solid fa-book"></i></div>
-                <div class="card-title">Guia dos Esquemas</div>
-                <div class="card-desc">Introdução Geral</div>
-            </a>
-             <a href="psicoeducacao/te/modos.html" class="tool-card">
-                <div class="card-icon" style="color: var(--color-esquema);"><i class="fa-solid fa-masks-theater"></i></div>
-                <div class="card-title">Guia dos Modos</div>
-                <div class="card-desc">Explicação dos Modos</div>
-            </a>
-
-            <a href="psicoeducacao/te/esquema-abandono.html" class="tool-card">
-                <div class="card-icon" style="color: var(--color-esquema);"><i class="fa-solid fa-heart-crack"></i></div>
-                <div class="card-title">Abandono</div>
-                <div class="card-desc">Instabilidade</div>
-            </a>
-            <a href="psicoeducacao/te/esquema-privacao.html" class="tool-card">
-                <div class="card-icon" style="color: var(--color-esquema);"><i class="fa-solid fa-battery-quarter"></i></div>
-                <div class="card-title">Privação Emocional</div>
-                <div class="card-desc">Vazio e Falta</div>
-            </a>
-            <a href="psicoeducacao/te/esquema-subjugacao.html" class="tool-card">
-                <div class="card-icon" style="color: var(--color-esquema);"><i class="fa-solid fa-lock"></i></div>
-                <div class="card-title">Subjugação</div>
-                <div class="card-desc">Sacrifício do Eu</div>
-            </a>
-            <a href="psicoeducacao/te/esquema-padroes.html" class="tool-card">
-                <div class="card-icon" style="color: var(--color-esquema);"><i class="fa-solid fa-ruler-combined"></i></div>
-                <div class="card-title">Padrões Inflexíveis</div>
-                <div class="card-desc">Perfeccionismo</div>
-            </a>
-            <a href="psicoeducacao/te/esquema-merecimento.html" class="tool-card">
-                <div class="card-icon" style="color: var(--color-esquema);"><i class="fa-solid fa-crown"></i></div>
-                <div class="card-title">Merecimento</div>
-                <div class="card-desc">Grandiosidade</div>
-            </a>
-            <a href="psicoeducacao/te/esquema-isolamento.html" class="tool-card">
-                <div class="card-icon" style="color: var(--color-esquema);"><i class="fa-solid fa-user-astronaut"></i></div>
-                <div class="card-title">Isolamento Social</div>
-                <div class="card-desc">Sentir-se Diferente</div>
-            </a>
-            <a href="psicoeducacao/te/esquema-defectividade.html" class="tool-card">
-                <div class="card-icon" style="color: var(--color-esquema);"><i class="fa-solid fa-mask"></i></div>
-                <div class="card-title">Defectividade</div>
-                <div class="card-desc">Vergonha e Falha</div>
-            </a>
-            <a href="psicoeducacao/te/esquema-fracasso.html" class="tool-card">
-                <div class="card-icon" style="color: var(--color-esquema);"><i class="fa-solid fa-chart-line-down"></i></div>
-                <div class="card-title">Fracasso</div>
-                <div class="card-desc">Sensação de Atraso</div>
-            </a>
-            <a href="psicoeducacao/te/esquema-dependencia.html" class="tool-card">
-                <div class="card-icon" style="color: var(--color-esquema);"><i class="fa-solid fa-baby-carriage"></i></div>
-                <div class="card-title">Dependência</div>
-                <div class="card-desc">Incompetência</div>
-            </a>
-            <a href="psicoeducacao/te/esquema-vulnerabilidade.html" class="tool-card">
-                <div class="card-icon" style="color: var(--color-esquema);"><i class="fa-solid fa-shield-virus"></i></div>
-                <div class="card-title">Vulnerabilidade</div>
-                <div class="card-desc">Medo de Catástrofe</div>
-            </a>
-            <a href="psicoeducacao/te/esquema-emaranhamento.html" class="tool-card">
-                <div class="card-icon" style="color: var(--color-esquema);"><i class="fa-solid fa-people-arrows"></i></div>
-                <div class="card-title">Emaranhamento</div>
-                <div class="card-desc">Fusão de Identidade</div>
-            </a>
-            <a href="psicoeducacao/te/esquema-negativismo.html" class="tool-card">
-                <div class="card-icon" style="color: var(--color-esquema);"><i class="fa-solid fa-cloud-showers-heavy"></i></div>
-                <div class="card-title">Negativismo</div>
-                <div class="card-desc">Pessimismo</div>
-            </a>
-            <a href="psicoeducacao/te/esquema-punicao.html" class="tool-card">
-                <div class="card-icon" style="color: var(--color-esquema);"><i class="fa-solid fa-gavel"></i></div>
-                <div class="card-title">Punição</div>
-                <div class="card-desc">Intolerância ao Erro</div>
-            </a>
-            <a href="psicoeducacao/te/esquema-inibicao.html" class="tool-card">
-                <div class="card-icon" style="color: var(--color-esquema);"><i class="fa-solid fa-snowflake"></i></div>
-                <div class="card-title">Inibição Emocional</div>
-                <div class="card-desc">Bloqueio Afetivo</div>
-            </a>
-            <a href="psicoeducacao/te/esquema-autocontrole.html" class="tool-card">
-                <div class="card-icon" style="color: var(--color-esquema);"><i class="fa-solid fa-gamepad"></i></div>
-                <div class="card-title">Autocontrole</div>
-                <div class="card-desc">Impulsividade</div>
-            </a>
-            <a href="psicoeducacao/te/esquema-autossacrificio.html" class="tool-card">
-                <div class="card-icon" style="color: var(--color-esquema);"><i class="fa-solid fa-hand-holding-heart"></i></div>
-                <div class="card-title">Autossacrifício</div>
-                <div class="card-desc">Cuidar Demais</div>
-            </a>
-            <a href="psicoeducacao/te/esquema-busca-aprovacao.html" class="tool-card">
-                <div class="card-icon" style="color: var(--color-esquema);"><i class="fa-solid fa-star"></i></div>
-                <div class="card-title">Busca de Aprovação</div>
-                <div class="card-desc">Agradar aos Outros</div>
-            </a>
-            <a href="psicoeducacao/te/esquema-desconfianca.html" class="tool-card">
-                <div class="card-icon" style="color: var(--color-esquema);"><i class="fa-solid fa-shield-halved"></i></div>
-                <div class="card-title">Desconfiança</div>
-                <div class="card-desc">Abuso e Medo</div>
-            </a>
-
-            <a href="escalas-te/smi.html" class="tool-card">
-                <div class="card-icon" style="color: var(--color-esquema);"><i class="fa-solid fa-chart-pie"></i></div>
-                <div class="card-title">SMI (Modos)</div>
-                <div class="card-desc">Inventário de Modos</div>
-            </a>
-            <a href="escalas-te/ysqs3.html" class="tool-card">
-                <div class="card-icon" style="color: var(--color-esquema);"><i class="fa-solid fa-list-ol"></i></div>
-                <div class="card-title">YSQ-S3</div>
-                <div class="card-desc">Esquemas (Adulto)</div>
-            </a>
-            <a href="escalas-te/yci.html" class="tool-card">
-                <div class="card-icon" style="color: var(--color-esquema);"><i class="fa-solid fa-child-reaching"></i></div>
-                <div class="card-title">YCI</div>
-                <div class="card-desc">Inventário para Crianças</div>
-            </a>
-            <a href="escalas-te/ypi.html" class="tool-card">
-                <div class="card-icon" style="color: var(--color-esquema);"><i class="fa-solid fa-user-group"></i></div>
-                <div class="card-title">YPI</div>
-                <div class="card-desc">Estilos Parentais</div>
-            </a>
-            <a href="escalas-te/yrai.html" class="tool-card">
-                <div class="card-icon" style="color: var(--color-esquema);"><i class="fa-solid fa-person-running"></i></div>
-                <div class="card-title">YRAI</div>
-                <div class="card-desc">Evitação</div>
-            </a>
-        </div>
-
         <div class="section-label" style="color: var(--color-aval);">
             <i class="fa-solid fa-clipboard-check"></i> Avaliação & Testes
         </div>
@@ -731,20 +756,19 @@
             </a>
         </div>
 
+        <footer>
+            <div class="footer-container">
+                <div class="footer-info">
+                    &copy; 2026 Bruno de Souza • <i class="fa-solid fa-heart" style="color:#e17055;"></i> Feito com carinho
+                </div>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/psi.brunosg/" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://wa.me/5553991898309" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://www.linkedin.com/in/psi-bsouza/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </footer>
     </div>
-
-    <footer>
-        <div class="footer-container">
-            <div class="footer-info">
-                &copy; 2026 Bruno de Souza • <i class="fa-solid fa-heart" style="color:#e17055;"></i> Feito com carinho
-            </div>
-            <div class="social-links">
-                <a href="https://www.instagram.com/psi.brunosg/" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
-                <a href="https://wa.me/5553991898309" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-                <a href="https://www.linkedin.com/in/psi-bsouza/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-            </div>
-        </div>
-    </footer>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
