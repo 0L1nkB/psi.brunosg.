@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baralho da Assertividade | Bruno de Souza</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Paleta "Assertividade" */
+            --bg-color: #fefce8;      /* Amarelo muito pálido */
+            --primary: #eab308;       /* Amarelo Escuro (Ação Assertiva) */
+            --primary-dark: #a16207;
+            --accent: #3b82f6;        /* Azul (Clareza) */
+            --text: #2d3436;
+            --card-front: #ffffff;
+            --card-back: #fde047;     /* Amarelo Claro */
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#fef08a 2px, transparent 2px);
+            background-size: 25px 25px;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* --- CABEÇALHO --- */
+        header {
+            text-align: center;
+            margin: 20px auto 40px auto;
+            background: white;
+            padding: 30px 20px;
+            border-radius: 25px;
+            border: 3px dashed var(--primary);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            position: relative;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        header::before {
+            content: ""; 
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%) rotate(-1deg);
+            width: 140px; height: 35px; 
+            background-color: rgba(234, 179, 8, 0.2); 
+            border: 1px solid rgba(0,0,0,0.05); 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2rem;
+            color: var(--primary-dark); /* Texto mais escuro para contraste */
+            text-transform: uppercase;
+            margin: 0;
+            font-weight: 800;
+        }
+
+        .subtitle { margin-top: 5px; color: #636e72; font-weight: 600; }
+
+        /* --- ÁREA DA CARTA --- */
+        .card-container {
+            width: 100%;
+            max-width: 400px;
+            height: 550px;
+            perspective: 1000px;
+            margin-bottom: 30px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        /* LADOS DA CARTA */
+        .card-face {
+            position: absolute;
+            width: 100%; height: 100%;
+            backface-visibility: hidden;
+            border-radius: 25px;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            padding: 40px;
+            box-sizing: border-box;
+            text-align: center;
+            border: 8px solid white;
+        }
+
+        /* VERSO (CAPA) */
+        .face-back {
+            background: linear-gradient(135deg, var(--primary) 0%, #fde047 100%);
+            color: white; /* Texto branco no amarelo pode ser difícil de ler, ajustarei */
+            color: #713f12; /* Marrom escuro para contraste */
+            transform: rotateY(0deg);
+        }
+
+        .icon-box {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 4px 4px rgba(0,0,0,0.1));
+            background: rgba(255,255,255,0.4);
+            width: 120px; height: 120px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%;
+            border: 4px solid rgba(255,255,255,0.5);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .deck-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            color: #713f12; 
+        }
+
+        .tap-hint {
+            margin-top: 30px;
+            font-size: 0.95rem;
+            opacity: 0.9;
+            background: rgba(255,255,255,0.3);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 700;
+            color: #713f12;
+        }
+
+        /* FRENTE (SITUAÇÃO) */
+        .face-front {
+            transform: rotateY(180deg);
+            background-color: #fff;
+            /* Padrão sutil de balões de fala */
+            background-image: radial-gradient(#fef9c3 20%, transparent 20%);
+            background-size: 15px 15px;
+        }
+
+        .category-badge {
+            background: var(--accent);
+            color: white;
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+        }
+
+        .quote-icon {
+            font-size: 2.5rem;
+            color: #cbd5e1;
+            margin-bottom: 15px;
+        }
+
+        .situation-text {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #2d3436;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        /* BOTÃO E FOOTER */
+        .btn-draw {
+            background-color: var(--primary);
+            color: white; /* Ajuste para contraste se necessário */
+            color: #713f12;
+            border: none;
+            padding: 18px 50px;
+            font-size: 1.2rem;
+            font-weight: 800;
+            font-family: 'Quicksand', sans-serif;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #ca8a04;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        .btn-draw:hover { transform: translateY(-3px); background-color: #facc15; }
+        .btn-draw:active { transform: translateY(2px); box-shadow: none; }
+
+        .back-link {
+            color: #b2bec3;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+            margin-top: auto;
+        }
+        .back-link:hover { color: var(--primary); }
+
+        /* Responsividade */
+        @media (max-width: 400px) {
+            .card-container { width: 100%; height: 450px; }
+            h1 { font-size: 1.6rem; }
+            .situation-text { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header data-aos="fade-down">
+        <h1>Baralho da Assertividade</h1>
+        <div class="subtitle">Comunicação Clara e Respeitosa 🗣️</div>
+    </header>
+
+    <div class="card-container" onclick="flipCard()" data-aos="zoom-in">
+        <div class="card" id="card">
+            
+            <div class="card-face face-back">
+                <div class="icon-box"><i class="fa-solid fa-comments"></i></div> 
+                <div class="deck-title">SITUAÇÃO<br>DESAFIO</div>
+                <div class="tap-hint">Toque para praticar</div>
+            </div>
+
+            <div class="card-face face-front">
+                <div class="category-badge" id="cat-badge">Prática</div>
+                <div class="quote-icon"><i class="fa-solid fa-quote-left"></i></div>
+                <div class="situation-text" id="sit-text">
+                    Clique no botão abaixo para sortear uma situação e treinar sua assertividade!
+                </div>
+                <div class="quote-icon"><i class="fa-solid fa-quote-right"></i></div>
+            </div>
+
+        </div>
+    </div>
+
+    <button class="btn-draw" onclick="drawCard(event)">
+        <i class="fa-solid fa-shuffle"></i> Nova Situação
+    </button>
+
+    <a href="../listaferramentas.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> Voltar para Ferramentas</a>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        const situations = [
+            "Seu amigo te pediu dinheiro emprestado, mas você não pode emprestar.",
+            "Um colega de trabalho te interrompe constantemente durante as reuniões.",
+            "Você recebeu um prato errado no restaurante.",
+            "Alguém furou a fila na sua frente.",
+            "Seu parceiro(a) esqueceu uma data importante para você.",
+            "Um vendedor é insistente e você não quer comprar o produto.",
+            "Seu chefe te pede para fazer hora extra, mas você tem um compromisso.",
+            "Um amigo faz uma piada que te ofende.",
+            "Você precisa devolver uma roupa com defeito na loja.",
+            "Alguém te pede um favor que vai te atrapalhar muito.",
+            "Você não concorda com a opinião de um grupo de amigos.",
+            "Alguém está falando muito alto no cinema.",
+            "Você precisa pedir um aumento de salário.",
+            "Um familiar faz comentários sobre seu peso/aparência que você não gosta.",
+            "Você emprestou um livro e a pessoa não devolveu.",
+            "Alguém te critica na frente de outras pessoas.",
+            "Você quer terminar um relacionamento.",
+            "Você precisa pedir ajuda para realizar uma tarefa.",
+            "Alguém te dá um conselho não solicitado.",
+            "Você se sente ignorado em uma conversa.",
+             "Você precisa dizer 'não' para um convite de festa.",
+            "Alguém pega algo seu sem pedir.",
+            "Você quer expressar que se sentiu magoado com uma atitude.",
+            "Você precisa renegociar um prazo.",
+            "Alguém te culpa por algo que você não fez."
+        ];
+
+        const cardElement = document.getElementById('card');
+        const textElement = document.getElementById('sit-text');
+        
+        function drawCard(event) {
+            // Evita propagação do clique
+            if(event) event.stopPropagation();
+
+            // Animação de troca
+            if (cardElement.classList.contains('flipped')) {
+                cardElement.classList.remove('flipped');
+                
+                setTimeout(() => {
+                    updateContent();
+                    cardElement.classList.add('flipped');
+                }, 600);
+            } else {
+                updateContent();
+                cardElement.classList.add('flipped');
+            }
+        }
+
+        function updateContent() {
+            const randomIndex = Math.floor(Math.random() * situations.length);
+            const item = situations[randomIndex];
+            
+            textElement.innerText = item;
+        }
+
+        function flipCard() {
+            cardElement.classList.toggle('flipped');
+        }
+    </script>
+
+</body>
+</html>
