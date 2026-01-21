@@ -3,287 +3,423 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exercício: 100 Perguntas para o Relacionamento</title>
+    <title>100 Perguntas | Bruno de Souza</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
-    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     
     <style>
         :root {
-            --primary: #7DB9B6; 
-            --secondary: #E9EDC9; 
-            --accent: #E29578; 
-            --dark-green: #2D5A58;
-            --text-color: #4A4A4A;
-            --bg-body: #FBFBFB;
+            /* Paleta Romântica/Afeto */
+            --bg-color: #fff0f3;      /* Rosa muito pálido */
+            --primary: #ff758f;       /* Rosa Médio */
+            --primary-dark: #c9184a;  /* Rosa Escuro */
+            --accent: #ffb3c1;        /* Rosa Claro */
+            --text: #2d3436;
+            --card-bg: #ffffff;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            font-family: 'Open Sans', sans-serif;
-            background-color: var(--bg-body);
-            color: var(--text-color);
-            line-height: 1.8;
-        }
-
-        h1, h2, h3 { font-family: 'Quicksand', sans-serif; color: var(--dark-green); }
-
-        .container { max-width: 900px; margin: 0 auto; padding: 0 25px; }
-
-        /* --- Header --- */
-        header {
-            height: 45vh;
-            background: linear-gradient(135deg, var(--primary) 0%, #A2D2FF 100%);
-            display: flex; align-items: center; justify-content: center;
-            text-align: center; color: white; border-radius: 0 0 60px 60px;
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#ffccd5 2px, transparent 2px);
+            background-size: 25px 25px;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             padding: 20px;
         }
 
-        header h1 { font-size: 2.8rem; color: white; margin-bottom: 15px; }
-        header p { font-size: 1.1rem; max-width: 600px; opacity: 0.95; }
-
-        /* --- Simulador de Baralho --- */
-        .deck-wrapper {
+        /* --- HEADER --- */
+        header {
             text-align: center;
-            padding: 60px 20px;
-            background: var(--secondary);
-            border-radius: 40px;
-            margin: 40px 0;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.02);
+            margin: 20px 0 40px 0;
+            background: white;
+            padding: 30px 20px;
+            border-radius: 25px;
+            border: 3px dashed var(--primary);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            width: 100%;
+            max-width: 700px;
+            position: relative;
+        }
+
+        header::before {
+            content: ""; 
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%) rotate(-1deg);
+            width: 120px; height: 35px; 
+            background-color: rgba(255, 117, 143, 0.2); 
+            border: 1px solid rgba(0,0,0,0.05); 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+            font-weight: 800;
+        }
+
+        .subtitle {
+            color: #636e72;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        /* --- ÁREA DO BARALHO --- */
+        .deck-container {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
         }
 
         .card-display {
-            width: 350px;
-            height: 250px;
             background: white;
-            margin: 20px auto;
-            border-radius: 25px;
+            width: 100%;
+            min-height: 350px;
+            border-radius: 30px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 30px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
-            font-family: 'Quicksand', sans-serif;
-            font-weight: 600;
-            font-size: 1.2rem;
-            color: var(--dark-green);
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
-            cursor: default;
-            border: 2px solid var(--primary);
+            padding: 40px;
             text-align: center;
+            box-shadow: 0 10px 25px rgba(255, 117, 143, 0.15);
+            border: 2px solid var(--accent);
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
         }
 
-        .card-display.flip { transform: rotateY(180deg) scale(0.8); opacity: 0; }
+        .card-display:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(255, 117, 143, 0.25);
+            border-color: var(--primary);
+        }
 
-        .btn-draw {
-            background-color: var(--accent);
-            color: white;
-            border: none;
-            padding: 18px 45px;
-            border-radius: 35px;
-            font-size: 1.1rem;
+        .card-display.flip {
+            transform: rotateY(90deg) scale(0.9);
+            opacity: 0.5;
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+
+        .card-text {
+            font-size: 1.4rem;
             font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 25px;
-            box-shadow: 0 8px 20px rgba(226, 149, 120, 0.3);
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        .card-counter {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #b2bec3;
+            font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        .btn-draw:hover { transform: translateY(-3px) scale(1.02); background-color: #d17a5d; box-shadow: 0 12px 25px rgba(226, 149, 120, 0.4); }
-        .btn-draw:active { transform: translateY(0); }
-
-        .counter {
-            margin-top: 20px;
-            font-size: 0.9rem;
-            color: var(--dark-green);
-            opacity: 0.7;
-            font-weight: 600;
+        /* --- CONTROLES --- */
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
         }
 
-        /* --- Footer --- */
-        footer { background: #f4f4f4; padding: 60px 0; font-size: 0.9rem; color: #777; border-top: 1px solid #eee; text-align: center; }
+        .btn-draw {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 0 var(--primary-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-draw:hover {
+            background: var(--primary-dark);
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #880e4f;
+        }
+
+        .btn-draw:active {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
+
+        .btn-reset {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            padding: 15px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 0 #f3e5f5;
+        }
+
+        .btn-reset:hover {
+            background: var(--bg-color);
+            transform: rotate(180deg);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            margin-top: auto;
+            padding-top: 40px;
+            text-align: center;
+            width: 100%;
+        }
         
-        @media (max-width: 768px) {
-            header h1 { font-size: 2rem; }
-            .card-display { width: 100%; height: auto; min-height: 220px; }
+        .footer-container {
+            background: white;
+            border-top: 1px dashed #ffb3c1;
+            padding: 20px;
+            border-radius: 20px 20px 0 0;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 15px;
+            color: #b2bec3;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .back-link:hover { color: var(--primary); }
+
+        @media (max-width: 600px) {
+            .card-display { min-height: 280px; padding: 25px; }
+            .card-text { font-size: 1.2rem; }
+            h1 { font-size: 1.6rem; }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="container" data-aos="fade-up">
-            <h1>100 Perguntas</h1>
-            <p>Desbloqueie discussões significativas, descubra novos horizontes e cresçam juntos através do diálogo profundo.</p>
-        </div>
+    <header data-aos="fade-down">
+        <h1>100 Perguntas: Relacionamento</h1>
+        <div class="subtitle">Conexão, vulnerabilidade e descoberta</div>
     </header>
 
-    <main class="container">
+    <div class="deck-container">
+        
+        <div id="card-area" class="card-display" onclick="drawCard()" data-aos="zoom-in">
+            <div class="card-icon"><i class="fa-solid fa-infinity"></i></div>
+            <div class="card-text" id="question-text">Toque no botão para sortear uma pergunta</div>
+            <div class="card-counter" id="counter">100 cartas disponíveis</div>
+        </div>
 
-        <section data-aos="fade-up" style="padding: 40px 0;">
-            <div style="background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border-left: 6px solid var(--primary); margin-bottom: 30px;">
-                <p>Este exercício foi desenhado para ser um convite à vulnerabilidade e à conexão. Não há pressa: aproveitem cada pergunta para ouvir atentamente o que o outro tem a dizer.</p>
-            </div>
+        <div class="controls" data-aos="fade-up" data-aos-delay="200">
+            <button class="btn-draw" onclick="drawCard()">
+                <i class="fa-solid fa-shuffle"></i> Nova Pergunta
+            </button>
+            <button class="btn-reset" onclick="resetDeck()" title="Reiniciar Baralho">
+                <i class="fa-solid fa-rotate-right"></i>
+            </button>
+        </div>
 
-            <div class="deck-wrapper" data-aos="zoom-in">
-                <div id="card" class="card-display">Toque no botão para sortear uma das 100 perguntas reflexivas</div>
-                <button class="btn-draw" onclick="drawCard()">Sortear Pergunta</button>
-                <div class="counter" id="counter">Restam 100 perguntas no baralho</div>
-            </div>
-        </section>
-
-    </main>
+    </div>
 
     <footer>
-        <div class="container">
-            <p>Material de Psicoeducação Clínica</p>
-            <p style="margin-top: 10px;">Adaptado para suporte terapêutico digital por Bruno de Souza (CRP 07/44472)</p>
+        <div class="footer-container">
+            <a href="../listaferramentas.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> Voltar para Ferramentas</a>
+            <p style="font-size: 0.85rem; color: #a5b1c2;">&copy; 2026 Bruno de Souza</p>
         </div>
     </footer>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        AOS.init({ duration: 1000, once: true });
+        AOS.init();
 
-        // Lista completa das 100 questões extraídas das fases 1 a 4 do material
-        const questions = [
-            // Fase 1
+        const allQuestions = [
+            // Fase 1: Conexão Inicial & Comunicação
             "O quanto você se sente compreendido(a) pelo seu parceiro(a)?",
             "O que você gostaria que seu parceiro(a) entendesse melhor sobre você?",
-            "Em que momentos você se sente visto (a) pelo seu parceiro(a)?",
-            "Como você costuma se comunicar com seu parceiro(a)?",
-            "Quantas vezes por dia você gostaria de conversar com seu parceiro(a)?",
+            "Em que momentos você se sente realmente visto(a) pelo seu parceiro(a)?",
+            "Como você descreveria o estilo de comunicação de vocês hoje?",
+            "Quantas vezes por dia você gostaria de ter uma conversa significativa?",
             "Se seu parceiro(a) está chateado(a), como você prefere que ele(a) comunique isso?",
-            "O que torna difícil a comunicação entre vocês?",
-            "Quando algo te incomoda, como você comunica isso ao seu parceiro(a)?",
-            "Quando você está chateado(a), o que você espera do seu parceiro(a)?",
-            "Existe algum aspecto do relacionamento de vocês que nunca é falado? Por quê?",
-            "Sobre quais temas você gostaria de conversar mais com seu parceiro(a)?",
-            "Existe algo que você sempre teve vontade de perguntar ao seu parceiro(a)?",
-            "Sobre o que você gostaria que seu parceiro(a) se abrisse mais?",
-            "Qual foi algo que você contou ao seu parceiro(a) e que ninguém mais sabe?",
-            "Como vocês podem melhorar a comunicação no relacionamento?",
-            "O que geralmente leva a uma briga entre vocês?",
-            "Quais discussões costumam se repetir no relacionamento?",
-            "Como são, normalmente, as discussões entre vocês?",
-            "Qual é o seu estilo de lidar com conflitos e como isso impacta o relacionamento?",
-            "Como você pode se acolher nos momentos em que se sente reativo(a)?",
-            "Como vocês podem resolver os desentendimentos de forma mais eficaz?",
-            "Quais desafios vocês já superaram juntos?",
-            "Qual foi o maior desafio que vocês enfrentaram até agora no relacionamento?",
+            "O que, na sua opinião, torna difícil a comunicação entre vocês às vezes?",
+            "Quando algo te incomoda, qual é a sua primeira reação ao comunicar isso?",
+            "Quando você está chateado(a), o que você mais precisa do seu parceiro(a)? (Espaço, colo, conselho?)",
+            "Existe algum aspecto do relacionamento de vocês que parece um 'tabu'? Por quê?",
+            "Sobre quais temas você sente falta de conversar mais?",
+            "Existe algo que você sempre teve vontade de perguntar, mas teve medo?",
+            "Sobre o que você gostaria que seu parceiro(a) se abrisse mais com você?",
+            "Qual foi algo que você contou ao seu parceiro(a) e que ninguém mais no mundo sabe?",
+            "Qual é uma pequena mudança que melhoraria muito a comunicação de vocês?",
+            "O que geralmente serve de gatilho para uma briga entre vocês?",
+            "Quais discussões parecem se repetir em loop no relacionamento?",
+            "Como você descreveria o 'clima' de uma discussão típica entre vocês?",
+            "Qual é o seu estilo de lidar com conflitos (ataque, defesa, fuga)? Como isso afeta vocês?",
+            "Como você pode se acolher nos momentos em que se sente reativo(a) durante uma briga?",
+            "Como vocês poderiam encerrar os desentendimentos de forma mais amorosa?",
+            "Quais desafios difíceis vocês já superaram juntos que te dão orgulho?",
+            "Qual foi o maior desafio que vocês enfrentaram até agora?",
             "Qual é, hoje, o aspecto mais difícil do seu relacionamento?",
-            "Há questões não resolvidas entre vocês? Como poderiam resolvê-las?",
+            "Há alguma questão do passado que ainda dói e precisa ser resolvida?",
 
-            // Fase 2 (Variações e Aprofundamento)
-            "O quanto você se sente compreendido(a) pelo seu parceiro(a)?",
-            "O que você gostaria que seu parceiro(a) compreendesse melhor sobre você?",
-            "Quando você se sente visto(a) pelo seu parceiro(a)?",
-            "Como você se comunica com seu parceiro(a)?",
-            "Quantas vezes por dia você gostaria de conversar com seu parceiro(a)?",
-            "Se seu parceiro(a) estiver chateado(a), como você prefere que ele(a) expresse isso?",
-            "O que dificulta a comunicação entre vocês?",
-            "Quando algo está te incomodando, como você comunica isso ao seu parceiro(a)?",
-            "Quando você está chateado(a), o que espera do seu parceiro(a)?",
-            "Existe algum aspecto do relacionamento que vocês nunca conversam? Por quê?",
-            "Sobre quais assuntos você gostaria de conversar mais com seu parceiro(a)?",
-            "Existe algo que você sempre quis perguntar ao seu parceiro(a)?",
-            "Sobre o que você gostaria que seu parceiro(a) se abrisse mais?",
-            "Qual foi algo que você contou ao seu parceiro(a) e que mais ninguém sabe?",
-            "Como vocês podem melhorar a comunicação no relacionamento?",
-            "O que geralmente leva vocês a uma discussão?",
-            "Quais discussões tendem a se repetir no relacionamento?",
-            "Como são, geralmente, as discussões entre vocês?",
-            "Qual é o seu estilo de lidar com conflitos e como isso impacta o relacionamento?",
-            "Como você pode se acolher e se cuidar emocionalmente nos momentos em que se sente ativado(a)?",
-            "Como vocês podem resolver um desentendimento de forma mais eficaz?",
-            "Quais desafios vocês já superaram juntos?",
-            "Qual foi o maior desafio do relacionamento até agora?",
-            "Qual é, neste momento, o aspecto mais difícil do relacionamento?",
-            "Há questões não resolvidas entre vocês? Como elas podem ser resolvidas?",
+            // Fase 2: Profundidade & Vulnerabilidade
+            "Qual é a sua maior insegurança dentro deste relacionamento?",
+            "Em que momento você se sentiu mais amado(a) por mim?",
+            "Existe algum comportamento meu que faz você se sentir rejeitado(a)?",
+            "Qual é o seu maior medo em relação ao nosso futuro?",
+            "O que eu faço que faz você se sentir valorizado(a)?",
+            "Qual é a sua lembrança favorita de nós dois?",
+            "Se você pudesse mudar uma coisa no nosso passado, o que seria?",
+            "O que significa 'intimidade' para você, além do sexo?",
+            "Quando você se sente mais conectado(a) comigo?",
+            "O que eu poderia fazer para tornar seu dia a dia mais leve?",
+            "Qual elogio você gostaria de ouvir com mais frequência?",
+            "O que você acha que eu não percebo sobre o quanto você se esforça?",
+            "Como eu posso ser um(a) melhor parceiro(a) para você na próxima semana?",
+            "Qual é um sonho seu que você tem medo de não realizar?",
+            "O que faz você rir genuinamente?",
+            "Qual é a sua linguagem do amor principal (palavras, tempo, presentes, atos, toque)?",
+            "Você sente que recebe amor na linguagem que você precisa?",
+            "O que faz você se sentir seguro(a) ao meu lado?",
+            "Qual foi o momento mais difícil da sua vida antes de me conhecer?",
+            "O que você aprendeu com seus relacionamentos passados que trouxe para este?",
+            "Como você lida com a vulnerabilidade? É fácil ou difícil para você?",
+            "O que você precisa para confiar plenamente em alguém?",
+            "Qual é a sua maior qualidade como parceiro(a)?",
+            "Qual é o seu maior defeito como parceiro(a)?",
+            "O que você gostaria que fizéssemos juntos que nunca fizemos?",
 
-            // Fase 3 (Dinâmica e Convivência)
-            "Qual é a maior fraqueza de vocês como casal?",
-            "Qual é o maior ponto forte de vocês como casal?",
-            "Em que momento você conseguiu contar com seu parceiro(a)?",
-            "Em que momento você não conseguiu contar com seu parceiro(a)?",
-            "Quando você está em um dia difícil, como seu parceiro(a) pode te apoiar da melhor forma?",
-            "De quanto espaço pessoal você precisa?",
-            "Quanto tempo você passa com seu parceiro(a)?",
-            "Quem costuma tomar a iniciativa de passar tempo juntos no relacionamento?",
-            "Quanto tempo você gostaria de passar com seu parceiro(a)?",
-            "Como é, para vocês, um tempo de qualidade juntos?",
-            "Qual é a sua ideia de encontro perfeito?",
-            "Como seria, para você, um dia inteiro de tempo de qualidade com seu parceiro(a)?",
-            "O que você gostaria de fazer com mais frequência?",
-            "O que você está ansioso(a) para viver com seu parceiro(a)?",
-            "Quais são coisas novas e empolgantes que vocês poderiam experimentar juntos?",
-            "O que você pensa sobre os amigos do seu parceiro(a)?",
-            "O que você gosta na família do seu parceiro(a)?",
-            "Você se sente amado(a) ou valorizado(a) pela família do seu parceiro(a)?",
-            "Do que você mais se orgulha como casal?",
-            "Você já mudou algo em si mesmo(a) por causa do seu parceiro(a)?",
-            "O que você está sacrificando neste momento, e por quê?",
-            "Em que ponto você está cedendo ou fazendo concessões agora?",
-            "Com o que você não está disposto(a) a ceder no relacionamento?",
-            "O que significa lealdade para você?",
-            "O que você considera traição?",
+            // Fase 3: Dinâmica & Convivência
+            "Qual é a maior fraqueza de vocês como equipe?",
+            "Qual é o maior superpoder de vocês como casal?",
+            "Em que momento recente você sentiu que podia contar comigo?",
+            "Em que momento recente você sentiu que estava sozinho(a)?",
+            "Quando você tem um dia ruim, prefere conversar ou ficar quieto(a)?",
+            "Você sente que tem espaço pessoal suficiente neste relacionamento?",
+            "A quantidade de tempo que passamos juntos é pouca, muita ou ideal?",
+            "Quem costuma tomar a iniciativa para o lazer? Isso está equilibrado?",
+            "Como seria um 'tempo de qualidade' ideal para você nesta fase da vida?",
+            "Qual é a sua ideia de um encontro perfeito (sem restrições de orçamento)?",
+            "Se tivéssemos um dia inteiro livre sem obrigações, o que faríamos?",
+            "O que você gostaria que fizéssemos com mais frequência como casal?",
+            "O que você está ansioso(a) para vivermos juntos no próximo ano?",
+            "Quais hobbies novos poderíamos começar juntos?",
+            "Como você se sente em relação aos meus amigos?",
+            "O que você mais gosta na minha família?",
+            "Você se sente parte da minha família? O que poderia melhorar?",
+            "Do que você mais se orgulha na vida que construímos até agora?",
+            "Você sente que mudou (para melhor ou pior) por minha causa?",
+            "O que você sente que está sacrificando pelo relacionamento hoje?",
+            "Em que áreas você sente que cede mais do que eu?",
+            "O que é inegociável para você em um relacionamento?",
+            "O que significa lealdade para você na prática?",
+            "O que você considera uma traição (emocional ou física)?",
+            "Como lidamos com as finanças? Isso gera estresse para você?",
 
-            // Fase 4 (Futuro e Intimidade)
-            "O que desperta ciúmes em você?",
-            "Há limites que vocês precisam estabelecer um com o outro?",
-            "O que você gostaria de ter mais no seu relacionamento?",
-            "O que você gostaria de ter menos no seu relacionamento?",
-            "Seu parceiro(a) mudou sua visão sobre alguma coisa?",
-            "De que formas vocês podem tornar o relacionamento mais leve e divertido?",
-            "Como você pode melhorar o seu relacionamento?",
-            "O que você pode fazer hoje para fortalecer o relacionamento de vocês?",
-            "Quais são seus planos para o futuro?",
-            "Se você pudesse enxergar o futuro de vocês juntos, o que gostaria de saber?",
-            "Que tipo de lugar você gostaria de morar e por quê?",
-            "Se vocês ainda não são casados, o casamento passa pela sua mente?",
-            "Se vocês ainda não têm filhos, você deseja ser pai ou mãe?",
-            "Se você deseja ter filhos, como gostaria de criá-los?",
-            "O que você acha mais sexy no seu parceiro(a)?",
-            "Existe algum tipo de roupa ou estilo que você acha sexy?",
-            "O que seu parceiro(a) faz que sempre desperta seu desejo?",
-            "O que desliga completamente a sua energia sexual?",
-            "Em que partes do corpo você gostaria de ser tocado(a) com mais frequência?",
-            "Quais foram os momentos íntimos mais marcantes para você?",
-            "Qual é a sua ideia de um momento íntimo perfeito?",
-            "Você tem alguma insegurança em relação à vida sexual?",
-            "Como seu parceiro(a) pode ajudar você a lidar com essas inseguranças?",
-            "Você tem alguma fantasia sexual que nunca compartilhou?",
-            "O que você gostaria de mudar na sua vida sexual?"
+            // Fase 4: Futuro, Paixão & Intimidade
+            "O que desperta ciúmes em você, mesmo que pareça bobo?",
+            "Há limites que precisamos redefinir com outras pessoas?",
+            "O que você gostaria de ter MAIS no nosso relacionamento?",
+            "O que você gostaria de ter MENOS no nosso relacionamento?",
+            "Eu mudei sua visão sobre alguma coisa importante na vida?",
+            "De que formas podemos rir mais juntos?",
+            "Se você pudesse me dar um conselho para melhorar nosso namoro/casamento, qual seria?",
+            "O que podemos fazer hoje (uma pequena ação) para nos conectarmos?",
+            "Onde você nos vê daqui a 5 anos?",
+            "Se você pudesse ver o futuro, o que gostaria de saber sobre nós?",
+            "Qual é o seu lugar dos sonhos para morar?",
+            "Como você enxerga o envelhecer ao meu lado?",
+            "Se a questão 'filhos' fosse decidida apenas pelo coração (sem lógica), o que você faria?",
+            "Se tivermos (ou temos) filhos, qual valor é essencial passar para eles?",
+            "O que você acha mais sexy em mim?",
+            "Existe algum estilo de roupa ou atitude minha que te atrai muito?",
+            "O que eu faço (gesto ou ação) que desperta seu desejo?",
+            "O que funciona como um 'balde de água fria' para o seu desejo?",
+            "Em que partes do corpo você gostaria de receber mais carinho/toque?",
+            "Qual foi o nosso melhor momento íntimo até hoje?",
+            "Qual é a sua fantasia de um momento íntimo perfeito?",
+            "Você tem alguma insegurança com seu corpo que afeta nossa intimidade?",
+            "Como eu posso te ajudar a se sentir mais confiante na cama?",
+            "Você tem alguma fantasia que nunca contou por vergonha?",
+            "Se pudéssemos mudar uma coisa na nossa vida sexual, o que seria?"
         ];
 
-        let availableQuestions = [...questions];
+        let availableQuestions = [...allQuestions];
 
         function drawCard() {
-            const cardElement = document.getElementById('card');
-            const counterElement = document.getElementById('counter');
-            
-            if (availableQuestions.length === 0) {
-                cardElement.innerText = "Todas as perguntas foram sorteadas! Desejam recomeçar?";
-                counterElement.innerText = "Fim do baralho";
-                availableQuestions = [...questions]; // Reinicia se desejar
-                return;
-            }
+            const cardArea = document.getElementById('card-area');
+            const questionText = document.getElementById('question-text');
+            const counter = document.getElementById('counter');
+            const icon = cardArea.querySelector('.card-icon i');
 
-            cardElement.classList.add('flip');
-            
+            // Animação de Saída
+            cardArea.classList.add('flip');
+
             setTimeout(() => {
-                const randomIndex = Math.floor(Math.random() * availableQuestions.length);
-                const chosenQuestion = availableQuestions.splice(randomIndex, 1)[0];
-                
-                cardElement.innerText = chosenQuestion;
-                cardElement.classList.remove('flip');
-                counterElement.innerText = `Restam ${availableQuestions.length} perguntas no baralho`;
-            }, 300);
+                if (availableQuestions.length === 0) {
+                    questionText.innerHTML = "<span style='color: #c9184a'>Fim do Baralho! 🎉<br>Reinicie para jogar novamente.</span>";
+                    icon.className = "fa-solid fa-flag-checkered";
+                    counter.innerText = "0 cartas restantes";
+                } else {
+                    // Sorteio
+                    const randomIndex = Math.floor(Math.random() * availableQuestions.length);
+                    const question = availableQuestions[randomIndex];
+                    
+                    // Remove a pergunta sorteada
+                    availableQuestions.splice(randomIndex, 1);
+
+                    // Atualiza o conteúdo
+                    questionText.innerText = question;
+                    counter.innerText = `${availableQuestions.length} cartas restantes`;
+                    
+                    // Ícones aleatórios para dinamismo
+                    const icons = ["fa-heart", "fa-comments", "fa-star", "fa-lightbulb", "fa-dove"];
+                    icon.className = `fa-solid ${icons[Math.floor(Math.random() * icons.length)]}`;
+                }
+
+                // Animação de Entrada
+                cardArea.classList.remove('flip');
+            }, 200);
+        }
+
+        function resetDeck() {
+            availableQuestions = [...allQuestions];
+            const cardArea = document.getElementById('card-area');
+            const questionText = document.getElementById('question-text');
+            const counter = document.getElementById('counter');
+            const icon = cardArea.querySelector('.card-icon i');
+
+            cardArea.classList.add('flip');
+            setTimeout(() => {
+                questionText.innerText = "Baralho Reiniciado! Toque para começar.";
+                counter.innerText = "100 cartas disponíveis";
+                icon.className = "fa-solid fa-infinity";
+                cardArea.classList.remove('flip');
+            }, 200);
         }
     </script>
+
 </body>
 </html>
