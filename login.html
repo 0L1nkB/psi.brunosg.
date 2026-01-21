@@ -3,30 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | Bruno de Souza</title>
+    <title>Acesso Restrito | Bruno de Souza</title>
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../style/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
-        /* Estilo inline simples para centralizar o login caso o CSS externo não cubra body flex */
+        :root {
+            --bg-color: #f0f8ff;
+            --primary: #6c5ce7; /* Roxo principal do sistema */
+            --primary-dark: #5649b9;
+            --text: #2d3436;
+            --error: #ff7675;
+        }
+
         body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            background-color: #f4f4f9; /* Cor de fundo suave */
+            color: var(--text);
+        }
+
+        .login-card {
+            background: white;
+            padding: 40px;
+            border-radius: 25px;
+            border: 3px dashed #b2bec3;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .login-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        /* Ícone de Cadeado Animado */
+        .icon-lock {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            background: #f0f3ff;
+            width: 80px;
+            height: 80px;
+            line-height: 80px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        h2 { margin: 0 0 10px 0; font-weight: 800; color: var(--text); }
+        p { margin: 0 0 25px 0; color: #636e72; font-weight: 500; }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #dfe6e9;
+            border-radius: 15px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+            box-sizing: border-box; /* Garante que o padding não aumente a largura */
+            text-align: center;
+        }
+
+        .login-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.1);
+        }
+
+        .btn-login {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.3s;
+            box-shadow: 0 4px 0 var(--primary-dark);
+        }
+
+        .btn-login:hover {
+            background: var(--primary-dark);
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #483d8b;
+        }
+
+        .btn-login:active {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
+
+        .error-msg {
+            color: var(--error);
+            font-weight: 700;
+            margin-top: 15px;
+            display: none;
+            animation: shake 0.3s;
+        }
+
+        .footer-text {
+            margin-top: 30px;
+            font-size: 0.8rem;
+            color: #b2bec3;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
         }
     </style>
 </head>
 <body>
 
-    <div id="login-screen">
-        <div class="login-box">
-            <h2 style="margin-top: 20px;">Olá! 👋</h2>
-            <p>Qual é a palavra-chave?</p>
-            <input type="password" id="password" class="login-input" placeholder="Digite aqui...">
-            <button type="button" class="btn-login" onclick="checkLogin()">ABRIR BAÚ 🔓</button>
-            <p class="error-msg" id="error" style="display:none; color: red; margin-top: 10px;">Ops! Tente de novo.</p>
+    <div class="login-card">
+        <div class="icon-lock"><i class="fa-solid fa-lock"></i></div>
+        <h2>Área Restrita</h2>
+        <p>Olá, Psi Bruno! Digite sua chave.</p>
+        
+        <div class="input-group">
+            <input type="password" id="password" class="login-input" placeholder="Senha de acesso">
+        </div>
+        
+        <button type="button" class="btn-login" onclick="checkLogin()">
+            <i class="fa-solid fa-key"></i> ACESSAR
+        </button>
+        
+        <div class="error-msg" id="error">
+            <i class="fa-solid fa-circle-xmark"></i> Senha incorreta.
+        </div>
+
+        <div class="footer-text">
+            Uso exclusivo profissional
         </div>
     </div>
 
@@ -38,12 +169,27 @@
             var error = document.getElementById('error');
             
             if (input.value === SENHA_CORRETA) {
-                // Redireciona para o arquivo da lista
-                window.location.href = "ferramentas/listaferramentas.html";
+                // Efeito visual de sucesso antes de redirecionar
+                var btn = document.querySelector('.btn-login');
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> SUCESSO!';
+                btn.style.backgroundColor = '#00b894';
+                btn.style.boxShadow = '0 4px 0 #008f72';
+                
+                setTimeout(() => {
+                    // Ajuste o caminho conforme sua estrutura de pastas
+                    window.location.href = "ferramentas/listaferramentas.html"; 
+                }, 500);
             } else {
                 error.style.display = 'block';
                 input.value = '';
+                input.style.borderColor = '#ff7675';
                 input.focus();
+                
+                // Remove o erro após 3 segundos
+                setTimeout(() => {
+                    error.style.display = 'none';
+                    input.style.borderColor = '#dfe6e9';
+                }, 3000);
             }
         }
 
