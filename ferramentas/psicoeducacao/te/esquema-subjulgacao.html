@@ -3,413 +3,386 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Subjugação - Caderno Terapêutico</title>
+    <title>Subjugação | Bruno de Souza</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <style>
         :root {
-            /* Paleta "A Voz Presa" */
-            --paper-line: #e5e7eb;    /* Linhas cinza suave */
-            --paper-bg: #fffdfa;      /* Fundo creme muito leve */
-            --ink-color: #3f3f46;
+            /* Identidade Visual - Tema "Silêncio/Voz" */
+            --bg-color: #fafaf9;      /* Cinza pedra muito pálido */
+            --primary: #57534e;       /* Cinza Pedra (Supressão/Silêncio) */
+            --primary-dark: #292524;
+            --accent: #f59e0b;        /* Amarelo Âmbar (Expressão/Voz) */
+            --text: #2d3436;
+            --card-border: #d6d3d1;
             
-            /* Cores do Esquema (Opressão -> Libertação) */
-            --primary: #57534e;       /* Cinza Pedra (O Silêncio) */
-            --primary-hover: #292524;
-            --voice: #fbbf24;         /* Amarelo Solar (A Expressão) */
-            --voice-text: #b45309;
-            
-            /* Tags de Personas */
-            --tag-sofia-bg: #f5f5f4; --tag-sofia-text: #57534e; /* Cinza (Submissa) */
-            --tag-roberto-bg: #fef3c7; --tag-roberto-text: #b45309; /* Amarelo (Rebelde) */
-
-            --radius: 16px;
-            --shadow-paper: 3px 3px 10px rgba(0,0,0,0.06);
+            /* Cores Específicas */
+            --submit-color: #78716c;  /* Cinza Médio (Submissão/Sofia) */
+            --rebel-color: #d97706;   /* Laranja/Âmbar Escuro (Rebeldia/Roberto) */
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Nunito', sans-serif;
-            color: var(--ink-color);
-            line-height: 1.6;
-            background-color: var(--paper-bg);
-            /* Efeito Papel Pautado */
-            background-image: linear-gradient(var(--paper-line) 1px, transparent 1px);
-            background-size: 100% 2rem;
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#e7e5e4 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            color: var(--text);
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            align-items: center;
         }
 
-        h1, h2, h3, h4 {
-            font-family: 'Patrick Hand', cursive;
-            color: #44403c;
-        }
-
-        /* --- HEADER --- */
+        /* --- CABEÇALHO --- */
         header {
-            background-color: rgba(255, 255, 255, 0.95);
-            border-bottom: 2px dashed #d6d3d1;
-            padding: 2rem 0;
-            margin-bottom: 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);
-        }
-
-        .header-content {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0 20px;
             text-align: center;
+            margin: 20px auto 40px auto;
+            background: white;
+            padding: 30px 20px;
+            border-radius: 25px;
+            border: 3px dashed var(--primary);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            position: relative;
+            max-width: 800px;
+            width: 100%;
         }
 
-        .header-title {
-            font-size: 2.5rem;
+        header::before {
+            content: ""; 
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%) rotate(-1deg);
+            width: 140px; height: 35px; 
+            background-color: rgba(87, 83, 78, 0.2); 
+            border: 1px solid rgba(0,0,0,0.05); 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2rem;
             color: var(--primary);
-            margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 0px #f5f5f4;
+            text-transform: uppercase;
+            margin: 0;
+            font-weight: 800;
         }
 
-        .header-subtitle {
-            font-size: 1.2rem;
-            color: var(--voice-text);
-            font-family: 'Patrick Hand', cursive;
-        }
+        .subtitle { margin-top: 5px; color: #636e72; font-weight: 600; }
 
         /* --- CONTAINER --- */
         .main-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0 20px;
+            max-width: 850px;
             width: 100%;
-            display: grid;
-            gap: 35px;
-            margin-bottom: 60px;
+            margin-bottom: 80px;
         }
 
-        /* --- CARDS (PAPEL) --- */
-        .paper-card {
-            background-color: #ffffff;
-            border-radius: 2px;
-            box-shadow: var(--shadow-paper);
-            border: 1px solid #e7e5e4;
-            padding: 2rem;
-            position: relative;
-            transform: rotate(-0.5deg);
-            transition: transform 0.3s;
-        }
-        
-        .paper-card:hover { transform: rotate(0deg) translateY(-3px); }
-        
-        /* Corrente Decorativa (Quebrada) */
-        .paper-card::before {
-            content: '⛓️';
-            position: absolute;
-            top: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 1.5rem;
-            opacity: 0.3;
-            background: #fff;
-            padding: 0 10px;
+        /* --- CARDS DE CONTEÚDO --- */
+        .content-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.05);
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
         }
 
-        .card-header {
+        .content-card:hover {
+            border-color: var(--card-border);
+            transform: translateY(-2px);
+        }
+
+        .card-title {
+            color: var(--primary-dark);
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid var(--paper-line);
+            gap: 10px;
+            border-bottom: 2px dashed #eee;
             padding-bottom: 10px;
         }
 
-        .card-icon { font-size: 1.8rem; color: var(--voice-text); }
-        .card-title { font-size: 1.8rem; margin: 0; }
-
-        /* --- POST-IT (DEFINIÇÃO) --- */
-        .post-it {
-            background-color: #f5f5f4; /* Cinza Pedra */
-            padding: 1.5rem;
-            border-radius: 2px 2px 16px 2px;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
-            font-family: 'Patrick Hand', cursive;
-            font-size: 1.3rem;
-            color: #44403c;
-            transform: rotate(1deg);
-            margin: 20px 0;
-            border-left: 5px solid #78716c;
-        }
-
-        /* --- PERSONAS --- */
-        .persona-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-        }
-
-        .persona-card {
-            background: #fff;
+        .highlight-box {
+            background: #fffbeb; /* Fundo amarelado suave */
+            border-left: 5px solid var(--accent);
             padding: 20px;
-            border: 2px dashed #d6d3d1;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 1rem;
+            color: #78350f;
+        }
+
+        /* --- GRID DE PERSONAS (DUAL) --- */
+        .dual-symptoms {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .symptom-column h4 {
+            text-align: center; margin-bottom: 15px; font-weight: 800; text-transform: uppercase; font-size: 0.9rem;
+        }
+
+        .symptom-item {
+            background: #f8f9fa;
+            padding: 15px;
             border-radius: 12px;
+            display: flex; flex-direction: column; gap: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid;
         }
         
-        .persona-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .persona-name { font-size: 1.4rem; font-weight: 700; color: #44403c; }
-        .persona-tag { font-family: 'Nunito', sans-serif; font-size: 0.8rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; }
-        
-        .tag-sofia { background: var(--tag-sofia-bg); color: var(--tag-sofia-text); }
-        .tag-roberto { background: var(--tag-roberto-bg); color: var(--tag-roberto-text); }
+        .style-submit { border-color: var(--submit-color); }
+        .style-rebel { border-color: var(--rebel-color); }
 
-        /* --- STICKERS (3 DIMENSÕES) --- */
-        .sticker-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;
+        .persona-tag {
+            font-size: 0.75rem; text-transform: uppercase; font-weight: 800;
+            padding: 4px 10px; border-radius: 20px; width: fit-content;
         }
-        
-        .sticker-box {
-            background: white; padding: 1.5rem; border-radius: 12px;
-            border: 2px solid #f5f5f4; text-align: center;
-            transition: all 0.3s;
-        }
-        .sticker-box:hover { border-color: var(--voice); transform: scale(1.02); }
-        .sticker-icon { font-size: 2rem; margin-bottom: 10px; display: block; }
+        .tag-sofia { background: #f5f5f4; color: var(--submit-color); }
+        .tag-roberto { background: #fff7ed; color: var(--rebel-color); }
 
-        /* --- TRADUTOR INTERATIVO --- */
-        .translator-area {
-            background-color: #fffbeb; /* Amarelo muito claro */
-            padding: 2rem; border-radius: 20px;
-            border: 2px dashed #fcd34d; text-align: center;
+        /* --- WIDGET: TRADUTOR DE ASSERTIVIDADE --- */
+        .translator-container {
+            text-align: center;
+            background: #fffbeb; /* Amarelo muito claro */
+            padding: 25px;
+            border-radius: 20px;
+            border: 2px dashed #fcd34d;
         }
 
-        .btn-translate {
-            background: white; border: 2px solid #fde68a;
-            padding: 10px 20px; margin: 5px; border-radius: 30px;
-            font-family: 'Nunito', sans-serif; font-weight: 700; color: #b45309;
-            cursor: pointer; transition: all 0.2s;
-            box-shadow: 0 4px 0 #fde68a;
-        }
-        
-        .btn-translate:active { box-shadow: 0 0 0 #fde68a; transform: translateY(4px); }
-        .btn-translate:hover { background: #fff; border-color: var(--voice-text); color: var(--voice-text); }
-
-        .result-bubble {
-            background: white; padding: 20px; border-radius: 20px;
-            margin-top: 20px; border: 2px solid #e7e5e4;
-            font-family: 'Patrick Hand', cursive; font-size: 1.3rem;
-            color: #44403c; min-height: 100px; display: flex; align-items: center; justify-content: center;
+        .translator-display {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: 0.3s;
         }
 
-        /* --- ACCORDIONS --- */
-        details {
-            background: #fafaf9; border-radius: 12px; margin-bottom: 10px;
-            border: 1px solid #d6d3d1;
+        .btn-trans {
+            background: white; border: 2px solid #fde68a; color: #b45309;
+            padding: 10px 20px; border-radius: 30px; font-weight: 700;
+            cursor: pointer; margin: 5px; transition: 0.2s; font-family: 'Quicksand';
         }
-        summary {
-            padding: 15px; font-weight: 700; cursor: pointer; list-style: none;
-            display: flex; justify-content: space-between; color: #57534e;
-        }
-        summary:hover { background: #f5f5f4; border-radius: 12px; }
-        .details-content { padding: 20px; border-top: 1px dashed #d6d3d1; color: #57534e; }
+        .btn-trans:hover { border-color: var(--accent); background: var(--accent); color: white; }
 
-        /* --- FLASHCARD (FLIP) --- */
-        .flashcard-container { perspective: 1000px; width: 100%; height: 280px; cursor: pointer; }
-        .flashcard-inner {
-            position: relative; width: 100%; height: 100%; text-align: center;
-            transition: transform 0.6s; transform-style: preserve-3d;
+        /* --- NEUROBIOLOGIA --- */
+        .neuro-box {
+            display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; margin-top: 20px;
         }
-        .flashcard-container.flipped .flashcard-inner { transform: rotateY(180deg); }
-        
-        .flashcard-front, .flashcard-back {
+        .neuro-item {
+            flex: 1; min-width: 200px;
+            background: #fafafa; border: 1px solid #eee;
+            padding: 20px; border-radius: 15px;
+            text-align: center;
+        }
+        .neuro-item i { font-size: 2rem; color: var(--primary); margin-bottom: 10px; }
+        .neuro-item h4 { margin: 5px 0; font-size: 1rem; color: var(--primary-dark); }
+        .neuro-item p { font-size: 0.85rem; color: #666; margin: 0; }
+
+        /* --- FLIP CARDS --- */
+        .flip-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .flip-card {
+            background-color: transparent;
+            height: 300px;
+            perspective: 1000px;
+            cursor: pointer;
+            margin: 0 auto;
+            max-width: 350px;
+            width: 100%;
+        }
+
+        .flip-card-inner {
+            position: relative; width: 100%; height: 100%;
+            text-align: center; transition: transform 0.6s;
+            transform-style: preserve-3d;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+
+        .flip-front, .flip-back {
             position: absolute; width: 100%; height: 100%;
             -webkit-backface-visibility: hidden; backface-visibility: hidden;
-            border-radius: 16px; padding: 2rem;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            box-shadow: var(--shadow-paper); border: 2px solid;
-        }
-        
-        .flashcard-front {
-            background: #f5f5f4; border-color: #d6d3d1; color: #44403c;
-        }
-        .flashcard-back {
-            background: #fffbeb; border-color: #fcd34d; color: #92400e;
-            transform: rotateY(180deg);
+            padding: 25px; border-radius: 15px; border: 2px solid #dfe6e9;
+            box-sizing: border-box;
         }
 
-        /* --- FOOTER PADRÃO --- */
+        .flip-front { background-color: white; color: #2d3436; }
+        .flip-back { background-color: var(--accent); color: white; transform: rotateY(180deg); border-color: var(--accent); }
+
+        /* Botão Voltar */
+        .btn-back {
+            display: block; margin: 30px auto; text-align: center; color: #b2bec3; text-decoration: none; font-weight: 600;
+        }
+        .btn-back:hover { color: var(--primary); }
+
+        /* --- FOOTER ADAPTADO --- */
         footer {
-            background-color: #ffffff;
-            border-top: 1px solid #e5e7eb;
-            padding: 2rem 0;
+            width: 100%;
+            background-color: white;
+            border-top: 1px dashed #b2bec3;
+            padding: 30px 20px;
             margin-top: auto;
         }
         .footer-container {
-            max-width: 1000px;
+            max-width: 900px;
             margin: 0 auto;
-            padding: 0 20px;
-            display: flex; justify-content: space-between; align-items: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .footer-brand { color: #64748b; font-size: 0.9rem; font-weight: 600; }
-        .social-links { display: flex; gap: 1.5rem; }
-        .social-links a { color: #94a3b8; font-size: 1.2rem; transition: color 0.2s; }
-        .social-links a:hover { color: var(--voice-text); }
+        .footer-brand { color: #636e72; font-weight: 700; font-size: 0.95rem; }
+        .social-links { display: flex; gap: 20px; }
+        .social-links a { color: #b2bec3; font-size: 1.4rem; transition: all 0.3s ease; }
+        .social-links a:hover { color: var(--primary); transform: translateY(-3px); }
 
-        @media (max-width: 640px) {
-            .footer-container { flex-direction: column; gap: 1rem; }
-            .persona-grid, .sticker-grid { grid-template-columns: 1fr; }
+        @media (max-width: 600px) {
+            .dual-symptoms { grid-template-columns: 1fr; }
+            .footer-container { flex-direction: column; gap: 15px; }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="header-content">
-            <h1 class="header-title">Subjugação</h1>
-            <p class="header-subtitle">Caderno de Psicoeducação</p>
-        </div>
+    <header data-aos="fade-down">
+        <h1>Subjugação</h1>
+        <div class="subtitle">A voz presa</div>
     </header>
 
     <div class="main-container">
-
-        <div class="paper-card">
-            <div class="card-header">
-                <i class="fas fa-compress-arrows-alt card-icon"></i>
-                <h2 class="card-title">A Voz Presa</h2>
-            </div>
+        
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-comment-slash"></i> A Voz Silenciada</div>
             <p>O Esquema de Subjugação é a crença de que você <strong>deve</strong> suprimir seus desejos, necessidades e emoções para agradar os outros ou evitar consequências ruins (como raiva ou abandono).</p>
-            
-            <div class="post-it">
-                <i class="fas fa-thumbtack" style="color:#57534e; margin-right:10px;"></i>
-                "O que eu quero não importa. Se eu falar, vou criar problemas. Melhor ficar quieto e fazer o que eles querem."
+            <div class="highlight-box">
+                <i class="fa-solid fa-lock"></i> <strong>O Pensamento:</strong> "O que eu quero não importa. Se eu falar, vou criar problemas. Melhor ficar quieto e fazer o que eles querem."
             </div>
         </div>
 
-        <div class="paper-card" style="transform: rotate(0.5deg);">
-            <div class="card-header">
-                <i class="fas fa-users card-icon"></i>
-                <h2 class="card-title">Espelhos da Vida Real</h2>
-            </div>
-            <p>Como a submissão (ou a revolta contra ela) aparece:</p>
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-users"></i> Formas de Enfrentamento</div>
             
-            <div class="persona-grid">
-                <div class="persona-card">
-                    <div class="persona-header">
-                        <span class="persona-name">Sofia</span>
-                        <span class="persona-tag tag-sofia">A Boazinha</span>
+            <div class="dual-symptoms">
+                <div class="symptom-column">
+                    <div class="symptom-item style-submit">
+                        <span class="persona-tag tag-sofia">Sofia (A Boazinha)</span>
+                        <div><strong>Comportamento:</strong> Nunca escolhe o restaurante. Diz "sim" para favores indesejados. Morre de medo de desagradar.</div>
                     </div>
-                    <p>Sofia nunca escolhe o restaurante ou o filme. Ela diz "sim" para favores que não quer fazer. Morre de medo de desagradar. Guarda tanta raiva que sofre de enxaquecas constantes.</p>
-                    <p style="font-size:0.85rem; color:#57534e;"><strong>Comportamento:</strong> Rendição (Conformidade)</p>
+                    <div class="symptom-item style-submit">
+                        <div><strong>Consequência:</strong> Acúmulo de ressentimento, enxaquecas, sensação de ser "capacho".</div>
+                    </div>
                 </div>
 
-                <div class="persona-card">
-                    <div class="persona-header">
-                        <span class="persona-name">Roberto</span>
-                        <span class="persona-tag tag-roberto">O Rebelde</span>
+                <div class="symptom-column">
+                    <div class="symptom-item style-rebel">
+                        <span class="persona-tag tag-roberto">Roberto (O Rebelde)</span>
+                        <div><strong>Comportamento:</strong> Alergia a ordens. Enrola de propósito se mandam fazer algo. Briga por coisas pequenas para provar autonomia.</div>
                     </div>
-                    <p>Roberto tem alergia a ordens. Se o chefe pede algo, ele enrola de propósito. Ele briga por coisas pequenas só para provar que ninguém manda nele. No fundo, sente-se controlado.</p>
-                    <p style="font-size:0.85rem; color:#b45309;"><strong>Comportamento:</strong> Ataque (Oposição)</p>
+                    <div class="symptom-item style-rebel">
+                        <div><strong>Consequência:</strong> Conflitos constantes, resistência passivo-agressiva, exaustão.</div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="paper-card">
-            <div class="card-header">
-                <i class="fas fa-shapes card-icon"></i>
-                <h2 class="card-title">O que você esconde?</h2>
-            </div>
-            <div class="sticker-grid">
-                <div class="sticker-box">
-                    <span class="sticker-icon">🤐</span>
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-mask"></i> O Que Você Esconde?</div>
+            <div class="neuro-box">
+                <div class="neuro-item">
+                    <i class="fa-solid fa-eye-slash"></i>
                     <h4>Necessidades</h4>
-                    <p>Esconder suas preferências ("Tanto faz", "Escolhe você") para não incomodar.</p>
+                    <p>Esconde preferências ("Tanto faz") para não incomodar ou gerar atrito.</p>
                 </div>
-                <div class="sticker-box">
-                    <span class="sticker-icon">😡</span>
-                    <h4>Emoções (Raiva)</h4>
-                    <p>Engolir a raiva até ela virar ressentimento ou sintomas físicos (gastrite, tensão).</p>
+                <div class="neuro-item">
+                    <i class="fa-solid fa-fire"></i>
+                    <h4>Raiva</h4>
+                    <p>Engole a raiva até ela virar sintomas físicos (gastrite, tensão) ou explodir.</p>
                 </div>
-                <div class="sticker-box">
-                    <span class="sticker-icon">😨</span>
+                <div class="neuro-item">
+                    <i class="fa-solid fa-ghost"></i>
                     <h4>Medo</h4>
-                    <p>A crença de que, se você se expressar, será punido, rejeitado ou abandonado.</p>
+                    <p>Acredita que se expressar levará a punição, rejeição ou abandono.</p>
                 </div>
             </div>
         </div>
 
-        <div class="paper-card" style="transform: rotate(-0.5deg);">
-            <div class="card-header">
-                <i class="fas fa-bullhorn card-icon"></i>
-                <h2 class="card-title">Solte Sua Voz</h2>
-            </div>
-            <p>Você aprendeu a se calar. Vamos traduzir o "Silêncio" em "Assertividade":</p>
-            
-            <div class="translator-area">
-                <p style="margin-bottom:15px; font-weight:700;">O que você diz (vs) O que sente?</p>
-                <div>
-                    <button class="btn-translate" onclick="translateNeed('tudo_bem')">"Tudo bem, eu faço." (Sem querer fazer)</button>
-                    <button class="btn-translate" onclick="translateNeed('nao_sei')">"Não sei, o que você quer?"</button>
-                    <button class="btn-translate" onclick="translateNeed('desculpa')">"Desculpa, a culpa foi minha."</button>
-                </div>
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-bullhorn"></i> Solte Sua Voz</div>
+            <div class="translator-container">
+                <p style="font-weight:700; color:#b45309; margin-bottom:15px;">Você aprendeu a se calar. Vamos traduzir o silêncio em assertividade:</p>
                 
-                <div id="translator-bubble" class="result-bubble">
-                    Toque em uma frase para traduzir...
+                <div>
+                    <button class="btn-trans" onclick="translateNeed('tudo_bem')">"Tudo bem, eu faço." (Sem querer)</button>
+                    <button class="btn-trans" onclick="translateNeed('nao_sei')">"Não sei, o que você quer?"</button>
+                    <button class="btn-trans" onclick="translateNeed('desculpa')">"Desculpa, a culpa foi minha."</button>
+                </div>
+
+                <div class="translator-display" id="trans-res">
+                    <span style="color:#b0bec5; font-style:italic;">Clique na frase...</span>
                 </div>
             </div>
         </div>
 
-        <div class="paper-card">
-            <div class="card-header">
-                <i class="fas fa-brain card-icon"></i>
-                <h2 class="card-title">Conceitos Clínicos</h2>
-            </div>
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-brain"></i> Por Dentro da Mente</div>
             
-            <details>
-                <summary>🧠 Neurobiologia: A Resposta "Fawn" <i class="fas fa-chevron-down"></i></summary>
-                <div class="details-content">
-                    <p>Além de Lutar ou Fugir, existe a resposta de "Agradar" (Fawn). Seu sistema nervoso aprendeu que, para sobreviver a uma figura dominante (pai/mãe), você precisava ser dócil e invisível. É um mecanismo de defesa biológico.</p>
+            <div class="neuro-box">
+                <div class="neuro-item">
+                    <i class="fa-solid fa-paw"></i>
+                    <h4>Resposta "Fawn"</h4>
+                    <p>Além de Lutar ou Fugir, existe o "Agradar" (Fawn). Seu sistema nervoso aprendeu que ser dócil era a única forma de sobreviver a figuras dominantes.</p>
                 </div>
-            </details>
-
-            <details>
-                <summary>🌱 Como a Terapia Ajuda? <i class="fas fa-chevron-down"></i></summary>
-                <div class="details-content">
-                    <p>O foco é a <strong>Assertividade</strong>. Você aprende que tem direitos iguais aos outros. O terapeuta incentiva a expressão de raiva saudável e a tomada de decisões baseadas no que <em>você</em> quer, não no que esperam de você.</p>
+                <div class="neuro-item">
+                    <i class="fa-solid fa-battery-full"></i>
+                    <h4>Acúmulo de Raiva</h4>
+                    <p>Quem se subjuga acumula "selos de raiva". Um dia a cartela enche e você explode por nada, ou adoece. A cura é expressar na hora.</p>
                 </div>
-            </details>
-
-            <details>
-                <summary>⚠️ O Acúmulo de Raiva <i class="fas fa-chevron-down"></i></summary>
-                <div class="details-content">
-                    <p>Quem se subjuga acumula "selos de raiva". Um dia, a cartela enche e você explode por um motivo bobo, ou se vinga passivamente (esquecendo coisas, atrasando). A cura é expressar o desconforto na hora que ele acontece.</p>
-                </div>
-            </details>
+            </div>
         </div>
 
-        <div class="paper-card">
-            <div class="card-header">
-                <i class="fas fa-adjust card-icon"></i>
-                <h2 class="card-title">Vire o Pensamento</h2>
-            </div>
-            <p>Toque no cartão quando sentir medo de dizer "Não":</p>
+        <div class="content-card" data-aos="fade-up">
+            <div class="card-title"><i class="fa-solid fa-rotate"></i> Vire o Pensamento</div>
+            <p style="margin-bottom:20px; text-align:center; font-size:0.9rem; color:#aaa;">Toque no cartão para ativar o Adulto Saudável</p>
             
-            <div class="flashcard-container" onclick="this.classList.toggle('flipped')">
-                <div class="flashcard-inner">
-                    <div class="flashcard-front">
-                        <h3 style="font-family:'Patrick Hand'; font-size:1.5rem;">Voz da Submissão</h3>
-                        <p style="margin-top:10px;">"Ele vai ficar bravo se eu recusar. Não custa nada eu fazer. É melhor evitar a briga. Meus desejos não são tão importantes assim."</p>
-                        <i class="fas fa-hand-pointer" style="margin-top:20px; color:#57534e; font-size:1.5rem;"></i>
-                    </div>
-                    <div class="flashcard-back">
-                        <h3 style="font-family:'Patrick Hand'; font-size:1.5rem;">Voz do Adulto Saudável</h3>
-                        <p style="margin-top:10px;">"Eu tenho o direito de dizer não. Se ele ficar bravo, isso é uma emoção dele, não minha responsabilidade. Minhas necessidades são tão importantes quanto as dele. Vou me posicionar com respeito."</p>
+            <div class="flip-grid">
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-front">
+                            <i class="fa-solid fa-hand-paper" style="font-size:2.5rem; color:#dfe6e9; margin-bottom:15px;"></i>
+                            <h3 style="font-size:1.1rem; color:#2d3436;">Voz da Submissão</h3>
+                            <p style="margin-top:10px; font-size:0.9rem; color:#555;">"Ele vai ficar bravo se eu recusar. Não custa nada eu fazer. É melhor evitar a briga. Meus desejos não importam."</p>
+                        </div>
+                        <div class="flip-back">
+                            <h3 style="font-size:1.1rem; margin-bottom:10px;">Adulto Saudável</h3>
+                            <p style="font-size:0.9rem;">"Tenho o direito de dizer não. Se ele ficar bravo, é uma emoção dele, não minha responsabilidade. Minhas necessidades importam. Vou me posicionar com respeito."</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <center>
+            <a href="../../listaferramentas.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Voltar para Ferramentas</a>
+        </center>
 
     </div>
 
@@ -419,31 +392,39 @@
                 &copy; 2026 Bruno de Souza
             </div>
             <div class="social-links">
-                <a href="https://www.instagram.com/psi.brunosg/" target="_blank"><i class="fab fa-instagram"></i></a>
-                <a href="https://wa.me/5553991898309" target="_blank"><i class="fab fa-whatsapp"></i></a>
-                <a href="https://www.linkedin.com/in/psi-bsouza/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                <a href="https://www.instagram.com/psi.brunosg/" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://wa.me/5553991898309" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.linkedin.com/in/psi-bsouza/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
             </div>
         </div>
     </footer>
 
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
+        AOS.init();
+
         function translateNeed(type) {
-            const bubble = document.getElementById('translator-bubble');
+            const display = document.getElementById('trans-res');
             let text = "";
+            let color = "";
             
             if (type === 'tudo_bem') {
-                text = "✨ Tradução: 'Na verdade, não posso fazer isso agora. Tenho outros compromissos/limites.'";
+                text = "✨ <strong>Tradução:</strong> 'Na verdade, não posso fazer isso agora. Tenho outros compromissos e limites.'";
+                color = "#57534e";
             } else if (type === 'nao_sei') {
-                text = "✨ Tradução: 'Eu prefiro comida italiana hoje. O que você acha?' (Expresse sua preferência!)";
+                text = "✨ <strong>Tradução:</strong> 'Eu prefiro comida italiana hoje. O que você acha?' (Exercício de expressar preferência!)";
+                color = "#f59e0b";
             } else if (type === 'desculpa') {
-                text = "✨ Tradução: 'Sinto muito que você esteja chateado, mas eu não fiz nada de errado. Não vou assumir culpas que não são minhas.'";
+                text = "✨ <strong>Tradução:</strong> 'Sinto muito que você esteja chateado, mas eu não fiz nada de errado. Não vou assumir culpas que não são minhas.'";
+                color = "#d97706";
             }
             
-            bubble.style.opacity = 0;
+            display.style.opacity = 0;
+            display.style.borderTop = `5px solid ${color}`;
+            
             setTimeout(() => {
-                bubble.innerHTML = text;
-                bubble.style.opacity = 1;
-                bubble.style.transition = "opacity 0.3s";
+                display.innerHTML = `<p style="font-size:1.1rem; color:#2d3436;">${text}</p>`;
+                display.style.opacity = 1;
             }, 200);
         }
     </script>
