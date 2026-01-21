@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | Área Restrita</title>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Acesso Restrito | Psicologia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
         body {
             margin: 0;
@@ -20,102 +19,59 @@
             justify-content: center;
             align-items: center;
         }
-
         .login-card {
             background: white;
             padding: 40px;
             border-radius: 20px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             width: 100%;
-            max-width: 400px;
+            max-width: 350px;
             text-align: center;
-            border: 3px dashed #6c5ce7;
+            border: 2px dashed #6c5ce7;
         }
-
-        h1 { color: #6c5ce7; margin-bottom: 5px; font-weight: 800; }
-        p { color: #636e72; margin-bottom: 30px; font-size: 0.95rem; }
-
-        .input-group {
-            position: relative;
-            margin-bottom: 20px;
-        }
-
-        .input-group i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #b2bec3;
-        }
-
+        h1 { color: #6c5ce7; margin-bottom: 10px; }
+        .input-group { position: relative; margin: 20px 0; }
+        .input-group i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #b2bec3; }
         input {
-            width: 100%;
-            padding: 15px 15px 15px 45px;
-            border: 2px solid #dfe6e9;
-            border-radius: 12px;
-            font-family: inherit;
-            font-size: 1rem;
-            outline: none;
-            transition: 0.3s;
+            width: 100%; padding: 15px 15px 15px 45px;
+            border: 2px solid #dfe6e9; border-radius: 10px;
+            font-family: inherit; outline: none; box-sizing: border-box;
         }
-
         input:focus { border-color: #6c5ce7; }
-
         button {
-            width: 100%;
-            background: #6c5ce7;
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 10px;
+            width: 100%; padding: 15px; background: #6c5ce7;
+            color: white; border: none; border-radius: 10px;
+            font-weight: 700; cursor: pointer; transition: 0.3s;
         }
-
-        button:hover { background: #5b4cc4; transform: translateY(-2px); }
-
-        .error { color: #ef5350; font-size: 0.9rem; margin-top: 15px; display: none; }
+        button:hover { background: #5b4cc4; }
+        .error { color: #ef5350; margin-top: 10px; display: none; font-size: 0.9rem; }
     </style>
 </head>
 <body>
-
     <div class="login-card">
+        <i class="fa-solid fa-user-doctor" style="font-size: 3rem; color: #6c5ce7;"></i>
         <h1>Área do Psicólogo</h1>
-        <p>Insira sua senha para acessar as ferramentas.</p>
-        
-        <form onsubmit="realizarLogin(event)">
+        <form onsubmit="fazerLogin(event)">
             <div class="input-group">
-                <i class="fa-solid fa-lock"></i>
-                <input type="password" id="senha" placeholder="Senha de acesso" required>
+                <i class="fa-solid fa-key"></i>
+                <input type="password" id="senha" placeholder="Digite sua senha" required>
             </div>
             <button type="submit">Entrar</button>
-            <div class="error" id="msg-erro">Senha incorreta. Tente novamente.</div>
+            <div class="error" id="msg-erro">Senha incorreta!</div>
         </form>
     </div>
-
     <script>
-        function realizarLogin(e) {
+        function fazerLogin(e) {
             e.preventDefault();
             const senha = document.getElementById('senha').value;
-            
-            // SENHA SIMPLES (Você pode alterar aqui)
-            if (senha === "psi2026") { 
-                localStorage.setItem('psi_logged_in', 'true');
+            // SENHA DEFINIDA AQUI: psi2026
+            if(senha === "psi123") {
+                localStorage.setItem('logado', 'sim');
                 window.location.href = "ferramentas/listaferramentas.html";
             } else {
-                const erro = document.getElementById('msg-erro');
-                erro.style.display = 'block';
-                // Animação de erro
-                const card = document.querySelector('.login-card');
-                card.style.transform = 'translateX(5px)';
-                setTimeout(() => card.style.transform = 'translateX(-5px)', 100);
-                setTimeout(() => card.style.transform = 'none', 200);
+                document.getElementById('msg-erro').style.display = 'block';
             }
         }
     </script>
-
 </body>
 </html>
