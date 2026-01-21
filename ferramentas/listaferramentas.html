@@ -6,9 +6,8 @@
     <title>Minhas Ferramentas | Bruno de Souza</title>
     
     <script>
-        // Verifica se o usuário está logado (chave 'logado' = 'sim')
+        // Verifica se o usuário está logado
         if(localStorage.getItem('logado') !== 'sim') {
-            // Se não estiver, redireciona para o login na pasta anterior
             window.location.href = "../login.html";
         }
 
@@ -26,8 +25,6 @@
         :root {
             --bg-color: #f0f8ff;
             --primary: #6c5ce7;
-            --secondary: #00b894;
-            --accent: #fdcb6e;
             --text: #2d3436;
             
             /* Cores das Seções */
@@ -269,7 +266,7 @@
                 <div class="card-desc">Grandiosidade</div>
             </a>
             <a href="../psicoeducacao/te/esquema-autocontrole.html" class="tool-card">
-                <div class="card-icon" style="color: #ec407a;"><i class="fa-solid fa-traffic-light"></i></div>
+                <div class="card-icon" style="color: #ec407a;"><i class="fa-solid fa-gamepad"></i></div>
                 <div class="card-title">Autocontrole</div>
                 <div class="card-desc">Insuficiente</div>
             </a>
@@ -288,7 +285,7 @@
                 <div class="card-desc">Cuidar Demais</div>
             </a>
             <a href="../psicoeducacao/te/esquema-busca-aprovacao.html" class="tool-card">
-                <div class="card-icon" style="color: #66bb6a;"><i class="fa-solid fa-award"></i></div>
+                <div class="card-icon" style="color: #66bb6a;"><i class="fa-solid fa-star"></i></div>
                 <div class="card-title">Busca de Aprovação</div>
                 <div class="card-desc">Reconhecimento</div>
             </a>
