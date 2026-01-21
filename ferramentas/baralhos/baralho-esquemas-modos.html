@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esquemas e Modos | Bruno de Souza</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-body: #f8fafc;
+            --text-main: #334155;
+            
+            /* Cores dos Tipos */
+            --color-esquema: #ef4444; /* Vermelho para Esquemas (Alerta) */
+            --color-modo: #3b82f6;    /* Azul para Modos (Estados) */
+            --color-saudavel: #10b981; /* Verde para Adulto Saudável */
+            
+            --card-front: #ffffff;
+            --card-back-esquema: #fca5a5;
+            --card-back-modo: #93c5fd;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-body);
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 25px 25px;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* --- HEADER --- */
+        header {
+            text-align: center;
+            margin: 20px auto 40px auto;
+            background: white;
+            padding: 30px 40px;
+            border-radius: 25px;
+            border: 3px dashed var(--color-esquema);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            max-width: 800px;
+            width: 100%;
+            position: relative;
+            transition: border-color 0.3s;
+        }
+
+        header::before {
+            content: ""; 
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%) rotate(-1deg);
+            width: 160px; height: 35px; 
+            background-color: rgba(239, 68, 68, 0.1); 
+            border: 1px solid rgba(0,0,0,0.05); 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2rem;
+            color: var(--text-main);
+            text-transform: uppercase;
+            margin: 0;
+            font-weight: 800;
+        }
+
+        .subtitle { margin-top: 5px; color: #64748b; font-weight: 600; }
+
+        /* --- SELETOR DE DECK --- */
+        .deck-toggle {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            background: white;
+            padding: 8px;
+            border-radius: 50px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .toggle-btn {
+            border: none;
+            background: transparent;
+            padding: 12px 30px;
+            border-radius: 40px;
+            font-family: inherit;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            color: #94a3b8;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-btn.active-esquema {
+            background-color: var(--color-esquema);
+            color: white;
+            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
+        }
+
+        .toggle-btn.active-modo {
+            background-color: var(--color-modo);
+            color: white;
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+        }
+
+        /* --- CARD --- */
+        .card-container {
+            width: 100%;
+            max-width: 450px;
+            height: 580px; /* Cartas mais altas para caber o texto */
+            perspective: 1000px;
+            margin-bottom: 30px;
+            cursor: pointer;
+        }
+
+        .card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .card.flipped { transform: rotateY(180deg); }
+
+        .face {
+            position: absolute;
+            width: 100%; height: 100%;
+            backface-visibility: hidden;
+            border-radius: 25px;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid rgba(0,0,0,0.05);
+            background: white;
+        }
+
+        /* FRENTE (TÍTULO) */
+        .face-front {
+            background-image: linear-gradient(135deg, #fff 0%, #f1f5f9 100%);
+        }
+
+        .card-icon {
+            font-size: 5rem;
+            margin-bottom: 25px;
+            filter: drop-shadow(0 4px 4px rgba(0,0,0,0.1));
+            transition: color 0.3s;
+        }
+
+        .card-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            line-height: 1.2;
+            color: var(--text-main);
+            margin-bottom: 10px;
+        }
+
+        .card-tag {
+            background: #e2e8f0;
+            color: #64748b;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .tap-hint {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #94a3b8;
+            font-weight: 600;
+            background: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        /* VERSO (DESCRIÇÃO) */
+        .face-back {
+            transform: rotateY(180deg);
+            background: white;
+            border-top: 10px solid var(--color-esquema); /* Cor dinâmica */
+            justify-content: flex-start;
+            padding-top: 50px;
+            text-align: left;
+        }
+
+        .description-box {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #475569;
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 15px;
+            width: 100%;
+            border-left: 4px solid #cbd5e1;
+        }
+
+        .back-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            text-align: center;
+            width: 100%;
+            color: var(--text-main);
+        }
+
+        /* CONTROLES */
+        .btn-draw {
+            background: var(--text-main);
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: all 0.2s;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-draw:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0,0,0,0.15); }
+        .btn-draw:active { transform: translateY(2px); box-shadow: none; }
+
+        .btn-back-home {
+            margin-top: 40px;
+            color: #94a3b8;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .btn-back-home:hover { color: var(--text-main); }
+
+        @media (max-width: 500px) {
+            .card-container { height: 500px; }
+            .card-title { font-size: 1.5rem; }
+            .description-box { font-size: 0.95rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header data-aos="fade-down">
+        <h1>Terapia do Esquema</h1>
+        <div class="subtitle">Identificando padrões e modos de funcionamento</div>
+    </header>
+
+    <div class="deck-toggle" data-aos="fade-up">
+        <button class="toggle-btn active-esquema" id="btnEsquemas" onclick="setDeck('esquemas')">ESQUEMAS</button>
+        <button class="toggle-btn" id="btnModos" onclick="setDeck('modos')">MODOS</button>
+    </div>
+
+    <div class="card-container" onclick="flipCard()" data-aos="zoom-in">
+        <div class="card" id="card">
+            
+            <div class="card-face face-front">
+                <div class="card-tag" id="cardTag">Esquema #1</div>
+                <div class="card-icon" id="cardIcon"><i class="fa-solid fa-person-falling-burst"></i></div>
+                <div class="card-title" id="cardTitle">ABANDONO / INSTABILIDADE</div>
+                <div class="tap-hint"><i class="fa-solid fa-rotate"></i> Toque para ler a descrição</div>
+            </div>
+
+            <div class="card-face face-back" id="cardBackFace">
+                <div class="back-title" id="backTitle">ABANDONO</div>
+                <div class="description-box" id="cardDesc">
+                    Acho que as pessoas são instáveis e indignas de confiança. Tenho medo de perder quem amo ou ser abandonado. As pessoas são imprevisíveis. Fico incomodado se deixado sozinho.
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <button class="btn-draw" onclick="drawCard()">
+        <i class="fa-solid fa-shuffle"></i> SORTEAR CARTA
+    </button>
+
+    <a href="../listaferramentas.html" class="btn-back-home"><i class="fa-solid fa-arrow-left"></i> Voltar para Ferramentas</a>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        // --- BANCO DE DADOS (Extraído do PDF) ---
+        const db = {
+            esquemas: [
+                { id: 1, title: "Abandono / Instabilidade", icon: "fa-person-falling-burst", text: "Acho que as pessoas são instáveis e indignas de confiança. Tenho medo de perder quem amo ou ser abandonado. As pessoas são imprevisíveis. Fico incomodado se deixado sozinho. Se eu for eu mesmo me deixarão." },
+                { id: 2, title: "Desconfiança / Abuso", icon: "fa-shield-halved", text: "Penso que as pessoas irão me machucar, abusar, humilhar, enganar, manipular ou aproveitar-se de modo a me prejudicar intencionalmente. Estou sempre alerta. Desconfio das intenções dos outros." },
+                { id: 3, title: "Privação Emocional", icon: "fa-glass-water-droplet", text: "Acho que as pessoas não serão capazes de suprir minhas necessidades de atenção, afeto, carinho. Na maior parte do tempo, não tenho ninguém para me compreender, escutar ou dar uma força. 'Não posso contar com as pessoas'." },
+                { id: 4, title: "Defectividade / Vergonha", icon: "fa-face-frown-open", text: "Sinto que sou defeituoso, mau, indesejado, inferior e que não mereço amor. Sinto-me rejeitado, hipersensível a críticas e comparações, inseguro e com vergonha se me apontam defeitos. Ninguém vai querer estar comigo se me conhecer bem." },
+                { id: 5, title: "Isolamento Social / Alienação", icon: "fa-user-astronaut", text: "Sinto-me diferente dos outros, não me encaixo ou pertenço a grupos ou comunidade. Ninguém me entende realmente. Minha família sempre foi diferente. Sinto-me alienado das pessoas." },
+                { id: 6, title: "Dependência / Incompetência", icon: "fa-baby-carriage", text: "Sinto que não consigo dar conta das responsabilidades do cotidiano, problemas do dia a dia e decisões sem considerável ajuda. Sinto-me desamparado. Preciso de ajuda, não confio na minha capacidade para resolver problemas." },
+                { id: 7, title: "Vulnerabilidade ao Dano", icon: "fa-house-crack", text: "Sinto que algo ruim irá acontecer a qualquer momento (doença, perda financeira, catástrofe). Tenho muitos medos. O mundo é perigoso. Sinto com frequência que terei um ataque de ansiedade." },
+                { id: 8, title: "Emaranhamento", icon: "fa-people-arrows", text: "Tenho relação extremamente próxima e íntima com pessoas importantes (pais/parceiro), a ponto de perder minha individualidade. Tenho medo do afastamento. Sinto-me vazio, sem direção ou sufocado sem eles." },
+                { id: 9, title: "Fracasso", icon: "fa-stairs", text: "Sinto que sou inadequado em relação aos outros em conquistas (escola, trabalho). Acredito que sou inferior, menos exitoso e que os outros são melhores. Sinto-me um fracasso." },
+                { id: 10, title: "Arrogo / Grandiosidade", icon: "fa-crown", text: "Acredito que sou superior às outras pessoas e não deveria estar sujeito às mesmas regras. Sou competitivo e gosto de dominar. Não tolero que me digam o que fazer. Tenho dificuldade de aceitar um 'não'." },
+                { id: 11, title: "Autocontrole Insuficiente", icon: "fa-traffic-light", text: "Não controlo a expressão das minhas emoções ou impulsos. Se uma atividade me desagrada, tento evitar. Não tolero bem a frustração. Tenho dificuldade de concretizar metas de longo prazo. Não tenho disciplina." },
+                { id: 12, title: "Subjugação", icon: "fa-hands-bound", text: "Prefiro não manifestar a raiva, tenho receio de retaliação ou abandono. Deixo que os outros decidam e acabo fazendo o que querem. Aguento ofensas e controle até não poder mais." },
+                { id: 13, title: "Autossacrifício", icon: "fa-hand-holding-heart", text: "Ocupo-me em atender às necessidades de outros à custa da minha satisfação. Sinto-me culpado quando faço algo para mim. Só me sinto feliz quando os outros estão felizes. Ressinto-me por não ter retorno." },
+                { id: 14, title: "Busca de Aprovação", icon: "fa-award", text: "Busco me enquadrar no que é esperado. Preciso da aprovação alheia para sentir que tenho valor. Fico hipersensível com a rejeição. Minha autoestima depende da reação dos outros." },
+                { id: 15, title: "Negativismo / Pessimismo", icon: "fa-cloud-showers-heavy", text: "Sinto que algo pode dar errado a qualquer momento. Não vejo eventos positivos. Tenho medo de cometer erros que levem a situações ruins. Fico sempre vigilante e preocupado." },
+                { id: 16, title: "Inibição Emocional", icon: "fa-face-meh", text: "Tenho dificuldade em demonstrar emoções (raiva, afeto, tristeza). Prefiro manter o controle e a racionalidade para não passar vergonha. Me acham fechado ou frio." },
+                { id: 17, title: "Padrões Inflexíveis", icon: "fa-ruler-combined", text: "Tenho altos padrões de desempenho. Sou perfeccionista e crítico. Preocupo-me em fazer sempre mais e melhor. Sinto uma pressão constante, quase não relaxo." },
+                { id: 18, title: "Postura Punitiva", icon: "fa-gavel", text: "Penso que quem erra deve ser punido. Fico impaciente e com raiva quando não correspondem aos meus padrões. Tenho dificuldade de perdoar erros (meus e dos outros). Costumo me punir." }
+            ],
+            modos: [
+                { id: 'm1', title: "Criança Vulnerável", icon: "fa-child-reaching", text: "Sente-se solitária, isolada, triste, incompreendida, desamparada, defeituosa, inútil ou vítima. Sente medo, tristeza e desamparo.", type: "criança" },
+                { id: 'm2', title: "Criança Zangada", icon: "fa-face-angry", text: "Sente-se injustiçada por suas necessidades não serem atendidas. Demonstra raiva e até fúria. Percepções de traição e abandono.", type: "criança" },
+                { id: 'm3', title: "Criança Impulsiva", icon: "fa-bolt", text: "Age impulsivamente para satisfazer desejos egoístas e imediatos. Não considera limites ou sentimentos alheios.", type: "criança" },
+                { id: 'm4', title: "Criança Feliz", icon: "fa-face-laugh-beam", text: "Sente-se amada, conectada, compreendida e validada. É espontânea, otimista e sente-se encorajada.", type: "saudavel" },
+                { id: 'm5', title: "Pai/Mãe Punitivo", icon: "fa-user-ninja", text: "Mostra-se agressivo, intolerante e crítico consigo mesmo. Está sempre se culpando e punindo erros. Réplica do cuidador internalizado.", type: "pai" },
+                { id: 'm6', title: "Pai/Mãe Exigente", icon: "fa-user-tie", text: "Sente que precisa agir de acordo com regras rígidas e padrões elevados. Busca competência e eficiência. Nunca se sente satisfeito.", type: "pai" },
+                { id: 'm7', title: "Protetor Desligado", icon: "fa-robot", text: "Foge de emoções negativas. Desconecta-se, agindo de modo robótico ou desligado da realidade. Sente-se indiferente, vazio e distante. Evitação.", type: "enfrentamento" },
+                { id: 'm8', title: "Capitulador Complacente", icon: "fa-flag", text: "Age de forma obediente ou dependente para evitar conflito. Submete-se aos desejos dos outros, desconsiderando os seus próprios. Medo de represálias.", type: "enfrentamento" },
+                { id: 'm9', title: "Hipercompensador", icon: "fa-khanda", text: "Age como se o oposto do esquema fosse verdade. Usa contra-ataque, controle e busca superioridade para aliviar o desconforto.", type: "enfrentamento" },
+                { id: 'm10', title: "Adulto Saudável", icon: "fa-user-check", text: "Busca relações positivas. Identifica e neutraliza pensamentos negativos. Cuida da Criança Vulnerável. Estabelece limites e modera os modos disfuncionais.", type: "saudavel" }
+            ]
+        };
+
+        let currentDeckType = 'esquemas';
+        const card = document.getElementById('card');
+        const root = document.documentElement;
+
+        // Elements
+        const elTag = document.getElementById('cardTag');
+        const elIcon = document.getElementById('cardIcon');
+        const elTitle = document.getElementById('cardTitle');
+        const elBackFace = document.getElementById('cardBackFace');
+        const elBackTitle = document.getElementById('backTitle');
+        const elDesc = document.getElementById('cardDesc');
+        const btnEsquemas = document.getElementById('btnEsquemas');
+        const btnModos = document.getElementById('btnModos');
+
+        function setDeck(type) {
+            currentDeckType = type;
+            
+            // UI Toggle
+            if (type === 'esquemas') {
+                btnEsquemas.classList.add('active-esquema');
+                btnModos.classList.remove('active-modo');
+                root.style.setProperty('--color-esquema', '#ef4444');
+                document.querySelector('header').style.borderColor = '#ef4444';
+            } else {
+                btnEsquemas.classList.remove('active-esquema');
+                btnModos.classList.add('active-modo');
+                root.style.setProperty('--color-esquema', '#3b82f6'); // Muda borda do header para azul
+                document.querySelector('header').style.borderColor = '#3b82f6';
+            }
+
+            // Reset Card
+            if (card.classList.contains('flipped')) {
+                card.classList.remove('flipped');
+                setTimeout(drawCard, 300);
+            } else {
+                drawCard();
+            }
+        }
+
+        function drawCard() {
+            const list = db[currentDeckType];
+            const item = list[Math.floor(Math.random() * list.length)];
+
+            // Animação leve
+            card.style.transform = "scale(0.95)";
+            setTimeout(() => {
+                card.style.transform = "scale(1)";
+                if (card.classList.contains('flipped')) card.style.transform = "rotateY(180deg)";
+            }, 150);
+
+            // Se estiver virado, desvira primeiro
+            if (card.classList.contains('flipped')) {
+                card.classList.remove('flipped');
+                setTimeout(() => updateCardContent(item), 300);
+            } else {
+                updateCardContent(item);
+            }
+        }
+
+        function updateCardContent(item) {
+            // Frente
+            elTag.innerText = currentDeckType === 'esquemas' ? `Esquema #${item.id}` : "Modo";
+            elIcon.innerHTML = `<i class="fa-solid ${item.icon}"></i>`;
+            elTitle.innerText = item.title;
+            
+            // Cor do ícone
+            if (currentDeckType === 'esquemas') {
+                elIcon.style.color = '#ef4444';
+                elBackFace.style.borderTopColor = '#ef4444';
+            } else {
+                // Cores específicas para Modos
+                if (item.type === 'criança') elIcon.style.color = '#f59e0b'; // Laranja
+                else if (item.type === 'pai') elIcon.style.color = '#7c3aed'; // Roxo
+                else if (item.type === 'enfrentamento') elIcon.style.color = '#64748b'; // Cinza
+                else if (item.type === 'saudavel') elIcon.style.color = '#10b981'; // Verde
+                
+                elBackFace.style.borderTopColor = elIcon.style.color;
+            }
+
+            // Verso
+            elBackTitle.innerText = item.title;
+            elDesc.innerText = item.text;
+        }
+
+        function flipCard() {
+            card.classList.toggle('flipped');
+        }
+
+        // Inicializar
+        drawCard();
+
+    </script>
+
+</body>
+</html>
