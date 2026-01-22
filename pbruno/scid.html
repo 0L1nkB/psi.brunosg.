@@ -215,8 +215,10 @@
         <div class="nav-item active" onclick="switchModule('A_DEP')" id="nav-A_DEP"><span>Depressão Maior</span><span class="score-badge" id="score-A_DEP">0</span></div>
         <div class="nav-item" onclick="switchModule('A_MANIA')" id="nav-A_MANIA"><span>Mania/Hipomania</span><span class="score-badge" id="score-A_MANIA">0</span></div>
 
-        <div class="menu-group">Módulo B & D: Psicose/Dif</div>
+        <div class="menu-group">Módulo B: Psicose</div>
         <div class="nav-item" onclick="switchModule('B_PSYCH')" id="nav-B_PSYCH"><span>Sint. Psicóticos</span><span class="score-badge" id="score-B_PSYCH">0</span></div>
+
+        <div class="menu-group">Módulo D: Diferencial</div>
         <div class="nav-item" onclick="switchModule('D_DIFF')" id="nav-D_DIFF" style="color:#e67e22"><span>Diag. Diferencial</span><span class="score-badge" id="score-D_DIFF">-</span></div>
 
         <div class="menu-group">Módulo E: Substâncias</div>
@@ -289,12 +291,12 @@
         AOS.init();
 
         const moduleOrder = [
-            'A_DEP', 'A_MANIA', 'B_PSYCH', 'E_SUBST', 
+            'A_DEP', 'A_MANIA', 'B_PSYCH', 'D_DIFF', 'E_SUBST', 
             'F_PANIC', 'F_AGORA', 'F_SOCIAL', 'F_GAD', 
-            'G_TOC', 'G_TEPT', 'H_ADHD', 'I_SCREEN', 'J_ADJUST', 'D_DIFF'
+            'G_TOC', 'G_TEPT', 'H_ADHD', 'I_SCREEN', 'J_ADJUST'
         ];
 
-        /* BASE DE DADOS COMPLETA E FIDEDIGNA */
+        /* BASE DE DADOS COMPLETA E CORRIGIDA */
         const database = {
             'A_DEP': [
                 { id: "A1", text: "No último mês, desde [DATA], houve algum período de tempo em que você se sentiu deprimido ou abatido na maior parte do dia, quase todos os dias?", sub: "Alguém comentou que você parecia triste, abatido ou deprimido?", criteria: "A. Humor deprimido na maior parte do dia, quase todos os dias.", inst: "SE VISIVELMENTE DEPRIMIDO, PODE CLASSIFICAR (+) MESMO SE NEGADO." },
@@ -439,7 +441,7 @@
                 'B_PSYCH': 'Módulo B: Rastreio de Psicose', 'D_DIFF': 'Módulo D: Diagnóstico Diferencial',
                 'E_SUBST': 'Módulo E: Uso de Substâncias',
                 'F_PANIC': 'Módulo F: Pânico', 'F_AGORA': 'Módulo F: Agorafobia',
-                'F_SOCIAL': 'Módulo F: Ansiedade Social', 'F_GAD': 'Módulo F: TAG',
+                'F_SOCIAL': 'Módulo F: Ans. Social', 'F_GAD': 'Módulo F: TAG',
                 'G_TOC': 'Módulo G: TOC', 'G_TEPT': 'Módulo G: TEPT',
                 'H_ADHD': 'Módulo H: TDAH Adulto',
                 'I_SCREEN': 'Módulo I: Outros Transtornos',
@@ -459,12 +461,11 @@
 
             const q = questions[moduleIndex];
 
-            // AUTO-SKIP LOGIC (Sem Alerts)
             if (q.type === 'logic') {
                 const action = q.check(globalScores[currentModule]);
                 if (action === 'STOP') {
                     updateSidebarScore(currentModule);
-                    goToNextModule(); // Pula silenciosamente para o próximo módulo
+                    goToNextModule(); 
                     return; 
                 } else {
                     moduleIndex++;
@@ -518,7 +519,6 @@
             dash.innerHTML = '';
             alertBox.innerHTML = '';
 
-            // Configuração dos Diagnósticos
             const modules = [
                 { id: 'A_DEP', title: 'Depressão Maior', min: 5, crit: ['A1','A2'] },
                 { id: 'A_MANIA', title: 'Episódio Maníaco', min: 3, crit: ['C1','C2'] },
@@ -534,7 +534,6 @@
 
             let activeDiagnoses = [];
 
-            // Geração dos Cards
             modules.forEach(m => {
                 let scores = globalScores[m.id];
                 let count = 0;
