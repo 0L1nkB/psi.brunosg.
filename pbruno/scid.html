@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCID-5-CV: Versão Final | Bruno de Souza</title>
+    <title>SCID-5-CV: Fluxo Contínuo | Bruno de Souza</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -256,48 +256,37 @@
 <body>
 
     <div id="sidebar">
-        <div class="brand"><i class="fa-solid fa-brain"></i> SCID-5 FINAL</div>
+        <div class="brand"><i class="fa-solid fa-brain"></i> SCID-5 AUTO</div>
         
         <div class="menu-section">Módulo A: Humor</div>
-        <div class="nav-item active" onclick="switchModule('A_DEP')" id="nav-A_DEP">
-            <span><i class="fa-solid fa-cloud-rain"></i> Depressão</span>
-            <span class="score-badge" id="score-A_DEP">0</span>
-        </div>
-        <div class="nav-item" onclick="switchModule('A_MANIA')" id="nav-A_MANIA">
-            <span><i class="fa-solid fa-bolt"></i> Mania</span>
-            <span class="score-badge" id="score-A_MANIA">0</span>
-        </div>
+        <div class="nav-item active" onclick="switchModule('A_DEP')" id="nav-A_DEP"><span><i class="fa-solid fa-cloud-rain"></i> Depressão</span><span class="score-badge" id="score-A_DEP">0</span></div>
+        <div class="nav-item" onclick="switchModule('A_MANIA')" id="nav-A_MANIA"><span><i class="fa-solid fa-bolt"></i> Mania</span><span class="score-badge" id="score-A_MANIA">0</span></div>
 
         <div class="menu-section">Módulo B: Psicose</div>
-        <div class="nav-item" onclick="switchModule('B_PSYCH')" id="nav-B_PSYCH">
-            <span><i class="fa-solid fa-eye"></i> Rastreio Psicose</span>
-            <span class="score-badge" id="score-B_PSYCH">0</span>
-        </div>
+        <div class="nav-item" onclick="switchModule('B_PSYCH')" id="nav-B_PSYCH"><span><i class="fa-solid fa-eye"></i> Rastreio Psicose</span><span class="score-badge" id="score-B_PSYCH">0</span></div>
 
-        <div class="menu-section">Módulo D: Diferencial</div>
-        <div class="nav-item" onclick="switchModule('D_DIFF')" id="nav-D_DIFF" style="color:#fdcb6e">
-            <span><i class="fa-solid fa-scale-balanced"></i> O Grande Juiz</span>
-            <span class="score-badge" id="score-D_DIFF">-</span>
-        </div>
-
-        <div class="menu-section">Módulo E/F/G/H</div>
+        <div class="menu-section">Módulo E: Substâncias</div>
         <div class="nav-item" onclick="switchModule('E_SUBST')" id="nav-E_SUBST"><span><i class="fa-solid fa-wine-bottle"></i> Substâncias</span><span class="score-badge" id="score-E_SUBST">0</span></div>
+
+        <div class="menu-section">Módulo F: Ansiedade</div>
         <div class="nav-item" onclick="switchModule('F_PANIC')" id="nav-F_PANIC"><span><i class="fa-solid fa-person-falling-burst"></i> Pânico</span><span class="score-badge" id="score-F_PANIC">0</span></div>
         <div class="nav-item" onclick="switchModule('F_AGORA')" id="nav-F_AGORA"><span><i class="fa-solid fa-house-lock"></i> Agorafobia</span><span class="score-badge" id="score-F_AGORA">0</span></div>
         <div class="nav-item" onclick="switchModule('F_SOCIAL')" id="nav-F_SOCIAL"><span><i class="fa-solid fa-users-slash"></i> Ans. Social</span><span class="score-badge" id="score-F_SOCIAL">0</span></div>
         <div class="nav-item" onclick="switchModule('F_GAD')" id="nav-F_GAD"><span><i class="fa-solid fa-head-side-virus"></i> TAG</span><span class="score-badge" id="score-F_GAD">0</span></div>
+
+        <div class="menu-section">Outros</div>
         <div class="nav-item" onclick="switchModule('G_TOC')" id="nav-G_TOC"><span><i class="fa-solid fa-rotate"></i> TOC</span><span class="score-badge" id="score-G_TOC">0</span></div>
         <div class="nav-item" onclick="switchModule('G_TEPT')" id="nav-G_TEPT"><span><i class="fa-solid fa-land-mine-on"></i> TEPT</span><span class="score-badge" id="score-G_TEPT">0</span></div>
         <div class="nav-item" onclick="switchModule('H_ADHD')" id="nav-H_ADHD"><span><i class="fa-solid fa-bolt-lightning"></i> TDAH</span><span class="score-badge" id="score-H_ADHD">0</span></div>
         <div class="nav-item" onclick="switchModule('J_ADJUST')" id="nav-J_ADJUST"><span><i class="fa-solid fa-scale-unbalanced"></i> Adaptação</span><span class="score-badge" id="score-J_ADJUST">0</span></div>
+        <div class="nav-item" onclick="switchModule('D_DIFF')" id="nav-D_DIFF" style="color:#fdcb6e"><span><i class="fa-solid fa-scale-balanced"></i> Diferencial</span><span class="score-badge" id="score-D_DIFF">-</span></div>
 
         <div class="nav-item" onclick="showDashboard()" style="margin-top:auto; background:#2d3436; border:1px solid #636e72; justify-content:center;">
-            <span><i class="fa-solid fa-clipboard-check"></i> RELATÓRIO FINAL</span>
+            <span><i class="fa-solid fa-clipboard-check"></i> RESULTADO</span>
         </div>
     </div>
 
     <div id="main-content">
-        
         <header id="interview-header">
             <h2 id="module-title">SCID-5-CV Digital</h2>
             <div style="font-weight:bold; color:#636e72; background:white; padding:5px 15px; border-radius:10px; box-shadow:0 2px 5px rgba(0,0,0,0.05)" id="progress-display">Item 1</div>
@@ -336,12 +325,18 @@
                 Ferramenta Didática baseada na SCID-5-CV. Não substitui avaliação médica profissional.
             </div>
         </div>
-
     </div>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init();
+
+        // ORDEM DE EXECUÇÃO AUTOMÁTICA
+        const moduleOrder = [
+            'A_DEP', 'A_MANIA', 'B_PSYCH', 'E_SUBST', 
+            'F_PANIC', 'F_AGORA', 'F_SOCIAL', 'F_GAD', 
+            'G_TOC', 'G_TEPT', 'H_ADHD', 'J_ADJUST', 'D_DIFF'
+        ];
 
         const database = {
             'A_DEP': [
@@ -374,11 +369,6 @@
                 { id: "B3", text: "Sente-se perseguido ou espionado?", criteria: "Delírio Persecutório." },
                 { id: "B4", text: "Acredita ter poderes especiais?", criteria: "Delírio de Grandeza." },
                 { id: "B5", text: "Sente que leem ou controlam sua mente?", criteria: "Delírio de Controle." }
-            ],
-            'D_DIFF': [
-                { id: "D1", text: "(Se houve Psicose + Depressão): As alucinações/delírios acontecem APENAS quando você está deprimido?", sub: "Ou elas continuam acontecendo mesmo quando seu humor está normal?", criteria: "Diferencial: T. Humor com Psicose vs Esquizoafetivo." },
-                { id: "D2", text: "(Se houve Substâncias + Sintomas): Os sintomas começaram APENAS depois que você começou a usar drogas/álcool?", criteria: "Diferencial: Induzido por Substância." },
-                { id: "D3", text: "(Se houve Doença Médica): Você tem alguma doença (ex: tireoide) que o médico disse que causa isso?", criteria: "Diferencial: Condição Médica Geral." }
             ],
             'E_SUBST': [
                 { id: "E1", text: "Uso frequente de álcool?", criteria: "Rastreio Álcool." },
@@ -458,13 +448,17 @@
                 { type: 'logic', check: (s) => s['J1']==='+' ? 'NEXT' : 'STOP' },
                 { id: "J2", text: "Sofrimento desproporcional?", criteria: "B. Gravidade." },
                 { id: "J3", text: "Sintomas persistem 6 meses pós-término?", criteria: "E. Duração (Deve ser Não)." }
+            ],
+            'D_DIFF': [
+                { id: "D1", text: "As alucinações/delírios acontecem APENAS durante episódios de humor?", criteria: "Diff: Humor vs Esquizo." },
+                { id: "D2", text: "Sintomas apenas durante uso de substâncias?", criteria: "Diff: Substância." },
+                { id: "D3", text: "Devido a condição médica?", criteria: "Diff: Orgânico." }
             ]
         };
 
         let currentModule = 'A_DEP';
         let moduleIndex = 0;
         let globalScores = {};
-        // Inicializa scores vazios
         Object.keys(database).forEach(k => globalScores[k] = {});
 
         function switchModule(modId) {
@@ -491,8 +485,11 @@
 
         function loadQuestion() {
             const questions = database[currentModule];
+            
+            // VERIFICA SE O MÓDULO ACABOU
             if (moduleIndex >= questions.length) {
-                alert("Módulo concluído.");
+                // AUTO-AVANÇO (Sem Alert)
+                goToNextModule();
                 return;
             }
 
@@ -500,8 +497,9 @@
             if (q.type === 'logic') {
                 const action = q.check(globalScores[currentModule]);
                 if (action === 'STOP') {
-                    alert("Critérios não atendidos. Módulo encerrado.");
+                    // CRITÉRIO NÃO ATENDIDO (Sem Alert)
                     updateSidebarScore(currentModule);
+                    goToNextModule();
                     return; 
                 } else {
                     moduleIndex++;
@@ -514,7 +512,7 @@
             document.getElementById('q-text').innerText = q.text;
             document.getElementById('c-text').innerText = q.criteria;
             document.getElementById('progress-display').innerText = `Item ${moduleIndex + 1}`;
-
+            
             const subDiv = document.getElementById('q-sub');
             if (q.sub) { subDiv.style.display = 'block'; subDiv.innerText = q.sub; } 
             else { subDiv.style.display = 'none'; }
@@ -522,6 +520,20 @@
             const instDiv = document.getElementById('q-inst');
             instDiv.style.display = q.inst ? 'block' : 'none';
             if (q.inst) instDiv.innerText = "NOTA: " + q.inst;
+        }
+
+        // FUNÇÃO DE AUTO-NAVEGAÇÃO
+        function goToNextModule() {
+            const currentIdx = moduleOrder.indexOf(currentModule);
+            
+            // Se houver próximo módulo na lista
+            if (currentIdx >= 0 && currentIdx < moduleOrder.length - 1) {
+                const nextMod = moduleOrder[currentIdx + 1];
+                switchModule(nextMod);
+            } else {
+                // Se for o último, mostra o Dashboard
+                showDashboard();
+            }
         }
 
         function registerScore(val) {
@@ -549,12 +561,11 @@
             const diffAlert = document.getElementById('differential-alert');
             diffAlert.innerHTML = '';
 
-            // 1. Definição dos Módulos Principais
             const modules = [
                 { id: 'A_DEP', title: 'Depressão Maior', min: 5, crit: ['A1','A2'] },
                 { id: 'A_MANIA', title: 'Episódio Maníaco', min: 3, crit: ['C1','C2'] },
                 { id: 'B_PSYCH', title: 'Sintomas Psicóticos (Rastreio)', min: 1, crit: ['B1','B2','B3','B4','B5'] },
-                { id: 'E_SUBST', title: 'Transtorno por Uso de Substâncias', min: 2, crit: [] }, // Critério especial
+                { id: 'E_SUBST', title: 'Transtorno por Uso de Substâncias', min: 2, crit: [] },
                 { id: 'F_PANIC', title: 'Pânico', min: 1, crit: ['F1'] },
                 { id: 'F_AGORA', title: 'Agorafobia', min: 2, crit: ['F23'] },
                 { id: 'F_SOCIAL', title: 'Ansiedade Social', min: 2, crit: ['F32'] },
@@ -565,7 +576,6 @@
 
             let activeDiagnoses = [];
 
-            // 2. Processamento dos Módulos Normais
             modules.forEach(r => {
                 let scores = globalScores[r.id];
                 let count = 0;
@@ -592,7 +602,7 @@
                 dash.innerHTML += createCard(r.title, status, count);
             });
 
-            // 3. Processamento TDAH
+            // TDAH
             let hS = globalScores['H_ADHD'];
             let inatt = 0, hyper = 0;
             for(let i=1; i<=9; i++) if(hS['H'+i] === '+') inatt++;
@@ -603,7 +613,7 @@
             }
             dash.innerHTML += createCard("TDAH Adulto", adhdStatus, `D:${inatt} H:${hyper}`);
 
-            // 4. Módulo J (Exclusão)
+            // Adaptação
             let jS = globalScores['J_ADJUST'];
             let adjustStatus = "Negativo";
             if(activeDiagnoses.length === 0 && jS['J1']==='+' && jS['J2']==='+' && jS['J3']==='-') {
@@ -613,8 +623,7 @@
             }
             dash.innerHTML += createCard("Transtorno de Adaptação", adjustStatus, "-");
 
-            // 5. Módulo D: O GRANDE JUIZ (Lógica de Diferencial)
-            // Se houver Depressão E Psicose
+            // Diferencial
             let hasDep = activeDiagnoses.includes("Depressão Maior");
             let hasPsych = activeDiagnoses.includes("Sintomas Psicóticos (Rastreio)");
             let hasMania = activeDiagnoses.includes("Episódio Maníaco");
@@ -622,15 +631,14 @@
             if(hasDep && hasPsych) {
                 let dScore = globalScores['D_DIFF']['D1'];
                 let conclusao = "";
-                if(dScore === '+') conclusao = "Provável DEPRESSÃO COM CARACTERÍSTICAS PSICÓTICAS (Sintomas ocorrem apenas durante episódios de humor).";
-                else if(dScore === '-') conclusao = "Provável TRANSTORNO ESQUIZOAFETIVO ou ESQUIZOFRENIA (Psicose ocorre mesmo sem depressão).";
-                else conclusao = "Necessário aplicar Módulo D (Diferencial) para distinguir.";
-                
-                diffAlert.innerHTML += `<div style="background:#fff3cd; color:#856404; padding:15px; border-radius:10px; margin-bottom:20px; border-left:5px solid #ffc107"><strong>⚠️ Conflito Detectado:</strong> Depressão + Psicose.<br>${conclusao}</div>`;
+                if(dScore === '+') conclusao = "Provável DEPRESSÃO COM CARACTERÍSTICAS PSICÓTICAS.";
+                else if(dScore === '-') conclusao = "Provável TRANSTORNO ESQUIZOAFETIVO.";
+                else conclusao = "Necessário aplicar Módulo D.";
+                diffAlert.innerHTML += `<div style="background:#fff3cd; color:#856404; padding:15px; border-radius:10px; margin-bottom:20px;"><strong>⚠️ Conflito:</strong> Depressão + Psicose.<br>${conclusao}</div>`;
             }
 
             if(hasMania) {
-                diffAlert.innerHTML += `<div style="background:#fdcb6e; color:#d35400; padding:15px; border-radius:10px; margin-bottom:20px; border-left:5px solid #e67e22"><strong>⚠️ Alerta Bipolar:</strong> A presença de Mania anula o diagnóstico de Depressão Unipolar. Considere <strong>TRANSTORNO BIPOLAR TIPO I</strong>.</div>`;
+                diffAlert.innerHTML += `<div style="background:#fdcb6e; color:#d35400; padding:15px; border-radius:10px; margin-bottom:20px;"><strong>⚠️ Alerta Bipolar:</strong> Mania anula Depressão Unipolar.</div>`;
             }
         }
 
