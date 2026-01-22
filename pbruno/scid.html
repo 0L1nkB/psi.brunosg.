@@ -3,184 +3,263 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCID-5-CV: Módulo A (Didático)</title>
+    <title>SCID-5-CV: Depressão | Bruno de Souza</title>
+    
+    <script>
+        if(localStorage.getItem('logado') !== 'sim') {
+            window.location.href = "../login.html";
+        }
+    </script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
     <style>
         :root {
-            --primary: #2c3e50;
-            --accent: #3498db;
-            --bg: #f8f9fa;
-            --card: #ffffff;
-            --text: #333;
-            --success: #28a745;
-            --danger: #dc3545;
-            --warning: #ffc107;
+            --bg-color: #f0f8ff;
+            --primary: #6c5ce7;       /* Roxo Principal */
+            --text: #2d3436;
+            --card-bg: #ffffff;
+            
+            /* Cores de Ação */
+            --positive: #ef5350;      /* Vermelho (Sintoma Presente) */
+            --negative: #00b894;      /* Verde (Sintoma Ausente) */
+            --neutral: #fdcb6e;       /* Amarelo (Dúvida) */
+            
+            --criteria-bg: #dfe6e9;   /* Fundo da área técnica */
         }
+
+        * { box-sizing: border-box; }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
+            background-size: 20px 20px;
             margin: 0;
             padding: 20px;
-            height: 100vh;
-            box-sizing: border-box;
+            min-height: 100vh;
+            color: var(--text);
             display: flex;
             flex-direction: column;
-        }
-
-        header {
-            background: var(--primary);
-            color: white;
-            padding: 15px 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        h1 { margin: 0; font-size: 1.2rem; }
-        .badge { background: var(--accent); padding: 5px 10px; border-radius: 4px; font-size: 0.9rem; }
+        /* --- CABEÇALHO --- */
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: white;
+            padding: 20px 40px;
+            border-radius: 20px;
+            border: 3px dashed var(--primary);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            max-width: 900px;
+            width: 100%;
+            position: relative;
+        }
 
-        /* Container Principal */
+        header::before {
+            content: ""; 
+            position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+            width: 100px; height: 5px; 
+            background-color: rgba(108, 92, 231, 0.3); 
+            border-radius: 10px;
+        }
+
+        h1 { margin: 0; color: var(--primary); font-size: 1.8rem; text-transform: uppercase; font-weight: 800; }
+        .subtitle { margin-top: 5px; color: #636e72; font-weight: 600; font-size: 0.9rem; }
+        .badge { background: var(--primary); color: white; padding: 5px 15px; border-radius: 15px; font-size: 0.8rem; font-weight: 700; position: absolute; top: -15px; right: 20px; }
+
+        /* --- ÁREA PRINCIPAL (GRID) --- */
         #app-container {
-            display: flex;
-            flex: 1;
+            display: grid;
+            grid-template-columns: 2fr 1fr 100px; /* Pergunta | Critério | Botões */
             gap: 20px;
-            overflow: hidden;
+            width: 100%;
+            max-width: 1100px;
+            height: 60vh;
+            min-height: 500px;
         }
 
-        /* Coluna Esquerda: A Pergunta (Para o Paciente) */
+        /* PAINEL DE PERGUNTA (Esquerda) */
         .question-panel {
-            flex: 2;
-            background: var(--card);
-            border-radius: 8px;
+            background: var(--card-bg);
+            border-radius: 20px;
             padding: 30px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
             display: flex;
             flex-direction: column;
+            border: 2px solid white;
+            position: relative;
             overflow-y: auto;
         }
 
         .question-code {
-            color: var(--accent);
-            font-weight: bold;
-            font-size: 1.1rem;
-            margin-bottom: 10px;
+            color: var(--primary);
+            font-weight: 800;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            display: block;
         }
 
         .question-text {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             line-height: 1.4;
-            margin-bottom: 20px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 25px;
         }
 
         .sub-questions {
-            font-size: 1.1rem;
-            color: #555;
-            background: #f1f3f5;
-            padding: 15px;
-            border-radius: 6px;
-            border-left: 4px solid var(--accent);
+            font-size: 1rem;
+            color: #636e72;
+            background: #f1f2f6;
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid var(--primary);
             margin-bottom: 20px;
+            line-height: 1.6;
         }
 
         .instruction {
+            margin-top: auto;
             background: #fff3cd;
             color: #856404;
-            padding: 10px;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            margin-top: auto;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px dashed #ffeeba;
         }
 
-        /* Coluna Central: Critérios (Para o Médico) */
+        /* PAINEL TÉCNICO (Centro) */
         .criteria-panel {
-            flex: 1;
-            background: #e9ecef;
-            border-radius: 8px;
-            padding: 20px;
+            background: var(--criteria-bg);
+            border-radius: 20px;
+            padding: 25px;
             overflow-y: auto;
-            border: 1px solid #dee2e6;
+            border: 2px solid #b2bec3;
+            color: #2d3436;
         }
 
-        .criteria-title { font-weight: bold; margin-bottom: 10px; color: #495057; }
-        .criteria-text { font-size: 0.95rem; color: #495057; }
+        .criteria-title { 
+            font-weight: 800; 
+            margin-bottom: 15px; 
+            text-transform: uppercase; 
+            font-size: 0.9rem; 
+            color: #636e72; 
+            border-bottom: 2px solid rgba(0,0,0,0.1);
+            padding-bottom: 5px;
+        }
+        
+        .criteria-text { font-size: 0.95rem; line-height: 1.5; }
 
-        /* Coluna Direita: Ações */
+        /* PAINEL DE AÇÃO (Direita) */
         .action-panel {
-            flex: 0 0 150px;
             display: flex;
             flex-direction: column;
             gap: 15px;
             justify-content: center;
         }
 
-        .btn {
-            padding: 20px 10px;
+        .btn-action {
+            width: 100%;
+            height: 80px;
             border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: bold;
+            border-radius: 20px;
+            font-size: 1.5rem;
+            font-weight: 800;
             cursor: pointer;
-            transition: transform 0.1s, opacity 0.2s;
             color: white;
-            text-transform: uppercase;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 0 rgba(0,0,0,0.1);
         }
 
-        .btn:hover { opacity: 0.9; transform: scale(1.02); }
-        .btn-plus { background-color: var(--danger); } /* Presente/Patológico */
-        .btn-minus { background-color: var(--success); } /* Ausente/Saudável */
-        .btn-unsure { background-color: #6c757d; } /* Duvidoso */
+        .btn-action span { font-size: 0.7rem; font-weight: 600; margin-top: 5px; text-transform: uppercase; }
 
-        /* Tela de Resultados */
+        .btn-action:hover { transform: translateY(-3px); box-shadow: 0 8px 0 rgba(0,0,0,0.1); }
+        .btn-action:active { transform: translateY(2px); box-shadow: none; }
+
+        .btn-plus { background-color: var(--positive); }   /* Sim/Patológico */
+        .btn-minus { background-color: var(--negative); }  /* Não/Saudável */
+        .btn-unsure { background-color: var(--neutral); color: #2d3436; } /* Dúvida */
+
+        /* TELA DE RESULTADOS */
         #results-view {
             display: none;
             background: white;
             padding: 40px;
-            border-radius: 8px;
-            flex: 1;
-            overflow-y: auto;
+            border-radius: 25px;
+            width: 100%;
+            max-width: 800px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
         .result-item {
-            padding: 10px;
-            border-bottom: 1px solid #eee;
+            padding: 15px;
+            border-bottom: 1px dashed #dfe6e9;
             display: flex;
             justify-content: space-between;
+            align-items: center;
         }
         
         .diagnosis-box {
             margin-top: 30px;
-            padding: 20px;
-            border-radius: 8px;
+            padding: 30px;
+            border-radius: 15px;
             text-align: center;
-            font-size: 1.2rem;
-            font-weight: bold;
+            font-size: 1.3rem;
+            font-weight: 800;
         }
         
-        .diag-positive { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-        .diag-negative { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .diag-positive { background: #ff7675; color: white; border: 4px solid #d63031; }
+        .diag-negative { background: #55efc4; color: #006266; border: 4px solid #00b894; }
 
+        .back-link {
+            position: fixed; top: 20px; left: 20px;
+            color: #b2bec3; text-decoration: none; font-weight: 700;
+            transition: 0.3s;
+        }
+        .back-link:hover { color: var(--primary); }
+
+        /* RESPONSIVIDADE */
+        @media (max-width: 900px) {
+            #app-container {
+                display: flex;
+                flex-direction: column;
+                height: auto;
+            }
+            .action-panel {
+                flex-direction: row;
+                height: auto;
+            }
+            .btn-action { height: 60px; font-size: 1.2rem; }
+            .question-panel { min-height: 300px; }
+        }
     </style>
 </head>
 <body>
 
-    <header>
-        <div>
-            <h1>SCID-5-CV Digital</h1>
-            <span style="font-size:0.8rem; opacity:0.8;">Uso Pessoal Didático</span>
-        </div>
+    <a href="../listaferramentas.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> Voltar</a>
+
+    <header data-aos="fade-down">
+        <h1>SCID-5-CV Digital</h1>
+        <div class="subtitle">Módulo A: Episódio Depressivo Maior</div>
         <div class="badge" id="progress-display">Item 1</div>
     </header>
 
-    <div id="app-container">
+    <div id="app-container" data-aos="fade-up">
         
         <div class="question-panel">
             <span class="question-code" id="q-id">A1</span>
             <div class="question-text" id="q-main">
-                Carregando pergunta...
+                Carregando...
             </div>
             
             <div class="sub-questions" id="q-sub" style="display:none;">
@@ -191,50 +270,61 @@
         </div>
 
         <div class="criteria-panel">
-            <div class="criteria-title">Critério DSM-5</div>
+            <div class="criteria-title"><i class="fa-solid fa-book-medical"></i> Critério DSM-5</div>
             <div class="criteria-text" id="c-text">
-                Carregando critério...
+                Carregando...
             </div>
         </div>
 
         <div class="action-panel">
-            <button class="btn btn-plus" onclick="registerScore('+')">+ (Presente)</button>
-            <button class="btn btn-minus" onclick="registerScore('-')">- (Ausente)</button>
-            <button class="btn btn-unsure" onclick="registerScore('?')">? (Dúvida)</button>
+            <button class="btn-action btn-plus" onclick="registerScore('+')">
+                <i class="fa-solid fa-check"></i> <span>Presente</span>
+            </button>
+            <button class="btn-action btn-unsure" onclick="registerScore('?')">
+                <i class="fa-solid fa-question"></i> <span>Dúvida</span>
+            </button>
+            <button class="btn-action btn-minus" onclick="registerScore('-')">
+                <i class="fa-solid fa-xmark"></i> <span>Ausente</span>
+            </button>
         </div>
     </div>
 
     <div id="results-view">
-        <h2>Sumário do Módulo A</h2>
+        <h2 style="text-align:center; color:var(--text)">Sumário da Avaliação</h2>
         <div id="score-list"></div>
         <div id="final-diagnosis" class="diagnosis-box"></div>
-        <button class="btn btn-unsure" style="margin-top:20px;" onclick="location.reload()">Reiniciar</button>
+        <button class="btn-action btn-unsure" style="margin-top:20px; height:50px; background:#b2bec3" onclick="location.reload()">
+            <i class="fa-solid fa-rotate-right"></i> Nova Avaliação
+        </button>
     </div>
 
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
+        AOS.init();
+
         // ============================================================
-        // BANCO DE DADOS DAS PERGUNTAS (Extraído do PDF/Guia SCID-5)
+        // BANCO DE DADOS DAS PERGUNTAS (Lógica SCID-5)
         // ============================================================
         const questions = [
             {
                 id: "A1",
-                text: "No último mês, houve algum período de tempo em que você se sentiu deprimido ou abatido na maior parte do dia, quase todos os dias?",
-                sub: "Alguém disse que você parece triste, abatido ou deprimido?",
-                criteria: "1. Humor deprimido na maior parte do dia, quase todos os dias, indicado por relato subjetivo (p. ex., sente-se triste, vazio, sem esperança) ou observação de terceiros.",
-                inst: "Se o paciente estiver visivelmente deprimido, você pode classificar como (+) mesmo se ele negar, baseado na observação."
+                text: "No último mês, houve algum período em que você se sentiu deprimido ou abatido na maior parte do dia, quase todos os dias?",
+                sub: "Alguém comentou que você parecia triste, abatido ou 'para baixo'?",
+                criteria: "1. Humor deprimido na maior parte do dia, quase todos os dias (relato subjetivo ou observação).",
+                inst: "Se o paciente estiver visivelmente deprimido, marque (+) mesmo se ele negar."
             },
             {
                 id: "A2",
-                text: "Durante esse período, você sentiu menos interesse ou prazer com coisas de que normalmente gosta?",
-                sub: "Houve um período em que você perdeu o interesse ou o prazer por quase todas as atividades?",
-                criteria: "2. Acentuada diminuição de interesse ou prazer em todas, ou quase todas, as atividades na maior parte do dia, quase todos os dias."
+                text: "Durante esse período, você sentiu menos interesse ou prazer nas coisas que normalmente gosta?",
+                sub: "Houve um período em que você 'não sentia gosto por nada'?",
+                criteria: "2. Acentuada diminuição de interesse ou prazer em quase todas as atividades."
             },
-            // PONTO DE CHECAGEM CRÍTICO DA SCID
+            // PONTO DE CHECAGEM CRÍTICO
             {
                 id: "CHECK_ENTRY",
                 type: "logic",
                 check: function(scores) {
-                    // Se não tiver nem A1 nem A2 positivos, não é depressão. Pula.
+                    // Se A1 e A2 forem negativos, encerra (Não é depressão).
                     if (scores['A1'] !== '+' && scores['A2'] !== '+') {
                         return 'SKIP_TO_END';
                     }
@@ -243,106 +333,87 @@
             },
             {
                 id: "A3",
-                text: "Como estava o seu apetite? Houve alguma mudança significativa?",
-                sub: "Você teve que se forçar a comer? Ou comeu muito mais do que o habitual? Houve perda ou ganho de peso?",
-                criteria: "3. Perda ou ganho significativo de peso sem estar fazendo dieta (p. ex., 5% em um mês), ou diminuição/aumento do apetite quase todos os dias."
+                text: "Como estava o seu apetite? Houve alguma mudança de peso (sem dieta)?",
+                sub: "Teve que se forçar a comer? Ou comeu muito mais que o habitual?",
+                criteria: "3. Perda ou ganho significativo de peso (5% em um mês) ou alteração no apetite."
             },
             {
                 id: "A4",
                 text: "Como você estava dormindo?",
-                sub: "Teve dificuldade para pegar no sono? Acordou no meio da noite? Ou dormiu muito mais do que o normal?",
+                sub: "Dificuldade para pegar no sono? Acordar no meio da noite? Dormir demais?",
                 criteria: "4. Insônia ou hipersonia quase todos os dias."
             },
             {
                 id: "A5",
-                text: "Você tem se sentido inquieto ou agitado, a ponto de não conseguir ficar parado?",
-                sub: "Ou, pelo contrário, tem se sentido mais lento? Como se estivesse se movendo em câmera lenta, ou demorando para falar?",
-                criteria: "5. Agitação ou retardo psicomotor quase todos os dias (observável por outras pessoas, não apenas sensação subjetiva).",
-                inst: "Atenção: A mera sensação subjetiva não conta. Deve ser observável."
+                text: "Você se sentiu agitado (não conseguindo ficar parado) ou muito lento (câmera lenta)?",
+                sub: "Outras pessoas notaram isso?",
+                criteria: "5. Agitação ou retardo psicomotor (deve ser observável por outros).",
+                inst: "A mera sensação subjetiva de inquietude não conta. Deve ser visível."
             },
             {
                 id: "A6",
-                text: "Como tem estado sua energia? Tem se sentido cansado ou sem energia?",
-                sub: "Você se sente cansado mesmo sem fazer esforço físico?",
+                text: "Como estava sua energia? Sentiu-se cansado ou sem forças?",
+                sub: "Mesmo sem fazer esforço físico?",
                 criteria: "6. Fadiga ou perda de energia quase todos os dias."
             },
             {
                 id: "A7",
-                text: "Como você tem se sentido em relação a si mesmo? Tem tido sentimentos de inutilidade?",
-                sub: "Tem se sentido culpado em relação a coisas que fez ou deixou de fazer? (Essa culpa é excessiva?)",
-                criteria: "7. Sentimentos de inutilidade ou culpa excessiva ou inapropriada (que pode ser delirante) quase todos os dias."
+                text: "Como se sentiu em relação a si mesmo? Sentiu-se inútil ou culpado?",
+                sub: "Sentiu que decepcionou as pessoas ou se culpou por coisas do passado?",
+                criteria: "7. Sentimentos de inutilidade ou culpa excessiva/inapropriada."
             },
             {
                 id: "A8",
-                text: "Tem tido dificuldade para pensar ou se concentrar?",
-                sub: "Tem sido difícil tomar decisões sobre coisas cotidianas?",
-                criteria: "8. Capacidade diminuída para pensar ou se concentrar, ou indecisão, quase todos os dias."
+                text: "Teve dificuldade para pensar, concentrar-se ou tomar decisões?",
+                sub: "Ficou indeciso sobre coisas simples do dia a dia?",
+                criteria: "8. Capacidade diminuída para pensar/concentrar ou indecisão."
             },
             {
                 id: "A9",
-                text: "Você tem tido pensamentos de que seria melhor estar morto, ou pensamentos de se machucar?",
-                sub: "Pensou em suicídio? Chegou a planejar como faria?",
-                criteria: "9. Pensamentos recorrentes de morte (não somente medo de morrer), ideação suicida recorrente sem um plano específico, tentativa de suicídio ou plano específico.",
-                inst: "ALERTA DE SEGURANÇA: Se responder SIM, avalie o risco de suicídio imediato."
-            }
-                        // --- LÓGICA DE CONTAGEM (A10) ---
+                text: "Teve pensamentos de morte ou de se machucar?",
+                sub: "Pensou que seria melhor não acordar? Pensou em suicídio?",
+                criteria: "9. Pensamentos recorrentes de morte, ideação suicida ou tentativa.",
+                inst: "ALERTA: Se (+), avalie risco de suicídio imediato."
+            },
+            // CONTAGEM DE SINTOMAS
             {
-                id: "CHECK_A10",
+                id: "CHECK_COUNT",
                 type: "logic",
                 check: function(scores) {
                     let count = 0;
-                    // Conta quantos sintomas de A1 a A9 foram marcados como positivos
                     ['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9'].forEach(key => {
                         if (scores[key] === '+') count++;
                     });
                     
-                    // REGRA DO DSM-5: Pelo menos 5 sintomas são necessários.
-                    if (count < 5) {
-                        return 'SKIP_TO_END'; // Não é depressão maior, encerra módulo.
-                    }
-                    return 'NEXT'; // Tem 5+ sintomas, continua para avaliar gravidade.
+                    if (count < 5) return 'SKIP_TO_END'; // Menos de 5 sintomas = Não é TDM
+                    return 'NEXT';
                 }
             },
-            
-            // --- CRITÉRIO B: PREJUÍZO FUNCIONAL (A11) ---
             {
                 id: "A10", 
-                text: "Esses sintomas lhe causaram sofrimento clinicamente significativo ou prejuízo no funcionamento?",
-                sub: "Isso atrapalhou seu trabalho, seus estudos ou sua vida social? Como você tem lidado com suas responsabilidades em casa?",
-                criteria: "B. Os sintomas causam sofrimento clinicamente significativo ou prejuízo no funcionamento social, profissional ou em outras áreas importantes.",
-                inst: "Se o prejuízo for evidente (ex: parou de trabalhar), marque (+) sem perguntar excessivamente."
+                text: "Esses sintomas atrapalharam sua vida (trabalho, estudos, social)?",
+                sub: "Causaram muito sofrimento?",
+                criteria: "B. Sofrimento clinicamente significativo ou prejuízo no funcionamento.",
+                inst: "Se o prejuízo for óbvio (ex: não sai da cama), marque (+)."
             },
-
-            // --- CRITÉRIO C: EXCLUSÃO DE CAUSAS MÉDICAS/SUBSTÂNCIAS (A12) ---
             {
                 id: "A11",
-                text: "Você estava fisicamente doente ou usando algum medicamento/droga quando esses sintomas começaram?",
-                sub: "Houve alguma mudança na medicação? Você estava bebendo ou usando drogas mais do que o habitual?",
-                criteria: "C. O episódio não é atribuível aos efeitos fisiológicos de uma substância ou a outra condição médica.",
-                inst: "ATENÇÃO: Se os sintomas forem causados por drogas ou doença (ex: hipotireoidismo), marque (-) aqui, pois NÃO é Depressão Maior primária."
+                text: "Você estava doente fisicamente ou usando substâncias quando isso começou?",
+                sub: "Remédios, drogas ou álcool?",
+                criteria: "C. Não atribuível a efeitos de substância ou condição médica.",
+                inst: "Se for causado por droga/doença, marque (-) pois não é TDM primário."
             },
-
-            // --- DADOS DO EPISÓDIO (A13) ---
             {
                 id: "A12",
-                text: "Quando esse período atual de sintomas começou?",
-                sub: "Há quanto tempo você se sente assim sem parar?",
-                criteria: "Registro da cronologia para definir se é Agudo ou Crônico.",
-                inst: "Registre a data aproximada (Mês/Ano)."
-            },
-
-            // --- FIM DO MÓDULO A (ATUAL) ---
-            {
-                id: "FIM_MODULO_A",
-                text: "Fim da avaliação do Episódio Atual.",
-                criteria: "Clique em Prosseguir para ver o diagnóstico.",
-                type: "info" // Apenas informativo
+                text: "Quando esse período começou?",
+                sub: "Registre a data aproximada.",
+                criteria: "Cronologia do Episódio.",
+                inst: "Apenas registro de dados."
             }
-
         ];
 
         // ============================================================
-        // MOTOR DO APLICATIVO
+        // LÓGICA DO APP
         // ============================================================
         let currentIndex = 0;
         let scores = {};
@@ -355,11 +426,11 @@
 
             const q = questions[currentIndex];
 
-            // Processa Lógica (Itens invisíveis)
+            // Lógica invisível
             if (q.type === 'logic') {
                 const action = q.check(scores);
                 if (action === 'SKIP_TO_END') {
-                    showResults(true); // True indica pulo por falta de critério
+                    showResults(true); // True = pulou por não atender critérios
                     return;
                 } else {
                     currentIndex++;
@@ -368,11 +439,11 @@
                 }
             }
 
-            // Atualiza UI
+            // Atualiza Interface
             document.getElementById('q-id').innerText = q.id;
             document.getElementById('q-main').innerText = q.text;
             document.getElementById('c-text').innerText = q.criteria;
-            document.getElementById('progress-display').innerText = `Item ${currentIndex + 1} de ${questions.length}`;
+            document.getElementById('progress-display').innerText = `Item ${currentIndex + 1}/${questions.length}`;
 
             // Sub-perguntas
             const subDiv = document.getElementById('q-sub');
@@ -387,7 +458,7 @@
             const instDiv = document.getElementById('q-inst');
             if (q.inst) {
                 instDiv.style.display = 'block';
-                instDiv.innerText = "NOTA PARA O CLÍNICO: " + q.inst;
+                instDiv.innerText = "NOTA CLÍNICA: " + q.inst;
             } else {
                 instDiv.style.display = 'none';
             }
@@ -409,32 +480,36 @@
             list.innerHTML = '';
 
             let positiveCount = 0;
-            let hasA1 = scores['A1'] === '+';
-            let hasA2 = scores['A2'] === '+';
+            let hasCoreSymptoms = (scores['A1'] === '+' || scores['A2'] === '+');
 
             // Gera lista visual
             Object.keys(scores).forEach(key => {
                 const val = scores[key];
-                if (val === '+') positiveCount++;
+                // Conta apenas A1 a A9 para o critério de 5 sintomas
+                if (['A1','A2','A3','A4','A5','A6','A7','A8','A9'].includes(key) && val === '+') {
+                    positiveCount++;
+                }
                 
+                // Formatação visual do item
+                let colorClass = val === '+' ? 'color:#ef5350; font-weight:bold;' : 'color:#2d3436;';
                 const div = document.createElement('div');
                 div.className = 'result-item';
-                div.innerHTML = `<strong>${key}</strong> <b>${val}</b>`;
+                div.innerHTML = `<span>${key}</span> <span style="${colorClass}">${val}</span>`;
                 list.appendChild(div);
             });
 
-            // Lógica de Diagnóstico (Simplificada para fins didáticos)
-            // DSM-5: 5 ou mais sintomas, sendo obrigatório A1 ou A2.
-            
+            // Lógica de Diagnóstico Visual
             if (skipped) {
                 diagBox.className = "diagnosis-box diag-negative";
-                diagBox.innerHTML = "CRITÉRIOS NÃO ATENDIDOS<br><small>O paciente não apresentou os sintomas fundamentais (A1 ou A2).</small>";
-            } else if ((hasA1 || hasA2) && positiveCount >= 5) {
+                diagBox.innerHTML = "<i class='fa-solid fa-circle-check'></i> CRITÉRIOS NÃO ATENDIDOS<br><small>Sintomas fundamentais ausentes ou insuficientes.</small>";
+            } else if (hasCoreSymptoms && positiveCount >= 5 && scores['A10'] === '+' && scores['A11'] !== '-') {
+                // Nota: A11 deve ser não-negativo (ou seja, não causado por drogas)
+                // Aqui simplifiquei: Se chegou ao fim e tem contagem, é provável.
                 diagBox.className = "diagnosis-box diag-positive";
-                diagBox.innerHTML = `POSSÍVEL EPISÓDIO DEPRESSIVO MAIOR<br><small>Critérios atendidos: ${positiveCount}/9 (Mínimo 5)</small>`;
+                diagBox.innerHTML = `<i class='fa-solid fa-triangle-exclamation'></i> POSSÍVEL EPISÓDIO DEPRESSIVO<br><small>Sintomas: ${positiveCount}/9 (Mínimo exigido: 5)</small>`;
             } else {
                 diagBox.className = "diagnosis-box diag-negative";
-                diagBox.innerHTML = `ABAIXO DO LIMIAR DIAGNÓSTICO<br><small>Critérios atendidos: ${positiveCount}/9. Necessário 5.</small>`;
+                diagBox.innerHTML = "ABAIXO DO LIMIAR DIAGNÓSTICO<br><small>Quantidade de sintomas insuficiente.</small>";
             }
         }
 
