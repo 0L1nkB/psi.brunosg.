@@ -279,6 +279,12 @@
             <span class="score-badge" id="score-F_GAD">0</span>
         </div>
 
+        <div class="menu-section">Módulo I: Rastreio Geral</div>
+        <div class="nav-item" onclick="switchModule('I_SCREEN')" id="nav-I_SCREEN">
+            <span><i class="fa-solid fa-list-check"></i> Outros Transtornos</span>
+            <span class="score-badge" id="score-I_SCREEN">0</span>
+        </div>
+
         <div class="nav-item" onclick="showDashboard()" style="margin-top:auto; background:#2d3436; border:1px solid #636e72; justify-content:center;">
             <span><i class="fa-solid fa-clipboard-check"></i> RESULTADOS</span>
         </div>
@@ -355,9 +361,9 @@
                 { id: "F3", text: "Você mudou seu comportamento por causa dos ataques (ex: evitar sair)?", criteria: "B. Mudança desadaptativa de comportamento." }
             ],
             'F_AGORA': [
-                { id: "F23", text: "Nos últimos 6 meses, você sentiu medo ou ansiedade intensa em situações como: usar transporte público, espaços abertos, locais fechados, filas ou sair de casa sozinho?", criteria: "A. Medo/ansiedade em 2+ situações (Transporte, Espaços Abertos, Fechados, Filas, Sozinho)." },
+                { id: "F23", text: "Nos últimos 6 meses, você sentiu medo ou ansiedade intensa em situações como: usar transporte público, espaços abertos, locais fechados, filas ou sair de casa sozinho?", criteria: "A. Medo/ansiedade em 2+ situações." },
                 { type: 'logic', check: (s) => s['F23']==='+' ? 'NEXT' : 'STOP' },
-                { id: "F24", text: "Você teme essas situações porque acha que seria difícil escapar ou obter ajuda se passasse mal?", criteria: "B. Medo de não ter escape/socorro." },
+                { id: "F24", text: "Você teme essas situações porque acha que seria difícil escapar ou obter ajuda?", criteria: "B. Medo de não ter escape/socorro." },
                 { id: "F26", text: "Você evita ativamente essas situações ou precisa de companhia para enfrentá-las?", criteria: "D. Evitação ativa ou necessidade de companhia." }
             ],
             'F_SOCIAL': [
@@ -370,13 +376,21 @@
                 { id: "F42", text: "Nos últimos 6 meses, você tem se sentido muito ansioso e preocupado na maioria dos dias?", sub: "Preocupado com diversas coisas (trabalho, escola, família)?", criteria: "A. Ansiedade e preocupação excessivas (expectativa apreensiva)." },
                 { type: 'logic', check: (s) => s['F42']==='+' ? 'NEXT' : 'STOP' },
                 { id: "F43", text: "Você acha difícil controlar essa preocupação?", criteria: "B. Dificuldade em controlar a preocupação." },
-                { id: "F44", text: "Essa ansiedade vem acompanhada de sintomas como: inquietação, fadiga fácil, dificuldade de concentração, irritabilidade, tensão muscular ou perturbação do sono? (Pelo menos 3)", criteria: "C. Três ou mais sintomas físicos/cognitivos associados." }
+                { id: "F44", text: "Essa ansiedade vem acompanhada de sintomas como inquietação, fadiga ou tensão muscular? (Pelo menos 3)", criteria: "C. Sintomas físicos/cognitivos." }
+            ],
+            'I_SCREEN': [
+                { id: "I1", text: "ALIMENTAR: Você já teve episódios de comer muito mais comida do que o normal em pouco tempo e sentiu que perdeu o controle?", criteria: "Rastreio de Compulsão Alimentar (Binge)." },
+                { id: "I2", text: "ALIMENTAR: Você faz coisas para compensar ou evitar ganho de peso (vomitar, laxantes, exercício exagerado)?", criteria: "Rastreio de Comportamento Compensatório (Bulimia)." },
+                { id: "I3", text: "ALIMENTAR: Você se acha gordo ou tem medo intenso de engordar, mesmo estando abaixo do peso?", criteria: "Rastreio de Anorexia Nervosa." },
+                { id: "I4", text: "TDAH: Você frequentemente tem dificuldade de prestar atenção em detalhes ou comete erros por descuido?", criteria: "Rastreio de Desatenção (Adulto)." },
+                { id: "I5", text: "TDAH: Você frequentemente se sente inquieto, como se estivesse 'com um motor ligado'?", criteria: "Rastreio de Hiperatividade (Adulto)." },
+                { id: "I6", text: "TOC: Você tem pensamentos intrusivos e desagradáveis que não saem da cabeça (obsessões) ou precisa repetir atos (lavar, checar)?", criteria: "Rastreio de TOC." }
             ]
         };
 
         let currentModule = 'A_DEP';
         let moduleIndex = 0;
-        let globalScores = { 'A_DEP':{}, 'A_MANIA':{}, 'F_PANIC':{}, 'F_AGORA':{}, 'F_SOCIAL':{}, 'F_GAD':{} };
+        let globalScores = { 'A_DEP':{}, 'A_MANIA':{}, 'F_PANIC':{}, 'F_AGORA':{}, 'F_SOCIAL':{}, 'F_GAD':{}, 'I_SCREEN':{} };
 
         function switchModule(modId) {
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
@@ -391,7 +405,8 @@
             const titles = {
                 'A_DEP': 'Módulo A: Depressão', 'A_MANIA': 'Módulo A: Mania',
                 'F_PANIC': 'Módulo F: Pânico', 'F_AGORA': 'Módulo F: Agorafobia',
-                'F_SOCIAL': 'Módulo F: Ansiedade Social', 'F_GAD': 'Módulo F: TAG'
+                'F_SOCIAL': 'Módulo F: Ansiedade Social', 'F_GAD': 'Módulo F: TAG',
+                'I_SCREEN': 'Módulo I: Rastreio Geral'
             };
             document.getElementById('module-title').innerText = titles[currentModule];
             loadQuestion();
@@ -411,7 +426,7 @@
                 const action = q.check(globalScores[currentModule]);
                 if (action === 'STOP') {
                     alert("Critérios de rastreio não atendidos. Módulo encerrado.");
-                    updateSidebarScore(currentModule); // Atualiza score visual
+                    updateSidebarScore(currentModule);
                     return; 
                 } else {
                     moduleIndex++;
@@ -457,25 +472,21 @@
             const dash = document.getElementById('dashboard-content');
             dash.innerHTML = '';
 
-            // Lógica de Diagnóstico Simplificada para Exibição
             const results = [
                 { id: 'A_DEP', title: 'Depressão Maior', min: 5, crit: ['A1','A2'] },
-                { id: 'A_MANIA', title: 'Mania', min: 3, crit: ['C1','C2'] }, // Lógica simples
-                { id: 'F_PANIC', title: 'Transtorno de Pânico', min: 1, crit: ['F1'] },
+                { id: 'A_MANIA', title: 'Mania', min: 3, crit: ['C1','C2'] },
+                { id: 'F_PANIC', title: 'Pânico', min: 1, crit: ['F1'] },
                 { id: 'F_AGORA', title: 'Agorafobia', min: 2, crit: ['F23'] },
                 { id: 'F_SOCIAL', title: 'Ansiedade Social', min: 2, crit: ['F32'] },
-                { id: 'F_GAD', title: 'Ansiedade Generalizada (TAG)', min: 3, crit: ['F42'] }
+                { id: 'F_GAD', title: 'TAG (Ansiedade Gen.)', min: 3, crit: ['F42'] }
             ];
 
+            // Renderiza Módulos Principais
             results.forEach(r => {
                 let scores = globalScores[r.id];
                 let count = 0;
                 let critMet = false;
-                
-                // Conta positivos
                 Object.keys(scores).forEach(k => { if(scores[k] === '+') count++; });
-                
-                // Checa critério de entrada
                 r.crit.forEach(c => { if(scores[c] === '+') critMet = true; });
 
                 let status = (critMet && count >= r.min) ? 'Positivo' : 'Negativo';
@@ -495,9 +506,28 @@
                     </div>
                 `;
             });
+
+            // Renderiza Alertas do Módulo I
+            let iScores = globalScores['I_SCREEN'];
+            if(Object.values(iScores).includes('+')) {
+                let alertas = [];
+                if(iScores['I1']==='+' || iScores['I2']==='+' || iScores['I3']==='+') alertas.push("Transtorno Alimentar");
+                if(iScores['I4']==='+' || iScores['I5']==='+') alertas.push("TDAH (Rastreio)");
+                if(iScores['I6']==='+') alertas.push("TOC (Rastreio)");
+
+                if(alertas.length > 0) {
+                    dash.innerHTML += `
+                        <div class="result-card positive" style="border-left-color:#fdcb6e; background:#fffbf0">
+                            <div>
+                                <h3 style="color:#d35400"><i class="fa-solid fa-triangle-exclamation"></i> Alertas de Rastreio (Módulo I)</h3>
+                                <div style="margin-top:5px; color:#555">${alertas.join(', ')}</div>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
         }
 
-        // Inicia
         switchModule('A_DEP');
 
     </script>
