@@ -5,12 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SCID-5-CV: Sistema Completo | Bruno de Souza</title>
     
-    <script>
-        if(localStorage.getItem('logado') !== 'sim') {
-            // window.location.href = "../login.html"; 
-        }
-    </script>
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -39,10 +33,10 @@
             height: 100vh;
             color: var(--text);
             display: flex;
-            overflow: hidden; /* Evita rolagem dupla */
+            overflow: hidden;
         }
 
-        /* --- SIDEBAR (NOVO) --- */
+        /* SIDEBAR */
         #sidebar {
             width: 280px;
             background-color: var(--sidebar-bg);
@@ -51,46 +45,57 @@
             flex-direction: column;
             padding: 20px;
             box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+            overflow-y: auto;
             z-index: 100;
         }
 
         .brand {
             font-size: 1.5rem;
             font-weight: 800;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             color: var(--primary);
             text-transform: uppercase;
-            letter-spacing: 1px;
             text-align: center;
             background: white;
             padding: 10px;
             border-radius: 10px;
         }
 
+        .menu-section {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: #636e72;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-weight: 700;
+            padding-left: 10px;
+        }
+
         .nav-item {
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 12px;
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border-radius: 10px;
             cursor: pointer;
-            transition: 0.3s;
+            transition: 0.2s;
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-weight: 600;
             color: #b2bec3;
+            font-size: 0.9rem;
         }
 
         .nav-item:hover { background-color: rgba(255,255,255,0.1); color: white; }
-        .nav-item.active { background-color: var(--primary); color: white; box-shadow: 0 4px 15px rgba(108, 92, 231, 0.4); }
+        .nav-item.active { background-color: var(--primary); color: white; box-shadow: 0 4px 10px rgba(108, 92, 231, 0.4); }
 
         .score-badge {
             background: rgba(0,0,0,0.3);
             padding: 2px 8px;
             border-radius: 10px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
 
-        /* --- ÁREA PRINCIPAL --- */
+        /* MAIN CONTENT */
         #main-content {
             flex: 1;
             padding: 30px;
@@ -109,16 +114,15 @@
             align-items: center;
         }
 
-        h2 { margin: 0; color: var(--primary); font-weight: 800; }
+        h2 { margin: 0; color: var(--primary); font-weight: 800; font-size: 1.4rem; }
 
-        /* GRID DA ENTREVISTA */
         #interview-area {
             display: grid;
-            grid-template-columns: 2fr 1fr 100px;
+            grid-template-columns: 2fr 1fr 90px;
             gap: 20px;
             width: 100%;
             max-width: 1100px;
-            height: calc(100vh - 150px); /* Ajusta altura */
+            height: calc(100vh - 150px);
         }
 
         .question-panel {
@@ -135,12 +139,12 @@
         .question-code {
             color: var(--primary);
             font-weight: 800;
-            font-size: 1.2rem;
-            margin-bottom: 15px;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
         }
 
         .question-text {
-            font-size: 1.3rem;
+            font-size: 1.25rem;
             line-height: 1.5;
             font-weight: 700;
             color: var(--text);
@@ -148,12 +152,12 @@
         }
 
         .sub-questions {
-            font-size: 1rem;
+            font-size: 0.95rem;
             color: #4b6584;
             background: #f1f2f6;
-            padding: 20px;
-            border-radius: 15px;
-            border-left: 5px solid var(--primary);
+            padding: 15px;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
             margin-bottom: 20px;
             line-height: 1.6;
         }
@@ -162,8 +166,8 @@
             margin-top: auto;
             background: #fff3cd;
             color: #856404;
-            padding: 15px;
-            border-radius: 10px;
+            padding: 12px;
+            border-radius: 8px;
             font-size: 0.85rem;
             font-weight: 600;
             border: 1px dashed #ffeeba;
@@ -172,26 +176,26 @@
         .criteria-panel {
             background: #dfe6e9;
             border-radius: 20px;
-            padding: 25px;
+            padding: 20px;
             overflow-y: auto;
             border: 2px solid #b2bec3;
             color: #2d3436;
+            font-size: 0.9rem;
+            line-height: 1.4;
         }
-
-        .criteria-text { font-size: 0.9rem; line-height: 1.5; }
 
         .action-panel {
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            justify-content: center;
+            gap: 10px;
+            justify-content: flex-start;
         }
 
         .btn-action {
             width: 100%;
-            height: 80px;
+            height: 70px;
             border: none;
-            border-radius: 20px;
+            border-radius: 15px;
             font-size: 1.5rem;
             font-weight: 800;
             cursor: pointer;
@@ -207,7 +211,7 @@
         .btn-minus { background-color: var(--negative); }
         .btn-unsure { background-color: var(--neutral); color: #2d3436; }
 
-        /* PAINEL DE RESULTADO FINAL (DASHBOARD) */
+        /* DASHBOARD */
         #dashboard-view {
             display: none;
             width: 100%;
@@ -218,75 +222,99 @@
             background: white;
             padding: 20px;
             border-radius: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            border-left: 10px solid #ccc;
+            border-left: 8px solid #ccc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
+        .result-card h3 { margin: 0 0 5px 0; font-size: 1.1rem; }
         .result-card.positive { border-left-color: var(--positive); }
         .result-card.negative { border-left-color: var(--negative); }
+        
+        .status-tag {
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+        .status-pos { background: #ffebee; color: var(--positive); }
+        .status-neg { background: #e0f2f1; color: var(--negative); }
 
     </style>
 </head>
 <body>
 
     <div id="sidebar">
-        <div class="brand"><i class="fa-solid fa-brain"></i> SCID-5</div>
+        <div class="brand"><i class="fa-solid fa-brain"></i> SCID-5-CV</div>
         
-        <div class="nav-item active" onclick="switchModule('A')" id="nav-A">
+        <div class="menu-section">Módulo A: Humor</div>
+        <div class="nav-item active" onclick="switchModule('A_DEP')" id="nav-A_DEP">
             <span><i class="fa-solid fa-cloud-rain"></i> Depressão</span>
-            <span class="score-badge" id="score-A">0/9</span>
+            <span class="score-badge" id="score-A_DEP">0/9</span>
         </div>
-        
-        <div class="nav-item" onclick="switchModule('C')" id="nav-C">
+        <div class="nav-item" onclick="switchModule('A_MANIA')" id="nav-A_MANIA">
             <span><i class="fa-solid fa-bolt"></i> Mania</span>
-            <span class="score-badge" id="score-C">0/7</span>
+            <span class="score-badge" id="score-A_MANIA">0/7</span>
         </div>
 
-        <div class="nav-item" onclick="showDashboard()" style="margin-top:auto; background:#2d3436; border:1px solid #636e72">
-            <span><i class="fa-solid fa-chart-pie"></i> Ver Resultados</span>
+        <div class="menu-section">Módulo F: Ansiedade</div>
+        <div class="nav-item" onclick="switchModule('F_PANIC')" id="nav-F_PANIC">
+            <span><i class="fa-solid fa-person-falling-burst"></i> Pânico</span>
+            <span class="score-badge" id="score-F_PANIC">0</span>
+        </div>
+        <div class="nav-item" onclick="switchModule('F_AGORA')" id="nav-F_AGORA">
+            <span><i class="fa-solid fa-house-lock"></i> Agorafobia</span>
+            <span class="score-badge" id="score-F_AGORA">0</span>
+        </div>
+        <div class="nav-item" onclick="switchModule('F_SOCIAL')" id="nav-F_SOCIAL">
+            <span><i class="fa-solid fa-users-slash"></i> Ans. Social</span>
+            <span class="score-badge" id="score-F_SOCIAL">0</span>
+        </div>
+        <div class="nav-item" onclick="switchModule('F_GAD')" id="nav-F_GAD">
+            <span><i class="fa-solid fa-head-side-virus"></i> TAG (Ans. Gen.)</span>
+            <span class="score-badge" id="score-F_GAD">0</span>
+        </div>
+
+        <div class="nav-item" onclick="showDashboard()" style="margin-top:auto; background:#2d3436; border:1px solid #636e72; justify-content:center;">
+            <span><i class="fa-solid fa-clipboard-check"></i> RESULTADOS</span>
         </div>
     </div>
 
     <div id="main-content">
         
         <header id="interview-header">
-            <h2 id="module-title">Módulo A: Episódio Depressivo Maior</h2>
-            <div style="font-weight:bold; color:#636e72" id="progress-display">Item 1</div>
+            <h2 id="module-title">Módulo A: Episódio Depressivo</h2>
+            <div style="font-weight:bold; color:#636e72; background:white; padding:5px 15px; border-radius:10px; box-shadow:0 2px 5px rgba(0,0,0,0.05)" id="progress-display">Item 1</div>
         </header>
 
         <div id="interview-area">
-            
             <div class="question-panel" data-aos="fade-right">
                 <span class="question-code" id="q-id">A1</span>
                 <div class="question-text" id="q-text">Carregando...</div>
-                
                 <div class="sub-questions" id="q-sub" style="display:none;"></div>
                 <div class="instruction" id="q-inst" style="display:none;"></div>
             </div>
 
             <div class="criteria-panel" data-aos="fade-left">
-                <div style="font-weight:800; margin-bottom:10px; color:#636e72; text-transform:uppercase; font-size:0.8rem">Critério DSM-5</div>
+                <div style="font-weight:800; margin-bottom:10px; color:#636e72; text-transform:uppercase; font-size:0.75rem; letter-spacing:1px;">Critério DSM-5</div>
                 <div class="criteria-text" id="c-text">Carregando...</div>
             </div>
 
             <div class="action-panel">
-                <button class="btn-action btn-plus" onclick="registerScore('+')">
-                    <i class="fa-solid fa-check"></i>
-                </button>
-                <button class="btn-action btn-unsure" onclick="registerScore('?')">
-                    <i class="fa-solid fa-question"></i>
-                </button>
-                <button class="btn-action btn-minus" onclick="registerScore('-')">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
+                <button class="btn-action btn-plus" onclick="registerScore('+')"><i class="fa-solid fa-check"></i></button>
+                <button class="btn-action btn-unsure" onclick="registerScore('?')"><i class="fa-solid fa-question"></i></button>
+                <button class="btn-action btn-minus" onclick="registerScore('-')"><i class="fa-solid fa-xmark"></i></button>
             </div>
         </div>
 
         <div id="dashboard-view">
-            <h1>Sumário Diagnóstico</h1>
+            <h2 style="margin-bottom:30px">Sumário Diagnóstico</h2>
             <div id="dashboard-content"></div>
-            <button onclick="location.reload()" style="padding:15px; cursor:pointer; margin-top:20px;">Reiniciar Tudo</button>
+            <button onclick="location.reload()" style="padding:15px 30px; cursor:pointer; margin-top:20px; background:var(--primary); color:white; border:none; border-radius:10px; font-weight:bold;">Nova Avaliação</button>
         </div>
 
     </div>
@@ -295,180 +323,96 @@
     <script>
         AOS.init();
 
-        // ============================================================
-        // BANCO DE DADOS COMPLETO (Perguntas Expandidas)
-        // ============================================================
         const database = {
-            'A': [
-                {
-                    id: "A1",
-                    text: "No último mês, desde [DATA], houve algum período de tempo em que você se sentiu deprimido ou abatido na maior parte do dia, quase todos os dias?",
-                    sub: "Alguém comentou que você parecia triste, abatido, deprimido ou 'para baixo'? (Se sim: Como foi isso? Você se sentiu assim na maior parte do dia, quase todos os dias?)",
-                    criteria: "A. Humor deprimido na maior parte do dia, quase todos os dias, indicado por relato subjetivo (p. ex., sente-se triste, vazio, sem esperança) ou por observação feita por outras pessoas (p. ex., parece choroso).",
-                    inst: "Se o paciente estiver visivelmente deprimido, você pode classificar como (+) mesmo se ele negar, baseado na observação."
-                },
-                {
-                    id: "A2",
-                    text: "No último mês, houve algum período de tempo em que você perdeu o interesse ou o prazer nas coisas de que você normalmente gosta?",
-                    sub: "O que você gosta de fazer? (Você tem feito essas coisas? Você gostou de fazê-las?)",
-                    criteria: "B. Acentuada diminuição do interesse ou prazer em todas, ou quase todas, as atividades na maior parte do dia, quase todos os dias."
-                },
-                { type: 'logic', check: (scores) => (scores['A1']==='+' || scores['A2']==='+') ? 'NEXT' : 'STOP_MODULE' },
-                {
-                    id: "A3",
-                    text: "Como tem estado o seu apetite? (Como foi em comparação ao seu habitual?)",
-                    sub: "Você teve que se forçar a comer? (Ou você comeu muito mais do que o habitual?) Você perdeu ou ganhou peso? (Quanto?)",
-                    criteria: "C. Perda ou ganho significativo de peso sem estar fazendo dieta (p. ex., uma alteração de mais de 5% do peso corporal em um mês), ou diminuição ou aumento do apetite quase todos os dias."
-                },
-                {
-                    id: "A4",
-                    text: "Como você tem dormido? (Você teve problemas para pegar no sono? Acordou no meio da noite? Acordou muito cedo? Dormiu demais?)",
-                    sub: "Quantas horas por noite você tem dormido? (Isso é muito diferente do normal?)",
-                    criteria: "D. Insônia ou hipersonia quase todos os dias."
-                },
-                {
-                    id: "A5",
-                    text: "Você tem estado tão inquieto ou agitado a ponto de não conseguir ficar parado? Ou o contrário, tem se sentido mais lento?",
-                    sub: "Você sente como se estivesse se movendo em câmera lenta? Alguém notou isso?",
-                    criteria: "E. Agitação ou retardo psicomotor quase todos os dias (observável por outras pessoas, não meramente sensações subjetivas de inquietação ou de estar mais lento)."
-                },
-                {
-                    id: "A6",
-                    text: "Como tem estado sua energia?",
-                    sub: "Tem se sentido cansado o tempo todo? Teve que se esforçar para fazer as coisas? (Mesmo quando não está fazendo nada?)",
-                    criteria: "F. Fadiga ou perda de energia quase todos os dias."
-                },
-                {
-                    id: "A7",
-                    text: "Como você tem se sentido em relação a si mesmo? (Você tem se sentido inútil ou culpado?)",
-                    sub: "Sobre o que tem se sentido culpado? (Esses sentimentos são excessivos?)",
-                    criteria: "G. Sentimentos de inutilidade ou culpa excessiva ou inapropriada (que podem ser delirantes) quase todos os dias (não meramente autorrecriminação ou culpa por estar doente)."
-                },
-                {
-                    id: "A8",
-                    text: "Você tem tido dificuldade para pensar ou se concentrar?",
-                    sub: "Que tipos de coisas o distraem? Você tem tido dificuldade para tomar decisões?",
-                    criteria: "H. Capacidade diminuída para pensar ou se concentrar, ou indecisão, quase todos os dias (por relato subjetivo ou observação feita por outras pessoas)."
-                },
-                {
-                    id: "A9",
-                    text: "Você tem tido pensamentos de que seria melhor se estivesse morto ou pensamentos de machucar a si mesmo?",
-                    sub: "Você pensou em suicídio? (Você planejou como faria? Você tentou se matar?)",
-                    criteria: "I. Pensamentos recorrentes de morte (não somente medo de morrer), ideação suicida recorrente sem um plano específico, uma tentativa de suicídio ou plano específico para cometer suicídio.",
-                    inst: "ALERTA: Se positivo, avalie risco imediato."
-                },
-                {
-                    id: "A10",
-                    text: "(SUMÁRIO): Os sintomas causaram sofrimento significativo?",
-                    sub: "Isso atrapalhou sua vida no trabalho, na escola ou com a família?",
-                    criteria: "Critério B: Sofrimento clinicamente significativo ou prejuízo no funcionamento."
-                }
+            'A_DEP': [
+                { id: "A1", text: "No último mês, houve um período em que você se sentiu deprimido ou abatido na maior parte do dia, quase todos os dias?", sub: "Alguém comentou que você parecia triste ou 'para baixo'?", criteria: "A. Humor deprimido." },
+                { id: "A2", text: "No último mês, você perdeu o interesse ou prazer nas coisas que gosta?", criteria: "B. Anedonia (perda de prazer)." },
+                { type: 'logic', check: (s) => (s['A1']==='+' || s['A2']==='+') ? 'NEXT' : 'STOP' },
+                { id: "A3", text: "Mudança significativa de apetite ou peso?", criteria: "C. Perda/ganho de peso ou apetite." },
+                { id: "A4", text: "Problemas com sono (insônia ou dormir demais)?", criteria: "D. Insônia/Hipersonia." },
+                { id: "A5", text: "Agitação ou lentidão motora?", criteria: "E. Agitação/Retardo psicomotor." },
+                { id: "A6", text: "Fadiga ou perda de energia?", criteria: "F. Fadiga." },
+                { id: "A7", text: "Sentimentos de inutilidade ou culpa excessiva?", criteria: "G. Inutilidade/Culpa." },
+                { id: "A8", text: "Dificuldade para pensar ou concentrar?", criteria: "H. Concentração diminuída." },
+                { id: "A9", text: "Pensamentos de morte ou suicídio?", criteria: "I. Ideação suicida.", inst: "AVALIE RISCO IMEDIATO SE POSITIVO." }
             ],
-            'C': [
-                {
-                    id: "C1",
-                    text: "Você já teve algum período em que se sentiu muito animado, eufórico, 'no topo do mundo' ou hiperativo?",
-                    sub: "Isso era diferente do seu normal? As pessoas comentaram que você estava mais feliz do que o habitual?",
-                    criteria: "A. Um período distinto de humor anormal e persistentemente elevado, expansivo ou eufórico."
-                },
-                {
-                    id: "C2",
-                    text: "Se você não estava eufórico... houve um período em que você ficou extremamente irritado, bravo ou agressivo?",
-                    sub: "Você gritava com as pessoas, iniciava brigas ou discussões?",
-                    criteria: "A (Alternativo). Um período distinto de humor anormal e persistentemente irritável."
-                },
-                { type: 'logic', check: (scores) => (scores['C1']==='+' || scores['C2']==='+') ? 'NEXT' : 'STOP_MODULE' },
-                {
-                    id: "C3",
-                    text: "Durante esse período, como você se sentia em relação a si mesmo? Sentia-se mais autoconfiante do que o habitual?",
-                    sub: "Sentia que tinha talentos especiais ou poderes?",
-                    criteria: "1. Autoestima inflada ou grandiosidade."
-                },
-                {
-                    id: "C4",
-                    text: "Você precisava dormir menos do que o habitual? (Você se sentia descansado com menos horas de sono?)",
-                    criteria: "2. Redução da necessidade de sono (p. ex., sente-se repousado com apenas três horas de sono)."
-                },
-                {
-                    id: "C5",
-                    text: "Você estava mais falante do que o habitual? (Era difícil para as outras pessoas interromperem você?)",
-                    criteria: "3. Mais loquaz que o habitual ou pressão para continuar falando."
-                },
-                {
-                    id: "C6",
-                    text: "Você sentia que seus pensamentos estavam correndo? (Sua cabeça estava cheia de ideias?)",
-                    criteria: "4. Fuga de ideias ou experiência subjetiva de que os pensamentos estão acelerados."
-                },
-                {
-                    id: "C7",
-                    text: "Você se distraía facilmente com coisas ao seu redor?",
-                    criteria: "5. Distratibilidade (i.e., a atenção é desviada muito facilmente para estímulos externos insignificantes ou irrelevantes)."
-                },
-                {
-                    id: "C8",
-                    text: "Você estava muito mais ativo do que o habitual? (No trabalho, amigos, sexualmente?)",
-                    sub: "Você ficava andando de um lado para o outro, sem conseguir sentar?",
-                    criteria: "6. Aumento da atividade dirigida a objetivos ou agitação psicomotora."
-                },
-                {
-                    id: "C9",
-                    text: "Você fez coisas que poderiam ter causado problemas? (Gastar dinheiro, dirigir rápido, comportamento sexual de risco?)",
-                    criteria: "7. Envolvimento excessivo em atividades com elevado potencial para consequências dolorosas."
-                }
+            'A_MANIA': [
+                { id: "C1", text: "Você já teve um período em que se sentiu muito eufórico, 'no topo do mundo' ou hiperativo?", criteria: "A. Humor elevado/expansivo." },
+                { id: "C2", text: "Se não eufórico, houve um período em que ficou extremamente irritado ou agressivo?", criteria: "A (Alt). Humor irritável." },
+                { type: 'logic', check: (s) => (s['C1']==='+' || s['C2']==='+') ? 'NEXT' : 'STOP' },
+                { id: "C3", text: "Sentiu-se grandioso ou com superpoderes?", criteria: "1. Grandiosidade." },
+                { id: "C4", text: "Precisou dormir menos e acordou descansado?", criteria: "2. Menor necessidade de sono." },
+                { id: "C5", text: "Estava mais falante que o habitual?", criteria: "3. Loquacidade." },
+                { id: "C6", text: "Pensamentos acelerados?", criteria: "4. Fuga de ideias." },
+                { id: "C7", text: "Distraía-se facilmente?", criteria: "5. Distratibilidade." },
+                { id: "C8", text: "Aumento de atividades ou agitação?", criteria: "6. Aumento da atividade dirigida." },
+                { id: "C9", text: "Comportamentos de risco (gastos, sexo, velocidade)?", criteria: "7. Risco excessivo." }
+            ],
+            'F_PANIC': [
+                { id: "F1", text: "No último mês, você teve um ataque de pânico inesperado (pico súbito de medo intenso)?", sub: "Isso veio 'do nada', ou seja, não foi causado por uma situação específica?", criteria: "A. Ataques de pânico recorrentes e inesperados." },
+                { type: 'logic', check: (s) => s['F1']==='+' ? 'NEXT' : 'STOP' },
+                { id: "F2", text: "Você ficou preocupado com a possibilidade de ter outro ataque?", criteria: "B. Preocupação persistente acerca de novos ataques." },
+                { id: "F3", text: "Você mudou seu comportamento por causa dos ataques (ex: evitar sair)?", criteria: "B. Mudança desadaptativa de comportamento." }
+            ],
+            'F_AGORA': [
+                { id: "F23", text: "Nos últimos 6 meses, você sentiu medo ou ansiedade intensa em situações como: usar transporte público, espaços abertos, locais fechados, filas ou sair de casa sozinho?", criteria: "A. Medo/ansiedade em 2+ situações (Transporte, Espaços Abertos, Fechados, Filas, Sozinho)." },
+                { type: 'logic', check: (s) => s['F23']==='+' ? 'NEXT' : 'STOP' },
+                { id: "F24", text: "Você teme essas situações porque acha que seria difícil escapar ou obter ajuda se passasse mal?", criteria: "B. Medo de não ter escape/socorro." },
+                { id: "F26", text: "Você evita ativamente essas situações ou precisa de companhia para enfrentá-las?", criteria: "D. Evitação ativa ou necessidade de companhia." }
+            ],
+            'F_SOCIAL': [
+                { id: "F32", text: "Nos últimos 6 meses, você sentiu medo ou ansiedade acentuada em situações sociais (conversar, ser observado, palestrar)?", criteria: "A. Medo/ansiedade de exposição social." },
+                { type: 'logic', check: (s) => s['F32']==='+' ? 'NEXT' : 'STOP' },
+                { id: "F33", text: "Você teme ser avaliado negativamente, humilhado ou rejeitado nessas situações?", criteria: "B. Medo de avaliação negativa." },
+                { id: "F36", text: "Você evita essas situações sociais ou as suporta com intenso sofrimento?", criteria: "D. Evitação ou sofrimento intenso." }
+            ],
+            'F_GAD': [
+                { id: "F42", text: "Nos últimos 6 meses, você tem se sentido muito ansioso e preocupado na maioria dos dias?", sub: "Preocupado com diversas coisas (trabalho, escola, família)?", criteria: "A. Ansiedade e preocupação excessivas (expectativa apreensiva)." },
+                { type: 'logic', check: (s) => s['F42']==='+' ? 'NEXT' : 'STOP' },
+                { id: "F43", text: "Você acha difícil controlar essa preocupação?", criteria: "B. Dificuldade em controlar a preocupação." },
+                { id: "F44", text: "Essa ansiedade vem acompanhada de sintomas como: inquietação, fadiga fácil, dificuldade de concentração, irritabilidade, tensão muscular ou perturbação do sono? (Pelo menos 3)", criteria: "C. Três ou mais sintomas físicos/cognitivos associados." }
             ]
         };
 
-        // ============================================================
-        // ESTADO DA APLICAÇÃO
-        // ============================================================
-        let currentModule = 'A';
+        let currentModule = 'A_DEP';
         let moduleIndex = 0;
-        let globalScores = { 'A': {}, 'C': {} }; // Armazena todas as respostas
-
-        // ============================================================
-        // FUNÇÕES DE CONTROLE
-        // ============================================================
+        let globalScores = { 'A_DEP':{}, 'A_MANIA':{}, 'F_PANIC':{}, 'F_AGORA':{}, 'F_SOCIAL':{}, 'F_GAD':{} };
 
         function switchModule(modId) {
-            // Salva estado anterior visualmente
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             document.getElementById('nav-' + modId).classList.add('active');
-
-            // Esconde Dashboard, Mostra Entrevista
             document.getElementById('dashboard-view').style.display = 'none';
             document.getElementById('interview-header').style.display = 'flex';
             document.getElementById('interview-area').style.display = 'grid';
 
             currentModule = modId;
-            moduleIndex = 0; // Começa do início do módulo
-            updateTitle();
-            loadQuestion();
-        }
-
-        function updateTitle() {
-            const titles = { 'A': 'Módulo A: Depressão', 'C': 'Módulo C: Mania' };
+            moduleIndex = 0;
+            
+            const titles = {
+                'A_DEP': 'Módulo A: Depressão', 'A_MANIA': 'Módulo A: Mania',
+                'F_PANIC': 'Módulo F: Pânico', 'F_AGORA': 'Módulo F: Agorafobia',
+                'F_SOCIAL': 'Módulo F: Ansiedade Social', 'F_GAD': 'Módulo F: TAG'
+            };
             document.getElementById('module-title').innerText = titles[currentModule];
+            loadQuestion();
         }
 
         function loadQuestion() {
             const questions = database[currentModule];
             
-            // Verifica se acabou o módulo
             if (moduleIndex >= questions.length) {
-                alert("Módulo " + currentModule + " concluído!");
+                alert("Módulo concluído. Selecione o próximo no menu.");
                 return;
             }
 
             const q = questions[moduleIndex];
 
-            // Lógica de Pulo
             if (q.type === 'logic') {
                 const action = q.check(globalScores[currentModule]);
-                if (action === 'STOP_MODULE') {
-                    alert("Critérios de entrada não atendidos. Encerrando módulo.");
-                    // Preenche o resto com '-'
-                    finishModuleAsNegative();
-                    return;
+                if (action === 'STOP') {
+                    alert("Critérios de rastreio não atendidos. Módulo encerrado.");
+                    updateSidebarScore(currentModule); // Atualiza score visual
+                    return; 
                 } else {
                     moduleIndex++;
                     loadQuestion();
@@ -476,7 +420,6 @@
                 }
             }
 
-            // Atualiza UI
             document.getElementById('q-id').innerText = q.id;
             document.getElementById('q-text').innerText = q.text;
             document.getElementById('c-text').innerText = q.criteria;
@@ -492,38 +435,18 @@
         }
 
         function registerScore(val) {
-            const questions = database[currentModule];
-            const q = questions[moduleIndex];
-
-            // Salva resposta
+            const q = database[currentModule][moduleIndex];
             globalScores[currentModule][q.id] = val;
-
-            // Atualiza placar na sidebar
             updateSidebarScore(currentModule);
-
             moduleIndex++;
             loadQuestion();
         }
 
         function updateSidebarScore(mod) {
             let count = 0;
-            let total = 0;
             const scores = globalScores[mod];
-
-            // Conta apenas sintomas principais (ignorando A10, perguntas lógicas, etc)
-            Object.keys(scores).forEach(key => {
-                if (scores[key] === '+' && key.length <= 3) count++; // Filtro simples
-            });
-
-            // Total aproximado de sintomas
-            const max = mod === 'A' ? 9 : 7; 
-            document.getElementById('score-' + mod).innerText = `${count}/${max}`;
-        }
-
-        function finishModuleAsNegative() {
-            // Marca o resto como '-' visualmente no sistema
-            // Na prática, apenas paramos de perguntar.
-            updateSidebarScore(currentModule);
+            Object.keys(scores).forEach(key => { if (scores[key] === '+') count++; });
+            document.getElementById('score-' + mod).innerText = count > 0 ? count : "0";
         }
 
         function showDashboard() {
@@ -534,44 +457,48 @@
             const dash = document.getElementById('dashboard-content');
             dash.innerHTML = '';
 
-            // --- RESULTADO DEPRESSÃO ---
-            let aScores = globalScores['A'];
-            let aCount = 0;
-            ['A1','A2','A3','A4','A5','A6','A7','A8','A9'].forEach(k => { if(aScores[k] === '+') aCount++; });
-            let depStatus = (aScores['A1']==='+' || aScores['A2']==='+') && aCount >= 5 ? 'Positivo' : 'Negativo';
-            let depClass = depStatus === 'Positivo' ? 'positive' : 'negative';
+            // Lógica de Diagnóstico Simplificada para Exibição
+            const results = [
+                { id: 'A_DEP', title: 'Depressão Maior', min: 5, crit: ['A1','A2'] },
+                { id: 'A_MANIA', title: 'Mania', min: 3, crit: ['C1','C2'] }, // Lógica simples
+                { id: 'F_PANIC', title: 'Transtorno de Pânico', min: 1, crit: ['F1'] },
+                { id: 'F_AGORA', title: 'Agorafobia', min: 2, crit: ['F23'] },
+                { id: 'F_SOCIAL', title: 'Ansiedade Social', min: 2, crit: ['F32'] },
+                { id: 'F_GAD', title: 'Ansiedade Generalizada (TAG)', min: 3, crit: ['F42'] }
+            ];
 
-            dash.innerHTML += `
-                <div class="result-card ${depClass}">
-                    <h3>Episódio Depressivo Maior</h3>
-                    <p>Status: <strong>${depStatus}</strong></p>
-                    <p>Sintomas: ${aCount}/9</p>
-                    <small>Critério A1/A2 presente? ${(aScores['A1']==='+'||aScores['A2']==='+') ? 'Sim' : 'Não'}</small>
-                </div>
-            `;
+            results.forEach(r => {
+                let scores = globalScores[r.id];
+                let count = 0;
+                let critMet = false;
+                
+                // Conta positivos
+                Object.keys(scores).forEach(k => { if(scores[k] === '+') count++; });
+                
+                // Checa critério de entrada
+                r.crit.forEach(c => { if(scores[c] === '+') critMet = true; });
 
-            // --- RESULTADO MANIA ---
-            let cScores = globalScores['C'];
-            let cCount = 0;
-            ['C3','C4','C5','C6','C7','C8','C9'].forEach(k => { if(cScores[k] === '+') cCount++; });
-            
-            // Regra da Mania (Euforia=3, Irritabilidade=4)
-            let threshold = (cScores['C1'] === '+') ? 3 : 4;
-            let maniaStatus = (cScores['C1']==='+' || cScores['C2']==='+') && cCount >= threshold ? 'Positivo' : 'Negativo';
-            let maniaClass = maniaStatus === 'Positivo' ? 'positive' : 'negative';
+                let status = (critMet && count >= r.min) ? 'Positivo' : 'Negativo';
+                let cssClass = status === 'Positivo' ? 'positive' : 'negative';
+                let tagClass = status === 'Positivo' ? 'status-pos' : 'status-neg';
 
-            dash.innerHTML += `
-                <div class="result-card ${maniaClass}">
-                    <h3>Episódio Maníaco</h3>
-                    <p>Status: <strong>${maniaStatus}</strong></p>
-                    <p>Sintomas: ${cCount} (Necessário: ${threshold})</p>
-                    <small>Humor: ${cScores['C1']==='+' ? 'Eufórico' : (cScores['C2']==='+' ? 'Irritável' : 'Normal')}</small>
-                </div>
-            `;
+                dash.innerHTML += `
+                    <div class="result-card ${cssClass}">
+                        <div>
+                            <h3>${r.title}</h3>
+                            <span class="status-tag ${tagClass}">${status}</span>
+                        </div>
+                        <div style="text-align:right">
+                            <div style="font-size:1.5rem; font-weight:bold;">${count}</div>
+                            <small>Sintomas</small>
+                        </div>
+                    </div>
+                `;
+            });
         }
 
-        // Inicializa
-        switchModule('A');
+        // Inicia
+        switchModule('A_DEP');
 
     </script>
 </body>
