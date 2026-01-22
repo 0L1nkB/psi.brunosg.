@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BAI - Inventário de Ansiedade | Bruno de Souza</title>
     
+    <script>
+        if(localStorage.getItem('logado') !== 'sim') {
+            window.location.href = "../login.html";
+        }
+    </script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -13,7 +19,7 @@
         :root {
             /* Identidade Visual do Site */
             --bg-color: #f0f8ff;
-            --primary: #00cec9;       /* Verde-água (Tema Ansiedade/Fresco) */
+            --primary: #00cec9;       /* Verde-água */
             --primary-dark: #00b894;
             --accent: #fdcb6e;        /* Amarelo */
             --text: #2d3436;
@@ -35,7 +41,7 @@
             align-items: center;
         }
 
-        /* --- CABEÇALHO (Estilo Fita Adesiva) --- */
+        /* --- CABEÇALHO --- */
         header {
             text-align: center;
             margin: 20px auto 40px auto;
@@ -53,7 +59,7 @@
             content: ""; 
             position: absolute; top: -15px; left: 50%; transform: translateX(-50%) rotate(-1deg);
             width: 140px; height: 35px; 
-            background-color: rgba(0, 206, 201, 0.2); /* Verde translúcido */
+            background-color: rgba(0, 206, 201, 0.2); 
             border: 1px solid rgba(0,0,0,0.05); 
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
@@ -109,6 +115,7 @@
             box-shadow: 0 4px 0 rgba(0,0,0,0.05);
             border: 2px solid transparent;
             transition: all 0.3s ease;
+            page-break-inside: avoid;
         }
 
         .question-card:hover {
@@ -131,10 +138,10 @@
             font-size: 1.3rem;
         }
 
-        /* --- OPÇÕES (Botões Lado a Lado) --- */
+        /* --- OPÇÕES --- */
         .options-group {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); /* Responsivo */
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 10px;
         }
 
@@ -153,18 +160,16 @@
         }
 
         .option-label:hover {
-            background: #e0f7fa; /* Verde bem claro */
+            background: #e0f7fa;
             color: var(--primary-dark);
         }
 
-        /* Input Escondido */
         input[type="radio"] {
             position: absolute;
             opacity: 0;
             cursor: pointer;
         }
 
-        /* Estilo Selecionado */
         .option-label:has(input:checked) {
             background-color: var(--primary);
             color: white;
@@ -173,7 +178,7 @@
             transform: translateY(-2px);
         }
 
-        /* --- BARRA DE RESULTADOS (Fixa) --- */
+        /* --- RESULTADOS --- */
         .result-bar {
             position: fixed;
             bottom: 30px;
@@ -194,7 +199,6 @@
             white-space: nowrap;
         }
 
-        /* Área de Score para Impressão (Escondida na tela) */
         #print-score-area {
             display: none;
             font-size: 1.5rem;
@@ -211,79 +215,42 @@
             to { transform: translate(-50%, 0); }
         }
 
-        /* Botão Voltar */
         .btn-back {
-            display: inline-block;
-            margin-top: 20px;
-            color: #b2bec3;
-            text-decoration: none;
-            font-weight: 600;
-            transition: 0.3s;
+            display: inline-block; margin-top: 20px; color: #b2bec3; text-decoration: none; font-weight: 600; transition: 0.3s;
         }
         .btn-back:hover { color: var(--primary-dark); }
 
         @media (max-width: 600px) {
-            .options-group { grid-template-columns: 1fr 1fr; } /* 2 colunas no celular */
+            .options-group { grid-template-columns: 1fr 1fr; }
             .question-text { font-size: 1rem; }
             .option-label { font-size: 0.85rem; padding: 10px 5px; }
             .result-bar { font-size: 1.1rem; padding: 12px 30px; width: 90%; }
-            .btn-print span { display: none; } /* Só ícone no mobile */
+            .btn-print span { display: none; }
         }
 
-        /* --- ESTILOS DE IMPRESSÃO --- */
+        /* --- IMPRESSÃO --- */
         @media print {
-            body { 
-                background: white; 
-                color: black; 
-                display: block; /* Remove flex para imprimir corretamente */
-            }
+            body { background: white; color: black; display: block; }
+            header { border: none; box-shadow: none; padding: 0; margin-bottom: 20px; }
+            header::before, .btn-print, .btn-back, .result-bar { display: none !important; }
+            .main-container { max-width: 100%; margin: 0; }
             
-            header {
-                border: none;
-                box-shadow: none;
-                padding: 0;
-                margin-bottom: 20px;
-            }
-            header::before, .btn-print, .btn-back, .result-bar {
-                display: none !important;
-            }
-
-            .main-container {
-                max-width: 100%;
-                margin: 0;
-            }
-
             .question-card {
-                box-shadow: none;
-                border: 1px solid #ddd;
-                page-break-inside: avoid; /* Evita quebrar a pergunta no meio da página */
-                padding: 15px;
-                margin-bottom: 10px;
-                /* Remove animações AOS na impressão */
+                box-shadow: none; border: 1px solid #ddd;
+                padding: 10px; margin-bottom: 10px;
                 transform: none !important;
                 opacity: 1 !important;
             }
 
-            .option-label {
-                border: 1px solid #ccc;
-                background: white;
-                color: black;
-            }
-
-            /* Destacar opção selecionada na impressão */
+            .option-label { border: 1px solid #ccc; background: white; color: black; }
+            
             .option-label:has(input:checked) {
-                background-color: #ddd !important;
-                color: black !important;
-                border: 2px solid black !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-                font-weight: bold;
+                background-color: #ddd !important; color: black !important;
+                border: 2px solid black !important; -webkit-print-color-adjust: exact;
+                print-color-adjust: exact; font-weight: bold;
             }
 
-            /* Mostrar Score no topo */
-            #print-score-area {
-                display: block;
-            }
+            #print-score-area { display: block; }
         }
     </style>
 </head>
@@ -397,7 +364,7 @@
             if(count > 0) {
                 resultBar.style.display = 'block';
                 scoreSpan.innerText = total;
-                printScoreSpan.innerText = total; // Atualiza também o score da impressão
+                printScoreSpan.innerText = total;
             }
         }
     </script>
