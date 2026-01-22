@@ -261,6 +261,12 @@
             <span class="score-badge" id="score-A_MANIA">0/7</span>
         </div>
 
+        <div class="menu-section">Módulo E: Substâncias</div>
+        <div class="nav-item" onclick="switchModule('E_SUBST')" id="nav-E_SUBST">
+            <span><i class="fa-solid fa-wine-bottle"></i> Álcool/Drogas</span>
+            <span class="score-badge" id="score-E_SUBST">0/11</span>
+        </div>
+
         <div class="menu-section">Módulo F: Ansiedade</div>
         <div class="nav-item" onclick="switchModule('F_PANIC')" id="nav-F_PANIC">
             <span><i class="fa-solid fa-person-falling-burst"></i> Pânico</span>
@@ -370,6 +376,22 @@
                 { id: "C8", text: "Aumento de atividades ou agitação?", criteria: "6. Aumento da atividade dirigida." },
                 { id: "C9", text: "Comportamentos de risco (gastos, sexo, velocidade)?", criteria: "7. Risco excessivo." }
             ],
+            'E_SUBST': [
+                { id: "E1", text: "Nos últimos 12 meses, você bebeu álcool frequentemente ou em grandes quantidades?", sub: "Isso causou problemas para você?", criteria: "Rastreio de Álcool." },
+                { id: "E2", text: "Nos últimos 12 meses, usou drogas (cannabis, cocaína, remédios sem receita) para 'ficar alto' ou relaxar?", criteria: "Rastreio de Drogas." },
+                { type: 'logic', check: (s) => (s['E1']==='+' || s['E2']==='+') ? 'NEXT' : 'STOP' },
+                { id: "E3", text: "Você consumiu a substância em quantidades maiores ou por mais tempo do que pretendia?", criteria: "1. Uso excessivo." },
+                { id: "E4", text: "Você quis parar ou controlar o uso, mas não conseguiu?", criteria: "2. Desejo persistente/fracasso em controlar." },
+                { id: "E5", text: "Você gastou muito tempo para conseguir a substância, usá-la ou se recuperar?", criteria: "3. Tempo dispendido." },
+                { id: "E6", text: "Você teve 'fissura' ou uma vontade incontrolável de usar?", criteria: "4. Fissura (Craving)." },
+                { id: "E7", text: "O uso prejudicou seu trabalho, escola ou casa?", criteria: "5. Fracasso em obrigações." },
+                { id: "E8", text: "Continuou usando mesmo tendo problemas sociais ou interpessoais causados por isso?", criteria: "6. Problemas sociais." },
+                { id: "E9", text: "Deixou de fazer atividades importantes (lazer, social) por causa do uso?", criteria: "7. Abandono de atividades." },
+                { id: "E10", text: "Usou em situações fisicamente perigosas (ex: dirigir)?", criteria: "8. Uso perigoso." },
+                { id: "E11", text: "Continuou usando mesmo sabendo que tinha um problema físico ou psicológico causado pela substância?", criteria: "9. Uso apesar de problemas." },
+                { id: "E12", text: "Precisou de quantidades maiores para ter o mesmo efeito? (Tolerância)", criteria: "10. Tolerância." },
+                { id: "E13", text: "Sentiu sintomas de abstinência (tremores, suor, ansiedade) ao parar?", criteria: "11. Abstinência." }
+            ],
             'F_PANIC': [
                 { id: "F1", text: "No último mês, você teve um ataque de pânico inesperado (pico súbito de medo intenso)?", criteria: "A. Ataques de pânico recorrentes." },
                 { type: 'logic', check: (s) => s['F1']==='+' ? 'NEXT' : 'STOP' },
@@ -439,7 +461,7 @@
         let currentModule = 'A_DEP';
         let moduleIndex = 0;
         let globalScores = { 
-            'A_DEP':{}, 'A_MANIA':{}, 
+            'A_DEP':{}, 'A_MANIA':{}, 'E_SUBST':{},
             'F_PANIC':{}, 'F_AGORA':{}, 'F_SOCIAL':{}, 'F_GAD':{}, 
             'G_TOC':{}, 'G_TEPT':{}, 
             'H_ADHD':{}, 'I_SCREEN':{} 
@@ -457,6 +479,7 @@
             
             const titles = {
                 'A_DEP': 'Módulo A: Depressão', 'A_MANIA': 'Módulo A: Mania',
+                'E_SUBST': 'Módulo E: Substâncias',
                 'F_PANIC': 'Módulo F: Pânico', 'F_AGORA': 'Módulo F: Agorafobia',
                 'F_SOCIAL': 'Módulo F: Ans. Social', 'F_GAD': 'Módulo F: TAG',
                 'G_TOC': 'Módulo G: TOC', 'G_TEPT': 'Módulo G: TEPT',
@@ -530,6 +553,7 @@
             const results = [
                 { id: 'A_DEP', title: 'Depressão Maior', min: 5, crit: ['A1','A2'] },
                 { id: 'A_MANIA', title: 'Mania', min: 3, crit: ['C1','C2'] },
+                { id: 'E_SUBST', title: 'Transtorno por Uso de Substâncias', min: 2, crit: ['E3','E4','E5','E6','E7','E8','E9','E10','E11','E12','E13'] },
                 { id: 'F_PANIC', title: 'Pânico', min: 1, crit: ['F1'] },
                 { id: 'F_AGORA', title: 'Agorafobia', min: 2, crit: ['F23'] },
                 { id: 'F_SOCIAL', title: 'Ansiedade Social', min: 2, crit: ['F32'] },
@@ -548,11 +572,20 @@
                    if((scores['G1']==='+' || scores['G2']==='+') && scores['G3']==='+') critMet = true;
                 } else if (r.id === 'G_TEPT') {
                    if(scores['G4']==='+') critMet = true;
+                } else if (r.id === 'E_SUBST') {
+                    // Substâncias: precisa de 2 critérios positivos na lista E3-E13
+                    let sym = 0;
+                    for(let i=3; i<=13; i++) if(scores['E'+i] === '+') sym++;
+                    if(sym >= 2) critMet = true;
+                    count = sym; // Ajusta contagem para mostrar apenas critérios diagnósticos
                 } else {
                    r.crit.forEach(c => { if(scores[c] === '+') critMet = true; });
                 }
 
                 let status = (critMet && count >= r.min) ? 'Positivo' : 'Negativo';
+                // Override para Substâncias (se critMet true, já é positivo pois min é 2)
+                if(r.id === 'E_SUBST' && critMet) status = 'Positivo';
+
                 let cssClass = status === 'Positivo' ? 'positive' : 'negative';
                 let tagClass = status === 'Positivo' ? 'status-pos' : 'status-neg';
 
@@ -570,7 +603,7 @@
                 `;
             });
 
-            // TDAH (Lógica Específica)
+            // TDAH e Alertas
             let hScores = globalScores['H_ADHD'];
             let inatt = 0, hyper = 0;
             for(let i=1; i<=9; i++) if(hScores['H'+i] === '+') inatt++;
@@ -578,7 +611,6 @@
             
             let adhdStatus = "Negativo";
             let adhdType = "";
-            // Adulto exige 5+ em um dos domínios + início infância + prejuízo
             if(hScores['H19']==='+' && hScores['H20']==='+') {
                 if(inatt >= 5 && hyper >= 5) { adhdStatus = "Positivo"; adhdType = "Combinado"; }
                 else if(inatt >= 5) { adhdStatus = "Positivo"; adhdType = "Desatento"; }
@@ -600,7 +632,6 @@
                 </div>
             `;
 
-            // Alertas Módulo I
             let iScores = globalScores['I_SCREEN'];
             let alertas = [];
             if(iScores['I1']==='+' || iScores['I2']==='+' || iScores['I3']==='+') alertas.push("Alimentar");
