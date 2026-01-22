@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCID-5-CV: Depressão | Bruno de Souza</title>
+    <title>SCID-5-CV: Humor (Depressão + Mania) | Bruno de Souza</title>
     
     <script>
-        // Mantendo sua verificação de login
         if(localStorage.getItem('logado') !== 'sim') {
-            // window.location.href = "../login.html"; // Comentei para eu poder testar aqui, mas você pode descomentar
+            // window.location.href = "../login.html"; 
         }
     </script>
 
@@ -55,14 +54,6 @@
             max-width: 900px;
             width: 100%;
             position: relative;
-        }
-
-        header::before {
-            content: ""; 
-            position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
-            width: 100px; height: 5px; 
-            background-color: rgba(108, 92, 231, 0.3); 
-            border-radius: 10px;
         }
 
         h1 { margin: 0; color: var(--primary); font-size: 1.8rem; text-transform: uppercase; font-weight: 800; }
@@ -176,9 +167,6 @@
 
         .btn-action span { font-size: 0.7rem; font-weight: 600; margin-top: 5px; text-transform: uppercase; }
 
-        .btn-action:hover { transform: translateY(-3px); box-shadow: 0 8px 0 rgba(0,0,0,0.1); }
-        .btn-action:active { transform: translateY(2px); box-shadow: none; }
-
         .btn-plus { background-color: var(--positive); }
         .btn-minus { background-color: var(--negative); }
         .btn-unsure { background-color: var(--neutral); color: #2d3436; }
@@ -213,6 +201,9 @@
         .diag-positive { background: #ff7675; color: white; border: 4px solid #d63031; }
         .diag-negative { background: #55efc4; color: #006266; border: 4px solid #00b894; }
         .diag-neutral { background: #dfe6e9; color: #2d3436; border: 4px solid #b2bec3; }
+        
+        /* Estilo Específico para Bipolar */
+        .diag-bipolar { background: #fdcb6e; color: #d35400; border: 4px solid #e67e22; }
 
         .back-link {
             position: fixed; top: 20px; left: 20px;
@@ -222,15 +213,8 @@
         .back-link:hover { color: var(--primary); }
 
         @media (max-width: 900px) {
-            #app-container {
-                display: flex;
-                flex-direction: column;
-                height: auto;
-            }
-            .action-panel {
-                flex-direction: row;
-                height: auto;
-            }
+            #app-container { display: flex; flex-direction: column; height: auto; }
+            .action-panel { flex-direction: row; height: auto; }
             .btn-action { height: 60px; font-size: 1.2rem; }
             .question-panel { min-height: 300px; }
         }
@@ -242,7 +226,7 @@
 
     <header data-aos="fade-down">
         <h1>SCID-5-CV Digital</h1>
-        <div class="subtitle">Módulo A: Episódio Depressivo Maior</div>
+        <div class="subtitle" id="module-subtitle">Módulo A: Episódio Depressivo Maior</div>
         <div class="badge" id="progress-display">Item 1</div>
     </header>
 
@@ -250,20 +234,14 @@
         
         <div class="question-panel">
             <span class="question-code" id="q-id">A1</span>
-            <div class="question-text" id="q-main">
-                Carregando...
-            </div>
-            
+            <div class="question-text" id="q-main">Carregando...</div>
             <div class="sub-questions" id="q-sub" style="display:none;"></div>
-
             <div class="instruction" id="q-inst" style="display:none;"></div>
         </div>
 
         <div class="criteria-panel">
             <div class="criteria-title"><i class="fa-solid fa-book-medical"></i> Critério DSM-5</div>
-            <div class="criteria-text" id="c-text">
-                Carregando...
-            </div>
+            <div class="criteria-text" id="c-text">Carregando...</div>
         </div>
 
         <div class="action-panel">
@@ -293,168 +271,145 @@
         AOS.init();
 
         const questions = [
-            // --- INÍCIO DO MÓDULO A (EPISÓDIO ATUAL) ---
+            // ==========================================================
+            // MÓDULO A: DEPRESSÃO MAIOR
+            // ==========================================================
             {
                 id: "A1",
+                module: "Módulo A: Depressão",
                 text: "No último mês, houve algum período em que você se sentiu deprimido ou abatido na maior parte do dia, quase todos os dias?",
                 sub: "Alguém comentou que você parecia triste, abatido ou 'para baixo'?",
-                criteria: "1. Humor deprimido na maior parte do dia, quase todos os dias (relato subjetivo ou observação).",
-                inst: "Se o paciente estiver visivelmente deprimido, marque (+) mesmo se ele negar."
+                criteria: "1. Humor deprimido na maior parte do dia, quase todos os dias."
             },
             {
                 id: "A2",
+                module: "Módulo A: Depressão",
                 text: "Durante esse período, você sentiu menos interesse ou prazer nas coisas que normalmente gosta?",
                 sub: "Houve um período em que você 'não sentia gosto por nada'?",
                 criteria: "2. Acentuada diminuição de interesse ou prazer em quase todas as atividades."
             },
-            // PONTO DE CHECAGEM CRÍTICO
+            // PONTO DE CHECAGEM CRÍTICO (A1/A2)
             {
                 id: "CHECK_ENTRY",
                 type: "logic",
                 check: function(scores) {
                     if (scores['A1'] !== '+' && scores['A2'] !== '+') {
-                        // Se não tem sintomas atuais, vamos verificar o PASSADO.
-                        return 'JUMP_TO_A14'; 
+                        return 'JUMP_TO_A14'; // Pula para Passado
                     }
                     return 'NEXT';
                 }
             },
-            {
-                id: "A3",
-                text: "Como estava o seu apetite? Houve alguma mudança de peso (sem dieta)?",
-                sub: "Teve que se forçar a comer? Ou comeu muito mais que o habitual?",
-                criteria: "3. Perda ou ganho significativo de peso (5% em um mês) ou alteração no apetite."
-            },
-            {
-                id: "A4",
-                text: "Como você estava dormindo?",
-                sub: "Dificuldade para pegar no sono? Acordar no meio da noite? Dormir demais?",
-                criteria: "4. Insônia ou hipersonia quase todos os dias."
-            },
-            {
-                id: "A5",
-                text: "Você se sentiu agitado (não conseguindo ficar parado) ou muito lento (câmera lenta)?",
-                sub: "Outras pessoas notaram isso?",
-                criteria: "5. Agitação ou retardo psicomotor (deve ser observável por outros).",
-                inst: "A mera sensação subjetiva de inquietude não conta. Deve ser visível."
-            },
-            {
-                id: "A6",
-                text: "Como estava sua energia? Sentiu-se cansado ou sem forças?",
-                sub: "Mesmo sem fazer esforço físico?",
-                criteria: "6. Fadiga ou perda de energia quase todos os dias."
-            },
-            {
-                id: "A7",
-                text: "Como se sentiu em relação a si mesmo? Sentiu-se inútil ou culpado?",
-                sub: "Sentiu que decepcionou as pessoas ou se culpou por coisas do passado?",
-                criteria: "7. Sentimentos de inutilidade ou culpa excessiva/inapropriada."
-            },
-            {
-                id: "A8",
-                text: "Teve dificuldade para pensar, concentrar-se ou tomar decisões?",
-                sub: "Ficou indeciso sobre coisas simples do dia a dia?",
-                criteria: "8. Capacidade diminuída para pensar/concentrar ou indecisão."
-            },
-            {
-                id: "A9",
-                text: "Teve pensamentos de morte ou de se machucar?",
-                sub: "Pensou que seria melhor não acordar? Pensou em suicídio?",
-                criteria: "9. Pensamentos recorrentes de morte, ideação suicida ou tentativa.",
-                inst: "ALERTA: Se (+), avalie risco de suicídio imediato."
-            },
+            { id: "A3", module: "Módulo A: Depressão", text: "Mudança de apetite ou peso?", criteria: "3. Perda/ganho de peso ou apetite." },
+            { id: "A4", module: "Módulo A: Depressão", text: "Como estava dormindo?", criteria: "4. Insônia ou hipersonia." },
+            { id: "A5", module: "Módulo A: Depressão", text: "Agitação ou lentidão?", criteria: "5. Agitação ou retardo psicomotor." },
+            { id: "A6", module: "Módulo A: Depressão", text: "Fadiga ou perda de energia?", criteria: "6. Fadiga ou perda de energia." },
+            { id: "A7", module: "Módulo A: Depressão", text: "Sentimentos de inutilidade ou culpa?", criteria: "7. Inutilidade ou culpa excessiva." },
+            { id: "A8", module: "Módulo A: Depressão", text: "Dificuldade de concentração?", criteria: "8. Capacidade diminuída para pensar." },
+            { id: "A9", module: "Módulo A: Depressão", text: "Pensamentos de morte?", criteria: "9. Pensamentos de morte/suicídio.", inst: "Se (+), avalie risco." },
+            
             // CONTAGEM DE SINTOMAS ATUAIS
             {
                 id: "CHECK_COUNT",
                 type: "logic",
                 check: function(scores) {
                     let count = 0;
-                    ['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9'].forEach(key => {
-                        if (scores[key] === '+') count++;
-                    });
-                    
-                    if (count < 5) return 'JUMP_TO_A14'; // Não fecha critério ATUAL, verifica o PASSADO.
+                    ['A1','A2','A3','A4','A5','A6','A7','A8','A9'].forEach(k => { if (scores[k] === '+') count++; });
+                    if (count < 5) return 'JUMP_TO_A14'; // Não é depressão atual -> Vai para Passado
                     return 'NEXT';
                 }
             },
-            {
-                id: "A10", 
-                text: "Esses sintomas atrapalharam sua vida (trabalho, estudos, social)?",
-                sub: "Causaram muito sofrimento?",
-                criteria: "B. Sofrimento clinicamente significativo ou prejuízo no funcionamento.",
-                inst: "Se o prejuízo for óbvio (ex: não sai da cama), marque (+)."
-            },
-            {
-                id: "A11",
-                text: "Você estava doente fisicamente ou usando substâncias quando isso começou?",
-                sub: "Remédios, drogas ou álcool?",
-                criteria: "C. Não atribuível a efeitos de substância ou condição médica.",
-                inst: "Se for causado por droga/doença, marque (-) pois não é TDM primário."
-            },
-            {
-                id: "A12",
-                text: "Quando esse período começou?",
-                sub: "Registre a data aproximada.",
-                criteria: "Cronologia do Episódio.",
-                inst: "Apenas registro de dados."
-            },
+            { id: "A10", module: "Módulo A: Depressão", text: "Prejuízo no funcionamento?", criteria: "B. Sofrimento ou prejuízo." },
+            { id: "A11", module: "Módulo A: Depressão", text: "Uso de substâncias ou doença?", criteria: "C. Exclusão de causa orgânica." },
+            { id: "A12", module: "Módulo A: Depressão", text: "Início do episódio?", criteria: "Cronologia." },
 
-            // --- TRANSIÇÃO: LÓGICA DE RECORRÊNCIA ---
-            // Se chegou aqui, o paciente TEM depressão atual. Vamos ver se teve antes.
+            // RECORRÊNCIA
             {
                 id: "A13",
-                text: "Antes desse episódio, você JÁ teve algum outro período parecido?",
-                sub: "Houve alguma época no passado que foi igual a esta, com pelo menos 2 meses de intervalo?",
-                criteria: "Verificação de Recorrência (Episódio Único vs. Recorrente).",
-                inst: "Se SIM (+), o diagnóstico é Depressão Recorrente. Pula o rastreio do passado.",
+                module: "Módulo A: Depressão",
+                text: "Já teve outro episódio parecido antes?",
+                criteria: "Recorrência."
             },
-
-            // Se respondeu A13 (Recorrência), não precisa fazer o rastreio completo do passado.
             {
                 id: "CHECK_RECURRENCE",
                 type: "logic",
                 check: function(scores) {
-                    if (scores['A13']) {
-                        return 'SKIP_TO_END'; // Fim da entrevista, diagnóstico completo.
-                    }
-                    return 'NEXT';
+                    // Se confirmou atual (chegou até aqui), agora vamos para MANIA (C1)
+                    // Independentemente se é recorrente ou não, precisamos descartar bipolaridade.
+                    return 'JUMP_TO_C1'; 
                 }
             },
 
-            // --- INÍCIO DO MÓDULO EPISÓDIO PASSADO (Para quem não tem atual) ---
-            {
-                id: "A14",
-                text: "Você JÁ teve algum período na sua vida (no passado) em que se sentiu deprimido a maior parte do dia?",
-                sub: "Pense na pior fase da sua vida. Como você se sentia?",
-                criteria: "A. Rastreio de Humor Deprimido no PASSADO."
-            },
-            {
-                id: "A15",
-                text: "E houve algum período no passado em que você perdeu o interesse ou prazer pelas coisas?",
-                criteria: "A. Rastreio de Anedonia no PASSADO."
-            },
-            // Se não teve nada no passado, acaba.
+            // --- EPISÓDIO PASSADO (Para quem não tem atual) ---
+            { id: "A14", module: "Módulo A: Passado", text: "Já se sentiu deprimido no passado (Pior episódio)?", criteria: "A. Humor Deprimido Passado" },
+            { id: "A15", module: "Módulo A: Passado", text: "Já perdeu o interesse no passado?", criteria: "A. Anedonia Passada" },
             {
                 id: "CHECK_PAST_CORE",
                 type: "logic",
                 check: function(scores) {
-                    if (scores['A14'] !== '+' && scores['A15'] !== '+') {
-                        return 'SKIP_TO_END'; 
+                    if (scores['A14'] !== '+' && scores['A15'] !== '+') return 'JUMP_TO_C1'; // Sem passado -> Vai para Mania
+                    return 'NEXT';
+                }
+            },
+            { id: "A_PAST_FULL", module: "Módulo A: Passado", text: "Teve 5 sintomas ao mesmo tempo no passado?", criteria: "B. Confirmação Passada" },
+            
+            // ==========================================================
+            // MÓDULO C: MANIA / HIPOMANIA (NOVO!)
+            // ==========================================================
+            {
+                id: "C1",
+                module: "Módulo C: Mania",
+                text: "Agora mudando de assunto: Você já teve algum período em que se sentiu muito animado, eufórico, ou 'no topo do mundo'?",
+                sub: "Diferente do seu normal? Alguém comentou que você estava 'acelerado'?",
+                criteria: "A. Humor anormalmente elevado ou expansivo.",
+                inst: "Se o paciente descrever apenas felicidade normal, marque (-)."
+            },
+            {
+                id: "C2",
+                module: "Módulo C: Mania",
+                text: "Se não ficou eufórico... houve um período em que você ficou extremamente irritado ou bravo?",
+                sub: "Brigando com todos, gritando, desproporcional ao motivo?",
+                criteria: "A. Humor anormalmente irritável."
+            },
+            {
+                id: "CHECK_MANIA_ENTRY",
+                type: "logic",
+                check: function(scores) {
+                    if (scores['C1'] !== '+' && scores['C2'] !== '+') {
+                        return 'SKIP_TO_END'; // Não é bipolar. Fim da entrevista.
                     }
                     return 'NEXT';
                 }
             },
+            // SINTOMAS DE MANIA
+            { id: "C3", module: "Módulo C: Mania", text: "Sentiu-se grandioso ou com superpoderes?", criteria: "1. Autoestima inflada/Grandiosidade." },
+            { id: "C4", module: "Módulo C: Mania", text: "Precisou dormir menos (ex: 3h) e acordou descansado?", criteria: "2. Redução da necessidade de sono." },
+            { id: "C5", module: "Módulo C: Mania", text: "Falou muito mais que o habitual?", criteria: "3. Loquacidade/Pressão por falar." },
+            { id: "C6", module: "Módulo C: Mania", text: "Pensamentos acelerados?", criteria: "4. Fuga de ideias." },
+            { id: "C7", module: "Módulo C: Mania", text: "Distraía-se fácil?", criteria: "5. Distratibilidade." },
+            { id: "C8", module: "Módulo C: Mania", text: "Fez muitas atividades ao mesmo tempo?", criteria: "6. Aumento da atividade dirigida." },
+            { id: "C9", module: "Módulo C: Mania", text: "Fez coisas arriscadas (gastos, sexo, velocidade)?", criteria: "7. Comportamentos de risco." },
+
+            // CÁLCULO FINAL DA MANIA
             {
-                id: "A_PAST_FULL",
-                text: "Durante esse pior episódio do passado, você teve vários daqueles outros sintomas (sono, peso, culpa, concentração) ao mesmo tempo?",
-                sub: "Durou pelo menos 2 semanas?",
-                criteria: "B. Confirmação de Episódio Depressivo Maior Passado.",
-                inst: "Marque (+) se houve um episódio completo no passado."
+                id: "CHECK_MANIA_FINAL",
+                type: "logic",
+                check: function(scores) {
+                    let sCount = 0;
+                    ['C3','C4','C5','C6','C7','C8','C9'].forEach(k => { if(scores[k] === '+') sCount++; });
+                    
+                    // Lógica: Se Euforia (C1+), precisa de 3. Se só Irritabilidade (C1- e C2+), precisa de 4.
+                    let threshold = (scores['C1'] === '+') ? 3 : 4;
+                    
+                    if (sCount >= threshold) {
+                        scores['DIAG_BIPOLAR'] = 'YES';
+                    }
+                    return 'SKIP_TO_END';
+                }
             }
         ];
 
         // ============================================================
-        // MOTOR DO APP (ATUALIZADO PARA PULOS ESPECÍFICOS)
+        // MOTOR DO APP
         // ============================================================
         let currentIndex = 0;
         let scores = {};
@@ -467,65 +422,35 @@
 
             const q = questions[currentIndex];
 
-            // --- LÓGICA DE PULOS INTELIGENTE ---
+            // Pulos
             if (q.type === 'logic') {
                 const action = q.check(scores);
-                
-                if (action === 'SKIP_TO_END') {
-                    showResults(); // Fim da linha
-                    return;
-                } 
-                // Novo recurso: Pular para ID específico
+                if (action === 'SKIP_TO_END') { showResults(); return; } 
                 else if (action.startsWith('JUMP_TO_')) {
-                    const targetId = action.split('JUMP_TO_')[1];
-                    const targetIndex = questions.findIndex(item => item.id === targetId);
-                    
-                    if (targetIndex !== -1) {
-                        currentIndex = targetIndex;
-                        loadQuestion();
-                    } else {
-                        console.error("Erro: Destino de pulo não encontrado ->", targetId);
-                        showResults();
-                    }
+                    const tId = action.split('JUMP_TO_')[1];
+                    const tIndex = questions.findIndex(i => i.id === tId);
+                    if (tIndex !== -1) { currentIndex = tIndex; loadQuestion(); }
                     return;
                 }
-                // Segue normal
-                else {
-                    currentIndex++;
-                    loadQuestion();
-                    return;
-                }
+                else { currentIndex++; loadQuestion(); return; }
             }
-            // -----------------------------------
 
-            // Atualiza Interface
+            // UI Updates
+            document.getElementById('module-subtitle').innerText = q.module || "Avaliação";
             document.getElementById('q-id').innerText = q.id;
             document.getElementById('q-main').innerText = q.text;
             document.getElementById('c-text').innerText = q.criteria;
             document.getElementById('progress-display').innerText = `Item ${currentIndex + 1}`;
-
-            // Sub-perguntas
+            
             const subDiv = document.getElementById('q-sub');
-            if (q.sub) {
-                subDiv.style.display = 'block';
-                subDiv.innerText = q.sub;
-            } else {
-                subDiv.style.display = 'none';
-            }
-
-            // Instruções
+            if (q.sub) { subDiv.style.display = 'block'; subDiv.innerText = q.sub; } else { subDiv.style.display = 'none'; }
+            
             const instDiv = document.getElementById('q-inst');
-            if (q.inst) {
-                instDiv.style.display = 'block';
-                instDiv.innerText = "NOTA CLÍNICA: " + q.inst;
-            } else {
-                instDiv.style.display = 'none';
-            }
+            if (q.inst) { instDiv.style.display = 'block'; instDiv.innerText = "NOTA: " + q.inst; } else { instDiv.style.display = 'none'; }
         }
 
-        function registerScore(value) {
-            const q = questions[currentIndex];
-            scores[q.id] = value;
+        function registerScore(val) {
+            scores[questions[currentIndex].id] = val;
             currentIndex++;
             loadQuestion();
         }
@@ -538,46 +463,51 @@
             const diagBox = document.getElementById('final-diagnosis');
             list.innerHTML = '';
 
-            // Lógica de Diagnóstico Atual
-            let currentSymptoms = 0;
-            ['A1','A2','A3','A4','A5','A6','A7','A8','A9'].forEach(k => { if(scores[k] === '+') currentSymptoms++; });
-            
-            let hasCurrent = (scores['A1'] === '+' || scores['A2'] === '+') && currentSymptoms >= 5;
-            let hasPast = scores['A_PAST_FULL'] === '+';
-            let isRecurrent = scores['A13'] === '+';
+            // Diagnósticos
+            let depCount = 0;
+            ['A1','A2','A3','A4','A5','A6','A7','A8','A9'].forEach(k => { if(scores[k] === '+') depCount++; });
+            let hasDepression = (scores['A1'] === '+' || scores['A2'] === '+') && depCount >= 5;
+            let hasPastDep = scores['A_PAST_FULL'] === '+';
+            let isBipolar = scores['DIAG_BIPOLAR'] === 'YES';
 
-            // Gera lista visual
+            // Lista
             Object.keys(scores).forEach(key => {
-                const val = scores[key];
-                // Ignora chaves internas de lógica para o relatório
-                if (['CHECK_ENTRY', 'CHECK_COUNT', 'CHECK_RECURRENCE', 'CHECK_PAST_CORE'].includes(key)) return;
+                if (key.includes('CHECK') || key === 'DIAG_BIPOLAR') return;
+                
+                // Divisor visual
+                if (key === 'C1') {
+                    const sep = document.createElement('div');
+                    sep.innerHTML = "<h3 style='margin:20px 0 5px; color:#6c5ce7; border-bottom:1px solid #ddd'>Módulo Mania</h3>";
+                    list.appendChild(sep);
+                }
 
-                let colorClass = val === '+' ? 'color:#ef5350; font-weight:bold;' : 'color:#2d3436;';
+                let color = scores[key] === '+' ? '#ef5350' : '#2d3436';
+                let weight = scores[key] === '+' ? 'bold' : 'normal';
+                
                 const div = document.createElement('div');
                 div.className = 'result-item';
-                div.innerHTML = `<span>${key}</span> <span style="${colorClass}">${val}</span>`;
+                div.innerHTML = `<span>${key}</span> <span style="color:${color}; font-weight:${weight}">${scores[key]}</span>`;
                 list.appendChild(div);
             });
 
-            // RESULTADO FINAL
-            if (hasCurrent) {
-                let tipo = isRecurrent ? "RECORRENTE" : "EPISÓDIO ÚNICO";
+            // Lógica Final Hierárquica
+            if (isBipolar) {
+                diagBox.className = "diagnosis-box diag-bipolar";
+                let extra = hasDepression ? "<br><small>(Com Episódio Depressivo Atual)</small>" : "";
+                diagBox.innerHTML = `<i class='fa-solid fa-bolt'></i> POSSÍVEL TRANSTORNO BIPOLAR${extra}`;
+            } else if (hasDepression) {
                 diagBox.className = "diagnosis-box diag-positive";
-                diagBox.innerHTML = `<i class='fa-solid fa-triangle-exclamation'></i> TRANSTORNO DEPRESSIVO MAIOR (${tipo})<br><small>Episódio Atual Confirmado (${currentSymptoms} sintomas).</small>`;
-            } 
-            else if (hasPast) {
+                diagBox.innerHTML = `<i class='fa-solid fa-cloud-rain'></i> DEPRESSÃO UNIPOLAR (TDM)<br><small>Sem histórico de Mania.</small>`;
+            } else if (hasPastDep) {
                 diagBox.className = "diagnosis-box diag-neutral";
-                diagBox.innerHTML = `<i class='fa-solid fa-clock-rotate-left'></i> TDM EM REMISSÃO (Histórico Passado)<br><small>Não tem depressão hoje, mas teve no passado.</small>`;
-            } 
-            else {
+                diagBox.innerHTML = `<i class='fa-solid fa-clock-rotate-left'></i> TDM EM REMISSÃO (Histórico)`;
+            } else {
                 diagBox.className = "diagnosis-box diag-negative";
-                diagBox.innerHTML = "<i class='fa-solid fa-circle-check'></i> SEM DIAGNÓSTICO DE TDM<br><small>Critérios não atendidos no presente nem no passado.</small>";
+                diagBox.innerHTML = `<i class='fa-solid fa-circle-check'></i> SEM DIAGNÓSTICO DE HUMOR`;
             }
         }
 
-        // Iniciar
         loadQuestion();
-
     </script>
 </body>
 </html>
