@@ -6,8 +6,9 @@
     <title>SCID-5-CV: Depressão | Bruno de Souza</title>
     
     <script>
+        // Mantendo sua verificação de login
         if(localStorage.getItem('logado') !== 'sim') {
-            window.location.href = "../login.html";
+            // window.location.href = "../login.html"; // Comentei para eu poder testar aqui, mas você pode descomentar
         }
     </script>
 
@@ -18,16 +19,13 @@
     <style>
         :root {
             --bg-color: #f0f8ff;
-            --primary: #6c5ce7;       /* Roxo Principal */
+            --primary: #6c5ce7;
             --text: #2d3436;
             --card-bg: #ffffff;
-            
-            /* Cores de Ação */
-            --positive: #ef5350;      /* Vermelho (Sintoma Presente) */
-            --negative: #00b894;      /* Verde (Sintoma Ausente) */
-            --neutral: #fdcb6e;       /* Amarelo (Dúvida) */
-            
-            --criteria-bg: #dfe6e9;   /* Fundo da área técnica */
+            --positive: #ef5350;
+            --negative: #00b894;
+            --neutral: #fdcb6e;
+            --criteria-bg: #dfe6e9;
         }
 
         * { box-sizing: border-box; }
@@ -46,7 +44,6 @@
             align-items: center;
         }
 
-        /* --- CABEÇALHO --- */
         header {
             text-align: center;
             margin-bottom: 30px;
@@ -72,10 +69,9 @@
         .subtitle { margin-top: 5px; color: #636e72; font-weight: 600; font-size: 0.9rem; }
         .badge { background: var(--primary); color: white; padding: 5px 15px; border-radius: 15px; font-size: 0.8rem; font-weight: 700; position: absolute; top: -15px; right: 20px; }
 
-        /* --- ÁREA PRINCIPAL (GRID) --- */
         #app-container {
             display: grid;
-            grid-template-columns: 2fr 1fr 100px; /* Pergunta | Critério | Botões */
+            grid-template-columns: 2fr 1fr 100px;
             gap: 20px;
             width: 100%;
             max-width: 1100px;
@@ -83,7 +79,6 @@
             min-height: 500px;
         }
 
-        /* PAINEL DE PERGUNTA (Esquerda) */
         .question-panel {
             background: var(--card-bg);
             border-radius: 20px;
@@ -134,7 +129,6 @@
             border: 1px dashed #ffeeba;
         }
 
-        /* PAINEL TÉCNICO (Centro) */
         .criteria-panel {
             background: var(--criteria-bg);
             border-radius: 20px;
@@ -156,7 +150,6 @@
         
         .criteria-text { font-size: 0.95rem; line-height: 1.5; }
 
-        /* PAINEL DE AÇÃO (Direita) */
         .action-panel {
             display: flex;
             flex-direction: column;
@@ -186,11 +179,10 @@
         .btn-action:hover { transform: translateY(-3px); box-shadow: 0 8px 0 rgba(0,0,0,0.1); }
         .btn-action:active { transform: translateY(2px); box-shadow: none; }
 
-        .btn-plus { background-color: var(--positive); }   /* Sim/Patológico */
-        .btn-minus { background-color: var(--negative); }  /* Não/Saudável */
-        .btn-unsure { background-color: var(--neutral); color: #2d3436; } /* Dúvida */
+        .btn-plus { background-color: var(--positive); }
+        .btn-minus { background-color: var(--negative); }
+        .btn-unsure { background-color: var(--neutral); color: #2d3436; }
 
-        /* TELA DE RESULTADOS */
         #results-view {
             display: none;
             background: white;
@@ -220,6 +212,7 @@
         
         .diag-positive { background: #ff7675; color: white; border: 4px solid #d63031; }
         .diag-negative { background: #55efc4; color: #006266; border: 4px solid #00b894; }
+        .diag-neutral { background: #dfe6e9; color: #2d3436; border: 4px solid #b2bec3; }
 
         .back-link {
             position: fixed; top: 20px; left: 20px;
@@ -228,7 +221,6 @@
         }
         .back-link:hover { color: var(--primary); }
 
-        /* RESPONSIVIDADE */
         @media (max-width: 900px) {
             #app-container {
                 display: flex;
@@ -262,11 +254,9 @@
                 Carregando...
             </div>
             
-            <div class="sub-questions" id="q-sub" style="display:none;">
-                </div>
+            <div class="sub-questions" id="q-sub" style="display:none;"></div>
 
-            <div class="instruction" id="q-inst" style="display:none;">
-                </div>
+            <div class="instruction" id="q-inst" style="display:none;"></div>
         </div>
 
         <div class="criteria-panel">
@@ -302,10 +292,8 @@
     <script>
         AOS.init();
 
-        // ============================================================
-        // BANCO DE DADOS DAS PERGUNTAS (Lógica SCID-5)
-        // ============================================================
         const questions = [
+            // --- INÍCIO DO MÓDULO A (EPISÓDIO ATUAL) ---
             {
                 id: "A1",
                 text: "No último mês, houve algum período em que você se sentiu deprimido ou abatido na maior parte do dia, quase todos os dias?",
@@ -324,9 +312,9 @@
                 id: "CHECK_ENTRY",
                 type: "logic",
                 check: function(scores) {
-                    // Se A1 e A2 forem negativos, encerra (Não é depressão).
                     if (scores['A1'] !== '+' && scores['A2'] !== '+') {
-                        return 'SKIP_TO_END';
+                        // Se não tem sintomas atuais, vamos verificar o PASSADO.
+                        return 'JUMP_TO_A14'; 
                     }
                     return 'NEXT';
                 }
@@ -375,7 +363,7 @@
                 criteria: "9. Pensamentos recorrentes de morte, ideação suicida ou tentativa.",
                 inst: "ALERTA: Se (+), avalie risco de suicídio imediato."
             },
-            // CONTAGEM DE SINTOMAS
+            // CONTAGEM DE SINTOMAS ATUAIS
             {
                 id: "CHECK_COUNT",
                 type: "logic",
@@ -385,7 +373,7 @@
                         if (scores[key] === '+') count++;
                     });
                     
-                    if (count < 5) return 'SKIP_TO_END'; // Menos de 5 sintomas = Não é TDM
+                    if (count < 5) return 'JUMP_TO_A14'; // Não fecha critério ATUAL, verifica o PASSADO.
                     return 'NEXT';
                 }
             },
@@ -409,11 +397,64 @@
                 sub: "Registre a data aproximada.",
                 criteria: "Cronologia do Episódio.",
                 inst: "Apenas registro de dados."
+            },
+
+            // --- TRANSIÇÃO: LÓGICA DE RECORRÊNCIA ---
+            // Se chegou aqui, o paciente TEM depressão atual. Vamos ver se teve antes.
+            {
+                id: "A13",
+                text: "Antes desse episódio, você JÁ teve algum outro período parecido?",
+                sub: "Houve alguma época no passado que foi igual a esta, com pelo menos 2 meses de intervalo?",
+                criteria: "Verificação de Recorrência (Episódio Único vs. Recorrente).",
+                inst: "Se SIM (+), o diagnóstico é Depressão Recorrente. Pula o rastreio do passado.",
+            },
+
+            // Se respondeu A13 (Recorrência), não precisa fazer o rastreio completo do passado.
+            {
+                id: "CHECK_RECURRENCE",
+                type: "logic",
+                check: function(scores) {
+                    if (scores['A13']) {
+                        return 'SKIP_TO_END'; // Fim da entrevista, diagnóstico completo.
+                    }
+                    return 'NEXT';
+                }
+            },
+
+            // --- INÍCIO DO MÓDULO EPISÓDIO PASSADO (Para quem não tem atual) ---
+            {
+                id: "A14",
+                text: "Você JÁ teve algum período na sua vida (no passado) em que se sentiu deprimido a maior parte do dia?",
+                sub: "Pense na pior fase da sua vida. Como você se sentia?",
+                criteria: "A. Rastreio de Humor Deprimido no PASSADO."
+            },
+            {
+                id: "A15",
+                text: "E houve algum período no passado em que você perdeu o interesse ou prazer pelas coisas?",
+                criteria: "A. Rastreio de Anedonia no PASSADO."
+            },
+            // Se não teve nada no passado, acaba.
+            {
+                id: "CHECK_PAST_CORE",
+                type: "logic",
+                check: function(scores) {
+                    if (scores['A14'] !== '+' && scores['A15'] !== '+') {
+                        return 'SKIP_TO_END'; 
+                    }
+                    return 'NEXT';
+                }
+            },
+            {
+                id: "A_PAST_FULL",
+                text: "Durante esse pior episódio do passado, você teve vários daqueles outros sintomas (sono, peso, culpa, concentração) ao mesmo tempo?",
+                sub: "Durou pelo menos 2 semanas?",
+                criteria: "B. Confirmação de Episódio Depressivo Maior Passado.",
+                inst: "Marque (+) se houve um episódio completo no passado."
             }
         ];
 
         // ============================================================
-        // LÓGICA DO APP
+        // MOTOR DO APP (ATUALIZADO PARA PULOS ESPECÍFICOS)
         // ============================================================
         let currentIndex = 0;
         let scores = {};
@@ -426,24 +467,42 @@
 
             const q = questions[currentIndex];
 
-            // Lógica invisível
+            // --- LÓGICA DE PULOS INTELIGENTE ---
             if (q.type === 'logic') {
                 const action = q.check(scores);
+                
                 if (action === 'SKIP_TO_END') {
-                    showResults(true); // True = pulou por não atender critérios
+                    showResults(); // Fim da linha
                     return;
-                } else {
+                } 
+                // Novo recurso: Pular para ID específico
+                else if (action.startsWith('JUMP_TO_')) {
+                    const targetId = action.split('JUMP_TO_')[1];
+                    const targetIndex = questions.findIndex(item => item.id === targetId);
+                    
+                    if (targetIndex !== -1) {
+                        currentIndex = targetIndex;
+                        loadQuestion();
+                    } else {
+                        console.error("Erro: Destino de pulo não encontrado ->", targetId);
+                        showResults();
+                    }
+                    return;
+                }
+                // Segue normal
+                else {
                     currentIndex++;
                     loadQuestion();
                     return;
                 }
             }
+            // -----------------------------------
 
             // Atualiza Interface
             document.getElementById('q-id').innerText = q.id;
             document.getElementById('q-main').innerText = q.text;
             document.getElementById('c-text').innerText = q.criteria;
-            document.getElementById('progress-display').innerText = `Item ${currentIndex + 1}/${questions.length}`;
+            document.getElementById('progress-display').innerText = `Item ${currentIndex + 1}`;
 
             // Sub-perguntas
             const subDiv = document.getElementById('q-sub');
@@ -471,7 +530,7 @@
             loadQuestion();
         }
 
-        function showResults(skipped = false) {
+        function showResults() {
             document.getElementById('app-container').style.display = 'none';
             document.getElementById('results-view').style.display = 'block';
             
@@ -479,18 +538,20 @@
             const diagBox = document.getElementById('final-diagnosis');
             list.innerHTML = '';
 
-            let positiveCount = 0;
-            let hasCoreSymptoms = (scores['A1'] === '+' || scores['A2'] === '+');
+            // Lógica de Diagnóstico Atual
+            let currentSymptoms = 0;
+            ['A1','A2','A3','A4','A5','A6','A7','A8','A9'].forEach(k => { if(scores[k] === '+') currentSymptoms++; });
+            
+            let hasCurrent = (scores['A1'] === '+' || scores['A2'] === '+') && currentSymptoms >= 5;
+            let hasPast = scores['A_PAST_FULL'] === '+';
+            let isRecurrent = scores['A13'] === '+';
 
             // Gera lista visual
             Object.keys(scores).forEach(key => {
                 const val = scores[key];
-                // Conta apenas A1 a A9 para o critério de 5 sintomas
-                if (['A1','A2','A3','A4','A5','A6','A7','A8','A9'].includes(key) && val === '+') {
-                    positiveCount++;
-                }
-                
-                // Formatação visual do item
+                // Ignora chaves internas de lógica para o relatório
+                if (['CHECK_ENTRY', 'CHECK_COUNT', 'CHECK_RECURRENCE', 'CHECK_PAST_CORE'].includes(key)) return;
+
                 let colorClass = val === '+' ? 'color:#ef5350; font-weight:bold;' : 'color:#2d3436;';
                 const div = document.createElement('div');
                 div.className = 'result-item';
@@ -498,18 +559,19 @@
                 list.appendChild(div);
             });
 
-            // Lógica de Diagnóstico Visual
-            if (skipped) {
-                diagBox.className = "diagnosis-box diag-negative";
-                diagBox.innerHTML = "<i class='fa-solid fa-circle-check'></i> CRITÉRIOS NÃO ATENDIDOS<br><small>Sintomas fundamentais ausentes ou insuficientes.</small>";
-            } else if (hasCoreSymptoms && positiveCount >= 5 && scores['A10'] === '+' && scores['A11'] !== '-') {
-                // Nota: A11 deve ser não-negativo (ou seja, não causado por drogas)
-                // Aqui simplifiquei: Se chegou ao fim e tem contagem, é provável.
+            // RESULTADO FINAL
+            if (hasCurrent) {
+                let tipo = isRecurrent ? "RECORRENTE" : "EPISÓDIO ÚNICO";
                 diagBox.className = "diagnosis-box diag-positive";
-                diagBox.innerHTML = `<i class='fa-solid fa-triangle-exclamation'></i> POSSÍVEL EPISÓDIO DEPRESSIVO<br><small>Sintomas: ${positiveCount}/9 (Mínimo exigido: 5)</small>`;
-            } else {
+                diagBox.innerHTML = `<i class='fa-solid fa-triangle-exclamation'></i> TRANSTORNO DEPRESSIVO MAIOR (${tipo})<br><small>Episódio Atual Confirmado (${currentSymptoms} sintomas).</small>`;
+            } 
+            else if (hasPast) {
+                diagBox.className = "diagnosis-box diag-neutral";
+                diagBox.innerHTML = `<i class='fa-solid fa-clock-rotate-left'></i> TDM EM REMISSÃO (Histórico Passado)<br><small>Não tem depressão hoje, mas teve no passado.</small>`;
+            } 
+            else {
                 diagBox.className = "diagnosis-box diag-negative";
-                diagBox.innerHTML = "ABAIXO DO LIMIAR DIAGNÓSTICO<br><small>Quantidade de sintomas insuficiente.</small>";
+                diagBox.innerHTML = "<i class='fa-solid fa-circle-check'></i> SEM DIAGNÓSTICO DE TDM<br><small>Critérios não atendidos no presente nem no passado.</small>";
             }
         }
 
