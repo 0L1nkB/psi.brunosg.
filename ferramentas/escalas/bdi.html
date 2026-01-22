@@ -74,6 +74,9 @@
             background: white; border: 2px dashed var(--card-border);
             border-radius: 20px; padding: 25px; margin-bottom: 25px;
             box-shadow: 0 4px 0 rgba(0,0,0,0.05); transition: all 0.3s ease;
+            
+            /* CORREÇÃO PARA IMPRESSÃO: Evita quebra de página no meio do card */
+            break-inside: avoid; 
             page-break-inside: avoid;
         }
         .group-container:hover { border-color: var(--primary); transform: translateY(-2px); }
@@ -128,7 +131,10 @@
 
         /* --- IMPRESSÃO --- */
         @media print {
-            body { background: white; color: black; display: block; }
+            body { 
+                background: white; color: black; display: block; 
+                margin: 0; padding: 10px; /* Reduz margens para caber mais */
+            }
             header { border: none; box-shadow: none; padding: 0; margin-bottom: 20px; }
             header::before, .btn-print, .btn-back, .result-bar { display: none !important; }
             
@@ -136,10 +142,18 @@
             
             .group-container {
                 box-shadow: none; border: 1px solid #ccc;
-                padding: 10px; margin-bottom: 10px; transform: none !important;
+                padding: 10px; margin-bottom: 15px; 
+                transform: none !important;
+                
+                /* FORÇA NÃO QUEBRAR */
+                break-inside: avoid;
+                page-break-inside: avoid;
             }
 
-            .option-label { border: 1px solid #eee; background: white; color: black; padding: 5px; }
+            .option-label { 
+                border: 1px solid #eee; background: white; color: black; padding: 5px; 
+                margin-bottom: 5px; /* Reduz espaço entre opções */
+            }
             
             .option-label:has(input:checked) {
                 background-color: #ddd !important; color: black !important;
@@ -155,6 +169,7 @@
                 margin-bottom: 20px;
                 text-align: center;
                 background-color: #f8f9fa;
+                -webkit-print-color-adjust: exact;
             }
             #print-result-area h3 { margin: 0 0 5px 0; color: #2c3e50; }
             #print-result-area p { margin: 0; font-size: 1.2rem; }
@@ -235,6 +250,7 @@
             item.options.forEach((optText, optIndex) => {
                 const label = document.createElement('label');
                 label.className = 'option-label';
+                
                 label.innerHTML = `
                     <input type="radio" name="g${index}" value="${optIndex}" onchange="calcScore()">
                     ${optText}
@@ -256,19 +272,16 @@
                 count++;
             }
 
-            // Atualiza Barra Flutuante
             const bar = document.getElementById('resultBar');
             const span = document.getElementById('scoreVal');
+            const printScore = document.getElementById('print-score');
+            const printClass = document.getElementById('print-class');
             
             if (count > 0) {
                 bar.style.display = 'block';
                 span.innerText = total;
+                printScore.innerText = total; // Atualiza para impressão
             }
-
-            // Atualiza Área de Impressão com Classificação
-            const printScore = document.getElementById('print-score');
-            const printClass = document.getElementById('print-class');
-            printScore.innerText = total;
 
             let classification = "";
             if (total <= 13) classification = "Mínima";
