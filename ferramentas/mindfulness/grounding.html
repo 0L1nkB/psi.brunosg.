@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aterramento 5-4-3-2-1 | Mindfulness</title>
+    <style>
+        /* --- Variáveis e Reset --- */
+        :root {
+            --primary: #a5b4fc; /* Indigo claro */
+            --accent: #6366f1; /* Indigo forte */
+            --bg-deep: #1e1b4b;
+            --text-main: #ffffff;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            background: var(--bg-deep);
+            background-image: 
+                radial-gradient(circle at 10% 20%, #312e81 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, #4338ca 0%, transparent 50%);
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* --- O Card de Vidro (Container Principal) --- */
+        .glass-card {
+            width: 90%;
+            max-width: 400px;
+            min-height: 500px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px 30px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            transition: transform 0.3s ease;
+        }
+
+        /* --- Elementos de Conteúdo --- */
+        .step-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: floatIcon 3s ease-in-out infinite;
+        }
+
+        .instruction {
+            font-size: 1.5rem;
+            text-align: center;
+            font-weight: 300;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .sub-instruction {
+            font-size: 0.9rem;
+            text-align: center;
+            opacity: 0.7;
+            margin-bottom: 40px;
+        }
+
+        /* --- O Contador Interativo (As Bolinhas) --- */
+        .counter-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .dot {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .dot.active {
+            background-color: var(--primary);
+            box-shadow: 0 0 15px var(--primary);
+            transform: scale(1.2);
+        }
+
+        /* --- O Botão de Ação --- */
+        .action-btn {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 10px 20px -10px var(--accent);
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+        }
+
+        .action-btn:active {
+            transform: scale(0.95);
+        }
+
+        .action-btn:hover {
+            box-shadow: 0 15px 30px -10px var(--accent);
+            transform: translateY(-2px);
+        }
+
+        /* --- Animações --- */
+        @keyframes floatIcon {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Classes para transição de entrada/saída dos passos */
+        .fade-enter {
+            animation: slideIn 0.5s forwards cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* --- Tela de Finalização --- */
+        .hidden { display: none; }
+        
+        .success-checkmark {
+            color: #4ade80; /* Verde suave */
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="glass-card" id="card">
+        </div>
+
+    <script>
+        // Configuração dos Passos
+        const steps = [
+            {
+                count: 5,
+                type: 'vision',
+                icon: '👀',
+                title: 'Olhe ao redor',
+                desc: 'Encontre 5 coisas que você consegue ver agora.',
+                btnText: 'Encontrei uma'
+            },
+            {
+                count: 4,
+                type: 'touch',
+                icon: '✋',
+                title: 'Sinta o toque',
+                desc: 'Toque em 4 coisas ou sinta 4 sensações no corpo.',
+                btnText: 'Senti uma'
+            },
+            {
+                count: 3,
+                type: 'sound',
+                icon: '👂',
+                title: 'Escute com atenção',
+                desc: 'Identifique 3 sons diferentes ao seu redor.',
+                btnText: 'Ouvi um'
+            },
+            {
+                count: 2,
+                type: 'smell',
+                icon: '👃',
+                title: 'Sinta o cheiro',
+                desc: 'Perceba 2 cheiros (ou imagine seus aromas favoritos).',
+                btnText: 'Senti um'
+            },
+            {
+                count: 1,
+                type: 'taste',
+                icon: '👅',
+                title: 'Sinta o gosto',
+                desc: 'Sinta 1 gosto na boca ou tome um gole de água.',
+                btnText: 'Pronto'
+            }
+        ];
+
+        let currentStepIndex = 0;
+        let currentCount = 0;
+
+        const card = document.getElementById('card');
+
+        // Função principal que desenha a tela
+        function renderStep() {
+            // Se acabaram os passos, mostra tela final
+            if (currentStepIndex >= steps.length) {
+                renderSuccess();
+                return;
+            }
+
+            const step = steps[currentStepIndex];
+            
+            // Reinicia contagem interna
+            currentCount = 0;
+
+            // HTML template
+            let dotsHtml = '';
+            for(let i=0; i<step.count; i++) {
+                dotsHtml += `<div class="dot" id="dot-${i}"></div>`;
+            }
+
+            const htmlContent = `
+                <div class="content-wrapper fade-enter" style="width:100%; display:flex; flex-direction:column; align-items:center;">
+                    <div class="step-icon">${step.icon}</div>
+                    <div class="instruction">${step.title}</div>
+                    <div class="sub-instruction">${step.desc}</div>
+                    
+                    <div class="counter-container">
+                        ${dotsHtml}
+                    </div>
+
+                    <button class="action-btn" onclick="handleProgress()">${step.btnText}</button>
+                </div>
+            `;
+
+            card.innerHTML = htmlContent;
+        }
+
+        // Lógica de progresso (clique no botão)
+        window.handleProgress = function() {
+            const step = steps[currentStepIndex];
+            
+            // Ativa a bolinha correspondente (animação visual)
+            const dot = document.getElementById(`dot-${currentCount}`);
+            if(dot) dot.classList.add('active');
+
+            currentCount++;
+
+            // Feedback tátil (vibração) se disponível no celular
+            if (navigator.vibrate) navigator.vibrate(50);
+
+            // Se completou a contagem do passo atual
+            if (currentCount >= step.count) {
+                // Pequeno delay para o usuário ver a última bolinha acender
+                setTimeout(() => {
+                    currentStepIndex++;
+                    renderStep();
+                }, 400);
+            }
+        }
+
+        function renderSuccess() {
+            card.innerHTML = `
+                <div class="content-wrapper fade-enter" style="width:100%; display:flex; flex-direction:column; align-items:center;">
+                    <div class="success-checkmark">✨</div>
+                    <div class="instruction">Você está aqui.</div>
+                    <div class="sub-instruction">Sinta-se aterrado no momento presente.</div>
+                    <button class="action-btn" onclick="location.reload()">Recomeçar</button>
+                </div>
+            `;
+        }
+
+        // Inicia
+        renderStep();
+
+    </script>
+</body>
+</html>
