@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitor de Crenças | Bruno de Souza</title>
+    
+    <script>
+        if(localStorage.getItem('logado') !== 'sim') {
+            window.location.href = "../../login.html";
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #f0f8ff;
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --accent: #00cec9;
+            --text: #2d3436;
+            --chart-bar: #74b9ff;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0; padding: 20px;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* HEADER */
+        header {
+            text-align: center; margin-bottom: 30px;
+            background: white; padding: 20px 40px;
+            border-radius: 20px; border: 3px dashed #636e72;
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            max-width: 900px; width: 100%; position: relative;
+        }
+
+        header h1 { color: #2d3436; margin: 0; font-weight: 800; font-size: 1.8rem; }
+        .subtitle { color: #636e72; font-weight: 600; margin-top: 5px; }
+
+        .header-actions {
+            position: absolute; top: 20px; right: 20px; display: flex; gap: 10px;
+        }
+
+        .btn-header {
+            background: none; border: 2px solid #2d3436; color: #2d3436;
+            padding: 8px 15px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: 0.3s;
+            font-size: 0.9rem;
+        }
+        .btn-header:hover { background: #2d3436; color: white; }
+        .btn-clear { border-color: #d63031; color: #d63031; }
+        .btn-clear:hover { background: #d63031; color: white; }
+
+        /* CRENÇA CENTRAL */
+        .belief-input-section {
+            width: 100%; max-width: 900px;
+            background: white; padding: 25px; border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 30px;
+            border-left: 5px solid var(--primary);
+        }
+
+        .belief-input-section label { display: block; font-weight: 800; font-size: 1.1rem; margin-bottom: 10px; color: var(--primary); }
+        .belief-input-section input {
+            width: 100%; padding: 15px; border: 2px solid #dfe6e9; border-radius: 10px;
+            font-size: 1.1rem; font-family: inherit; transition: 0.3s;
+        }
+        .belief-input-section input:focus { border-color: var(--primary); outline: none; }
+
+        /* CONTROLES */
+        .entry-controls {
+            width: 100%; max-width: 900px;
+            background: white; padding: 25px; border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 30px;
+            display: grid; grid-template-columns: 100px 1fr 1fr auto; gap: 15px;
+            align-items: end;
+        }
+
+        .control-group label { display: block; font-size: 0.85rem; font-weight: bold; margin-bottom: 5px; color: #636e72; }
+        
+        select, input[type="text"] {
+            width: 100%; padding: 12px; border: 2px solid #dfe6e9; border-radius: 10px;
+            font-family: inherit; font-size: 0.95rem; background: #fdfdfd;
+        }
+
+        .range-container { display: flex; align-items: center; gap: 10px; background: #f8f9fa; padding: 5px 10px; border-radius: 10px; border: 2px solid #dfe6e9; height: 46px; }
+        input[type=range] { flex: 1; accent-color: var(--accent); cursor: pointer; }
+        .range-val { font-weight: 800; color: var(--accent); min-width: 40px; text-align: right; }
+
+        .btn-add {
+            background: var(--primary); color: white; border: none; padding: 12px 25px;
+            border-radius: 10px; font-weight: bold; cursor: pointer; height: 46px;
+            transition: 0.3s; box-shadow: 0 4px 10px rgba(108, 92, 231, 0.3);
+        }
+        .btn-add:hover { transform: translateY(-2px); background: var(--secondary); }
+
+        /* GRÁFICO */
+        .chart-container {
+            width: 100%; max-width: 900px;
+            background: white; padding: 20px; border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 30px;
+            display: none; 
+        }
+        .chart-title { text-align: center; font-weight: bold; margin-bottom: 15px; color: #636e72; }
+        
+        .bars-wrapper {
+            display: flex; align-items: flex-end; gap: 5px; height: 150px;
+            border-bottom: 2px solid #dfe6e9; padding-bottom: 5px; overflow-x: auto;
+        }
+        
+        .bar-group {
+            display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+            width: 40px; flex-shrink: 0; height: 100%; position: relative;
+        }
+        
+        .bar {
+            width: 100%; background: var(--chart-bar); border-radius: 5px 5px 0 0;
+            transition: height 0.5s ease; position: relative;
+        }
+        .bar:hover::after {
+            content: attr(data-percent) "%";
+            position: absolute; top: -25px; left: 50%; transform: translateX(-50%);
+            background: #2d3436; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem;
+        }
+        .bar-label { font-size: 0.7rem; color: #636e72; margin-top: 5px; transform: rotate(-45deg); height: 20px; }
+
+        /* LISTA */
+        .log-list { width: 100%; max-width: 900px; display: flex; flex-direction: column; gap: 15px; }
+
+        .log-card {
+            background: white; border-radius: 15px; padding: 15px 20px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center;
+            border-left: 5px solid; animation: slideIn 0.3s ease;
+        }
+        
+        .log-info { display: flex; gap: 20px; align-items: center; }
+        .log-time { font-weight: 800; color: #636e72; background: #f1f2f6; padding: 5px 10px; border-radius: 8px; }
+        .log-activity { font-weight: 600; color: var(--text); }
+        .log-percent { font-size: 1.2rem; font-weight: 800; }
+        
+        .btn-delete { color: #d63031; background: none; border: none; cursor: pointer; opacity: 0.5; transition: 0.2s; }
+        .btn-delete:hover { opacity: 1; transform: scale(1.2); }
+
+        .status-msg {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: #2d3436; color: white; padding: 10px 20px; border-radius: 30px;
+            font-size: 0.9rem; opacity: 0; transition: opacity 0.5s; pointer-events: none;
+        }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* IMPRESSÃO */
+        #print-table, #print-header { display: none; }
+
+        @media (max-width: 768px) {
+            .entry-controls { grid-template-columns: 1fr; gap: 10px; }
+            .btn-add { width: 100%; }
+            .log-info { flex-direction: column; align-items: flex-start; gap: 5px; }
+            .header-actions { position: relative; top: 0; right: 0; margin-top: 15px; justify-content: center; }
+            .btn-print span { display: none; }
+        }
+
+        @media print {
+            body { background: white; padding: 0; }
+            header button, .entry-controls, .chart-container, .log-list, .btn-back-home, .header-actions { display: none !important; }
+            header { border: none; box-shadow: none; margin-bottom: 10px; padding: 0; }
+            
+            #print-header { display: block; margin-bottom: 20px; font-size: 1.2rem; font-weight: bold; color: var(--primary); }
+            
+            #print-table {
+                display: table; width: 100%; border-collapse: collapse; font-family: sans-serif; margin-top: 20px;
+            }
+            #print-table th { background: #eee; padding: 8px; text-align: left; border: 1px solid #ccc; font-size: 0.9rem; }
+            #print-table td { padding: 8px; border: 1px solid #ccc; font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header data-aos="fade-down">
+        <h1>Monitor de Crenças</h1>
+        <div class="subtitle">Registro do grau de crença em um pensamento</div>
+        
+        <div class="header-actions">
+            <button class="btn-header btn-clear" onclick="clearData()"><i class="fa-solid fa-trash-can"></i> Limpar Tudo</button>
+            <button class="btn-header btn-print" onclick="window.print()"><i class="fa-solid fa-print"></i> <span>Imprimir</span></button>
+        </div>
+    </header>
+
+    <div class="belief-input-section" data-aos="fade-up">
+        <label><i class="fa-solid fa-brain"></i> Crença Negativa (O pensamento que estamos testando)</label>
+        <input type="text" id="mainBelief" placeholder='Ex: "Não sou capaz de fazer nada direito..."' oninput="saveMainBelief()">
+    </div>
+
+    <div class="entry-controls" data-aos="fade-up">
+        <div class="control-group">
+            <label>Hora</label>
+            <select id="timeSelect">
+                </select>
+        </div>
+        <div class="control-group">
+            <label>Atividade</label>
+            <input type="text" id="activityInput" placeholder="O que estava fazendo?">
+        </div>
+        <div class="control-group">
+            <label>Grau de Crença (0-100%)</label>
+            <div class="range-container">
+                <input type="range" id="percentInput" min="0" max="100" value="50" oninput="document.getElementById('rangeVal').innerText = this.value + '%'">
+                <span class="range-val" id="rangeVal">50%</span>
+            </div>
+        </div>
+        <button class="btn-add" onclick="addEntry()">Adicionar</button>
+    </div>
+
+    <div class="chart-container" id="chartContainer">
+        <div class="chart-title">Variação da Crença ao Longo do Dia</div>
+        <div class="bars-wrapper" id="barsWrapper">
+            </div>
+    </div>
+
+    <div class="log-list" id="logList">
+        </div>
+
+    <div id="statusMsg" class="status-msg">Salvo automaticamente</div>
+
+    <div id="print-header">Crença Monitorada: <span id="printBeliefText"></span></div>
+    <table id="print-table">
+        <thead>
+            <tr>
+                <th width="20%">Hora</th>
+                <th width="60%">Atividade</th>
+                <th width="20%">% Crença</th>
+            </tr>
+        </thead>
+        <tbody id="printBody">
+            </tbody>
+    </table>
+
+    <center>
+        <a href="../listaferramentas.html" style="display:inline-block; margin-top:40px; color:#b2bec3; text-decoration:none; font-weight:600;" class="btn-back-home">
+            <i class="fa-solid fa-arrow-left"></i> Voltar
+        </a>
+    </center>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        // 1. CARREGAMENTO INICIAL
+        const timeSelect = document.getElementById('timeSelect');
+        const hours = [
+            "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", 
+            "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", 
+            "20:00", "21:00", "22:00", "23:00", "00:00", "01:00"
+        ];
+        
+        hours.forEach(h => {
+            const opt = document.createElement('option');
+            opt.value = h;
+            opt.innerText = h;
+            timeSelect.appendChild(opt);
+        });
+
+        // Recupera dados do localStorage
+        let entries = JSON.parse(localStorage.getItem('tcc_entries')) || [];
+        const savedBelief = localStorage.getItem('tcc_main_belief');
+        
+        if (savedBelief) {
+            document.getElementById('mainBelief').value = savedBelief;
+        }
+
+        // Renderiza se tiver dados salvos
+        if (entries.length > 0) {
+            renderAll();
+        }
+
+        // 2. FUNÇÕES DE DADOS E SALVAMENTO
+        function saveMainBelief() {
+            const val = document.getElementById('mainBelief').value;
+            localStorage.setItem('tcc_main_belief', val);
+            showStatus("Salvo");
+        }
+
+        function saveData() {
+            localStorage.setItem('tcc_entries', JSON.stringify(entries));
+            showStatus("Dados Salvos");
+        }
+
+        function showStatus(msg) {
+            const el = document.getElementById('statusMsg');
+            el.innerText = msg;
+            el.style.opacity = 1;
+            setTimeout(() => { el.style.opacity = 0; }, 2000);
+        }
+
+        function clearData() {
+            if(confirm("Tem certeza que deseja apagar todos os registros deste exercício?")) {
+                localStorage.removeItem('tcc_entries');
+                localStorage.removeItem('tcc_main_belief');
+                entries = [];
+                document.getElementById('mainBelief').value = "";
+                renderAll();
+                showStatus("Dados Limpos");
+            }
+        }
+
+        // 3. LÓGICA DA FERRAMENTA
+        function addEntry() {
+            const time = document.getElementById('timeSelect').value;
+            const activity = document.getElementById('activityInput').value.trim();
+            const percent = document.getElementById('percentInput').value;
+
+            if (!activity) {
+                alert("Digite a atividade!");
+                return;
+            }
+
+            entries.push({ time, activity, percent: parseInt(percent) });
+            entries.sort((a, b) => hours.indexOf(a.time) - hours.indexOf(b.time));
+
+            saveData();
+            renderAll();
+            
+            // Reset input
+            document.getElementById('activityInput').value = '';
+            document.getElementById('percentInput').value = 50;
+            document.getElementById('rangeVal').innerText = '50%';
+        }
+
+        function getColor(percent) {
+            if (percent < 30) return '#00b894'; // Verde (Crença fraca = Bom)
+            if (percent < 70) return '#fdcb6e'; // Amarelo
+            return '#d63031'; // Vermelho (Crença forte)
+        }
+
+        function renderAll() {
+            const logList = document.getElementById('logList');
+            const barsWrapper = document.getElementById('barsWrapper');
+            const printBody = document.getElementById('printBody');
+            const chartContainer = document.getElementById('chartContainer');
+            const printBeliefText = document.getElementById('printBeliefText');
+
+            logList.innerHTML = '';
+            barsWrapper.innerHTML = '';
+            printBody.innerHTML = '';
+            
+            // Atualiza texto de impressão
+            printBeliefText.innerText = document.getElementById('mainBelief').value || "(Não definida)";
+
+            if (entries.length > 0) {
+                chartContainer.style.display = 'block';
+            } else {
+                chartContainer.style.display = 'none';
+            }
+
+            entries.forEach((entry, index) => {
+                const color = getColor(entry.percent);
+
+                // 1. Renderiza Card na Lista
+                const card = document.createElement('div');
+                card.className = 'log-card';
+                card.style.borderLeftColor = color;
+                card.innerHTML = `
+                    <div class="log-info">
+                        <div class="log-time">${entry.time}</div>
+                        <div class="log-activity">${entry.activity}</div>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:15px;">
+                        <div class="log-percent" style="color:${color}">${entry.percent}%</div>
+                        <button class="btn-delete" onclick="removeEntry(${index})"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                `;
+                logList.appendChild(card);
+
+                // 2. Renderiza Barra no Gráfico
+                const barGroup = document.createElement('div');
+                barGroup.className = 'bar-group';
+                barGroup.innerHTML = `
+                    <div class="bar" style="height:${Math.max(entry.percent, 5)}%; background:${color}" data-percent="${entry.percent}"></div>
+                    <div class="bar-label">${entry.time}</div>
+                `;
+                barsWrapper.appendChild(barGroup);
+
+                // 3. Renderiza Linha na Tabela de Impressão
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${entry.time}</td>
+                    <td>${entry.activity}</td>
+                    <td>${entry.percent}%</td>
+                `;
+                printBody.appendChild(row);
+            });
+        }
+
+        function removeEntry(index) {
+            if(confirm("Remover este registro?")) {
+                entries.splice(index, 1);
+                saveData();
+                renderAll();
+            }
+        }
+    </script>
+
+</body>
+</html>
