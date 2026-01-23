@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auditor de Evidências | Bruno de Souza</title>
+    
+    <script>
+        if(localStorage.getItem('logado') !== 'sim') {
+            window.location.href = "../../login.html";
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #f0f8ff;
+            --primary: #6c5ce7;
+            --grade-a: #00b894; /* Verde */
+            --grade-c: #fdcb6e; /* Amarelo */
+            --grade-f: #d63031; /* Vermelho */
+            --text: #2d3436;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0; padding: 20px;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* --- HEADER --- */
+        header {
+            text-align: center; margin-bottom: 30px;
+            background: white; padding: 20px 40px;
+            border-radius: 20px; border: 3px dashed #636e72;
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            max-width: 900px; width: 100%; position: relative;
+        }
+
+        header h1 { color: #2d3436; margin: 0; font-weight: 800; font-size: 1.8rem; }
+        .subtitle { color: #636e72; font-weight: 600; margin-top: 5px; }
+
+        .btn-print {
+            position: absolute; top: 20px; right: 20px;
+            background: none; border: 2px solid #2d3436; color: #2d3436;
+            padding: 8px 15px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+        .btn-print:hover { background: #2d3436; color: white; }
+
+        /* --- PENSAMENTO CENTRAL --- */
+        .thought-card {
+            width: 100%; max-width: 900px;
+            background: white; padding: 25px; border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 30px;
+            border-left: 5px solid var(--primary);
+        }
+        .thought-card label { display: block; font-weight: 800; font-size: 1.1rem; margin-bottom: 10px; color: var(--primary); }
+        .thought-card input {
+            width: 100%; padding: 15px; border: 2px solid #dfe6e9; border-radius: 10px;
+            font-size: 1.1rem; font-family: inherit; transition: 0.3s; outline: none;
+        }
+        .thought-card input:focus { border-color: var(--primary); }
+
+        /* --- ÁREA DE AUDITORIA --- */
+        .audit-panel {
+            width: 100%; max-width: 900px;
+            background: white; padding: 30px; border-radius: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 40px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 30px;
+        }
+
+        .input-group { display: flex; flex-direction: column; gap: 10px; }
+        label { font-weight: 800; color: #636e72; font-size: 0.95rem; }
+
+        textarea {
+            width: 100%; padding: 12px; border: 2px solid #dfe6e9; border-radius: 12px;
+            font-family: inherit; font-size: 1rem; resize: vertical; min-height: 100px;
+            transition: 0.3s; background: #fdfdfd;
+        }
+        textarea:focus { border-color: var(--primary); outline: none; background: white; }
+
+        /* Chips de Problemas */
+        .problem-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+        .chip {
+            background: #f1f2f6; padding: 6px 12px; border-radius: 20px; font-size: 0.8rem;
+            font-weight: 600; color: #636e72; cursor: pointer; transition: 0.2s; border: 1px solid transparent;
+        }
+        .chip:hover { background: #dfe6e9; color: #2d3436; }
+        .chip.active { background: #ffeaa7; color: #d35400; border-color: #d35400; }
+
+        /* Seletor de Nota */
+        .grade-selector { display: flex; justify-content: space-between; gap: 5px; margin-top: 5px; }
+        .grade-btn {
+            flex: 1; padding: 10px; border: 2px solid #eee; border-radius: 10px;
+            background: white; font-weight: 800; cursor: pointer; transition: 0.2s;
+            color: #b2bec3;
+        }
+        .grade-btn:hover { transform: translateY(-2px); }
+        
+        /* Cores das Notas */
+        .grade-btn[data-val="A"] { border-color: var(--grade-a); color: var(--grade-a); }
+        .grade-btn[data-val="A"].selected { background: var(--grade-a); color: white; }
+        
+        .grade-btn[data-val="B"] { border-color: #0984e3; color: #0984e3; }
+        .grade-btn[data-val="B"].selected { background: #0984e3; color: white; }
+
+        .grade-btn[data-val="C"] { border-color: var(--grade-c); color: var(--grade-c); }
+        .grade-btn[data-val="C"].selected { background: var(--grade-c); color: white; }
+
+        .grade-btn[data-val="D"] { border-color: #e17055; color: #e17055; }
+        .grade-btn[data-val="D"].selected { background: #e17055; color: white; }
+
+        .grade-btn[data-val="F"] { border-color: var(--grade-f); color: var(--grade-f); }
+        .grade-btn[data-val="F"].selected { background: var(--grade-f); color: white; }
+
+        .btn-add {
+            grid-column: span 2; padding: 15px; border-radius: 50px; border: none;
+            background: #2d3436; color: white; font-weight: 800; font-size: 1.1rem;
+            cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px;
+        }
+        .btn-add:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+
+        /* --- LISTA DE REGISTROS --- */
+        .evidence-list {
+            width: 100%; max-width: 900px; display: flex; flex-direction: column; gap: 20px;
+        }
+
+        .evidence-card {
+            background: white; border-radius: 20px; padding: 20px 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); position: relative;
+            display: grid; grid-template-columns: 1fr 1fr auto; gap: 20px; align-items: center;
+            border-right: 10px solid; animation: slideUp 0.4s ease;
+        }
+
+        .ev-title { font-size: 0.8rem; text-transform: uppercase; color: #b2bec3; font-weight: 800; margin-bottom: 5px; }
+        .ev-text { font-size: 1rem; color: #2d3436; font-weight: 600; }
+        
+        .grade-badge {
+            width: 50px; height: 50px; border-radius: 50%; color: white;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; font-weight: 800;
+        }
+
+        .btn-delete {
+            background: none; border: none; color: #b2bec3; cursor: pointer; font-size: 1.1rem;
+        }
+        .btn-delete:hover { color: #d63031; }
+
+        /* --- CONCLUSÃO --- */
+        .conclusion-section {
+            width: 100%; max-width: 900px;
+            background: #fff; padding: 25px; border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-top: 30px; margin-bottom: 50px;
+        }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Responsividade */
+        @media (max-width: 800px) {
+            .audit-panel { grid-template-columns: 1fr; }
+            .btn-add { grid-column: span 1; }
+            .evidence-card { grid-template-columns: 1fr; border-right: none; border-bottom: 10px solid; }
+            .grade-badge { position: absolute; top: 20px; right: 20px; }
+            .btn-print span { display: none; }
+        }
+
+        /* --- IMPRESSÃO --- */
+        #print-table { display: none; }
+
+        @media print {
+            body { background: white; padding: 0; }
+            header button, .btn-back-home, .audit-panel, .btn-delete { display: none !important; }
+            header { border: none; box-shadow: none; margin-bottom: 20px; }
+            
+            #print-table {
+                display: table; width: 100%; border-collapse: collapse; font-family: sans-serif; margin: 20px 0;
+            }
+            #print-table th { background: #eee; padding: 10px; border: 1px solid #ccc; font-weight: bold; font-size: 0.9rem; }
+            #print-table td { padding: 10px; border: 1px solid #ccc; vertical-align: top; font-size: 0.9rem; }
+            
+            .thought-card, .conclusion-section { border: 1px solid #ccc; box-shadow: none; }
+            .evidence-list { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <header data-aos="fade-down">
+        <button class="btn-print" onclick="window.print()"><i class="fa-solid fa-print"></i> <span>Imprimir</span></button>
+        <h1>Exame da Qualidade</h1>
+        <div class="subtitle">Auditor de Evidências</div>
+    </header>
+
+    <div class="thought-card" data-aos="fade-up">
+        <label><i class="fa-solid fa-brain"></i> Pensamento Automático em Análise:</label>
+        <input type="text" id="mainThought" placeholder='Ex: "Eu sou um fracasso completo."'>
+    </div>
+
+    <div class="audit-panel" data-aos="fade-up">
+        
+        <div class="input-group">
+            <label><i class="fa-solid fa-quote-left"></i> A Evidência Apresentada</label>
+            <textarea id="evidenceInput" placeholder="Ex: Eu cometi um erro no relatório ontem."></textarea>
+        </div>
+
+        <div class="input-group">
+            <label><i class="fa-solid fa-bug"></i> Problemas de Qualidade</label>
+            <div class="problem-chips">
+                <div class="chip" onclick="toggleChip(this)">Raciocínio Emocional</div>
+                <div class="chip" onclick="toggleChip(this)">Irrelevante</div>
+                <div class="chip" onclick="toggleChip(this)">Generalização</div>
+                <div class="chip" onclick="toggleChip(this)">Leitura da Mente</div>
+                <div class="chip" onclick="toggleChip(this)">Filtro Negativo</div>
+                <div class="chip" onclick="toggleChip(this)">Fato Isolado</div>
+            </div>
+            <textarea id="problemInput" placeholder="Descreva por que essa evidência é fraca ou falha..." style="min-height: 60px;"></textarea>
+            
+            <label style="margin-top:10px;"><i class="fa-solid fa-graduation-cap"></i> Nota da Evidência</label>
+            <div class="grade-selector">
+                <button class="grade-btn" data-val="A" onclick="selectGrade('A')">A</button>
+                <button class="grade-btn" data-val="B" onclick="selectGrade('B')">B</button>
+                <button class="grade-btn" data-val="C" onclick="selectGrade('C')">C</button>
+                <button class="grade-btn" data-val="D" onclick="selectGrade('D')">D</button>
+                <button class="grade-btn" data-val="F" onclick="selectGrade('F')">F</button>
+            </div>
+        </div>
+
+        <button class="btn-add" onclick="addRecord()">
+            <i class="fa-solid fa-gavel"></i> Auditar Evidência
+        </button>
+    </div>
+
+    <div class="evidence-list" id="evidenceList">
+        <div class="evidence-card" style="border-right-color: #d63031;">
+            <div>
+                <div class="ev-title">Evidência</div>
+                <div class="ev-text">"Sinto que sou um fracasso."</div>
+            </div>
+            <div>
+                <div class="ev-title">Problemas</div>
+                <div class="ev-text">Raciocínio Emocional. Sentir não torna isso um fato.</div>
+            </div>
+            <div class="grade-badge" style="background: #d63031;">F</div>
+            <button class="btn-delete" onclick="deleteRecord(this)"><i class="fa-solid fa-trash"></i></button>
+        </div>
+    </div>
+
+    <div class="conclusion-section">
+        <label style="display:block; margin-bottom:10px; font-weight:bold; color:#2d3436;">Conclusão Final:</label>
+        <textarea id="conclusion" placeholder="Olhando para a qualidade (notas) das suas evidências, o que você conclui sobre o pensamento inicial?" style="width:100%; border:none; resize:none; font-family:inherit; font-size:1rem; min-height:80px;"></textarea>
+    </div>
+
+    <table id="print-table">
+        <thead>
+            <tr>
+                <th width="35%">Evidência</th>
+                <th width="50%">Problemas de Qualidade / Relevância</th>
+                <th width="15%">Nota</th>
+            </tr>
+        </thead>
+        <tbody id="printBody">
+            </tbody>
+    </table>
+
+    <center>
+        <a href="../listaferramentas.html" style="display:inline-block; margin-top:20px; color:#b2bec3; text-decoration:none; font-weight:600;" class="btn-back-home">
+            <i class="fa-solid fa-arrow-left"></i> Voltar
+        </a>
+    </center>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        let selectedGrade = null;
+
+        function toggleChip(chip) {
+            chip.classList.toggle('active');
+            updateProblemText();
+        }
+
+        function updateProblemText() {
+            const activeChips = Array.from(document.querySelectorAll('.chip.active')).map(c => c.innerText);
+            const textArea = document.getElementById('problemInput');
+            
+            // Simplesmente adiciona os chips ao texto se estiver vazio ou anexa
+            if (activeChips.length > 0) {
+                // Lógica simples: Se o usuário ainda não digitou muito, preenche com os chips
+                // Se já digitou, não sobrescreve, mas o usuário vê os chips ativos
+            }
+        }
+
+        function selectGrade(val) {
+            selectedGrade = val;
+            document.querySelectorAll('.grade-btn').forEach(btn => {
+                btn.classList.remove('selected');
+                if(btn.dataset.val === val) btn.classList.add('selected');
+            });
+        }
+
+        function getGradeColor(grade) {
+            const colors = { 'A': '#00b894', 'B': '#0984e3', 'C': '#fdcb6e', 'D': '#e17055', 'F': '#d63031' };
+            return colors[grade] || '#ccc';
+        }
+
+        function addRecord() {
+            const ev = document.getElementById('evidenceInput').value.trim();
+            let prob = document.getElementById('problemInput').value.trim();
+            
+            // Adiciona chips ao texto do problema se não estiverem lá
+            const activeChips = Array.from(document.querySelectorAll('.chip.active')).map(c => c.innerText);
+            if (activeChips.length > 0) {
+                const chipsText = "[" + activeChips.join(', ') + "] ";
+                if (!prob.includes(chipsText)) prob = chipsText + prob;
+            }
+
+            if (!ev || !selectedGrade) {
+                alert("Digite a evidência e dê uma nota!");
+                return;
+            }
+
+            const list = document.getElementById('evidenceList');
+            const div = document.createElement('div');
+            div.className = 'evidence-card';
+            div.style.borderRightColor = getGradeColor(selectedGrade);
+            
+            div.innerHTML = `
+                <div>
+                    <div class="ev-title">Evidência</div>
+                    <div class="ev-text ev-content">${ev}</div>
+                </div>
+                <div>
+                    <div class="ev-title">Problemas</div>
+                    <div class="ev-text ev-prob">${prob || "Nenhum problema identificado."}</div>
+                </div>
+                <div class="grade-badge ev-grade" style="background: ${getGradeColor(selectedGrade)};">${selectedGrade}</div>
+                <button class="btn-delete" onclick="deleteRecord(this)"><i class="fa-solid fa-trash"></i></button>
+            `;
+
+            list.prepend(div);
+            
+            // Reset
+            document.getElementById('evidenceInput').value = '';
+            document.getElementById('problemInput').value = '';
+            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.grade-btn').forEach(b => b.classList.remove('selected'));
+            selectedGrade = null;
+
+            updatePrintTable();
+        }
+
+        function deleteRecord(btn) {
+            if(confirm("Remover?")) {
+                btn.closest('.evidence-card').remove();
+                updatePrintTable();
+            }
+        }
+
+        function updatePrintTable() {
+            const tbody = document.getElementById('printBody');
+            tbody.innerHTML = '';
+            
+            const cards = document.querySelectorAll('.evidence-card');
+            
+            cards.forEach(card => {
+                const e = card.querySelector('.ev-content').innerText;
+                const p = card.querySelector('.ev-prob').innerText;
+                const g = card.querySelector('.ev-grade').innerText;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${e}</td><td>${p}</td><td style="text-align:center; font-weight:bold;">${g}</td>`;
+                tbody.appendChild(tr);
+            });
+        }
+
+        updatePrintTable(); // Carrega exemplo
+    </script>
+
+</body>
+</html>
