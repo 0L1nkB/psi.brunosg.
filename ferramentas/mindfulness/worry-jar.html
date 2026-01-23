@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pote de Preocupações | Mindfulness</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&display=swap" rel="stylesheet">
+    
     <style>
         body {
             margin: 0; padding: 0;
@@ -51,11 +53,9 @@
 
         .hint { margin-top: 15px; color: rgba(255,255,255,0.3); font-size: 0.9rem; text-align: center;}
 
-        /* Botão de Esvaziar (Canto Inferior) */
         .clear-btn {
             position: absolute; bottom: 20px; right: 20px;
-            background: rgba(239, 68, 68, 0.2); /* Vermelho translúcido */
-            color: #fca5a5;
+            background: rgba(239, 68, 68, 0.2); color: #fca5a5;
             border: 1px solid rgba(239, 68, 68, 0.4);
             padding: 10px 20px; border-radius: 20px;
             font-size: 0.9rem; cursor: pointer;
@@ -68,6 +68,74 @@
             position: absolute; top: 20px; left: 20px;
             color: rgba(255,255,255,0.4); text-decoration: none; z-index: 20;
         }
+
+        /* --- O POP-UP ESTILO POST-IT (NOVO) --- */
+        
+        .overlay-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); /* Fundo escuro */
+            backdrop-filter: blur(4px);
+            z-index: 100;
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; /* Escondido por padrão */
+            transition: opacity 0.3s ease;
+        }
+
+        .overlay-modal.open {
+            opacity: 1; pointer-events: all;
+        }
+
+        .post-it {
+            background: #fef08a; /* Amarelo Post-it */
+            /* Gradiente sutil para parecer papel */
+            background: linear-gradient(135deg, #fef9c3 0%, #fef08a 100%);
+            width: 300px; min-height: 300px;
+            padding: 40px 30px;
+            box-shadow: 10px 10px 30px rgba(0,0,0,0.5);
+            position: relative;
+            transform: scale(0) rotate(-10deg); /* Começa pequeno e torto */
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Efeito Bouncy */
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+        }
+
+        /* Quando abre, fica tamanho normal */
+        .overlay-modal.open .post-it {
+            transform: scale(1) rotate(2deg); /* Levemente torto para realismo */
+        }
+
+        /* O Adesivo (Tape/Sticker) em cima */
+        .sticker {
+            position: absolute; top: -15px; left: 50%;
+            transform: translateX(-50%);
+            width: 120px; height: 35px;
+            background: rgba(255,255,255,0.4);
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            backdrop-filter: blur(2px);
+            /* Parece fita adesiva */
+            transform: translateX(-50%) rotate(-2deg);
+        }
+
+        .note-text {
+            font-family: 'Kalam', cursive; /* Fonte de mão */
+            font-size: 1.8rem;
+            color: #4b5563;
+            text-align: center;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .note-close {
+            margin-top: 30px;
+            font-family: 'Segoe UI', sans-serif;
+            background: transparent; border: 2px solid #ca8a04;
+            color: #ca8a04; font-weight: bold;
+            padding: 8px 20px; border-radius: 20px;
+            cursor: pointer; transition: 0.2s;
+            font-size: 0.9rem;
+        }
+        .note-close:hover { background: #ca8a04; color: #fff; }
+
     </style>
 </head>
 <body>
@@ -80,15 +148,23 @@
             <input type="text" id="worryInput" placeholder="Deposite sua preocupação aqui..." autocomplete="off">
             <button id="addBtn">+</button>
         </div>
-        <div class="hint">Suas preocupações ficam salvas apenas neste dispositivo.<br>Elas estarão aqui quando você voltar.</div>
+        <div class="hint">Clique nas bolinhas para ler o que guardou.<br>Suas preocupações ficam salvas apenas neste dispositivo.</div>
     </div>
 
-    <button class="clear-btn" onclick="clearJar()">🗑️ Esvaziar Pote (Liberar tudo)</button>
+    <button class="clear-btn" onclick="clearJar()">🗑️ Esvaziar Pote</button>
+
+    <div class="overlay-modal" id="noteModal" onclick="closeNote()">
+        <div class="post-it" onclick="event.stopPropagation()"> <div class="sticker"></div>
+            <div class="note-text" id="noteContent">Texto aqui...</div>
+            <button class="note-close" onclick="closeNote()">Fechar e Guardar</button>
+        </div>
+    </div>
 
     <script>
-        // --- 1. CONFIGURAÇÃO FÍSICA (MATTER.JS) ---
+        // --- 1. CONFIGURAÇÃO FÍSICA ---
         const Engine = Matter.Engine, Render = Matter.Render, Runner = Matter.Runner,
-              Bodies = Matter.Bodies, Composite = Matter.Composite;
+              Bodies = Matter.Bodies, Composite = Matter.Composite, 
+              Query = Matter.Query; // Importante para detectar o clique
 
         const engine = Engine.create();
         const world = engine.world;
@@ -101,30 +177,62 @@
             options: { width: width, height: height, wireframes: false, background: 'transparent' }
         });
 
-        // Paredes do Pote
         const glassStyle = { fillStyle: '#ffffff', opacity: 0.08 };
         const wallOptions = { isStatic: true, render: glassStyle };
         
         Composite.add(world, [
-            Bodies.rectangle(width * 0.25, height * 0.6, 60, height * 0.7, { ...wallOptions, angle: 0.2 }), // Esq
-            Bodies.rectangle(width * 0.75, height * 0.6, 60, height * 0.7, { ...wallOptions, angle: -0.2 }), // Dir
-            Bodies.rectangle(width * 0.5, height * 0.95, width * 0.6, 60, wallOptions) // Chão
+            Bodies.rectangle(width * 0.25, height * 0.6, 60, height * 0.7, { ...wallOptions, angle: 0.2 }),
+            Bodies.rectangle(width * 0.75, height * 0.6, 60, height * 0.7, { ...wallOptions, angle: -0.2 }),
+            Bodies.rectangle(width * 0.5, height * 0.95, width * 0.6, 60, wallOptions)
         ]);
 
         Render.run(render);
         Runner.run(Runner.create(), engine);
 
-        // --- 2. LÓGICA DE DADOS (LOCALSTORAGE) ---
+        // --- 2. LÓGICA DE INTERAÇÃO (CLIQUE NA BOLINHA) ---
         
+        // Adiciona um "ouvinte" de clique no canvas inteiro
+        render.canvas.addEventListener('click', function(event) {
+            // Pega a posição do mouse
+            const mousePosition = { x: event.clientX, y: event.clientY };
+            
+            // Pega todos os corpos do mundo
+            const bodies = Composite.allBodies(world);
+            
+            // Verifica se o mouse está em cima de algum corpo
+            const clickedBodies = Query.point(bodies, mousePosition);
+
+            if (clickedBodies.length > 0) {
+                const body = clickedBodies[0];
+                
+                // Só abre se for uma 'worryStone' (ignorando as paredes)
+                if (body.label === 'worryStone' && body.worryText) {
+                    openNote(body.worryText);
+                }
+            }
+        });
+
+        // --- 3. FUNÇÕES DO MODAL POST-IT ---
+        const modal = document.getElementById('noteModal');
+        const noteContent = document.getElementById('noteContent');
+
+        function openNote(text) {
+            noteContent.innerText = text;
+            modal.classList.add('open');
+        }
+
+        function closeNote() {
+            modal.classList.remove('open');
+        }
+
+        // --- 4. LÓGICA DE DADOS ---
         const STORAGE_KEY = 'minhas_preocupacoes_v1';
         const colors = ['#818cf8', '#c084fc', '#38bdf8', '#fb7185', '#2dd4bf'];
 
-        // Função que APENAS cria o corpo físico na tela
         function spawnStone(text) {
             const radius = Math.min(Math.max(text.length * 1.5, 20), 55);
-            // Posição X aleatória para não empilhar tudo numa torre só ao carregar
             const xPos = (width * 0.35) + Math.random() * (width * 0.3);
-            const yPos = -Math.random() * 500 - 50; // Começa bem alto com atraso aleatório
+            const yPos = -Math.random() * 500 - 50;
 
             const stone = Bodies.circle(xPos, yPos, radius, {
                 restitution: 0.4, friction: 0.5,
@@ -132,29 +240,25 @@
                     fillStyle: colors[Math.floor(Math.random() * colors.length)],
                     strokeStyle: '#fff', lineWidth: 2
                 },
-                label: 'worryStone' // Etiqueta para identificarmos depois se precisar
+                label: 'worryStone'
             });
+
+            // *** O TRUQUE: Guardamos o texto DENTRO do objeto físico ***
+            stone.worryText = text;
 
             Composite.add(world, stone);
         }
 
-        // Função chamada ao clicar no botão "+"
         function handleAdd() {
             const input = document.getElementById('worryInput');
             const text = input.value.trim();
             if (!text) return;
-
-            // 1. Cria visualmente
             spawnStone(text);
-
-            // 2. Salva no navegador
             saveToStorage(text);
-
             input.value = '';
         }
 
         function saveToStorage(newText) {
-            // Pega o que já existe ou cria array vazio
             let stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
             stored.push(newText);
             localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
@@ -162,36 +266,23 @@
 
         function loadFromStorage() {
             let stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-            // Para cada texto salvo, cria uma pedra
-            stored.forEach(text => {
-                spawnStone(text);
-            });
+            stored.forEach(text => spawnStone(text));
         }
 
-        // Função Terapêutica: Limpar tudo
         window.clearJar = function() {
-            if(confirm("Tem certeza? Isso simboliza 'deixar ir' todas as preocupações guardadas aqui.")) {
-                // 1. Limpa banco de dados
+            if(confirm("Tem certeza? Isso apaga tudo.")) {
                 localStorage.removeItem(STORAGE_KEY);
-                
-                // 2. Remove pedras do mundo físico
-                // Filtra apenas os corpos que não são estáticos (paredes)
                 const stones = Composite.allBodies(world).filter(body => !body.isStatic);
                 Composite.remove(world, stones);
             }
         }
 
-        // --- 3. EVENTOS ---
-        
         document.getElementById('addBtn').addEventListener('click', handleAdd);
         document.getElementById('worryInput').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') handleAdd();
         });
 
-        // Quando a página carrega, recupera os dados antigos
         window.onload = loadFromStorage;
-
-        // Ajuste de tela
         window.addEventListener('resize', () => location.reload());
 
     </script>
