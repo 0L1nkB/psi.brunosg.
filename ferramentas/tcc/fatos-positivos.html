@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outros Fatos Possíveis | Bruno de Souza</title>
+    
+    <script>
+        if(localStorage.getItem('logado') !== 'sim') {
+            window.location.href = "../../login.html";
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #f0f8ff;
+            --neg-color: #d63031; /* Vermelho - Negativo */
+            --pos-color: #00b894; /* Verde - Positivo */
+            --text: #2d3436;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0; padding: 20px;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* --- HEADER --- */
+        header {
+            text-align: center; margin-bottom: 30px;
+            background: white; padding: 20px 40px;
+            border-radius: 20px; border: 3px dashed #636e72;
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            max-width: 900px; width: 100%; position: relative;
+        }
+
+        header h1 { color: #2d3436; margin: 0; font-weight: 800; font-size: 1.8rem; }
+        .subtitle { color: #636e72; font-weight: 600; margin-top: 5px; }
+
+        .btn-print {
+            position: absolute; top: 20px; right: 20px;
+            background: none; border: 2px solid #2d3436; color: #2d3436;
+            padding: 8px 15px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+        .btn-print:hover { background: #2d3436; color: white; }
+
+        /* --- ÁREA DE TRABALHO --- */
+        .workspace {
+            width: 100%; max-width: 900px;
+            display: flex; flex-direction: column; gap: 30px;
+        }
+
+        /* --- INPUTS --- */
+        .input-card {
+            background: white; border-radius: 25px; padding: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            display: grid; grid-template-columns: 1fr 1fr; gap: 30px;
+            align-items: start;
+        }
+
+        .side {
+            display: flex; flex-direction: column; gap: 15px;
+        }
+
+        .label-neg { color: var(--neg-color); font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; }
+        .label-pos { color: var(--pos-color); font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; }
+
+        textarea {
+            width: 100%; padding: 15px; border: 2px solid #dfe6e9;
+            border-radius: 15px; font-family: inherit; font-size: 1rem;
+            resize: vertical; min-height: 100px; transition: 0.3s; background: #fdfdfd;
+        }
+        
+        .input-neg:focus { border-color: var(--neg-color); outline: none; background: #fff5f5; }
+        .input-pos:focus { border-color: var(--pos-color); outline: none; background: #f0fff4; }
+
+        .btn-add {
+            grid-column: span 2;
+            padding: 15px; border-radius: 50px; border: none;
+            background: #2d3436; color: white; font-weight: 800; font-size: 1.1rem;
+            cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px;
+        }
+        .btn-add:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+
+        /* --- LISTA DE REGISTROS --- */
+        .balance-list {
+            display: flex; flex-direction: column; gap: 20px;
+        }
+
+        .balance-card {
+            background: white; border-radius: 20px; overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            display: grid; grid-template-columns: 1fr 1fr;
+            border: 1px solid #eee; position: relative;
+            animation: slideIn 0.4s ease;
+        }
+
+        .balance-neg {
+            padding: 20px; background: #fff5f5; border-right: 2px dashed #ffcccc;
+            color: #636e72; font-style: italic;
+        }
+        
+        .balance-pos {
+            padding: 20px; background: #f0fff4; color: #2d3436; font-weight: 600;
+        }
+
+        .btn-delete {
+            position: absolute; top: 10px; right: 10px;
+            background: white; border: 1px solid #ddd; color: #d63031;
+            width: 30px; height: 30px; border-radius: 50%; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; transition: 0.2s;
+        }
+        .balance-card:hover .btn-delete { opacity: 1; }
+        .btn-delete:hover { background: #d63031; color: white; }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .input-card { grid-template-columns: 1fr; gap: 20px; }
+            .btn-add { grid-column: span 1; }
+            .balance-card { grid-template-columns: 1fr; }
+            .balance-neg { border-right: none; border-bottom: 2px dashed #ffcccc; }
+            .btn-print span { display: none; }
+        }
+
+        /* --- IMPRESSÃO --- */
+        #print-table { display: none; }
+
+        @media print {
+            body { background: white; padding: 0; }
+            header button, .workspace, .btn-back-home { display: none !important; }
+            header { border: none; box-shadow: none; margin-bottom: 20px; }
+            
+            #print-table {
+                display: table; width: 100%; border-collapse: collapse; font-family: sans-serif; margin-top: 20px;
+            }
+            #print-table th { background: #eee; padding: 10px; text-align: left; border: 1px solid #ccc; font-weight: bold; }
+            #print-table td { padding: 10px; border: 1px solid #ccc; vertical-align: top; }
+        }
+    </style>
+</head>
+<body>
+
+    <header data-aos="fade-down">
+        <button class="btn-print" onclick="window.print()"><i class="fa-solid fa-print"></i> <span>Imprimir</span></button>
+        <h1>Outros Fatos Possíveis</h1>
+        <div class="subtitle">Desafiando o Pensamento Negativo</div>
+    </header>
+
+    <div class="workspace" data-aos="fade-up">
+        
+        <div class="input-card">
+            <div class="side">
+                <div class="label-neg"><i class="fa-solid fa-thumbs-down"></i> Pensamento Negativo</div>
+                <textarea id="inputNeg" class="input-neg" placeholder='Ex: "Eu não estou preparado para a prova..."'></textarea>
+            </div>
+            
+            <div class="side">
+                <div class="label-pos"><i class="fa-solid fa-scale-balanced"></i> Fatos Positivos (Defesa)</div>
+                <textarea id="inputPos" class="input-pos" placeholder='Ex: "Eu estudei bastante, sou inteligente, já passei em outras..."'></textarea>
+            </div>
+
+            <button class="btn-add" onclick="addEntry()">
+                <i class="fa-solid fa-plus-circle"></i> Equilibrar a Balança
+            </button>
+        </div>
+
+        <div class="balance-list" id="balanceList">
+            <div class="balance-card">
+                <div class="balance-neg">"Não vou conseguir entregar o trabalho a tempo."</div>
+                <div class="balance-pos">"Já fiz trabalhos mais difíceis em menos tempo. Tenho um plano de ação e posso pedir ajuda se precisar."</div>
+                <button class="btn-delete" onclick="deleteEntry(this)"><i class="fa-solid fa-trash"></i></button>
+            </div>
+        </div>
+
+    </div>
+
+    <table id="print-table">
+        <thead>
+            <tr>
+                <th style="width: 40%">Pensamento Negativo</th>
+                <th style="width: 60%">Fatos Positivos Possíveis</th>
+            </tr>
+        </thead>
+        <tbody id="print-body">
+            </tbody>
+    </table>
+
+    <center>
+        <a href="../listaferramentas.html" style="display:inline-block; margin-top:40px; color:#b2bec3; text-decoration:none; font-weight:600;" class="btn-back-home">
+            <i class="fa-solid fa-arrow-left"></i> Voltar
+        </a>
+    </center>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        function addEntry() {
+            const neg = document.getElementById('inputNeg').value.trim();
+            const pos = document.getElementById('inputPos').value.trim();
+
+            if (!neg || !pos) {
+                alert("Por favor, preencha os dois lados da balança!");
+                return;
+            }
+
+            const list = document.getElementById('balanceList');
+            const div = document.createElement('div');
+            div.className = 'balance-card';
+            
+            div.innerHTML = `
+                <div class="balance-neg">"${neg}"</div>
+                <div class="balance-pos">"${pos}"</div>
+                <button class="btn-delete" onclick="deleteEntry(this)"><i class="fa-solid fa-trash"></i></button>
+            `;
+
+            list.prepend(div); // Adiciona no topo
+            
+            // Limpa inputs
+            document.getElementById('inputNeg').value = '';
+            document.getElementById('inputPos').value = '';
+
+            updatePrintTable();
+        }
+
+        function deleteEntry(btn) {
+            if(confirm("Remover este registro?")) {
+                btn.closest('.balance-card').remove();
+                updatePrintTable();
+            }
+        }
+
+        // Atualiza tabela oculta para impressão
+        function updatePrintTable() {
+            const tbody = document.getElementById('print-body');
+            tbody.innerHTML = '';
+            
+            // Pega todos os cards visíveis
+            const cards = document.querySelectorAll('.balance-card');
+            
+            cards.forEach(card => {
+                const n = card.querySelector('.balance-neg').innerText.replace(/"/g, '');
+                const p = card.querySelector('.balance-pos').innerText.replace(/"/g, '');
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${n}</td><td>${p}</td>`;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Carrega o exemplo inicial
+        updatePrintTable();
+    </script>
+
+</body>
+</html>
