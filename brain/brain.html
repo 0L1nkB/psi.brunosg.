@@ -391,26 +391,24 @@
 
         function loadBrainParts() {
             const loader = new OBJLoader(loaderManager);
+            
+            // Variável para calcular o centro de TODO o cérebro junto
+            const box = new THREE.Box3(); 
 
             fileList.forEach(filename => {
-                // Caminho relativo da pasta 'brain'
                 loader.load('./' + filename, function (object) {
                     
-                    // Limpeza do nome: FJ1735_..._Left_gyrus.obj -> Left gyrus
                     const rawName = filename.replace('.obj', '');
                     const nameParts = rawName.split('_');
-                    // Pega tudo depois do terceiro underscore (ignora os códigos)
-                    // Se não tiver underscores suficientes, usa o nome do arquivo limpo
                     let cleanName = nameParts.length > 3 ? nameParts.slice(3).join(' ') : rawName;
                     
                     object.traverse(function (child) {
                         if (child.isMesh) {
-                            // Gera cor única baseada no nome
                             const color = getColorFromString(cleanName);
                             
                             child.material = new THREE.MeshStandardMaterial({
                                 color: color,
-                                roughness: 0.3, // Um pouco brilhante (úmido)
+                                roughness: 0.4, 
                                 metalness: 0.1,
                                 transparent: true,
                                 opacity: 1,
@@ -420,12 +418,48 @@
                             child.userData = { 
                                 originalColor: color,
                                 name: cleanName,
-                                code: rawName // Guarda o código original para referência
+                                code: rawName 
                             };
                         }
                     });
 
+                    // --- MÁGICA DE POSICIONAMENTO ---
+                    // Adiciona o objeto
                     brainGroup.add(object);
+                    
+                    // Expande a caixa imaginária para incluir essa nova peça
+                    box.expandByObject(object);
+
+                    // Se for o último arquivo, centraliza tudo
+                    // (Isso é uma aproximação, pois o loading é assíncrono, 
+                    // mas funciona bem o suficiente visualmente)
+                    const center = box.getCenter(new THREE.Vector3());
+                    const size = box.getSize(new THREE.Vector3());
+
+                    // Move o grupo inteiro para anular o deslocamento original
+                    brainGroup.position.x = -center.x;
+                    brainGroup.position.y = -center.y;
+                    brainGroup.position.z = -center.z;
+
+                    // Ajusta a câmera baseada no tamanho do cérebro
+                    // Se o cérebro for gigante, afasta a câmera. Se for pequeno, aproxima.
+                    const maxDim = Math.max(size.x, size.y, size.z);
+                    if (maxDim > 0 && camera.position.z === 150) { // Só ajusta se ainda não ajustou
+                        const fov = camera.fov * (Math.PI / 180);
+                        let cameraZ = Math.abs(maxDim / 2 * Math.tan(fov * 2));
+                        cameraZ *= 3; // Multiplicador de zoom (quanto maior, mais longe)
+                        
+                        camera.position.set(0, maxDim / 2, cameraZ);
+                        camera.lookAt(0, 0, 0);
+                        controls.maxDistance = cameraZ * 5;
+                        controls.target.set(0, 0, 0);
+                        controls.update();
+                    }
+                },
+                undefined,
+                function (error) {
+                     console.error("ERRO CRÍTICO AO CARREGAR: " + filename);
+                     console.error("Verifique se o nome do arquivo está exato e se ele está na mesma pasta do HTML.");
                 });
             });
         }
