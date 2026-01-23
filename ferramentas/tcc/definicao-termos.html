@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Definição de Termos | Bruno de Souza</title>
+    
+    <script>
+        if(localStorage.getItem('logado') !== 'sim') {
+            window.location.href = "../../login.html";
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #f0f8ff;
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --accent: #fdcb6e;
+            --text: #2d3436;
+            --card-bg: #ffffff;
+            --tag-bg: #e0e7ff;
+            --tag-text: #4338ca;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0; padding: 20px;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* --- HEADER --- */
+        header {
+            text-align: center; margin-bottom: 30px;
+            background: white; padding: 20px 40px;
+            border-radius: 20px; border: 3px dashed #636e72;
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            max-width: 900px; width: 100%; position: relative;
+        }
+
+        header h1 { color: #2d3436; margin: 0; font-weight: 800; font-size: 1.8rem; }
+        .subtitle { color: #636e72; font-weight: 600; margin-top: 5px; }
+
+        .btn-print {
+            position: absolute; top: 20px; right: 20px;
+            background: none; border: 2px solid #2d3436; color: #2d3436;
+            padding: 8px 15px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+        .btn-print:hover { background: #2d3436; color: white; }
+
+        /* --- PENSAMENTO PRINCIPAL --- */
+        .main-input-card {
+            width: 100%; max-width: 1000px;
+            background: white; padding: 25px; border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 30px;
+            border-left: 5px solid var(--primary);
+        }
+        
+        .main-input-card label { display: block; font-weight: 800; font-size: 1.1rem; margin-bottom: 10px; color: var(--primary); }
+        .main-input-card input {
+            width: 100%; padding: 15px; border: 2px solid #dfe6e9; border-radius: 10px;
+            font-size: 1.1rem; font-family: inherit; transition: 0.3s;
+        }
+        .main-input-card input:focus { border-color: var(--primary); outline: none; }
+
+        /* --- LAYOUT DE DUAS COLUNAS --- */
+        .workspace {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 30px;
+            width: 100%; max-width: 1000px;
+        }
+
+        /* Coluna 1: Editor */
+        .editor-card {
+            background: white; padding: 30px; border-radius: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); height: fit-content;
+            position: sticky; top: 20px;
+        }
+
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; font-weight: 800; margin-bottom: 8px; color: #636e72; font-size: 0.9rem; }
+        
+        input[type="text"], textarea {
+            width: 100%; padding: 12px; border: 2px solid #dfe6e9; border-radius: 10px;
+            font-family: inherit; font-size: 0.95rem; background: #fdfdfd; transition: 0.3s;
+        }
+        textarea { resize: vertical; min-height: 80px; }
+        input:focus, textarea:focus { border-color: var(--primary); outline: none; background: white; }
+
+        /* Chips de Ajuda */
+        .chips-container {
+            display: flex; flex-wrap: wrap; gap: 8px; margin-top: 5px; margin-bottom: 10px;
+        }
+        .chip {
+            background: #f1f2f6; color: #636e72; padding: 5px 12px; border-radius: 20px;
+            font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: 0.2s; border: 1px solid transparent;
+        }
+        .chip:hover { background: var(--tag-bg); color: var(--tag-text); border-color: var(--tag-text); }
+        .chip i { margin-right: 5px; }
+
+        .btn-add {
+            width: 100%; padding: 15px; background: #2d3436; color: white;
+            border: none; border-radius: 50px; font-weight: 800; font-size: 1rem;
+            cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px;
+        }
+        .btn-add:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+
+        /* Coluna 2: Dicionário (Lista) */
+        .dictionary-list {
+            display: flex; flex-direction: column; gap: 20px;
+        }
+
+        .dict-entry {
+            background: white; border-radius: 20px; padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); position: relative;
+            border-top: 5px solid var(--accent); animation: slideIn 0.4s ease;
+        }
+
+        .term-title { font-size: 1.4rem; font-weight: 800; color: #2d3436; margin-bottom: 10px; }
+        
+        .definition-box {
+            background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 15px;
+            font-style: italic; color: #555; position: relative;
+        }
+        .definition-box::before { content: '“'; font-size: 3rem; color: #e0e0e0; position: absolute; top: -10px; left: 10px; }
+
+        .problem-box {
+            border-top: 1px solid #eee; padding-top: 10px;
+        }
+        .problem-label { font-size: 0.75rem; text-transform: uppercase; font-weight: 800; color: #d63031; margin-bottom: 5px; }
+        .problem-text { font-size: 0.95rem; color: #2d3436; line-height: 1.4; }
+
+        .btn-delete {
+            position: absolute; top: 20px; right: 20px;
+            background: none; border: none; color: #d63031; cursor: pointer; opacity: 0.4; transition: 0.2s;
+        }
+        .btn-delete:hover { opacity: 1; transform: scale(1.2); }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+        /* Responsividade */
+        @media (max-width: 850px) {
+            .workspace { grid-template-columns: 1fr; }
+            .editor-card { position: static; }
+            .btn-print span { display: none; }
+        }
+
+        /* --- IMPRESSÃO --- */
+        #print-table, #print-header { display: none; }
+
+        @media print {
+            body { background: white; padding: 0; }
+            header button, .workspace, .btn-back-home { display: none !important; }
+            header { border: none; box-shadow: none; margin-bottom: 10px; padding: 0; }
+            
+            #print-header { display: block; margin-bottom: 20px; font-weight: bold; font-size: 1.2rem; }
+            
+            #print-table {
+                display: table; width: 100%; border-collapse: collapse; font-family: sans-serif; margin-top: 20px;
+            }
+            #print-table th { background: #eee; padding: 10px; text-align: left; border: 1px solid #ccc; font-weight: bold; }
+            #print-table td { padding: 10px; border: 1px solid #ccc; vertical-align: top; }
+        }
+    </style>
+</head>
+<body>
+
+    <header data-aos="fade-down">
+        <button class="btn-print" onclick="window.print()"><i class="fa-solid fa-print"></i> <span>Imprimir</span></button>
+        <h1>Definição de Termos</h1>
+        <div class="subtitle">O Dicionário Pessoal</div>
+    </header>
+
+    <div class="main-input-card" data-aos="fade-up">
+        <label><i class="fa-solid fa-cloud"></i> Pensamento Negativo (Vago):</label>
+        <input type="text" id="mainThought" placeholder='Ex: "Eu sou um fracassado completo."' oninput="updatePrintHeader()">
+    </div>
+
+    <div class="workspace">
+        
+        <div class="editor-card" data-aos="fade-right">
+            <h3 style="margin-top:0; color:var(--text)"><i class="fa-solid fa-pen-to-square"></i> Novo Termo</h3>
+            
+            <div class="input-group">
+                <label>Termo usado (Palavra-chave)</label>
+                <input type="text" id="termInput" placeholder='Ex: "Fracassado"'>
+            </div>
+
+            <div class="input-group">
+                <label>Como você define isso?</label>
+                <textarea id="defInput" placeholder="Ex: Alguém que nunca consegue nada e erra tudo..."></textarea>
+            </div>
+
+            <div class="input-group">
+                <label>Qual o problema dessa definição?</label>
+                <div class="chips-container">
+                    <div class="chip" onclick="addHint('Muito vago e impreciso')"><i class="fa-solid fa-plus"></i> Vago</div>
+                    <div class="chip" onclick="addHint('É um julgamento emocional, não um fato')"><i class="fa-solid fa-heart"></i> Emocional</div>
+                    <div class="chip" onclick="addHint('É absoluto (tudo ou nada), ninguém é 100% assim')"><i class="fa-solid fa-scale-unbalanced"></i> Absoluto</div>
+                    <div class="chip" onclick="addHint('Descreve um comportamento, não a pessoa inteira')"><i class="fa-solid fa-user"></i> Comportamento</div>
+                </div>
+                <textarea id="probInput" placeholder="Por que essa definição não é justa ou precisa?"></textarea>
+            </div>
+
+            <button class="btn-add" onclick="addEntry()">
+                <i class="fa-solid fa-book-medical"></i> Adicionar ao Dicionário
+            </button>
+        </div>
+
+        <div class="dictionary-list" id="dictList">
+            <div class="dict-entry">
+                <div class="term-title">"Fracassado"</div>
+                <div class="definition-box">
+                    "Alguém que nunca atinge seus objetivos e erra em tudo."
+                </div>
+                <div class="problem-box">
+                    <div class="problem-label"><i class="fa-solid fa-circle-exclamation"></i> O Problema:</div>
+                    <div class="problem-text">É uma definição absoluta. Eu já acertei muitas coisas na vida. Errar em uma tarefa não me torna um fracasso total como pessoa.</div>
+                </div>
+                <button class="btn-delete" onclick="deleteEntry(this)"><i class="fa-solid fa-trash"></i></button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div id="print-header">Pensamento: <span id="printThought"></span></div>
+    <table id="print-table">
+        <thead>
+            <tr>
+                <th width="20%">Termo</th>
+                <th width="40%">Definição</th>
+                <th width="40%">Problemas na Definição</th>
+            </tr>
+        </thead>
+        <tbody id="printBody">
+            </tbody>
+    </table>
+
+    <center>
+        <a href="../listaferramentas.html" style="display:inline-block; margin-top:40px; color:#b2bec3; text-decoration:none; font-weight:600;" class="btn-back-home">
+            <i class="fa-solid fa-arrow-left"></i> Voltar
+        </a>
+    </center>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        function addHint(text) {
+            const area = document.getElementById('probInput');
+            if(area.value) {
+                area.value += " " + text + ".";
+            } else {
+                area.value = text + ".";
+            }
+            area.focus();
+        }
+
+        function updatePrintHeader() {
+            document.getElementById('printThought').innerText = document.getElementById('mainThought').value;
+        }
+
+        function addEntry() {
+            const term = document.getElementById('termInput').value.trim();
+            const def = document.getElementById('defInput').value.trim();
+            const prob = document.getElementById('probInput').value.trim();
+
+            if (!term || !def || !prob) {
+                alert("Preencha todos os campos para adicionar ao dicionário!");
+                return;
+            }
+
+            const list = document.getElementById('dictList');
+            const div = document.createElement('div');
+            div.className = 'dict-entry';
+            
+            div.innerHTML = `
+                <div class="term-title">"${term}"</div>
+                <div class="definition-box">
+                    "${def}"
+                </div>
+                <div class="problem-box">
+                    <div class="problem-label"><i class="fa-solid fa-circle-exclamation"></i> O Problema:</div>
+                    <div class="problem-text">${prob}</div>
+                </div>
+                <button class="btn-delete" onclick="deleteEntry(this)"><i class="fa-solid fa-trash"></i></button>
+            `;
+
+            // Adiciona logo após o início (mantendo ordem cronológica inversa)
+            list.insertBefore(div, list.firstChild);
+            
+            // Reset
+            document.getElementById('termInput').value = '';
+            document.getElementById('defInput').value = '';
+            document.getElementById('probInput').value = '';
+
+            updatePrintTable();
+        }
+
+        function deleteEntry(btn) {
+            if(confirm("Apagar este termo?")) {
+                btn.closest('.dict-entry').remove();
+                updatePrintTable();
+            }
+        }
+
+        function updatePrintTable() {
+            const tbody = document.getElementById('printBody');
+            tbody.innerHTML = '';
+            
+            const cards = document.querySelectorAll('.dict-entry');
+            
+            cards.forEach(card => {
+                const t = card.querySelector('.term-title').innerText.replace(/"/g, '');
+                const d = card.querySelector('.definition-box').innerText.replace(/"/g, '');
+                const p = card.querySelector('.problem-text').innerText;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${t}</td><td>${d}</td><td>${p}</td>`;
+                tbody.appendChild(tr);
+            });
+        }
+
+        updatePrintTable(); // Carrega exemplo inicial
+    </script>
+
+</body>
+</html>
