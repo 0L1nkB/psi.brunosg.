@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advogado de Defesa | Bruno de Souza</title>
+    
+    <script>
+        if(localStorage.getItem('logado') !== 'sim') {
+            window.location.href = "../../login.html";
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #f0f8ff;
+            --primary: #2c3e50;       /* Azul Marinho (Jurídico) */
+            --accent: #f1c40f;        /* Dourado (Justiça) */
+            --text: #2d3436;
+            --card-bg: #ffffff;
+            --step-active: #3498db;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0; padding: 20px;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* --- HEADER --- */
+        header {
+            text-align: center; margin-bottom: 30px;
+            background: white; padding: 20px 40px;
+            border-radius: 20px; border: 3px solid var(--primary);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            max-width: 900px; width: 100%; position: relative;
+        }
+
+        header h1 { color: var(--primary); margin: 0; font-weight: 800; font-size: 1.8rem; text-transform: uppercase; letter-spacing: 1px; }
+        .subtitle { color: #7f8c8d; font-weight: 600; margin-top: 5px; }
+
+        .btn-print {
+            position: absolute; top: 20px; right: 20px;
+            background: none; border: 2px solid var(--primary); color: var(--primary);
+            padding: 8px 15px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+        .btn-print:hover { background: var(--primary); color: white; }
+
+        /* --- WIZARD PROGRESS --- */
+        .progress-container {
+            width: 100%; max-width: 900px; margin-bottom: 30px;
+            display: flex; justify-content: space-between; position: relative;
+        }
+        .progress-line {
+            position: absolute; top: 50%; left: 0; right: 0; height: 4px; background: #dfe6e9; z-index: 0; transform: translateY(-50%);
+        }
+        .progress-step {
+            width: 40px; height: 40px; background: #dfe6e9; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800; color: #636e72; z-index: 1; border: 3px solid var(--bg-color);
+            transition: 0.3s;
+        }
+        .progress-step.active { background: var(--primary); color: white; border-color: var(--accent); transform: scale(1.1); }
+        .progress-step.completed { background: var(--step-active); color: white; }
+
+        /* --- CONTEXTO FIXO (CRIME) --- */
+        .context-bar {
+            width: 100%; max-width: 900px;
+            background: #2c3e50; color: white; padding: 15px 25px;
+            border-radius: 15px; margin-bottom: 20px; display: none;
+            align-items: center; gap: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            animation: slideDown 0.5s ease;
+        }
+        .context-label { font-size: 0.8rem; text-transform: uppercase; color: var(--accent); font-weight: 800; }
+        .context-text { font-weight: 600; font-size: 1.1rem; font-style: italic; }
+
+        /* --- FORMS & CARDS --- */
+        .form-container {
+            width: 100%; max-width: 900px; position: relative;
+        }
+
+        .step-card {
+            background: white; border-radius: 25px; padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); display: none;
+            animation: fadeIn 0.5s ease; border-top: 5px solid var(--primary);
+        }
+        .step-card.active { display: block; }
+
+        .step-title {
+            font-size: 1.5rem; color: var(--primary); margin-bottom: 25px;
+            display: flex; align-items: center; gap: 15px; border-bottom: 2px solid #f1f2f6; padding-bottom: 15px;
+        }
+
+        .input-group { margin-bottom: 25px; }
+        label { display: block; font-weight: 800; font-size: 1rem; color: #2d3436; margin-bottom: 10px; }
+        
+        textarea {
+            width: 100%; padding: 15px; border: 2px solid #dfe6e9; border-radius: 12px;
+            font-family: inherit; font-size: 1rem; resize: vertical; min-height: 80px;
+            transition: 0.3s; background: #fdfdfd;
+        }
+        textarea:focus { border-color: var(--step-active); outline: none; background: white; }
+
+        /* Botões de Navegação */
+        .nav-buttons {
+            display: flex; justify-content: space-between; margin-top: 30px;
+        }
+        .btn-nav {
+            padding: 12px 30px; border-radius: 30px; font-weight: 800; border: none; cursor: pointer; transition: 0.3s; font-size: 1rem;
+        }
+        .btn-prev { background: #dfe6e9; color: #636e72; }
+        .btn-next { background: var(--primary); color: white; display: flex; align-items: center; gap: 10px; }
+        .btn-next:hover { background: #34495e; transform: translateY(-2px); }
+
+        /* Helper Chips */
+        .chips { display: flex; gap: 10px; margin-bottom: 10px; }
+        .chip {
+            background: #f1f2f6; padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; cursor: pointer; color: #636e72; font-weight: 600; border: 1px solid transparent;
+        }
+        .chip:hover { background: var(--accent); color: var(--primary); border-color: var(--primary); }
+
+        @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+
+        /* --- IMPRESSÃO --- */
+        #print-content { display: none; }
+
+        @media print {
+            body { background: white; padding: 0; }
+            header button, .progress-container, .nav-buttons, .chips, .btn-back-home { display: none !important; }
+            header { border: none; box-shadow: none; margin-bottom: 20px; padding: 0; }
+            
+            .form-container, .context-bar { display: none; } /* Esconde o wizard */
+            
+            #print-content { display: block; font-family: sans-serif; }
+            .print-section { margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 15px; }
+            .print-q { font-weight: bold; margin-bottom: 5px; color: #000; font-size: 0.9rem; }
+            .print-a { margin-bottom: 15px; color: #333; white-space: pre-wrap; font-size: 1rem; padding-left: 10px; border-left: 3px solid #eee; }
+            h2 { font-size: 1.2rem; border-bottom: 2px solid #000; margin-top: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header data-aos="fade-down">
+        <button class="btn-print" onclick="prepareAndPrint()"><i class="fa-solid fa-print"></i> <span>Imprimir Dossiê</span></button>
+        <h1>Advogado de Defesa</h1>
+        <div class="subtitle">Exercício de Auto-Defesa Racional</div>
+    </header>
+
+    <div class="progress-container">
+        <div class="progress-line"></div>
+        <div class="progress-step active" id="p1">1</div>
+        <div class="progress-step" id="p2">2</div>
+        <div class="progress-step" id="p3">3</div>
+        <div class="progress-step" id="p4">4</div>
+    </div>
+
+    <div class="context-bar" id="contextBar">
+        <div class="context-label">Acusação:</div>
+        <div class="context-text" id="contextText">...</div>
+    </div>
+
+    <div class="form-container">
+        
+        <div class="step-card active" id="step1">
+            <div class="step-title"><i class="fa-solid fa-gavel"></i> Fase 1: A Acusação</div>
+            
+            <div class="input-group">
+                <label>1. De que "crime" você está se acusando? (Pensamento Negativo)</label>
+                <textarea id="q1" placeholder='Ex: "Eu sou um fracasso por ter cometido aquele erro."' oninput="updateContext()"></textarea>
+            </div>
+            
+            <div class="input-group">
+                <label>2. Qual "lei" foi infringida? Existe evidência incontestável?</label>
+                <textarea id="q2" placeholder='Ex: "A lei de que eu nunca posso errar." Não existe evidência real, apenas minha autocritica.'></textarea>
+            </div>
+
+            <div class="nav-buttons" style="justify-content: flex-end;">
+                <button class="btn-nav btn-next" onclick="nextStep(2)">Investigar <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+        </div>
+
+        <div class="step-card" id="step2">
+            <div class="step-title"><i class="fa-solid fa-magnifying-glass"></i> Fase 2: A Investigação</div>
+            
+            <div class="input-group">
+                <label>3. Há outras explicações para o seu comportamento?</label>
+                <div class="chips">
+                    <span class="chip" onclick="addText('q3', 'Eu estava cansado.')">Cansaço</span>
+                    <span class="chip" onclick="addText('q3', 'Faltou informação.')">Falta de Info</span>
+                    <span class="chip" onclick="addText('q3', 'Estava sob pressão.')">Pressão</span>
+                </div>
+                <textarea id="q3"></textarea>
+            </div>
+
+            <div class="input-group">
+                <label>4. O acusado agiu de má-fé ou com malícia?</label>
+                <textarea id="q4" placeholder="Você teve a intenção de fazer algo ruim?"></textarea>
+            </div>
+
+            <div class="input-group">
+                <label>5. Uma pessoa "razoável" agiria da mesma forma nessa situação?</label>
+                <textarea id="q5" placeholder="Se fosse um amigo seu, ele teria feito algo parecido?"></textarea>
+            </div>
+
+            <div class="input-group">
+                <label>6. Existe mais alguém que compartilha a responsabilidade?</label>
+                <textarea id="q6" placeholder="Você é o único culpado ou havia fatores externos?"></textarea>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn-nav btn-prev" onclick="prevStep(1)">Voltar</button>
+                <button class="btn-nav btn-next" onclick="nextStep(3)">Ir para o Júri <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+        </div>
+
+        <div class="step-card" id="step3">
+            <div class="step-title"><i class="fa-solid fa-users"></i> Fase 3: O Teste do Júri</div>
+            
+            <div class="input-group">
+                <label>7. Essas regras rígidas se aplicariam a todos ou só a você?</label>
+                <textarea id="q7" placeholder="Você julgaria outra pessoa tão severamente?"></textarea>
+            </div>
+
+            <div class="input-group">
+                <label>8. Dado que o promotor (sua mente) prove o caso, o acusado é culpado de algo TERRÍVEL?</label>
+                <textarea id="q8" placeholder="É um erro imperdoável ou apenas um erro humano?"></textarea>
+            </div>
+
+            <div class="input-group">
+                <label>9. Um júri imparcial o condenaria?</label>
+                <textarea id="q9" placeholder="Pessoas neutras achariam que você merece punição?"></textarea>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn-nav btn-prev" onclick="prevStep(2)">Voltar</button>
+                <button class="btn-nav btn-next" onclick="nextStep(4)">Defesa Final <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+        </div>
+
+        <div class="step-card" id="step4">
+            <div class="step-title"><i class="fa-solid fa-scale-balanced"></i> Fase 4: Alegações Finais</div>
+            
+            <div class="input-group">
+                <label>10. Como você se defenderia diante do juiz?</label>
+                <textarea id="q10" placeholder="Resuma sua defesa aqui..."></textarea>
+            </div>
+
+            <div class="input-group">
+                <label>11. Qual é a qualidade do caso contra você?</label>
+                <textarea id="q11" placeholder="As provas são sólidas ou baseadas em sentimentos?"></textarea>
+            </div>
+
+            <div class="input-group" style="background:#e0f7fa; padding:15px; border-radius:10px; border:1px solid #00acc1;">
+                <label style="color:#006064;">12. CONCLUSÃO / NOVA PERSPECTIVA:</label>
+                <textarea id="q12" placeholder="Escreva aqui sua nova visão sobre o evento, mais justa e racional." style="background:white;"></textarea>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn-nav btn-prev" onclick="prevStep(3)">Voltar</button>
+                <button class="btn-nav btn-next" style="background:#27ae60;" onclick="prepareAndPrint()"><i class="fa-solid fa-print"></i> Concluir e Imprimir</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="print-content">
+        <h1>Dossiê de Defesa Pessoal</h1>
+        <p><strong>Advogado de Defesa:</strong> O Próprio Paciente</p>
+        <hr>
+
+        <div class="print-section">
+            <h2>1. A Acusação</h2>
+            <div class="print-q">Crime / Acusação:</div>
+            <div class="print-a" id="p-q1"></div>
+            <div class="print-q">Lei Infringida / Evidências:</div>
+            <div class="print-a" id="p-q2"></div>
+        </div>
+
+        <div class="print-section">
+            <h2>2. Investigação dos Fatos</h2>
+            <div class="print-q">Outras explicações:</div>
+            <div class="print-a" id="p-q3"></div>
+            <div class="print-q">Houve má-fé?</div>
+            <div class="print-a" id="p-q4"></div>
+            <div class="print-q">Conduta de pessoa razoável?</div>
+            <div class="print-a" id="p-q5"></div>
+            <div class="print-q">Responsabilidade compartilhada?</div>
+            <div class="print-a" id="p-q6"></div>
+        </div>
+
+        <div class="print-section">
+            <h2>3. O Veredito do Júri</h2>
+            <div class="print-q">Aplicação universal das regras:</div>
+            <div class="print-a" id="p-q7"></div>
+            <div class="print-q">Gravidade do erro:</div>
+            <div class="print-a" id="p-q8"></div>
+            <div class="print-q">Decisão do Júri:</div>
+            <div class="print-a" id="p-q9"></div>
+        </div>
+
+        <div class="print-section">
+            <h2>4. Alegações Finais</h2>
+            <div class="print-q">Defesa:</div>
+            <div class="print-a" id="p-q10"></div>
+            <div class="print-q">Qualidade do caso da acusação:</div>
+            <div class="print-a" id="p-q11"></div>
+            <div class="print-q">CONCLUSÃO FINAL:</div>
+            <div class="print-a" id="p-q12" style="font-weight:bold;"></div>
+        </div>
+    </div>
+
+    <center>
+        <a href="../listaferramentas.html" style="display:inline-block; margin-top:40px; color:#b2bec3; text-decoration:none; font-weight:600;" class="btn-back-home">
+            <i class="fa-solid fa-arrow-left"></i> Voltar
+        </a>
+    </center>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        function updateContext() {
+            const val = document.getElementById('q1').value;
+            const bar = document.getElementById('contextBar');
+            const txt = document.getElementById('contextText');
+            
+            if(val.length > 5) {
+                txt.innerText = val.substring(0, 60) + (val.length > 60 ? "..." : "");
+                bar.style.display = 'flex';
+            }
+        }
+
+        function showStep(step) {
+            // Oculta todos
+            document.querySelectorAll('.step-card').forEach(el => el.classList.remove('active'));
+            // Mostra atual
+            document.getElementById(`step${step}`).classList.add('active');
+            
+            // Atualiza barra
+            document.querySelectorAll('.progress-step').forEach((el, idx) => {
+                if (idx + 1 < step) {
+                    el.classList.add('completed');
+                    el.classList.remove('active');
+                } else if (idx + 1 === step) {
+                    el.classList.add('active');
+                    el.classList.remove('completed');
+                } else {
+                    el.classList.remove('active', 'completed');
+                }
+            });
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function nextStep(step) { showStep(step); }
+        function prevStep(step) { showStep(step); }
+
+        function addText(id, text) {
+            const area = document.getElementById(id);
+            area.value += (area.value ? " " : "") + text;
+        }
+
+        function prepareAndPrint() {
+            // Mapeia os 12 campos
+            for (let i = 1; i <= 12; i++) {
+                const inputVal = document.getElementById(`q${i}`).value;
+                document.getElementById(`p-q${i}`).innerText = inputVal || "Não respondido.";
+            }
+            window.print();
+        }
+    </script>
+
+</body>
+</html>
