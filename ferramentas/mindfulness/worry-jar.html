@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pote de Preocupações | Mindfulness</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+    <style>
+        body {
+            margin: 0; padding: 0;
+            background-color: #0f172a;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            overflow: hidden;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* --- Interface --- */
+        .input-container {
+            position: absolute; top: 5%; z-index: 10;
+            display: flex; flex-direction: column; align-items: center;
+            width: 90%; max-width: 500px;
+            pointer-events: none;
+        }
+
+        h1 {
+            color: #e2e8f0; font-weight: 300; letter-spacing: 2px;
+            margin-bottom: 20px; text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            pointer-events: auto;
+        }
+
+        .input-wrapper {
+            display: flex; width: 100%; gap: 10px; pointer-events: auto;
+        }
+
+        input {
+            flex: 1; padding: 15px 20px; border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px); color: white;
+            font-size: 1.1rem; outline: none; transition: all 0.3s;
+        }
+        input:focus { background: rgba(255, 255, 255, 0.2); border-color: #818cf8; }
+
+        button {
+            padding: 15px 25px; border-radius: 50%; border: none;
+            background: #818cf8; color: white; font-size: 1.2rem;
+            cursor: pointer; transition: transform 0.2s, background 0.2s;
+            box-shadow: 0 4px 15px rgba(129, 140, 248, 0.4);
+        }
+        button:hover { transform: scale(1.1); background: #6366f1; }
+
+        .hint { margin-top: 15px; color: rgba(255,255,255,0.3); font-size: 0.9rem; text-align: center;}
+
+        /* Botão de Esvaziar (Canto Inferior) */
+        .clear-btn {
+            position: absolute; bottom: 20px; right: 20px;
+            background: rgba(239, 68, 68, 0.2); /* Vermelho translúcido */
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            padding: 10px 20px; border-radius: 20px;
+            font-size: 0.9rem; cursor: pointer;
+            z-index: 20; backdrop-filter: blur(5px);
+            transition: all 0.3s;
+        }
+        .clear-btn:hover { background: rgba(239, 68, 68, 0.8); color: white; }
+
+        .back-btn {
+            position: absolute; top: 20px; left: 20px;
+            color: rgba(255,255,255,0.4); text-decoration: none; z-index: 20;
+        }
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="back-btn">← Menu</a>
+
+    <div class="input-container">
+        <h1>Seu Pote Seguro</h1>
+        <div class="input-wrapper">
+            <input type="text" id="worryInput" placeholder="Deposite sua preocupação aqui..." autocomplete="off">
+            <button id="addBtn">+</button>
+        </div>
+        <div class="hint">Suas preocupações ficam salvas apenas neste dispositivo.<br>Elas estarão aqui quando você voltar.</div>
+    </div>
+
+    <button class="clear-btn" onclick="clearJar()">🗑️ Esvaziar Pote (Liberar tudo)</button>
+
+    <script>
+        // --- 1. CONFIGURAÇÃO FÍSICA (MATTER.JS) ---
+        const Engine = Matter.Engine, Render = Matter.Render, Runner = Matter.Runner,
+              Bodies = Matter.Bodies, Composite = Matter.Composite;
+
+        const engine = Engine.create();
+        const world = engine.world;
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+
+        const render = Render.create({
+            element: document.body,
+            engine: engine,
+            options: { width: width, height: height, wireframes: false, background: 'transparent' }
+        });
+
+        // Paredes do Pote
+        const glassStyle = { fillStyle: '#ffffff', opacity: 0.08 };
+        const wallOptions = { isStatic: true, render: glassStyle };
+        
+        Composite.add(world, [
+            Bodies.rectangle(width * 0.25, height * 0.6, 60, height * 0.7, { ...wallOptions, angle: 0.2 }), // Esq
+            Bodies.rectangle(width * 0.75, height * 0.6, 60, height * 0.7, { ...wallOptions, angle: -0.2 }), // Dir
+            Bodies.rectangle(width * 0.5, height * 0.95, width * 0.6, 60, wallOptions) // Chão
+        ]);
+
+        Render.run(render);
+        Runner.run(Runner.create(), engine);
+
+        // --- 2. LÓGICA DE DADOS (LOCALSTORAGE) ---
+        
+        const STORAGE_KEY = 'minhas_preocupacoes_v1';
+        const colors = ['#818cf8', '#c084fc', '#38bdf8', '#fb7185', '#2dd4bf'];
+
+        // Função que APENAS cria o corpo físico na tela
+        function spawnStone(text) {
+            const radius = Math.min(Math.max(text.length * 1.5, 20), 55);
+            // Posição X aleatória para não empilhar tudo numa torre só ao carregar
+            const xPos = (width * 0.35) + Math.random() * (width * 0.3);
+            const yPos = -Math.random() * 500 - 50; // Começa bem alto com atraso aleatório
+
+            const stone = Bodies.circle(xPos, yPos, radius, {
+                restitution: 0.4, friction: 0.5,
+                render: {
+                    fillStyle: colors[Math.floor(Math.random() * colors.length)],
+                    strokeStyle: '#fff', lineWidth: 2
+                },
+                label: 'worryStone' // Etiqueta para identificarmos depois se precisar
+            });
+
+            Composite.add(world, stone);
+        }
+
+        // Função chamada ao clicar no botão "+"
+        function handleAdd() {
+            const input = document.getElementById('worryInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            // 1. Cria visualmente
+            spawnStone(text);
+
+            // 2. Salva no navegador
+            saveToStorage(text);
+
+            input.value = '';
+        }
+
+        function saveToStorage(newText) {
+            // Pega o que já existe ou cria array vazio
+            let stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+            stored.push(newText);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
+        }
+
+        function loadFromStorage() {
+            let stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+            // Para cada texto salvo, cria uma pedra
+            stored.forEach(text => {
+                spawnStone(text);
+            });
+        }
+
+        // Função Terapêutica: Limpar tudo
+        window.clearJar = function() {
+            if(confirm("Tem certeza? Isso simboliza 'deixar ir' todas as preocupações guardadas aqui.")) {
+                // 1. Limpa banco de dados
+                localStorage.removeItem(STORAGE_KEY);
+                
+                // 2. Remove pedras do mundo físico
+                // Filtra apenas os corpos que não são estáticos (paredes)
+                const stones = Composite.allBodies(world).filter(body => !body.isStatic);
+                Composite.remove(world, stones);
+            }
+        }
+
+        // --- 3. EVENTOS ---
+        
+        document.getElementById('addBtn').addEventListener('click', handleAdd);
+        document.getElementById('worryInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleAdd();
+        });
+
+        // Quando a página carrega, recupera os dados antigos
+        window.onload = loadFromStorage;
+
+        // Ajuste de tela
+        window.addEventListener('resize', () => location.reload());
+
+    </script>
+</body>
+</html>
