@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curto vs Longo Prazo | Bruno de Souza</title>
+    
+    <script>
+        if(localStorage.getItem('logado') !== 'sim') {
+            window.location.href = "../../login.html";
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #f0f8ff;
+            --present-color: #ff9f43; /* Laranja - Urgência */
+            --future-color: #5f27cd;  /* Roxo - Sabedoria/Futuro */
+            --benefit-color: #10ac84; /* Verde */
+            --cost-color: #ee5253;    /* Vermelho */
+            --text: #2d3436;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0; padding: 20px;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* --- HEADER --- */
+        header {
+            text-align: center; margin-bottom: 30px;
+            background: white; padding: 20px 40px;
+            border-radius: 20px; border: 3px dashed #636e72;
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            max-width: 900px; width: 100%; position: relative;
+        }
+
+        header h1 { color: #2d3436; margin: 0; font-weight: 800; font-size: 1.8rem; }
+        .subtitle { color: #636e72; font-weight: 600; margin-top: 5px; }
+
+        .btn-print {
+            position: absolute; top: 20px; right: 20px;
+            background: none; border: 2px solid #2d3436; color: #2d3436;
+            padding: 8px 15px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+        .btn-print:hover { background: #2d3436; color: white; }
+
+        /* --- INPUT COMPORTAMENTO --- */
+        .behavior-input {
+            width: 100%; max-width: 1000px;
+            background: white; padding: 25px; border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 30px;
+            border-left: 5px solid var(--present-color);
+        }
+        
+        .behavior-input label { display: block; font-weight: 800; font-size: 1.1rem; margin-bottom: 10px; color: var(--present-color); }
+        .behavior-input input {
+            width: 100%; padding: 15px; border: 2px solid #dfe6e9; border-radius: 10px;
+            font-size: 1.1rem; font-family: inherit; transition: 0.3s;
+        }
+        .behavior-input input:focus { border-color: var(--present-color); outline: none; }
+
+        /* --- TIMELINE GRID --- */
+        .timeline-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 30px;
+            width: 100%; max-width: 1000px; margin-bottom: 40px;
+        }
+
+        /* CARD DE TEMPO */
+        .time-card {
+            background: white; border-radius: 25px; overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 2px solid transparent;
+            display: flex; flex-direction: column;
+        }
+
+        .time-card.present { border-color: var(--present-color); }
+        .time-card.future { border-color: var(--future-color); }
+
+        .card-header {
+            padding: 20px; color: white; text-align: center;
+            font-weight: 800; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .present .card-header { background: var(--present-color); }
+        .future .card-header { background: var(--future-color); }
+
+        .card-body { padding: 20px; flex: 1; display: flex; flex-direction: column; gap: 20px; }
+
+        /* SEÇÃO DE CUSTOS E BENEFÍCIOS */
+        .cb-section h4 {
+            margin: 0 0 10px 0; font-size: 0.9rem; text-transform: uppercase; color: #b2bec3; border-bottom: 1px solid #eee; padding-bottom: 5px;
+        }
+
+        .input-row { display: flex; gap: 10px; margin-bottom: 10px; }
+        .input-row input { flex: 1; padding: 8px; border-radius: 8px; border: 1px solid #ddd; }
+        
+        .btn-mini-add {
+            background: #2d3436; color: white; border: none; width: 35px; border-radius: 8px; cursor: pointer;
+        }
+
+        /* LISTA DE ITENS */
+        .item-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 5px; }
+        .list-item {
+            font-size: 0.9rem; padding: 8px; background: #f8f9fa; border-radius: 6px;
+            display: flex; justify-content: space-between; align-items: center;
+            border-left: 3px solid #ccc;
+        }
+        .list-item.ben { border-left-color: var(--benefit-color); }
+        .list-item.cos { border-left-color: var(--cost-color); }
+
+        .item-remove { cursor: pointer; color: #d63031; font-size: 0.8rem; }
+
+        /* --- SCOREBOARD --- */
+        .scoreboard {
+            background: #f1f2f6; padding: 15px; border-radius: 10px; margin-top: auto;
+            text-align: center; font-weight: bold; color: #636e72;
+        }
+        .net-score { font-size: 1.5rem; color: #2d3436; margin-top: 5px; }
+
+        /* --- CONCLUSÃO --- */
+        .conclusion-card {
+            width: 100%; max-width: 1000px;
+            background: white; padding: 30px; border-radius: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 50px;
+            text-align: center; display: none; /* Aparece com dados */
+            animation: slideUp 0.5s ease;
+        }
+
+        .verdict-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 10px; }
+        .verdict-text { font-size: 1.1rem; color: #636e72; }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Responsividade */
+        @media (max-width: 800px) {
+            .timeline-grid { grid-template-columns: 1fr; }
+            .btn-print span { display: none; }
+        }
+
+        /* --- IMPRESSÃO --- */
+        #print-table { display: none; }
+
+        @media print {
+            body { background: white; padding: 0; }
+            header button, .btn-back-home, .input-row, .item-remove { display: none !important; }
+            header { border: none; box-shadow: none; margin-bottom: 20px; }
+            
+            #print-table {
+                display: table; width: 100%; border-collapse: collapse; font-family: sans-serif; margin: 20px 0;
+            }
+            #print-table th { background: #eee; padding: 10px; border: 1px solid #ccc; width: 50%; }
+            #print-table td { padding: 10px; border: 1px solid #ccc; vertical-align: top; }
+            
+            .timeline-grid, .scoreboard, .conclusion-card { display: none; }
+            .behavior-input { box-shadow: none; border: 1px solid #ccc; }
+        }
+    </style>
+</head>
+<body>
+
+    <header data-aos="fade-down">
+        <button class="btn-print" onclick="window.print()"><i class="fa-solid fa-print"></i> <span>Imprimir</span></button>
+        <h1>A Máquina do Tempo</h1>
+        <div class="subtitle">Análise de Curto vs. Longo Prazo</div>
+    </header>
+
+    <div class="behavior-input" data-aos="fade-up">
+        <label><i class="fa-solid fa-person-walking"></i> Comportamento, Decisão ou Pensamento a Analisar:</label>
+        <input type="text" id="mainBehavior" placeholder='Ex: "Faltar na academia hoje" ou "Evitar aquela conversa difícil"'>
+    </div>
+
+    <div class="timeline-grid">
+        
+        <div class="time-card present" data-aos="fade-right">
+            <div class="card-header">
+                <i class="fa-solid fa-stopwatch"></i> O AGORA (Curto Prazo)
+            </div>
+            <div class="card-body">
+                
+                <div class="cb-section">
+                    <h4 style="color:var(--benefit-color)">Benefícios Imediatos (Ganhos)</h4>
+                    <ul class="item-list" id="listShortBen"></ul>
+                    <div class="input-row">
+                        <input type="text" id="inShortBen" placeholder="Ex: Alívio, prazer...">
+                        <button class="btn-mini-add" onclick="addItem('ShortBen', 1)">+</button>
+                    </div>
+                </div>
+
+                <div class="cb-section">
+                    <h4 style="color:var(--cost-color)">Custos Imediatos (Perdas)</h4>
+                    <ul class="item-list" id="listShortCost"></ul>
+                    <div class="input-row">
+                        <input type="text" id="inShortCost" placeholder="Ex: Culpa leve...">
+                        <button class="btn-mini-add" onclick="addItem('ShortCost', -1)">+</button>
+                    </div>
+                </div>
+
+                <div class="scoreboard">
+                    Saldo Imediato: <div class="net-score" id="scoreShort">0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="time-card future" data-aos="fade-left">
+            <div class="card-header">
+                <i class="fa-solid fa-rocket"></i> O FUTURO (Longo Prazo)
+            </div>
+            <div class="card-body">
+                
+                <div class="cb-section">
+                    <h4 style="color:var(--benefit-color)">Benefícios Futuros</h4>
+                    <ul class="item-list" id="listLongBen"></ul>
+                    <div class="input-row">
+                        <input type="text" id="inLongBen" placeholder="Ex: Saúde, orgulho...">
+                        <button class="btn-mini-add" onclick="addItem('LongBen', 1)">+</button>
+                    </div>
+                </div>
+
+                <div class="cb-section">
+                    <h4 style="color:var(--cost-color)">Custos Futuros (Consequências)</h4>
+                    <ul class="item-list" id="listLongCost"></ul>
+                    <div class="input-row">
+                        <input type="text" id="inLongCost" placeholder="Ex: Doença, problemas...">
+                        <button class="btn-mini-add" onclick="addItem('LongCost', -1)">+</button>
+                    </div>
+                </div>
+
+                <div class="scoreboard">
+                    Saldo Futuro: <div class="net-score" id="scoreLong">0</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="conclusion-card" id="conclusionCard">
+        <div class="verdict-title" id="verdictTitle">Analisando...</div>
+        <div class="verdict-text" id="verdictText">...</div>
+    </div>
+
+    <table id="print-table">
+        <thead>
+            <tr>
+                <th style="background:#fff3e0; color:#e67e22;">CURTO PRAZO (Agora)</th>
+                <th style="background:#ede7f6; color:#673ab7;">LONGO PRAZO (Futuro)</th>
+            </tr>
+        </thead>
+        <tbody id="printBody">
+            <tr>
+                <td valign="top">
+                    <strong>CUSTOS:</strong><br>
+                    <div id="printShortCost"></div>
+                    <br>
+                    <strong>BENEFÍCIOS:</strong><br>
+                    <div id="printShortBen"></div>
+                </td>
+                <td valign="top">
+                    <strong>CUSTOS:</strong><br>
+                    <div id="printLongCost"></div>
+                    <br>
+                    <strong>BENEFÍCIOS:</strong><br>
+                    <div id="printLongBen"></div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <center>
+        <a href="../listaferramentas.html" style="display:inline-block; margin-top:40px; color:#b2bec3; text-decoration:none; font-weight:600;" class="btn-back-home">
+            <i class="fa-solid fa-arrow-left"></i> Voltar
+        </a>
+    </center>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        // Estado
+        const data = {
+            ShortBen: [],
+            ShortCost: [],
+            LongBen: [],
+            LongCost: []
+        };
+
+        function addItem(category, val) {
+            const input = document.getElementById(`in${category}`);
+            const text = input.value.trim();
+            
+            if (!text) return;
+
+            data[category].push({ text, val, id: Date.now() });
+            input.value = '';
+            
+            renderLists();
+        }
+
+        function removeItem(category, id) {
+            data[category] = data[category].filter(i => i.id !== id);
+            renderLists();
+        }
+
+        function renderLists() {
+            // Renderiza as 4 listas
+            renderList('ShortBen', 'ben');
+            renderList('ShortCost', 'cos');
+            renderList('LongBen', 'ben');
+            renderList('LongCost', 'cos');
+
+            // Calcula Scores (Quantidade de itens por enquanto, poderia ser peso)
+            // Vamos considerar cada item como 1 ponto para simplificar a visualização
+            const scoreShort = data.ShortBen.length - data.ShortCost.length;
+            const scoreLong = data.LongBen.length - data.LongCost.length;
+
+            updateScore('scoreShort', scoreShort);
+            updateScore('scoreLong', scoreLong);
+
+            updateVerdict(scoreShort, scoreLong);
+            updatePrint();
+        }
+
+        function renderList(category, typeClass) {
+            const list = document.getElementById(`list${category}`);
+            list.innerHTML = '';
+            
+            data[category].forEach(item => {
+                const li = document.createElement('li');
+                li.className = `list-item ${typeClass}`;
+                li.innerHTML = `
+                    <span>${item.text}</span>
+                    <i class="fa-solid fa-xmark item-remove" onclick="removeItem('${category}', ${item.id})"></i>
+                `;
+                list.appendChild(li);
+            });
+        }
+
+        function updateScore(elementId, score) {
+            const el = document.getElementById(elementId);
+            el.innerText = score > 0 ? `+${score}` : score;
+            el.style.color = score > 0 ? '#00b894' : (score < 0 ? '#d63031' : '#2d3436');
+        }
+
+        function updateVerdict(short, long) {
+            const card = document.getElementById('conclusionCard');
+            const title = document.getElementById('verdictTitle');
+            const text = document.getElementById('verdictText');
+
+            if (data.ShortBen.length + data.ShortCost.length + data.LongBen.length + data.LongCost.length === 0) {
+                card.style.display = 'none';
+                return;
+            }
+
+            card.style.display = 'block';
+
+            // Lógica simples de diagnóstico
+            if (short > 0 && long < 0) {
+                title.innerText = "⚠️ Armadilha Imediatista!";
+                title.style.color = "#e17055";
+                text.innerText = "Você está escolhendo o prazer de agora em troca de dor no futuro. Cuidado!";
+            } else if (short < 0 && long > 0) {
+                title.innerText = "🌱 Investimento Inteligente";
+                title.style.color = "#00b894";
+                text.innerText = "Pode ser difícil agora, mas vai valer muito a pena lá na frente!";
+            } else if (short > 0 && long > 0) {
+                title.innerText = "🌟 Cenário Ideal";
+                title.style.color = "#0984e3";
+                text.innerText = "Bom agora e bom depois. Vá em frente!";
+            } else if (short < 0 && long < 0) {
+                title.innerText = "⛔ Perda Total";
+                title.style.color = "#d63031";
+                text.innerText = "Ruim agora e ruim depois. Por que fazer isso?";
+            } else {
+                title.innerText = "⚖️ Equilibrado / Neutro";
+                title.style.color = "#2d3436";
+                text.innerText = "Os prós e contras estão balanceados.";
+            }
+        }
+
+        function updatePrint() {
+            // Atualiza a tabela oculta
+            document.getElementById('printShortCost').innerHTML = data.ShortCost.map(i => `• ${i.text}`).join('<br>') || "-";
+            document.getElementById('printShortBen').innerHTML = data.ShortBen.map(i => `• ${i.text}`).join('<br>') || "-";
+            document.getElementById('printLongCost').innerHTML = data.LongCost.map(i => `• ${i.text}`).join('<br>') || "-";
+            document.getElementById('printLongBen').innerHTML = data.LongBen.map(i => `• ${i.text}`).join('<br>') || "-";
+        }
+    </script>
+
+</body>
+</html>
