@@ -1,1 +1,404 @@
 
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuroView 3D - Estilo BrainFacts</title>
+    <style>
+        /* --- ESTILO GERAL (CSS) --- */
+        body { margin: 0; overflow: hidden; background-color: #0b0d10; font-family: 'Segoe UI', sans-serif; color: white; }
+        
+        /* Layout Principal */
+        #canvas-container { width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; z-index: 1; }
+        
+        /* UI: Painel de Informações Médicas (Esquerda) */
+        #info-panel {
+            position: absolute; top: 20px; left: 20px; width: 300px;
+            background: rgba(20, 24, 30, 0.9); border-left: 4px solid #00d2ff;
+            padding: 20px; border-radius: 0 8px 8px 0; z-index: 2;
+            backdrop-filter: blur(10px); box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease;
+        }
+        #info-panel h1 { margin: 0 0 10px 0; font-size: 24px; color: #fff; }
+        #info-panel h2 { margin: 0 0 10px 0; font-size: 18px; color: #00d2ff; text-transform: uppercase; letter-spacing: 1px; }
+        #info-panel p { font-size: 14px; line-height: 1.6; color: #ccc; }
+        .instruction { font-size: 12px; color: #666; margin-top: 15px; font-style: italic; }
+
+        /* UI: Botão de Reset */
+        #reset-btn {
+            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+            padding: 12px 25px; background: #00d2ff; color: #000; border: none;
+            border-radius: 25px; cursor: pointer; font-weight: bold; z-index: 2;
+            opacity: 0; pointer-events: none; transition: all 0.3s;
+        }
+        #reset-btn.active { opacity: 1; pointer-events: all; bottom: 50px; }
+
+        /* UI: Painel Didático do Desenvolvedor (Direita) */
+        #dev-panel {
+            position: absolute; top: 0; right: 0; width: 350px; height: 100vh;
+            background: #1a1a1a; border-left: 1px solid #333; z-index: 3;
+            transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            display: flex; flex-direction: column;
+        }
+        #dev-panel.open { transform: translateX(0); }
+        
+        /* Botão para abrir o painel Dev */
+        #dev-toggle {
+            position: absolute; top: 20px; right: 20px; z-index: 4;
+            background: #333; color: #fff; border: 1px solid #555;
+            padding: 8px 15px; cursor: pointer; border-radius: 4px; font-size: 12px;
+        }
+        #dev-toggle:hover { background: #444; }
+
+        /* Conteúdo do Painel Dev */
+        .dev-content { padding: 20px; overflow-y: auto; height: 100%; }
+        .module-card {
+            background: #252525; border-radius: 6px; padding: 15px; margin-bottom: 15px;
+            border-left: 3px solid #777;
+        }
+        .module-title { color: #f0a500; font-weight: bold; margin-bottom: 5px; font-family: monospace; }
+        .module-desc { font-size: 13px; color: #aaa; }
+
+    </style>
+</head>
+<body>
+
+    <div id="canvas-container"></div>
+
+    <div id="info-panel">
+        <h1>Cérebro Humano</h1>
+        <h2 id="region-title">Visão Geral</h2>
+        <p id="region-desc">
+            O cérebro é o centro de comando do sistema nervoso humano.
+            Nesta demonstração, separamos as áreas por cores (segmentação) para facilitar o estudo, similar ao método usado em anatomia didática.
+        </p>
+        <p class="instruction">Passe o mouse para identificar e clique para isolar uma área.</p>
+    </div>
+
+    <button id="reset-btn" onclick="resetView()">Restaurar Visão Completa</button>
+
+    <button id="dev-toggle" onclick="toggleDevPanel()">🛠️ Estrutura do Código</button>
+    
+    <div id="dev-panel">
+        <div class="dev-content">
+            <h3>Arquitetura da Aplicação</h3>
+            <p style="font-size: 12px; color: #888; margin-bottom: 20px;">
+                Como este projeto foi estruturado modularmente:
+            </p>
+
+            <div class="module-card" style="border-color: #f0a500;">
+                <div class="module-title">1. Data Module (JSON)</div>
+                <div class="module-desc">
+                    Um banco de dados simples dentro do código. Contém os IDs, nomes, cores e descrições médicas de cada parte. É a "Fonte da Verdade".
+                </div>
+            </div>
+
+            <div class="module-card" style="border-color: #00d2ff;">
+                <div class="module-title">2. Scene Manager</div>
+                <div class="module-desc">
+                    Responsável por criar o "mundo": Câmera, Luzes e Renderizador (Three.js). Configura o palco onde o cérebro vai existir.
+                </div>
+            </div>
+
+            <div class="module-card" style="border-color: #ff5733;">
+                <div class="module-title">3. Brain Builder</div>
+                <div class="module-desc">
+                    Constrói a geometria 3D. Na versão final, isso carregará arquivos `.obj`. Aqui, ele gera formas matemáticas para simular os lobos.
+                </div>
+            </div>
+
+            <div class="module-card" style="border-color: #33ff57;">
+                <div class="module-title">4. Interaction Handler</div>
+                <div class="module-desc">
+                    O cérebro da aplicação. Usa "Raycasting" (raios invisíveis) para detectar onde o mouse está, calcula colisões e gerencia os cliques.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+        // --- MÓDULO 1: DADOS (DATABASE) ---
+        // Aqui definimos as propriedades de cada região
+        const brainData = {
+            'frontal': {
+                name: 'Lobo Frontal',
+                color: 0xFF5733, // Laranja avermelhado
+                desc: 'Responsável pelo planejamento, raciocínio, resolução de problemas e controle motor voluntário. É a "sede da personalidade".'
+            },
+            'parietal': {
+                name: 'Lobo Parietal',
+                color: 0xFFC300, // Amarelo
+                desc: 'Processa informações sensoriais (tato, temperatura, dor) e a percepção espacial do corpo.'
+            },
+            'temporal': {
+                name: 'Lobo Temporal',
+                color: 0x28B463, // Verde
+                desc: 'Fundamental para a audição, linguagem e processamento de memórias (Hipocampo).'
+            },
+            'occipital': {
+                name: 'Lobo Occipital',
+                color: 0xC70039, // Vermelho escuro
+                desc: 'O centro de processamento visual. Interpreta cores, luzes e movimentos.'
+            },
+            'cerebellum': {
+                name: 'Cerebelo',
+                color: 0x8E44AD, // Roxo
+                desc: 'Coordena o equilíbrio, a postura e a precisão dos movimentos finos.'
+            }
+        };
+
+        // Variáveis Globais
+        let scene, camera, renderer, controls;
+        let raycaster, mouse;
+        let brainGroup; // Grupo que segura todas as peças
+        let hoveredObject = null;
+        let selectedObject = null;
+
+        // Elementos DOM
+        const uiTitle = document.getElementById('region-title');
+        const uiDesc = document.getElementById('region-desc');
+        const resetBtn = document.getElementById('reset-btn');
+
+        init();
+        animate();
+
+        // --- MÓDULO 2: SCENE MANAGER (Inicialização) ---
+        function init() {
+            // Cena
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0b0d10);
+            scene.fog = new THREE.Fog(0x0b0d10, 20, 100);
+
+            // Câmera
+            camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(20, 10, 20);
+
+            // Renderizador
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+            // Luzes (Setup de Estúdio)
+            const ambientLight = new THREE.AmbientLight(0x404040, 1.5);
+            scene.add(ambientLight);
+
+            const mainLight = new THREE.DirectionalLight(0xffffff, 2);
+            mainLight.position.set(10, 10, 10);
+            scene.add(mainLight);
+
+            const backLight = new THREE.DirectionalLight(0x5555ff, 0.5); // Luz de recorte azulada
+            backLight.position.set(-10, 5, -10);
+            scene.add(backLight);
+
+            // Controles de Câmera
+            controls = new OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.minDistance = 10;
+            controls.maxDistance = 60;
+
+            // Inicia os outros módulos
+            buildBrain();
+            setupInteraction();
+
+            window.addEventListener('resize', onWindowResize);
+        }
+
+        // --- MÓDULO 3: BRAIN BUILDER (Geometria) ---
+        function buildBrain() {
+            brainGroup = new THREE.Group();
+            scene.add(brainGroup);
+
+            // Como não temos o modelo 3D real ainda, vamos simular os lobos com formas primitivas distorcidas.
+            // No projeto final, substituiríamos `createLobe` por `loader.load('lobo_frontal.obj')`
+
+            // Lobo Frontal (Frente)
+            createLobe('frontal', new THREE.Vector3(2, 1, 0), new THREE.Vector3(4, 3.5, 3.5));
+            
+            // Lobo Parietal (Topo/Trás)
+            createLobe('parietal', new THREE.Vector3(-1.5, 2.5, 0), new THREE.Vector3(3.5, 3, 3.5));
+
+            // Lobo Temporal (Lateral/Baixo)
+            createLobe('temporal', new THREE.Vector3(0.5, -1, 0), new THREE.Vector3(4, 2, 3));
+
+            // Lobo Occipital (Traseira)
+            createLobe('occipital', new THREE.Vector3(-4, 0, 0), new THREE.Vector3(2, 3, 2.5));
+
+            // Cerebelo (Base Traseira)
+            createLobe('cerebellum', new THREE.Vector3(-3, -2.5, 0), new THREE.Vector3(2.5, 2, 2));
+        }
+
+        function createLobe(id, position, scale) {
+            const data = brainData[id];
+            
+            // Geometria: Icosaedro detalhado para parecer orgânico
+            const geometry = new THREE.IcosahedronGeometry(1, 4); // Alta contagem de polígonos
+            
+            // Deformação leve para não parecer uma bola perfeita (Ruído procedural simples)
+            const positionAttribute = geometry.attributes.position;
+            for ( let i = 0; i < positionAttribute.count; i ++ ) {
+                const vertex = new THREE.Vector3();
+                vertex.fromBufferAttribute( positionAttribute, i );
+                // Adiciona uma irregularidade aleatória
+                vertex.multiplyScalar( 1 + 0.1 * (Math.random() - 0.5) ); 
+                positionAttribute.setXYZ( i, vertex.x, vertex.y, vertex.z );
+            }
+            geometry.computeVertexNormals();
+
+            // Material: Estilo BrainFacts (Cor sólida, pouco brilho especular)
+            const material = new THREE.MeshStandardMaterial({
+                color: data.color,
+                roughness: 0.6,
+                metalness: 0.1,
+                transparent: true,
+                opacity: 1
+            });
+
+            const mesh = new THREE.Mesh(geometry, material);
+            mesh.position.copy(position);
+            mesh.scale.copy(scale);
+            mesh.userData = { id: id, originalColor: data.color }; // Salva metadados no objeto 3D
+            
+            brainGroup.add(mesh);
+        }
+
+        // --- MÓDULO 4: INTERACTION HANDLER (Lógica) ---
+        function setupInteraction() {
+            raycaster = new THREE.Raycaster();
+            mouse = new THREE.Vector2();
+
+            window.addEventListener('mousemove', onMouseMove);
+            window.addEventListener('click', onClick);
+            
+            // Expõe a função de reset globalmente para o botão HTML acessar
+            window.resetView = resetView;
+        }
+
+        function onMouseMove(event) {
+            // Normaliza coordenadas do mouse (-1 a +1)
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+            if (selectedObject) return; // Se algo está selecionado, ignora o hover
+
+            checkIntersection();
+        }
+
+        function onClick(event) {
+            if (hoveredObject) {
+                selectRegion(hoveredObject);
+            } else {
+                // Se clicou no fundo vazio, reseta (opcional)
+                // resetView(); 
+            }
+        }
+
+        function checkIntersection() {
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(brainGroup.children);
+
+            if (intersects.length > 0) {
+                const object = intersects[0].object;
+                
+                if (hoveredObject !== object) {
+                    // Restaura o anterior
+                    if (hoveredObject) hoveredObject.material.emissive.setHex(0x000000);
+                    
+                    // Destaca o novo
+                    hoveredObject = object;
+                    hoveredObject.material.emissive.setHex(0x333333); // Brilho suave
+                    
+                    document.body.style.cursor = 'pointer';
+                }
+            } else {
+                if (hoveredObject) {
+                    hoveredObject.material.emissive.setHex(0x000000);
+                    hoveredObject = null;
+                    document.body.style.cursor = 'default';
+                }
+            }
+        }
+
+        function selectRegion(object) {
+            selectedObject = object;
+            const id = object.userData.id;
+            const info = brainData[id];
+
+            // 1. Atualiza UI
+            uiTitle.innerText = info.name;
+            uiTitle.style.color = '#' + info.color.toString(16);
+            uiDesc.innerText = info.desc;
+            resetBtn.classList.add('active');
+
+            // 2. Efeito visual "Ghost" (Foco)
+            brainGroup.children.forEach(mesh => {
+                if (mesh === object) {
+                    mesh.material.opacity = 1;
+                    mesh.material.color.setHex(info.color);
+                } else {
+                    mesh.material.opacity = 0.2; // Deixa o resto transparente
+                    mesh.material.color.setHex(0x555555); // Cinza
+                }
+            });
+
+            // 3. Zoom dramático (Animação simples de câmera)
+            // Num app real, usaríamos TWEEN.js para suavizar isso
+            const targetPos = object.position.clone().multiplyScalar(1.5);
+            camera.position.lerp(new THREE.Vector3(targetPos.x + 10, targetPos.y + 5, targetPos.z + 10), 0.5);
+            controls.target.copy(object.position);
+        }
+
+        function resetView() {
+            selectedObject = null;
+            
+            // Restaura cores e opacidade
+            brainGroup.children.forEach(mesh => {
+                mesh.material.opacity = 1;
+                mesh.material.color.setHex(mesh.userData.originalColor);
+            });
+
+            // Restaura UI
+            uiTitle.innerText = "Visão Geral";
+            uiTitle.style.color = "#00d2ff";
+            uiDesc.innerText = "Passe o mouse para identificar e clique para isolar uma área.";
+            resetBtn.classList.remove('active');
+
+            // Restaura Câmera
+            controls.target.set(0,0,0);
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+    </script>
+
+    <script>
+        function toggleDevPanel() {
+            const panel = document.getElementById('dev-panel');
+            panel.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>
