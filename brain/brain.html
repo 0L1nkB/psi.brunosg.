@@ -394,7 +394,7 @@
 
             fileList.forEach(filename => {
                 // Caminho relativo da pasta 'brain'
-                loader.load('./brain/' + filename, function (object) {
+                loader.load('./' + filename, function (object) {
                     
                     // Limpeza do nome: FJ1735_..._Left_gyrus.obj -> Left gyrus
                     const rawName = filename.replace('.obj', '');
