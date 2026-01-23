@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Técnica A-B-C | Bruno de Souza</title>
+    
+    <script>
+        if(localStorage.getItem('logado') !== 'sim') {
+            window.location.href = "../../login.html";
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #f0f8ff;
+            --col-a: #74b9ff; /* Evento (Azul) */
+            --col-b: #fdcb6e; /* Crença (Amarelo) */
+            --col-c: #ff7675; /* Consequência (Vermelho) */
+            --text: #2d3436;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0; padding: 20px;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* --- HEADER --- */
+        header {
+            text-align: center; margin-bottom: 30px;
+            background: white; padding: 20px 40px;
+            border-radius: 20px; border: 3px dashed #636e72;
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            max-width: 900px; width: 100%; position: relative;
+        }
+
+        header h1 { color: #2d3436; margin: 0; font-weight: 800; font-size: 1.8rem; }
+        .subtitle { color: #636e72; font-weight: 600; margin-top: 5px; }
+
+        .btn-print {
+            position: absolute; top: 20px; right: 20px;
+            background: none; border: 2px solid #2d3436; color: #2d3436;
+            padding: 8px 15px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+        .btn-print:hover { background: #2d3436; color: white; }
+
+        /* --- ÁREA DE INPUT (INVESTIGAÇÃO) --- */
+        .investigation-panel {
+            width: 100%; max-width: 900px;
+            background: white; border-radius: 25px; padding: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+        }
+
+        .abc-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .input-card {
+            padding: 20px; border-radius: 15px;
+            border: 2px solid transparent; background: #f8f9fa;
+            display: flex; flex-direction: column; gap: 10px;
+        }
+
+        .input-card.a { border-color: var(--col-a); background: #eef6ff; }
+        .input-card.b { border-color: var(--col-b); background: #fffbf0; }
+        .input-card.c { border-color: var(--col-c); background: #fff0f0; }
+
+        .card-label { font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
+        .card-desc { font-size: 0.85rem; opacity: 0.8; margin-bottom: 5px; min-height: 40px; }
+
+        textarea {
+            width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 10px;
+            font-family: inherit; resize: vertical; min-height: 80px;
+        }
+        textarea:focus { outline: none; border-color: #636e72; }
+
+        .btn-add {
+            width: 100%; padding: 15px; border-radius: 50px; border: none;
+            background: #2d3436; color: white; font-weight: 800; font-size: 1.1rem;
+            cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px;
+        }
+        .btn-add:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+
+        /* --- LISTA DE REGISTROS --- */
+        .records-list {
+            width: 100%; max-width: 900px;
+            display: flex; flex-direction: column; gap: 20px;
+        }
+
+        .record-card {
+            background: white; border-radius: 20px; padding: 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); overflow: hidden;
+            display: flex; flex-direction: column;
+            border-left: 5px solid #2d3436;
+            animation: slideUp 0.4s ease;
+        }
+
+        .record-header {
+            padding: 15px 20px; background: #f8f9fa; border-bottom: 1px solid #eee;
+            display: flex; justify-content: space-between; align-items: center; font-weight: bold; color: #636e72;
+        }
+
+        .record-body {
+            display: grid; grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        .record-col { padding: 20px; border-right: 1px solid #eee; }
+        .record-col:last-child { border-right: none; }
+        
+        .col-title { font-size: 0.8rem; text-transform: uppercase; font-weight: 800; margin-bottom: 10px; }
+        .col-text { font-size: 1rem; line-height: 1.5; color: #2d3436; }
+
+        .btn-delete { background: none; border: none; color: #d63031; cursor: pointer; transition: 0.2s; font-size: 1rem; }
+        .btn-delete:hover { transform: scale(1.2); }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .abc-grid { grid-template-columns: 1fr; }
+            .record-body { grid-template-columns: 1fr; }
+            .record-col { border-right: none; border-bottom: 1px solid #eee; }
+            .btn-print span { display: none; }
+        }
+
+        /* --- IMPRESSÃO --- */
+        #print-table { display: none; }
+
+        @media print {
+            body { background: white; padding: 0; }
+            header button, .investigation-panel, .btn-back-home, .btn-delete { display: none !important; }
+            header { border: none; box-shadow: none; margin-bottom: 20px; }
+            
+            #print-table {
+                display: table; width: 100%; border-collapse: collapse; font-family: sans-serif; margin-top: 20px;
+            }
+            #print-table th { background: #eee; padding: 10px; text-align: left; border: 1px solid #ccc; font-weight: bold; }
+            #print-table td { padding: 10px; border: 1px solid #ccc; vertical-align: top; }
+            
+            /* Esconde cards visuais para usar a tabela limpa */
+            .records-list { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <header data-aos="fade-down">
+        <button class="btn-print" onclick="window.print()"><i class="fa-solid fa-print"></i> <span>Imprimir</span></button>
+        <h1>Técnica A-B-C</h1>
+        <div class="subtitle">Investigação: Evento, Crença e Consequência</div>
+    </header>
+
+    <div class="investigation-panel" data-aos="fade-up">
+        <div class="abc-grid">
+            
+            <div class="input-card a">
+                <div class="card-label" style="color:var(--col-a)">
+                    <i class="fa-solid fa-bolt"></i> A = Evento Ativador
+                </div>
+                <div class="card-desc">O que aconteceu? (Fato)</div>
+                <textarea id="inputA" placeholder="Ex: Meu chefe criticou meu trabalho..."></textarea>
+            </div>
+
+            <div class="input-card b">
+                <div class="card-label" style="color:#d4ac0d">
+                    <i class="fa-solid fa-lightbulb"></i> B = Crença (Belief)
+                </div>
+                <div class="card-desc">O que você pensou na hora?</div>
+                <textarea id="inputB" placeholder="Ex: Sou incompetente, vou ser demitido..."></textarea>
+            </div>
+
+            <div class="input-card c">
+                <div class="card-label" style="color:var(--col-c)">
+                    <i class="fa-solid fa-masks-theater"></i> C = Consequência
+                </div>
+                <div class="card-desc">O que você sentiu ou fez?</div>
+                <textarea id="inputC" placeholder="Ex: Ansiedade, fiquei quieto, procrastinei..."></textarea>
+            </div>
+
+        </div>
+        <button class="btn-add" onclick="addRecord()">
+            <i class="fa-solid fa-plus-circle"></i> Adicionar ao Relatório
+        </button>
+    </div>
+
+    <div class="records-list" id="recordsList">
+        <div class="record-card">
+            <div class="record-header">
+                <span><i class="fa-solid fa-file-lines"></i> Exemplo</span>
+                <button class="btn-delete" onclick="deleteRecord(this)"><i class="fa-solid fa-trash"></i></button>
+            </div>
+            <div class="record-body">
+                <div class="record-col">
+                    <div class="col-title" style="color:var(--col-a)">A - Evento</div>
+                    <div class="col-text">A prova é amanhã.</div>
+                </div>
+                <div class="record-col">
+                    <div class="col-title" style="color:#d4ac0d">B - Crença</div>
+                    <div class="col-text">"Não estou preparado, vou reprovar."</div>
+                </div>
+                <div class="record-col">
+                    <div class="col-title" style="color:var(--col-c)">C - Consequência</div>
+                    <div class="col-text">Ansiedade, dor de barriga, estudar desesperado.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <table id="print-table">
+        <thead>
+            <tr>
+                <th style="width: 30%">A = Evento Ativador</th>
+                <th style="width: 35%">B = Crença (Pensamento)</th>
+                <th style="width: 35%">C = Consequência (Sentimento/Ação)</th>
+            </tr>
+        </thead>
+        <tbody id="print-body">
+            </tbody>
+    </table>
+
+    <center>
+        <a href="../listaferramentas.html" style="display:inline-block; margin-top:40px; color:#b2bec3; text-decoration:none; font-weight:600;" class="btn-back-home">
+            <i class="fa-solid fa-arrow-left"></i> Voltar
+        </a>
+    </center>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        function addRecord() {
+            const a = document.getElementById('inputA').value.trim();
+            const b = document.getElementById('inputB').value.trim();
+            const c = document.getElementById('inputC').value.trim();
+
+            if (!a || !b || !c) {
+                alert("Por favor, preencha todos os campos da investigação!");
+                return;
+            }
+
+            const list = document.getElementById('recordsList');
+            const div = document.createElement('div');
+            div.className = 'record-card';
+            
+            div.innerHTML = `
+                <div class="record-header">
+                    <span><i class="fa-solid fa-magnifying-glass"></i> Investigação #${list.children.length + 1}</span>
+                    <button class="btn-delete" onclick="deleteRecord(this)"><i class="fa-solid fa-trash"></i></button>
+                </div>
+                <div class="record-body">
+                    <div class="record-col">
+                        <div class="col-title" style="color:var(--col-a)">A - Evento</div>
+                        <div class="col-text a-text">${a}</div>
+                    </div>
+                    <div class="record-col">
+                        <div class="col-title" style="color:#d4ac0d">B - Crença</div>
+                        <div class="col-text b-text">${b}</div>
+                    </div>
+                    <div class="record-col">
+                        <div class="col-title" style="color:var(--col-c)">C - Consequência</div>
+                        <div class="col-text c-text">${c}</div>
+                    </div>
+                </div>
+            `;
+
+            list.prepend(div); // Adiciona no topo
+            
+            // Limpa inputs
+            document.getElementById('inputA').value = '';
+            document.getElementById('inputB').value = '';
+            document.getElementById('inputC').value = '';
+
+            updatePrintTable();
+        }
+
+        function deleteRecord(btn) {
+            if(confirm("Remover este registro?")) {
+                btn.closest('.record-card').remove();
+                updatePrintTable();
+            }
+        }
+
+        // Atualiza tabela oculta para impressão
+        function updatePrintTable() {
+            const tbody = document.getElementById('print-body');
+            tbody.innerHTML = '';
+            
+            // Pega todos os cards visíveis
+            const cards = document.querySelectorAll('.record-card');
+            
+            cards.forEach(card => {
+                const a = card.querySelector('.a-text') ? card.querySelector('.a-text').innerText : "A prova é amanhã."; // Fallback pro exemplo
+                const b = card.querySelector('.b-text') ? card.querySelector('.b-text').innerText : '"Não estou preparado."';
+                const c = card.querySelector('.c-text') ? card.querySelector('.c-text').innerText : "Ansiedade.";
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${a}</td><td>${b}</td><td>${c}</td>`;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Carrega o exemplo inicial na tabela de impressão
+        updatePrintTable();
+    </script>
+
+</body>
+</html>
