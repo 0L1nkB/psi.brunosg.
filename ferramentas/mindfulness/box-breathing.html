@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Respiração Guiada | Mindfulness</title>
+    <style>
+        /* --- Configurações Gerais e Variáveis --- */
+        :root {
+            --bg-color: #0f172a; /* Azul noturno profundo */
+            --circle-color-start: #38bdf8; /* Azul celeste */
+            --circle-color-end: #818cf8; /* Índigo suave */
+            --text-color: #e2e8f0;
+            --breath-duration: 10s; /* Ciclo total: 5s inala, 5s exala */
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--bg-color);
+            /* Fundo sutil com gradiente radial para profundidade */
+            background-image: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: var(--text-color);
+            overflow: hidden;
+        }
+
+        /* --- O Container Principal --- */
+        .container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- O Círculo de Respiração (O Elemento Visual Chave) --- */
+        .breathing-circle {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            position: relative;
+            /* O gradiente que dá a sensação de "água viva" */
+            background: linear-gradient(135deg, var(--circle-color-start), var(--circle-color-end));
+            box-shadow: 0 0 60px -20px var(--circle-color-start);
+            
+            /* Estado inicial: pequeno */
+            transform: scale(0.6);
+            
+            /* A mágica da fluidez: uma transição suave se pararmos a animação */
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* Efeito de "Eco" ou "Ripple" atrás do círculo principal */
+        .breathing-circle::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 50%;
+            background: inherit;
+            opacity: 0.4;
+            filter: blur(20px);
+            z-index: -1;
+            transform: scale(1);
+             /* A animação só roda quando a classe .active é adicionada via JS */
+            animation: none;
+        }
+
+        /* --- A Animação CSS --- */
+        /* Quando a classe .active é adicionada, a animação começa */
+        .breathing-circle.active {
+            animation: breatheAnimation var(--breath-duration) infinite;
+            /* Curva de Bézier personalizada para parecer orgânico (não robótico) */
+            animation-timing-function: cubic-bezier(0.45, 0.05, 0.55, 0.95);
+        }
+
+        /* O eco também anima, ligeiramente diferente para dar profundidade */
+        .breathing-circle.active::before {
+             animation: pulseGlow var(--breath-duration) infinite cubic-bezier(0.45, 0.05, 0.55, 0.95);;
+        }
+
+
+        /* Os Keyframes: definem os estados da animação */
+        @keyframes breatheAnimation {
+            0%, 100% {
+                transform: scale(0.6); /* Estado Expirado (Pequeno) */
+            }
+            50% {
+                transform: scale(1.2); /* Estado Inspirado (Grande) */
+            }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% {
+                opacity: 0.3;
+                transform: scale(0.8);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(1.5); /* O brilho expande mais que o círculo */
+            }
+        }
+
+
+        /* --- O Texto Central --- */
+        .instruction-text {
+            position: absolute;
+            font-size: 1.8rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            /* Centraliza perfeitamente sobre o círculo */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none; /* O clique passa através do texto */
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            transition: opacity 0.5s ease;
+        }
+
+        /* --- O Botão de Controle --- */
+        .control-btn {
+            margin-top: 50px;
+            padding: 12px 30px;
+            background-color: transparent;
+            border: 2px solid var(--circle-color-start);
+            color: var(--circle-color-start);
+            font-size: 1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .control-btn:hover {
+            background-color: var(--circle-color-start);
+            color: var(--bg-color);
+            box-shadow: 0 0 20px var(--circle-color-start);
+        }
+
+        /* Utilitário para esconder elementos suavemente */
+        .hidden {
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="breathing-circle" id="breathCircle"></div>
+
+        <div class="instruction-text" id="textDisplay">Pronto?</div>
+        
+        <button class="control-btn" id="startBtn">Iniciar Respiração</button>
+    </div>
+
+
+    <script>
+        const circle = document.getElementById('breathCircle');
+        const textDisplay = document.getElementById('textDisplay');
+        const startBtn = document.getElementById('startBtn');
+
+        let isBreathing = false;
+        let breathInterval;
+        // Metade da duração total definida no CSS (10s / 2 = 5000ms)
+        const phaseDuration = 5000; 
+
+        startBtn.addEventListener('click', toggleBreathing);
+
+        function toggleBreathing() {
+            if (!isBreathing) {
+                startBreathing();
+            } else {
+                stopBreathing();
+            }
+        }
+
+        function startBreathing() {
+            isBreathing = true;
+            startBtn.innerText = "Parar";
+            // Adiciona a classe que liga as animações CSS
+            circle.classList.add('active');
+            
+            // Inicia o ciclo de texto imediatamente
+            breathCycle();
+            // Repete o ciclo baseado no tempo total da animação
+            breathInterval = setInterval(breathCycle, phaseDuration * 2);
+        }
+
+        function stopBreathing() {
+            isBreathing = false;
+            startBtn.innerText = "Reiniciar";
+            
+            // Remove a classe CSS, o círculo volta suavemente ao tamanho original
+            circle.classList.remove('active');
+            
+            // Limpa os timers do JavaScript
+            clearInterval(breathInterval);
+            clearTimeout(window.inhaleTimer);
+            
+            textDisplay.innerText = "Pausa";
+            
+            // Após o círculo "esvaziar", volta o texto para Pronto
+            setTimeout(() => {
+                if(!isBreathing) textDisplay.innerText = "Pronto?";
+            }, 1000);
+        }
+
+        // Função que gerencia a troca de texto sincronizada com o CSS
+        function breathCycle() {
+            // Fase 1: Inspirar (Início da animação CSS de 0% até 50%)
+            textDisplay.innerText = "Inspire...";
+            textDisplay.classList.remove('hidden');
+
+            // Fase 2: Expirar (Agenda para quando a animação chegar em 50%)
+            window.inhaleTimer = setTimeout(() => {
+                if(isBreathing) {
+                    textDisplay.innerText = "Expire...";
+                }
+            }, phaseDuration);
+        }
+
+    </script>
+</body>
+</html>
