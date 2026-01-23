@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Modo Diagnóstico</title>
+    <style>
+        body { background-color: #000; color: #fff; font-family: monospace; padding: 20px; }
+        #debug-log { border: 1px solid #333; padding: 10px; height: 150px; overflow-y: scroll; background: #111; }
+        .success { color: #0f0; }
+        .error { color: #f00; font-weight: bold; font-size: 16px; }
+    </style>
+</head>
+<body>
+    <h1>🛠️ Modo de Diagnóstico</h1>
+    <p>Tentando carregar 1 arquivo para teste...</p>
+    <div id="debug-log">Iniciando teste...<br></div>
+    
+    <div id="canvas-container" style="width: 100%; height: 400px; border: 1px solid #555;"></div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+        const logDiv = document.getElementById('debug-log');
+        function log(msg, type = '') {
+            logDiv.innerHTML += `<span class="${type}">[${new Date().toLocaleTimeString()}] ${msg}</span><br>`;
+        }
+
+        // ESCOLHI UM ARQUIVO DA SUA LISTA PARA TESTAR
+        // Se este falhar, todos falham.
+        const testFile = "FJ3829_BP36782_FMA72829_Left putamen.obj";
+
+        // Setup 3D Básico
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / 400, 0.1, 1000);
+        camera.position.z = 50; // Posição inicial
+
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth - 60, 400);
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+        
+        const controls = new OrbitControls(camera, renderer.domElement);
+        
+        const light = new THREE.DirectionalLight(0xffffff, 3);
+        light.position.set(10, 10, 10);
+        scene.add(light);
+        scene.add(new THREE.AmbientLight(0x404040));
+
+        // TENTATIVA DE CARREGAMENTO
+        log(`Tentando baixar: "${testFile}"...`);
+        
+        const loader = new OBJLoader();
+        
+        // Tenta carregar com o caminho relativo simples
+        loader.load('./' + testFile, 
+            // SUCESSO
+            function (object) {
+                log("✅ SUCESSO! O arquivo foi encontrado e baixado.", "success");
+                log("Adicionando à cena e centralizando...");
+                
+                object.traverse(child => {
+                    if(child.isMesh) child.material = new THREE.MeshStandardMaterial({color: 0x00ff00});
+                });
+                
+                scene.add(object);
+                
+                // Centraliza Câmera no Objeto
+                const box = new THREE.Box3().setFromObject(object);
+                const center = box.getCenter(new THREE.Vector3());
+                const size = box.getSize(new THREE.Vector3());
+                
+                log(`Tamanho do objeto: X:${size.x.toFixed(2)} Y:${size.y.toFixed(2)} Z:${size.z.toFixed(2)}`);
+                
+                object.position.x = -center.x;
+                object.position.y = -center.y;
+                object.position.z = -center.z;
+                
+                camera.position.z = Math.max(size.x, size.y, size.z) * 2;
+                log("Câmera ajustada. Você deve ver uma peça verde abaixo.", "success");
+            },
+            // PROGRESSO
+            function (xhr) {
+                log(`Download: ${(xhr.loaded / xhr.total * 100).toFixed(0)}%`);
+            },
+            // ERRO
+            function (error) {
+                log(`❌ ERRO FATAL: Não foi possível carregar o arquivo.`, "error");
+                log(`Mensagem técnica: ${error.target ? error.target.status + " " + error.target.statusText : "Erro de Rede/CORS"}`);
+                log(`DICA: Verifique se o arquivo "${testFile}" está EXATAMENTE na mesma pasta que o index.html`);
+            }
+        );
+
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+        }
+        animate();
+    </script>
+</body>
+</html>
