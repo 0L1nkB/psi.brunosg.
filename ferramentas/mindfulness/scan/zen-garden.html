@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jardim Zen | Mindfulness</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #000;
+            font-family: 'Segoe UI', sans-serif;
+            cursor: crosshair; /* Muda o cursor para indicar precisão */
+        }
+
+        /* Texto Flutuante de Instrução */
+        .overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 1.5rem;
+            text-align: center;
+            pointer-events: none; /* Deixa o clique passar direto para o canvas */
+            user-select: none;
+            transition: opacity 1s;
+        }
+
+        /* Menu de cores minimalista */
+        .controls {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 50px;
+            backdrop-filter: blur(5px);
+        }
+
+        .color-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.2);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .color-btn:hover, .color-btn.active {
+            transform: scale(1.3);
+            border-color: #fff;
+        }
+
+        /* Botão de voltar */
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            font-size: 1rem;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="back-btn">← Menu Principal</a>
+
+    <div class="overlay" id="instruction">
+        Arraste para desenhar com luz.<br>
+        Observe a impermanência.
+    </div>
+
+    <canvas id="zenCanvas"></canvas>
+
+    <div class="controls">
+        <div class="color-btn active" style="background: #a5b4fc;" onclick="setColor('#a5b4fc')"></div> <div class="color-btn" style="background: #86efac;" onclick="setColor('#86efac')"></div> <div class="color-btn" style="background: #fca5a5;" onclick="setColor('#fca5a5')"></div> <div class="color-btn" style="background: #fde047;" onclick="setColor('#fde047')"></div> </div>
+
+    <script>
+        const canvas = document.getElementById('zenCanvas');
+        const ctx = canvas.getContext('2d');
+        const instruction = document.getElementById('instruction');
+
+        let width, height;
+        let particles = [];
+        let hue = 0;
+        let mouse = { x: null, y: null };
+        let isDrawing = false;
+        let selectedColor = '#a5b4fc'; // Cor inicial
+
+        // Ajusta o tamanho do canvas para a tela toda
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        // --- Sistema de Partículas ---
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                // Tamanho aleatório para variar
+                this.size = Math.random() * 5 + 1; 
+                // Velocidade aleatória para se espalhar
+                this.speedX = Math.random() * 3 - 1.5;
+                this.speedY = Math.random() * 3 - 1.5;
+                // A mágica do desaparecimento
+                this.life = 1.0; // Opacidade começa em 100%
+                this.decay = Math.random() * 0.01 + 0.005; // Velocidade que desaparece
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.size *= 0.95; // Diminui de tamanho aos poucos
+                this.life -= this.decay; // Fica mais transparente
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.life; // Aplica a transparência
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1.0; // Reseta para não afetar outros desenhos
+            }
+        }
+
+        // --- Interação ---
+        
+        // Mouse (Desktop)
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.x;
+            mouse.y = e.y;
+            if(isDrawing) createParticles(5);
+            
+            // Esconde o texto quando começa a interagir
+            instruction.style.opacity = 0;
+        });
+
+        window.addEventListener('mousedown', () => isDrawing = true);
+        window.addEventListener('mouseup', () => isDrawing = false);
+
+        // Toque (Celular)
+        window.addEventListener('touchmove', (e) => {
+            mouse.x = e.touches[0].clientX;
+            mouse.y = e.touches[0].clientY;
+            createParticles(5);
+            instruction.style.opacity = 0;
+        });
+
+        function createParticles(amount) {
+            for (let i = 0; i < amount; i++) {
+                particles.push(new Particle(mouse.x, mouse.y, selectedColor));
+            }
+        }
+
+        function setColor(color) {
+            selectedColor = color;
+            // Atualiza visual dos botões
+            document.querySelectorAll('.color-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.style.background.includes(hexToRgb(color))); 
+                // Nota: Conversão simples, no visual o usuário só vê a borda branca mudar
+                if(btn.getAttribute('onclick').includes(color)) {
+                   document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+                   btn.classList.add('active');
+                }
+            });
+        }
+
+        // --- O Loop de Animação ---
+        function animate() {
+            // Truque para criar rastro (Trail Effect)
+            // Em vez de limpar a tela (clearRect), pintamos um preto quase transparente
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)'; 
+            ctx.fillRect(0, 0, width, height);
+
+            // Gerencia as partículas
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+
+                // Remove partículas que já "morreram" (ficaram invisíveis)
+                if (particles[i].life <= 0 || particles[i].size <= 0.2) {
+                    particles.splice(i, 1);
+                    i--;
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+    </script>
+</body>
+</html>
