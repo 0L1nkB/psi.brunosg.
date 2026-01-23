@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exame de Probabilidades | Bruno de Souza</title>
+    
+    <script>
+        if(localStorage.getItem('logado') !== 'sim') {
+            window.location.href = "../../login.html";
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #f0f8ff;
+            --primary: #6c5ce7;
+            --accent: #fdcb6e;
+            --text: #2d3436;
+            --risk-high: #d63031;
+            --risk-med: #e17055;
+            --risk-low: #00b894;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0; padding: 20px;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* --- HEADER --- */
+        header {
+            text-align: center; margin-bottom: 30px;
+            background: white; padding: 20px 40px;
+            border-radius: 20px; border: 3px dashed #636e72;
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            max-width: 900px; width: 100%; position: relative;
+        }
+
+        header h1 { color: #2d3436; margin: 0; font-weight: 800; font-size: 1.8rem; }
+        .subtitle { color: #636e72; font-weight: 600; margin-top: 5px; }
+
+        .btn-print {
+            position: absolute; top: 20px; right: 20px;
+            background: none; border: 2px solid #2d3436; color: #2d3436;
+            padding: 8px 15px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+        .btn-print:hover { background: #2d3436; color: white; }
+
+        /* --- EVENTO INICIAL --- */
+        .event-card {
+            width: 100%; max-width: 800px;
+            background: white; padding: 25px; border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 40px;
+            border-top: 5px solid var(--primary);
+        }
+        .event-card label { font-weight: 800; font-size: 1.1rem; color: var(--primary); display: block; margin-bottom: 10px; }
+        .event-card input {
+            width: 100%; padding: 15px; border: 2px solid #dfe6e9; border-radius: 10px;
+            font-size: 1.1rem; font-family: inherit; outline: none; transition: 0.3s;
+        }
+        .event-card input:focus { border-color: var(--primary); }
+
+        /* --- CORRENTE DE EVENTOS --- */
+        .chain-container {
+            width: 100%; max-width: 800px;
+            display: flex; flex-direction: column; gap: 0;
+            position: relative;
+        }
+
+        /* Linha conectora vertical */
+        .chain-line {
+            position: absolute; left: 30px; top: 20px; bottom: 0; width: 4px;
+            background: #dfe6e9; z-index: 0;
+        }
+
+        .step-card {
+            background: white; border-radius: 15px; padding: 20px;
+            margin-bottom: 30px; margin-left: 0; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            position: relative; z-index: 1;
+            border: 2px solid transparent; transition: all 0.3s;
+            animation: slideIn 0.4s ease;
+            display: grid; grid-template-columns: 60px 1fr auto; gap: 15px; align-items: center;
+        }
+
+        .step-number {
+            width: 50px; height: 50px; background: var(--primary); color: white;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 1.2rem; border: 4px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .step-content textarea {
+            width: 100%; padding: 10px; border: 1px solid #dfe6e9; border-radius: 8px;
+            font-family: inherit; resize: vertical; min-height: 60px;
+        }
+
+        .step-prob {
+            display: flex; flex-direction: column; align-items: center; min-width: 120px;
+        }
+        .step-prob input[type=range] { width: 100px; margin: 10px 0; accent-color: var(--primary); }
+        .prob-badge {
+            background: #f1f2f6; padding: 5px 10px; border-radius: 10px;
+            font-weight: 800; font-size: 0.9rem; color: #636e72;
+        }
+
+        .btn-delete {
+            position: absolute; top: -10px; right: -10px;
+            background: #d63031; color: white; border: none; width: 25px; height: 25px;
+            border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2); opacity: 0; transition: 0.2s;
+        }
+        .step-card:hover .btn-delete { opacity: 1; }
+
+        /* --- BOTÃO ADICIONAR --- */
+        .add-section {
+            text-align: center; margin: 20px 0 40px 0; z-index: 2;
+        }
+        .btn-add {
+            background: white; border: 2px dashed var(--primary); color: var(--primary);
+            padding: 12px 30px; border-radius: 30px; font-weight: 800; cursor: pointer;
+            transition: 0.3s; display: inline-flex; align-items: center; gap: 10px;
+        }
+        .btn-add:hover { background: var(--primary); color: white; transform: scale(1.05); }
+
+        /* --- RESULTADO (CALCULADORA) --- */
+        .result-box {
+            position: sticky; bottom: 20px;
+            background: #2d3436; color: white; padding: 20px 30px;
+            border-radius: 50px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: flex; align-items: center; gap: 20px; z-index: 100;
+            animation: popUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .res-label { font-size: 0.9rem; text-transform: uppercase; font-weight: 700; opacity: 0.8; }
+        .res-value { font-size: 2rem; font-weight: 800; color: var(--risk-low); }
+
+        /* --- REALITY CHECK --- */
+        .reality-section {
+            width: 100%; max-width: 800px; margin-bottom: 100px;
+            background: #f0fff4; border: 2px solid #00b894; border-radius: 20px; padding: 25px;
+        }
+        .reality-title { color: #00b894; font-weight: 800; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .reality-input { width: 100%; border: 1px solid #b2bec3; background: white; min-height: 100px; }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes popUp { from { transform: translateY(100px); } to { transform: translateY(0); } }
+
+        /* --- IMPRESSÃO --- */
+        @media print {
+            body { background: white; padding: 0; }
+            header button, .btn-add, .result-box, .btn-back-home, .btn-delete { display: none !important; }
+            header { border: none; box-shadow: none; margin-bottom: 20px; }
+            .event-card, .step-card, .reality-section { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
+            .chain-line { border-left: 2px dashed #ccc; background: none; }
+            textarea { border: none; resize: none; }
+            .reality-section { background: white; border-color: #ccc; }
+            
+            /* Mostra o resultado estático na impressão */
+            #print-result { display: block !important; margin: 20px 0; font-weight: bold; border: 1px solid #000; padding: 10px; }
+        }
+        #print-result { display: none; }
+    </style>
+</head>
+<body>
+
+    <header data-aos="fade-down">
+        <button class="btn-print" onclick="window.print()"><i class="fa-solid fa-print"></i> <span>Imprimir</span></button>
+        <h1>Exame de Probabilidade</h1>
+        <div class="subtitle">Calculadora de Catastrofização</div>
+    </header>
+
+    <div class="event-card" data-aos="fade-up">
+        <label><i class="fa-solid fa-bolt"></i> Evento / Gatilho Inicial:</label>
+        <input type="text" placeholder='Ex: "Meu chefe está de cara feia hoje..."'>
+    </div>
+
+    <div class="chain-container" id="chainList">
+        <div class="chain-line"></div>
+        </div>
+
+    <div class="add-section">
+        <button class="btn-add" onclick="addStep()">
+            <i class="fa-solid fa-plus"></i> Adicionar "E se..."
+        </button>
+    </div>
+
+    <div class="reality-section" data-aos="fade-up">
+        <div class="reality-title"><i class="fa-solid fa-shield-halved"></i> Checagem de Realidade</div>
+        <p style="font-size:0.9rem; margin-bottom:10px;">Quais são as razões pelas quais essa sequência de desastres pode <strong>NÃO</strong> acontecer?</p>
+        <textarea class="reality-input" placeholder="Escreva os fatos que quebram essa corrente..."></textarea>
+    </div>
+
+    <div class="result-box">
+        <div>
+            <div class="res-label">Probabilidade Real Acumulada</div>
+            <div style="font-size:0.7rem; opacity:0.6;">(Chance de tudo isso acontecer em sequência)</div>
+        </div>
+        <div class="res-value" id="finalProb">0%</div>
+    </div>
+
+    <div id="print-result">
+        Probabilidade Final Calculada: <span id="print-prob-val"></span>
+    </div>
+
+    <center>
+        <a href="../listaferramentas.html" style="display:inline-block; margin-top:20px; margin-bottom: 50px; color:#b2bec3; text-decoration:none; font-weight:600;" class="btn-back-home">
+            <i class="fa-solid fa-arrow-left"></i> Voltar
+        </a>
+    </center>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        let steps = [];
+
+        function addStep() {
+            const id = Date.now();
+            const list = document.getElementById('chainList');
+            const div = document.createElement('div');
+            div.className = 'step-card';
+            div.id = `card-${id}`;
+            
+            // Texto placeholder dinâmico
+            const placeholders = [
+                "E se isso acontecer, o que vem depois?",
+                "E então?",
+                "Qual seria a próxima consequência terrível?"
+            ];
+            const ph = placeholders[Math.min(steps.length, 2)];
+
+            div.innerHTML = `
+                <div class="step-number">${steps.length + 1}</div>
+                <div class="step-content">
+                    <textarea placeholder="${ph}" oninput="calculate()"></textarea>
+                </div>
+                <div class="step-prob">
+                    <span class="prob-badge" id="badge-${id}">50%</span>
+                    <input type="range" min="1" max="100" value="50" oninput="updateBadge('${id}', this.value)">
+                    <span style="font-size:0.7rem; color:#b2bec3;">Probabilidade</span>
+                </div>
+                <button class="btn-delete" onclick="removeStep('${id}')"><i class="fa-solid fa-xmark"></i></button>
+            `;
+
+            list.appendChild(div);
+            steps.push({ id, val: 50 });
+            
+            updateNumbers();
+            calculate();
+        }
+
+        function updateBadge(id, val) {
+            document.getElementById(`badge-${id}`).innerText = val + "%";
+            // Atualiza valor no array
+            const index = steps.findIndex(s => s.id == id);
+            if(index !== -1) steps[index].val = parseInt(val);
+            
+            calculate();
+        }
+
+        function removeStep(id) {
+            const el = document.getElementById(`card-${id}`);
+            el.remove();
+            steps = steps.filter(s => s.id != id);
+            updateNumbers();
+            calculate();
+        }
+
+        function updateNumbers() {
+            const cards = document.querySelectorAll('.step-card');
+            cards.forEach((card, index) => {
+                card.querySelector('.step-number').innerText = index + 1;
+            });
+        }
+
+        function calculate() {
+            if (steps.length === 0) {
+                document.getElementById('finalProb').innerText = "0%";
+                return;
+            }
+
+            // A mágica matemática: Multiplica as probabilidades (em decimais)
+            let cumulative = 1;
+            steps.forEach(s => {
+                cumulative *= (s.val / 100);
+            });
+
+            // Converte de volta para porcentagem
+            let finalPercent = (cumulative * 100);
+            
+            // Formatação bonita
+            let displayVal = "";
+            if (finalPercent < 0.01) displayVal = "< 0.01%";
+            else if (finalPercent < 1) displayVal = finalPercent.toFixed(2) + "%";
+            else displayVal = Math.round(finalPercent) + "%";
+
+            const resEl = document.getElementById('finalProb');
+            const printEl = document.getElementById('print-prob-val');
+            
+            resEl.innerText = displayVal;
+            printEl.innerText = displayVal;
+
+            // Muda cor baseada no risco
+            if (finalPercent < 10) resEl.style.color = "#00b894"; // Seguro
+            else if (finalPercent < 40) resEl.style.color = "#fdcb6e"; // Médio
+            else resEl.style.color = "#d63031"; // Alto (ilusório)
+        }
+
+        // Adiciona um passo inicial
+        addStep();
+    </script>
+
+</body>
+</html>
