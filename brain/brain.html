@@ -181,23 +181,130 @@
         import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
 
         // --- MAPA ---
-        const map = {
-            "prefrontal": { name: "Córtex Pré-Frontal", func: "Executivo Central", desc: "Personalidade, planejamento e controle de impulsos.", color: 0x00FFFF, keywords: ["superior frontal", "middle frontal", "straight", "rectus", "orbital"] },
-            "motor": { name: "Córtex Motor", func: "Movimento", desc: "Controle voluntário dos músculos (Homúnculo Motor).", color: 0xFF2A2A, keywords: ["precentral"] },
-            "somato": { name: "Córtex Somatossensorial", func: "Sensação", desc: "Tato, dor e temperatura.", color: 0xFFA500, keywords: ["postcentral"] },
-            "broca": { name: "Área de Broca", func: "Fala", desc: "Produção da linguagem.", color: 0x9D00FF, keywords: ["inferior frontal"] },
-            "wernicke": { name: "Área de Wernicke", func: "Linguagem", desc: "Compreensão da fala.", color: 0x0088FF, keywords: ["supramarginal", "angular"] },
-            "auditory": { name: "Córtex Auditivo", func: "Audição", desc: "Processamento de sons.", color: 0x76FF03, keywords: ["transverse temporal", "superior temporal"] },
-            "fusiform": { name: "Giro Fusiforme", func: "Face & Objetos", desc: "Reconhecimento facial.", color: 0xFF0055, keywords: ["fusiform"] },
-            "hippocampus": { name: "Hipocampo", func: "Memória", desc: "Memória de longo prazo e navegação.", color: 0xFFEA00, keywords: ["hippocampus", "dentate", "subiculum"] },
-            "amygdala": { name: "Amígdala", func: "Emoção", desc: "Medo e respostas de ameaça.", color: 0xFF0000, keywords: ["amygdala", "periamygdaloid"] },
-            "insula": { name: "Ínsula", func: "Interocepção", desc: "Sensação visceral e empatia.", color: 0xD500F9, keywords: ["insula"] },
-            "thalamus": { name: "Tálamo", func: "Relé", desc: "Hub sensorial central.", color: 0x304FFE, keywords: ["thalamus", "geniculate", "pulvinar"] },
-            "basal": { name: "Núcleos da Base", func: "Hábito", desc: "Controle motor fino.", color: 0x6200EA, keywords: ["caudate", "putamen", "globus pallidus", "accumbens"] },
-            "brainstem": { name: "Tronco Encefálico", func: "Vital", desc: "Respiração e batimentos.", color: 0xFFFFFF, keywords: ["midbrain", "pons", "medulla", "colliculus", "nigra"] },
-            "cerebellum": { name: "Cerebelo", func: "Equilíbrio", desc: "Coordenação motora.", color: 0xFFD600, keywords: ["cerebellum"] },
-            "connect": { name: "Substância Branca", func: "Conexão", desc: "Fibras de comunicação.", color: 0x607D8B, keywords: ["callosum", "capsule", "corona", "tract", "fasciculus", "fornix"] },
-            "ventricle": { name: "Ventrículos", func: "Proteção", desc: "Sistema hidráulico (LCR).", color: 0x263238, keywords: ["ventricle", "aqueduct"] }
+  const map = {
+            // --- LOBO FRONTAL ---
+            "prefrontal": {
+                name: "Córtex Pré-Frontal", func: "Executivo Central",
+                desc: "Sede da personalidade, planejamento futuro, controle de impulsos e modulação do comportamento social.",
+                color: 0x00FFFF, keywords: ["superior frontal", "middle frontal", "straight", "rectus", "orbital", "anterior orbital", "medial orbital", "lateral orbital"]
+            },
+            "motor": {
+                name: "Córtex Motor", func: "Controle Motor",
+                desc: "Inicia e coordena os movimentos musculares voluntários (Homúnculo Motor).",
+                color: 0xFF2A2A, keywords: ["precentral"]
+            },
+            "broca": {
+                name: "Área de Broca", func: "Produção da Fala",
+                desc: "Essencial para a articulação da fala e gramática. Lesões causam afasia expressiva.",
+                color: 0x9D00FF, keywords: ["inferior frontal"]
+            },
+
+            // --- LOBO PARIETAL ---
+            "somato": {
+                name: "Córtex Somatossensorial", func: "Sensação Física",
+                desc: "Processa tato, dor, temperatura e propriocepção do corpo.",
+                color: 0xFFA500, keywords: ["postcentral"]
+            },
+            "parietal_assoc": {
+                name: "Lobo Parietal (Assoc.)", func: "Espacialidade",
+                desc: "Atenção espacial, manipulação de objetos e habilidades matemáticas.",
+                color: 0xFFC400, keywords: ["superior parietal", "precuneus", "supramarginal", "angular"]
+            },
+
+            // --- LOBO TEMPORAL & LÍMBICO MEDIAL ---
+            "auditory": {
+                name: "Córtex Auditivo", func: "Audição",
+                desc: "Processamento primário de sons, tons e volume.",
+                color: 0x76FF03, keywords: ["transverse temporal", "superior temporal"]
+            },
+            "wernicke": {
+                name: "Área de Wernicke", func: "Compreensão",
+                desc: "Interpretação do significado da linguagem. Lesões afetam o entendimento.",
+                color: 0x0088FF, keywords: ["supramarginal", "angular", "posterior transverse"]
+            },
+            "fusiform": {
+                name: "Giro Fusiforme", func: "Reconhecimento Facial",
+                desc: "Especializado em identificar rostos (Área da Face) e palavras escritas.",
+                color: 0xFF0055, keywords: ["fusiform"]
+            },
+            "temporal_inf": {
+                name: "Temporal Inferior", func: "Memória Visual",
+                desc: "Reconhecimento de objetos e nomes.",
+                color: 0x00E676, keywords: ["inferior temporal", "middle temporal"]
+            },
+            // AQUI ESTÁ A CORREÇÃO DA "ESTRUTURA PRETA":
+            "uncus": {
+                name: "Uncus (Olfativo)", func: "Olfato e Emoção",
+                desc: "Processamento de cheiros e ligação direta com memórias emocionais. Área frequente de focos epilépticos.",
+                color: 0xFF4081, keywords: ["uncus"] 
+            },
+            "parahippocampal": {
+                name: "Giro Parahipocampal", func: "Memória de Cenas",
+                desc: "Codificação de memória espacial e reconhecimento de lugares/paisagens.",
+                color: 0xF8BBD0, keywords: ["parahippocampal", "presubiculum", "parasubiculum"]
+            },
+            "hippocampus": {
+                name: "Hipocampo", func: "Memória Longa",
+                desc: "Arquivista do cérebro. Consolida memórias recentes em duradouras.",
+                color: 0xFFEA00, keywords: ["hippocampus", "dentate", "fimbria", "subiculum", "fasciolar"]
+            },
+            "amygdala": {
+                name: "Amígdala", func: "Medo & Alerta",
+                desc: "Detector de ameaças. Processa medo, raiva e relevância emocional.",
+                color: 0xFF0000, keywords: ["amygdala", "periamygdaloid"]
+            },
+
+            // --- OUTRAS ESTRUTURAS ---
+            "insula": {
+                name: "Ínsula", func: "Interocepção",
+                desc: "Sensação visceral (frio na barriga), dor, nojo e empatia.",
+                color: 0xD500F9, keywords: ["short gyrus of insula", "long gyrus of insula", "insula", "anterior accessory"]
+            },
+            "cingulate": {
+                name: "Córtex Cingulado", func: "Regulação Emocional",
+                desc: "Detecção de conflitos, erros e dor emocional.",
+                color: 0x1DE9B6, keywords: ["cingulate"]
+            },
+            "thalamus": {
+                name: "Tálamo", func: "Relé Sensorial",
+                desc: "Porteiro da consciência. Filtra visão, audição e tato.",
+                color: 0x304FFE, keywords: ["thalamus", "geniculate", "pulvinar", "ventral posterior", "ventral lateral", "medial dorsal", "anterior nucleus", "centromedian", "parafascicular", "paratenial", "reuniens"]
+            },
+            "hypothalamus": {
+                name: "Hipotálamo", func: "Sobrevivência",
+                desc: "Fome, sede, sono, temperatura e controle hormonal.",
+                color: 0xF50057, keywords: ["hypothalamus", "mammillary", "preoptic", "suprachiasmatic", "supraoptic", "tuber cinereum", "posterior nucleus"]
+            },
+            "basal": {
+                name: "Núcleos da Base", func: "Hábito",
+                desc: "Controle motor fino e formação de hábitos.",
+                color: 0x6200EA, keywords: ["caudate", "putamen", "globus pallidus", "pallidus", "accumbens", "subthalamic", "substantia nigra", "claustrum"]
+            },
+            "brainstem": {
+                name: "Tronco Encefálico", func: "Vital",
+                desc: "Respiração e batimentos cardíacos.",
+                color: 0xFFFFFF, keywords: ["midbrain", "pons", "medulla", "oblongata", "colliculus", "red nucleus", "tegmentum", "olive", "cerebral crus"]
+            },
+            "cerebellum": {
+                name: "Cerebelo", func: "Equilíbrio",
+                desc: "Coordenação motora fina e postura.",
+                color: 0xFFD600, keywords: ["cerebellum"]
+            },
+            "connect": {
+                name: "Substância Branca", func: "Conexão",
+                desc: "Vias de comunicação (axônios) entre áreas.",
+                color: 0x607D8B, keywords: ["corpus callosum", "capsule", "corona", "peduncle", "brachium", "lemniscus", "tract", "fasciculus", "commissure", "stria", "lamina terminalis", "fornix", "septum", "induseum", "subcallosal", "paraterminal", "radiation", "tapetum", "diagonal band"]
+            },
+            "ventricle": {
+                name: "Ventrículos", func: "Proteção",
+                desc: "Cavidades com líquido que protegem o cérebro.",
+                color: 0x263238, keywords: ["ventricle", "aqueduct", "choroid"]
+            },
+            "olfactory": {
+                name: "Sistema Olfatório", func: "Olfato",
+                desc: "Bulbo e tratos olfatórios.",
+                color: 0x00C853, keywords: ["olfactory"]
+            }
         };
         const defaultRegion = { name: "Estrutura", func: "Anatomia", desc: "Parte estrutural.", color: 0x444444 };
 
