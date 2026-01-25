@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor de Crítica em Ação | Bruno de Souza</title>
+    
+    <script>
+        if(localStorage.getItem('logado') !== 'sim') {
+            window.location.href = "../../login.html";
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #f0f8ff;
+            --critic-color: #e17055;  /* Laranja avermelhado */
+            --action-color: #00b894;  /* Verde menta */
+            --text: #2d3436;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0; padding: 20px;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* --- HEADER --- */
+        header {
+            text-align: center; margin-bottom: 30px;
+            background: white; padding: 20px 40px;
+            border-radius: 20px; border: 3px solid var(--action-color);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            max-width: 900px; width: 100%; position: relative;
+        }
+
+        header h1 { color: var(--action-color); margin: 0; font-weight: 800; font-size: 1.8rem; }
+        .subtitle { color: #636e72; font-weight: 600; margin-top: 5px; }
+
+        .btn-print {
+            position: absolute; top: 20px; right: 20px;
+            background: none; border: 2px solid var(--action-color); color: var(--action-color);
+            padding: 8px 15px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+        .btn-print:hover { background: var(--action-color); color: white; }
+
+        /* --- ÁREA DE TRANSFORMAÇÃO --- */
+        .converter-container {
+            width: 100%; max-width: 1000px;
+            display: grid; grid-template-columns: 1fr 60px 1fr; gap: 10px;
+            align-items: start; margin-bottom: 40px;
+        }
+
+        .panel {
+            background: white; padding: 25px; border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            display: flex; flex-direction: column; gap: 15px;
+            border-top: 6px solid; transition: 0.3s;
+        }
+        .panel:hover { transform: translateY(-5px); }
+
+        .panel-critic { border-color: var(--critic-color); }
+        .panel-action { border-color: var(--action-color); }
+
+        .panel-title {
+            font-size: 1.1rem; font-weight: 800; text-transform: uppercase;
+            display: flex; align-items: center; gap: 10px;
+        }
+
+        textarea {
+            width: 100%; padding: 15px; border: 2px solid #dfe6e9; border-radius: 12px;
+            font-family: inherit; font-size: 1rem; resize: vertical; min-height: 120px;
+            background: #fdfdfd; transition: 0.3s; outline: none;
+        }
+        
+        .panel-critic textarea:focus { border-color: var(--critic-color); background: #fff5f5; }
+        .panel-action textarea:focus { border-color: var(--action-color); background: #f0fff4; }
+
+        /* Seta Central */
+        .arrow-center {
+            display: flex; align-items: center; justify-content: center; height: 100%;
+            font-size: 2rem; color: #b2bec3;
+        }
+
+        /* Botão Converter */
+        .btn-convert {
+            grid-column: span 3; justify-self: center; margin-top: 20px;
+            background: #2d3436; color: white; border: none; padding: 15px 40px;
+            border-radius: 50px; font-weight: 800; font-size: 1.1rem;
+            cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 10px;
+        }
+        .btn-convert:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); background: var(--action-color); }
+
+        /* --- LISTA DE REGISTROS --- */
+        .log-list {
+            width: 100%; max-width: 1000px; display: flex; flex-direction: column; gap: 15px; margin-bottom: 40px;
+        }
+
+        .log-card {
+            background: white; border-radius: 15px; padding: 20px;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.05); position: relative;
+            display: grid; grid-template-columns: 1fr auto 1fr auto; gap: 20px; align-items: center;
+            border-left: 5px solid var(--action-color); animation: slideIn 0.4s ease;
+        }
+
+        .log-text { font-size: 0.95rem; color: #636e72; }
+        .log-action { font-size: 1rem; font-weight: 700; color: var(--text); }
+        .log-icon { color: var(--action-color); font-size: 1.2rem; }
+
+        .btn-delete {
+            background: none; border: none; color: #d63031; cursor: pointer; opacity: 0.5; transition: 0.2s;
+        }
+        .btn-delete:hover { opacity: 1; transform: scale(1.2); }
+
+        /* --- REFLEXÃO FINAL --- */
+        .reflection-card {
+            width: 100%; max-width: 1000px;
+            background: #e3f2fd; padding: 25px; border-radius: 20px;
+            border: 2px dashed #0984e3; text-align: center; margin-bottom: 50px;
+        }
+        .reflection-card textarea {
+            border: 1px solid #74b9ff; min-height: 80px; background: white; margin-top: 10px;
+        }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Responsividade */
+        @media (max-width: 800px) {
+            .converter-container { grid-template-columns: 1fr; gap: 20px; }
+            .arrow-center { transform: rotate(90deg); height: auto; margin: 10px 0; }
+            .btn-convert { grid-column: span 1; width: 100%; }
+            .log-card { grid-template-columns: 1fr; border-left: none; border-top: 5px solid var(--action-color); text-align: center; }
+            .log-icon { margin: 5px 0; transform: rotate(90deg); }
+            .btn-print span { display: none; }
+        }
+
+        /* --- IMPRESSÃO --- */
+        #print-table { display: none; }
+
+        @media print {
+            body { background: white; padding: 0; }
+            header button, .btn-back-home, .btn-convert, .converter-container, .btn-delete { display: none !important; }
+            header { border: none; box-shadow: none; margin-bottom: 20px; }
+            
+            .log-list { display: none; } /* Usa a tabela formatada */
+            .reflection-card { border: 1px solid #ccc; background: white; box-shadow: none; }
+            
+            #print-table {
+                display: table; width: 100%; border-collapse: collapse; font-family: sans-serif; margin-bottom: 20px;
+            }
+            #print-table th { background: #eee; padding: 10px; border: 1px solid #ccc; text-align: left; }
+            #print-table td { padding: 10px; border: 1px solid #ccc; vertical-align: top; }
+        }
+    </style>
+</head>
+<body>
+
+    <header data-aos="fade-down">
+        <button class="btn-print" onclick="window.print()"><i class="fa-solid fa-print"></i> <span>Imprimir Plano</span></button>
+        <h1>Conversor de Crítica em Ação</h1>
+        <div class="subtitle">Progredir em vez de tentar a perfeição</div>
+    </header>
+
+    <div class="converter-container" data-aos="fade-up">
+        
+        <div class="panel panel-critic">
+            <div class="panel-title" style="color:var(--critic-color)">
+                <i class="fa-solid fa-thumbs-down"></i> O que critico em mim?
+            </div>
+            <textarea id="criticInput" placeholder='Ex: "Não sou bom o suficiente no meu trabalho, não terminei o relatório perfeito..."'></textarea>
+        </div>
+
+        <div class="arrow-center">
+            <i class="fa-solid fa-arrow-right"></i>
+        </div>
+
+        <div class="panel panel-action">
+            <div class="panel-title" style="color:var(--action-color)">
+                <i class="fa-solid fa-stairs"></i> Como posso progredir hoje?
+            </div>
+            <textarea id="actionInput" placeholder='Ex: "Vou escrever apenas o primeiro parágrafo, mesmo que saia rascunho. Feito é melhor que perfeito."'></textarea>
+        </div>
+
+        <button class="btn-convert" onclick="addEntry()">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Converter Crítica em Passo Prático
+        </button>
+    </div>
+
+    <div class="log-list" id="logList">
+        </div>
+
+    <div class="reflection-card" data-aos="fade-up">
+        <label style="font-weight:800; color:#0984e3; font-size:1.1rem;">
+            <i class="fa-solid fa-brain"></i> Por que progredir (fazer um pouco) é melhor do que buscar a perfeição (ficar parado)?
+        </label>
+        <textarea id="whyInput" placeholder="Ex: Porque quando ajo, eu aprendo e saio do lugar. A perfeição só gera ansiedade..."></textarea>
+    </div>
+
+    <table id="print-table">
+        <thead>
+            <tr>
+                <th width="45%">Crítica (O que me incomoda)</th>
+                <th width="55%">Ação de Progresso (O que farei)</th>
+            </tr>
+        </thead>
+        <tbody id="printBody"></tbody>
+    </table>
+
+    <center>
+        <a href="../listaferramentas.html" style="display:inline-block; margin-top:40px; color:#b2bec3; text-decoration:none; font-weight:600;" class="btn-back-home">
+            <i class="fa-solid fa-arrow-left"></i> Voltar
+        </a>
+    </center>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        function addEntry() {
+            const critic = document.getElementById('criticInput').value.trim();
+            const action = document.getElementById('actionInput').value.trim();
+
+            if (!critic || !action) {
+                alert("Preencha os dois lados para converter!");
+                return;
+            }
+
+            const list = document.getElementById('logList');
+            const div = document.createElement('div');
+            div.className = 'log-card';
+            
+            div.innerHTML = `
+                <div class="log-text">"${critic}"</div>
+                <div class="log-icon"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="log-action"><i class="fa-solid fa-check"></i> ${action}</div>
+                <button class="btn-delete" onclick="deleteEntry(this)"><i class="fa-solid fa-trash"></i></button>
+            `;
+
+            list.prepend(div); // Adiciona no topo
+            
+            // Limpa inputs
+            document.getElementById('criticInput').value = '';
+            document.getElementById('actionInput').value = '';
+
+            updatePrintTable();
+        }
+
+        function deleteEntry(btn) {
+            if(confirm("Remover este item?")) {
+                btn.closest('.log-card').remove();
+                updatePrintTable();
+            }
+        }
+
+        function updatePrintTable() {
+            const tbody = document.getElementById('printBody');
+            tbody.innerHTML = '';
+            
+            const cards = document.querySelectorAll('.log-card');
+            
+            cards.forEach(card => {
+                const c = card.querySelector('.log-text').innerText.replace(/"/g, '');
+                const a = card.querySelector('.log-action').innerText;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${c}</td><td>${a}</td>`;
+                tbody.appendChild(tr);
+            });
+        }
+    </script>
+
+</body>
+</html>
