@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventário de Perfeccionismo | Bruno de Souza</title>
+    
+    <script>
+        if(localStorage.getItem('logado') !== 'sim') {
+            window.location.href = "../../login.html";
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #f0f8ff;
+            --primary: #4834d4;
+            --secondary: #686de0;
+            --text: #2d3436;
+            --good: #6ab04c; /* Consciencioso */
+            --bad: #eb4d4b;  /* Autoavaliativo */
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0; padding: 20px;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        header {
+            text-align: center; margin-bottom: 30px;
+            background: white; padding: 20px 40px;
+            border-radius: 20px; border: 3px solid var(--primary);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            max-width: 900px; width: 100%; position: relative;
+        }
+
+        header h1 { color: var(--primary); margin: 0; font-weight: 800; font-size: 1.8rem; }
+        .subtitle { color: #636e72; font-weight: 600; margin-top: 5px; }
+
+        .btn-print {
+            position: absolute; top: 20px; right: 20px;
+            background: none; border: 2px solid var(--primary); color: var(--primary);
+            padding: 8px 15px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+        .btn-print:hover { background: var(--primary); color: white; }
+
+        /* --- LEGENDA --- */
+        .legend-card {
+            background: white; padding: 15px 25px; border-radius: 15px; margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); text-align: center; max-width: 800px;
+            display: flex; justify-content: space-around; flex-wrap: wrap; gap: 10px;
+        }
+        .legend-item { font-size: 0.9rem; font-weight: 600; }
+        .legend-num { 
+            display: inline-block; width: 25px; height: 25px; background: var(--primary); color: white; 
+            border-radius: 50%; line-height: 25px; margin-right: 5px; 
+        }
+
+        /* --- LISTA DE QUESTÕES --- */
+        .question-container {
+            width: 100%; max-width: 900px;
+            display: flex; flex-direction: column; gap: 15px;
+        }
+
+        .question-card {
+            background: white; padding: 20px; border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03); transition: 0.2s;
+            border-left: 5px solid transparent;
+        }
+        .question-card:hover { border-left-color: var(--secondary); transform: translateX(5px); }
+
+        .q-text { font-weight: 600; font-size: 1.05rem; margin-bottom: 15px; display: block; }
+        
+        .options-grid {
+            display: flex; justify-content: space-between; gap: 5px;
+        }
+
+        .opt-label {
+            flex: 1; text-align: center; cursor: pointer;
+            background: #f1f2f6; padding: 10px 5px; border-radius: 8px;
+            transition: 0.2s; font-size: 0.9rem; font-weight: 700; color: #636e72;
+        }
+        .opt-label:hover { background: #dfe6e9; }
+
+        /* Esconde o radio button real */
+        input[type="radio"] { display: none; }
+        
+        /* Estilo quando selecionado */
+        input[type="radio"]:checked + .opt-label {
+            background: var(--primary); color: white; transform: scale(1.05);
+        }
+
+        /* --- BOTÃO CALCULAR --- */
+        .btn-calc {
+            margin-top: 40px; padding: 15px 40px; background: var(--text); color: white;
+            border: none; border-radius: 50px; font-weight: 800; font-size: 1.2rem;
+            cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 10px;
+        }
+        .btn-calc:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); background: var(--primary); }
+
+        /* --- RESULTADOS --- */
+        .results-section {
+            width: 100%; max-width: 900px; display: none; margin-top: 40px;
+            animation: slideUp 0.5s ease;
+        }
+
+        .result-group {
+            background: white; padding: 30px; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-bottom: 30px;
+            border-top: 6px solid;
+        }
+        .group-bad { border-color: var(--bad); }
+        .group-good { border-color: var(--good); }
+
+        .group-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 5px; }
+        .group-desc { font-size: 0.9rem; color: #636e72; margin-bottom: 20px; font-style: italic; }
+
+        .score-row {
+            display: grid; grid-template-columns: 2fr 1fr 2fr; align-items: center; gap: 15px;
+            margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #f1f2f6;
+        }
+
+        .bar-container {
+            height: 10px; background: #dfe6e9; border-radius: 5px; overflow: hidden; position: relative;
+        }
+        .bar-fill {
+            height: 100%; width: 0%; transition: width 1s ease; border-radius: 5px;
+        }
+        .marker {
+            position: absolute; top: -5px; width: 2px; height: 20px; background: black; z-index: 2;
+        }
+        .marker-label {
+            position: absolute; top: -20px; font-size: 0.7rem; color: black; transform: translateX(-50%); font-weight: bold;
+        }
+
+        .score-val { font-weight: 800; font-size: 1.1rem; text-align: center; }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media print {
+            body { background: white; }
+            header button, .btn-calc { display: none !important; }
+            .results-section { display: block; }
+            .question-container { display: none; } /* Oculta perguntas no print para economizar papel, foca no resultado */
+        }
+    </style>
+</head>
+<body>
+
+    <header data-aos="fade-down">
+        <button class="btn-print" onclick="window.print()"><i class="fa-solid fa-print"></i> <span>Imprimir Resultados</span></button>
+        <h1>Inventário de Perfeccionismo</h1>
+        <div class="subtitle">Avaliação Multidimensional</div>
+    </header>
+
+    <div class="legend-card" data-aos="fade-up">
+        <div class="legend-item"><span class="legend-num">1</span> Discordo Plenamente</div>
+        <div class="legend-item"><span class="legend-num">2</span> Discordo em Parte</div>
+        <div class="legend-item"><span class="legend-num">3</span> Nem concordo/Nem discordo</div>
+        <div class="legend-item"><span class="legend-num">4</span> Concordo em Parte</div>
+        <div class="legend-item"><span class="legend-num">5</span> Concordo Plenamente</div>
+    </div>
+
+    <div class="question-container" id="questionsBox">
+        </div>
+
+    <button class="btn-calc" onclick="calculateResults()">
+        <i class="fa-solid fa-calculator"></i> Calcular Perfil
+    </button>
+
+    <div class="results-section" id="resultsArea">
+        
+        <div class="result-group group-bad">
+            <div class="group-title" style="color:var(--bad)">Perfeccionismo Autoavaliativo</div>
+            <div class="group-desc">Focado em autocrítica, medo de errar e pressão social. Geralmente associado a sofrimento.</div>
+            
+            <div class="score-row">
+                <strong>Preocupação com Erros (CM)</strong>
+                <div class="score-val" id="score_cm">0.0</div>
+                <div class="bar-container"><div class="bar-fill" id="bar_cm" style="background:var(--bad)"></div><div class="marker" style="left:49%"><span class="marker-label">Média</span></div></div>
+            </div>
+            <div class="score-row">
+                <strong>Necessidade de Aprovação (NA)</strong>
+                <div class="score-val" id="score_na">0.0</div>
+                <div class="bar-container"><div class="bar-fill" id="bar_na" style="background:var(--bad)"></div><div class="marker" style="left:64%"><span class="marker-label">Média</span></div></div>
+            </div>
+            <div class="score-row">
+                <strong>Pressão Parental (PP)</strong>
+                <div class="score-val" id="score_pp">0.0</div>
+                <div class="bar-container"><div class="bar-fill" id="bar_pp" style="background:var(--bad)"></div><div class="marker" style="left:63%"><span class="marker-label">Média</span></div></div>
+            </div>
+            <div class="score-row">
+                <strong>Ruminação (R)</strong>
+                <div class="score-val" id="score_r">0.0</div>
+                <div class="bar-container"><div class="bar-fill" id="bar_r" style="background:var(--bad)"></div><div class="marker" style="left:56%"><span class="marker-label">Média</span></div></div>
+            </div>
+            
+            <div style="margin-top:20px; padding-top:10px; border-top:2px dashed #eee; text-align:center;">
+                <strong>Índice Autoavaliativo Total: </strong> <span id="total_bad" style="font-size:1.5rem; color:var(--bad); font-weight:800;">00.0</span> <small>(Média Esp.: 11.68)</small>
+            </div>
+        </div>
+
+        <div class="result-group group-good">
+            <div class="group-title" style="color:var(--good)">Perfeccionismo Consciencioso</div>
+            <div class="group-desc">Focado em organização, esforço e planejamento. Pode ser positivo se for flexível.</div>
+            
+            <div class="score-row">
+                <strong>Padrões Elevados p/ Outros (HSO)</strong>
+                <div class="score-val" id="score_hso">0.0</div>
+                <div class="bar-container"><div class="bar-fill" id="bar_hso" style="background:var(--good)"></div><div class="marker" style="left:56%"><span class="marker-label">Média</span></div></div>
+            </div>
+            <div class="score-row">
+                <strong>Organização (O)</strong>
+                <div class="score-val" id="score_o">0.0</div>
+                <div class="bar-container"><div class="bar-fill" id="bar_o" style="background:var(--good)"></div><div class="marker" style="left:70%"><span class="marker-label">Média</span></div></div>
+            </div>
+            <div class="score-row">
+                <strong>Planejamento (P)</strong>
+                <div class="score-val" id="score_p">0.0</div>
+                <div class="bar-container"><div class="bar-fill" id="bar_p" style="background:var(--good)"></div><div class="marker" style="left:68%"><span class="marker-label">Média</span></div></div>
+            </div>
+            <div class="score-row">
+                <strong>Esforço por Excelência (SE)</strong>
+                <div class="score-val" id="score_se">0.0</div>
+                <div class="bar-container"><div class="bar-fill" id="bar_se" style="background:var(--good)"></div><div class="marker" style="left:62%"><span class="marker-label">Média</span></div></div>
+            </div>
+
+            <div style="margin-top:20px; padding-top:10px; border-top:2px dashed #eee; text-align:center;">
+                <strong>Índice Consciencioso Total: </strong> <span id="total_good" style="font-size:1.5rem; color:var(--good); font-weight:800;">00.0</span> <small>(Média Esp.: 12.83)</small>
+            </div>
+        </div>
+
+    </div>
+
+    <center>
+        <a href="../listaferramentas.html" style="display:inline-block; margin-top:40px; color:#b2bec3; text-decoration:none; font-weight:600;" class="btn-back-home">
+            <i class="fa-solid fa-arrow-left"></i> Voltar
+        </a>
+    </center>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        // Dados baseados no Formulário 4.6
+        // Categorias: se, na, hso, o, p, cm, pp, r
+        const questionsDB = [
+            {t: "Meu trabalho precisa ser perfeito para que eu fique satisfeito.", c: "se"},
+            {t: "Sou extremamente sensível aos comentários dos outros.", c: "na"},
+            {t: "Geralmente digo às pessoas quando seu trabalho não está à altura dos meus padrões.", c: "hso"},
+            {t: "Sou bem organizado.", c: "o"},
+            {t: "Reflito cuidadosamente sobre minhas opções antes de tomar uma decisão.", c: "p"},
+            {t: "Se eu cometer erros, as pessoas irão fazer pouco de mim.", c: "cm"},
+            {t: "Sempre senti pressão do(s) meu(s) pai(s) para ser o melhor.", c: "pp"},
+            {t: "Se eu fizer alguma coisa menos do que perfeita, terei dificuldade em superar isso.", c: "r"},
+            {t: "Toda minha energia é empregada na obtenção de um sucesso impecável.", c: "se"},
+            {t: "Comparo meu trabalho com o de outros e frequentemente me sinto inadequado.", c: "na"},
+            {t: "Fico incomodado quando as outras pessoas não mantêm os mesmos padrões que eu.", c: "hso"},
+            {t: "Penso que as coisas devem ser guardadas em seus lugares.", c: "o"},
+            {t: "Eu me pego planejando muitas das minhas decisões.", c: "p"},
+            {t: "Fico particularmente constrangido com um fracasso.", c: "cm"},
+            {t: "Meus pais me exigiam padrões elevados.", c: "pp"},
+            {t: "Passo muito tempo me preocupando com coisas que fiz ou com coisas que preciso fazer.", c: "r"},
+            {t: "Não tolero fazer as coisas pela metade.", c: "se"},
+            {t: "Sou sensível ao modo como os outros respondem ao meu trabalho.", c: "na"},
+            {t: "Não sou muito paciente com as desculpas das pessoas por um trabalho medíocre.", c: "hso"},
+            {t: "Eu me caracterizaria como uma pessoa organizada.", c: "o"},
+            {t: "A maioria das minhas decisões é tomada depois que tive tempo para pensar a respeito.", c: "p"},
+            {t: "Reajo de forma exagerada quando cometo erros.", c: "cm"},
+            {t: "Meu(minha) pai(mãe) é(são) difícil(eis) de agradar.", c: "pp"},
+            {t: "Se cometo um erro, meu dia inteiro está arruinado.", c: "r"},
+            {t: "Tenho que ser o melhor em todas as tarefas que realizo.", c: "se"},
+            {t: "Preocupo-me se outras pessoas irão aprovar minhas ações.", c: "na"},
+            {t: "Geralmente sou crítico com as outras pessoas.", c: "hso"},
+            {t: "Gosto de ser sempre organizado e disciplinado.", c: "o"},
+            {t: "Geralmente preciso refletir sobre as coisas antes de saber o que quero.", c: "p"},
+            {t: "Se alguém aponta um erro que cometi, sinto que de certa forma perdi o respeito dessa pessoa.", c: "cm"},
+            {t: "Meu(minha) pai(mãe) te(ê)m altas expectativas quanto ao desempenho.", c: "pp"},
+            {t: "Se digo ou faço alguma coisa idiota tendo a ficar pensando nisso o resto do dia.", c: "r"},
+            {t: "Oriento minhas ações com rigor para atingir padrões elevados.", c: "se"},
+            {t: "Frequentemente não falo nada porque temo dizer a coisa errada.", c: "na"},
+            {t: "Frequentemente fico irritado com o trabalho preguiçoso ou desleixado de outras pessoas.", c: "hso"},
+            {t: "Limpo minha casa com frequência.", c: "o"},
+            {t: "Preciso de tempo para montar um plano e agir.", c: "p"},
+            {t: "Se eu estragar alguma coisa, as pessoas podem começar a questionar tudo o que faço.", c: "cm"},
+            {t: "Durante meu crescimento, senti muita pressão para fazer tudo certo.", c: "pp"},
+            {t: "Quando cometo um erro, geralmente não consigo parar de pensar nisso.", c: "r"},
+            {t: "Preciso atingir a excelência em tudo o que faço.", c: "se"},
+            {t: "Sou inseguro sobre o que os outros pensam de mim.", c: "na"},
+            {t: "Tenho pouca tolerância com os erros de pessoas negligentes.", c: "hso"},
+            {t: "Não deixo de guardar as coisas assim que termino de usá-las.", c: "o"},
+            {t: "Tendo a deliberar antes de tomar minha decisão.", c: "p"},
+            {t: "Para mim, um erro é igual a fracasso.", c: "cm"},
+            {t: "Meu(minha) pai(mãe) me pressiona(m) muito para que tenha sucesso.", c: "pp"},
+            {t: "Com frequência fico obcecado com alguma coisa que fiz.", c: "r"},
+            {t: "Frequentemente me preocupo que as pessoas possam entender errado o que eu digo.", c: "na"},
+            {t: "Frequentemente fico frustrado com os erros das outras pessoas.", c: "hso"},
+            {t: "Meu guarda-roupa é limpo e organizado.", c: "o"},
+            {t: "Geralmente não tomo decisões na hora.", c: "p"},
+            {t: "Cometer erros é um sinal de burrice.", c: "cm"},
+            {t: "Sempre achei que meu(s) pai(mãe) queria(m) que eu fosse perfeito.", c: "pp"},
+            {t: "Depois que entrego um projeto, não consigo parar de pensar em como poderia ter feito melhor.", c: "r"},
+            {t: "Meu espaço de trabalho é organizado em geral.", c: "o"},
+            {t: "Se cometo um erro grave, sinto-me uma pessoa sem importância.", c: "cm"},
+            {t: "Meu(s) pai(mãe) esperava(m) de mim nada menos que o melhor.", c: "pp"},
+            {t: "Passo boa parte do tempo preocupado com a opinião que outras pessoas têm de mim.", c: "na"}
+        ];
+
+        // Médias Normativas (Pag 3) para cálculo de % da barra (sendo 5.0 = 100%)
+        // CM: 2.46, NA: 3.22, HSO: 2.83, O: 3.5, PP: 3.17, P: 3.4, R: 2.83, SE: 3.1
+        const norms = {
+            cm: 2.46, na: 3.22, hso: 2.83, o: 3.5, pp: 3.17, p: 3.4, r: 2.83, se: 3.1
+        };
+
+        function renderQuestions() {
+            const container = document.getElementById('questionsBox');
+            questionsDB.forEach((q, idx) => {
+                const num = idx + 1;
+                const html = `
+                    <div class="question-card">
+                        <span class="q-text">${num}. ${q.t}</span>
+                        <div class="options-grid">
+                            ${[1,2,3,4,5].map(val => `
+                                <input type="radio" name="q${num}" id="q${num}_${val}" value="${val}" data-cat="${q.c}">
+                                <label for="q${num}_${val}" class="opt-label">${val}</label>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += html;
+            });
+        }
+
+        function calculateResults() {
+            // Arrays para guardar as notas de cada categoria
+            const scores = { cm: [], na: [], hso: [], o: [], pp: [], p: [], r: [], se: [] };
+            let allAnswered = true;
+
+            // Coleta respostas
+            for(let i=1; i<=questionsDB.length; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                if(selected) {
+                    const val = parseInt(selected.value);
+                    const cat = selected.dataset.cat;
+                    scores[cat].push(val);
+                } else {
+                    allAnswered = false;
+                }
+            }
+
+            if(!allAnswered) {
+                if(!confirm("Você não respondeu todas as perguntas. O cálculo pode ser impreciso. Deseja continuar mesmo assim?")) return;
+            }
+
+            // Calcula Médias (AVE)
+            const results = {};
+            for(const key in scores) {
+                const arr = scores[key];
+                const sum = arr.reduce((a,b) => a+b, 0);
+                const avg = arr.length > 0 ? (sum / arr.length) : 0;
+                results[key] = avg;
+            }
+
+            // Renderiza Resultados
+            renderBar('cm', results.cm);
+            renderBar('na', results.na);
+            renderBar('pp', results.pp);
+            renderBar('r', results.r);
+            
+            renderBar('hso', results.hso);
+            renderBar('o', results.o);
+            renderBar('p', results.p);
+            renderBar('se', results.se);
+
+            // Calcula Totais Compostos (Soma das Médias)
+            const totalBad = results.cm + results.na + results.pp + results.r;
+            const totalGood = results.hso + results.o + results.p + results.se;
+
+            document.getElementById('total_bad').innerText = totalBad.toFixed(2);
+            document.getElementById('total_good').innerText = totalGood.toFixed(2);
+
+            document.getElementById('resultsArea').style.display = 'block';
+            
+            // Scroll para resultados
+            setTimeout(() => {
+                document.getElementById('resultsArea').scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        }
+
+        function renderBar(cat, val) {
+            document.getElementById(`score_${cat}`).innerText = val.toFixed(2);
+            
+            // Converte nota 1-5 em porcentagem 0-100 para a barra
+            // (Val - 1) / 4 * 100
+            const pct = ((val - 0) / 5) * 100; // Visual simples em relação ao max 5
+            document.getElementById(`bar_${cat}`).style.width = pct + "%";
+
+            // Posiciona marcador da média (Norm / 5 * 100)
+            const normPct = (norms[cat] / 5) * 100;
+            // O marcador já está posicionado via CSS inline no HTML para simplificar, 
+            // mas poderia ser dinâmico aqui se quisesse precisão exata.
+            // Deixei hardcoded no HTML baseado na média normativa aproximada para performance.
+        }
+
+        renderQuestions();
+
+    </script>
+
+</body>
+</html>
