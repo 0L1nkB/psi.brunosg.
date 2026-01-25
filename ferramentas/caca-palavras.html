@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caça-Sintomas | Bruno de Souza</title>
+    
+    <script>
+        if(localStorage.getItem('logado') !== 'sim') {
+            window.location.href = "../../login.html";
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #f0f8ff;
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --accent: #fdcb6e;
+            --text: #2d3436;
+            --selected: #fab1a0;
+            --found: #55efc4;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0; padding: 20px;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+            user-select: none;
+        }
+
+        /* --- HEADER --- */
+        header {
+            text-align: center; margin-bottom: 20px;
+            background: white; padding: 20px 40px;
+            border-radius: 20px; border: 3px dashed var(--primary);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            max-width: 900px; width: 100%; position: relative;
+        }
+
+        header h1 { color: var(--primary); margin: 0; font-weight: 800; font-size: 1.8rem; }
+        .subtitle { color: #636e72; font-weight: 600; margin-top: 5px; }
+
+        .btn-print {
+            position: absolute; top: 20px; right: 20px;
+            background: none; border: 2px solid var(--primary); color: var(--primary);
+            padding: 8px 15px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+        .btn-print:hover { background: var(--primary); color: white; }
+
+        /* --- CONTROLES --- */
+        .controls-area {
+            background: white; padding: 20px; border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 20px;
+            display: flex; gap: 15px; align-items: center; justify-content: center; flex-wrap: wrap;
+        }
+
+        select {
+            padding: 10px 20px; border-radius: 10px; border: 2px solid #dfe6e9;
+            font-family: inherit; font-size: 1rem; font-weight: bold; color: var(--text);
+            cursor: pointer; min-width: 250px;
+        }
+
+        .btn-new {
+            background: var(--primary); color: white; border: none; padding: 10px 20px;
+            border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.3s;
+        }
+        .btn-new:hover { background: var(--secondary); transform: scale(1.05); }
+
+        /* --- JOGO --- */
+        .game-container {
+            display: flex; flex-direction: column; align-items: center; gap: 30px;
+            width: 100%; max-width: 800px;
+        }
+
+        /* GRID */
+        .word-grid {
+            display: grid; 
+            grid-template-columns: repeat(12, 1fr);
+            gap: 5px; 
+            background: white; padding: 15px; border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            touch-action: manipulation;
+        }
+
+        .letter-cell {
+            width: 35px; height: 35px; 
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 1.2rem; text-transform: uppercase;
+            border-radius: 5px; cursor: pointer; transition: 0.2s;
+            background: #f8f9fa; color: #2d3436;
+        }
+
+        .letter-cell:hover { background: #dfe6e9; }
+        .letter-cell.selected { background: var(--selected); color: #d35400; transform: scale(1.1); }
+        .letter-cell.found { background: var(--found); color: #006266; animation: popIn 0.3s; }
+
+        /* LISTA */
+        .words-list {
+            background: white; padding: 20px; border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); width: 100%;
+            text-align: center;
+        }
+        .words-list h3 { margin: 0 0 15px 0; color: var(--primary); font-size: 1.1rem; }
+        
+        .words-wrapper {
+            display: flex; flex-wrap: wrap; gap: 15px; justify-content: center;
+        }
+
+        .word-item {
+            background: #f1f2f6; padding: 8px 15px; border-radius: 20px;
+            font-weight: 600; font-size: 0.9rem; color: #636e72; transition: 0.3s;
+        }
+        .word-item.found {
+            background: var(--found); color: #006266; text-decoration: line-through; opacity: 0.6;
+        }
+
+        /* --- VITÓRIA --- */
+        .victory-msg {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: white; padding: 40px; border-radius: 30px; text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3); z-index: 100; display: none;
+            border: 5px solid var(--found); animation: popUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .victory-msg h2 { color: var(--found); font-size: 2.5rem; margin: 0 0 10px 0; }
+        .victory-msg p { font-size: 1.2rem; margin-bottom: 20px; }
+
+        @keyframes popIn { from { transform: scale(0.5); } to { transform: scale(1); } }
+        @keyframes popUp { from { transform: translate(-50%, 0); opacity: 0; } to { transform: translate(-50%, -50%); opacity: 1; } }
+
+        @media (max-width: 600px) {
+            .word-grid { gap: 2px; padding: 5px; }
+            .letter-cell { width: 25px; height: 25px; font-size: 0.9rem; }
+            .btn-print span { display: none; }
+        }
+
+        @media print {
+            body { background: white; }
+            header button, .btn-back-home, .btn-new { display: none !important; }
+            .controls-area { border: none; box-shadow: none; }
+            .word-grid { box-shadow: none; border: 1px solid #ccc; }
+        }
+    </style>
+</head>
+<body>
+
+    <header data-aos="fade-down">
+        <button class="btn-print" onclick="window.print()"><i class="fa-solid fa-print"></i> <span>Imprimir</span></button>
+        <h1>Caça-Sintomas</h1>
+        <div class="subtitle">Aprenda os conceitos brincando</div>
+    </header>
+
+    <div class="controls-area" data-aos="fade-up">
+        <label style="font-weight:bold; color:var(--text);"><i class="fa-solid fa-brain"></i> Tema:</label>
+        <select id="categorySelect" onchange="startGame()">
+            <option value="ansiedade">Ansiedade Generalizada</option>
+            <option value="depressao">Depressão</option>
+            <option value="tdah">TDAH (Atenção/Hiperatividade)</option>
+            <option value="toc">TOC (Obsessivo-Compulsivo)</option>
+            <option value="tept">TEPT (Pós-Traumático)</option>
+            <option value="social">Ansiedade Social (Fobia)</option>
+            <option value="bipolar">Transtorno Bipolar</option>
+            <option value="panico">Síndrome do Pânico</option>
+            <option value="burnout">Burnout (Esgotamento)</option>
+            <option value="autoestima">Autoestima (Pilares)</option>
+        </select>
+        <button class="btn-new" onclick="startGame()"><i class="fa-solid fa-rotate"></i> Novo Jogo</button>
+    </div>
+
+    <div class="game-container" data-aos="zoom-in">
+        <div class="word-grid" id="grid"></div>
+        <div class="words-list">
+            <h3>Encontre estas palavras:</h3>
+            <div class="words-wrapper" id="wordList"></div>
+        </div>
+    </div>
+
+    <div class="victory-msg" id="victoryModal">
+        <i class="fa-solid fa-trophy" style="font-size: 4rem; color: #f1c40f; margin-bottom: 20px;"></i>
+        <h2>Parabéns!</h2>
+        <p>Você encontrou todos os termos!</p>
+        <button class="btn-new" onclick="startGame()">Jogar Novamente</button>
+    </div>
+
+    <center>
+        <a href="../listaferramentas.html" style="display:inline-block; margin-top:40px; color:#b2bec3; text-decoration:none; font-weight:600;" class="btn-back-home">
+            <i class="fa-solid fa-arrow-left"></i> Voltar
+        </a>
+    </center>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        // BANCO DE DADOS EXPANDIDO
+        const database = {
+            ansiedade: ["TAQUICARDIA", "MEDO", "TENSAO", "INSONIA", "TREMOR", "FUTURO", "PREOCUPACAO", "SUOR"],
+            depressao: ["TRISTEZA", "CULPA", "SONO", "APETITE", "DESANIMO", "ISOLAMENTO", "CANSACO", "VAZIO"],
+            tdah: ["DESATENCAO", "FOCO", "AGITACAO", "IMPULSO", "ESQUECIMENTO", "HIPERFOCO", "MENTE", "INQUIETO"],
+            burnout: ["EXAUSTAO", "CINISMO", "ESTRESSE", "TRABALHO", "LIMITE", "FADIGA", "IRRITACAO"],
+            autoestima: ["AMOR", "VALOR", "RESPEITO", "CONFIANCA", "ACEITACAO", "CUIDADO", "MERECIMENTO"],
+            
+            // NOVOS TRANSTORNOS
+            toc: ["RITUAL", "OBSESSAO", "LIMPEZA", "ORDEM", "DUVIDA", "REPETICAO", "CONTROLE", "SIMETRIA"],
+            tept: ["FLASHBACK", "TRAUMA", "ALERTA", "PESADELO", "EVITACAO", "MEMORIA", "GATILHO"],
+            bipolar: ["EUFORIA", "MANIA", "DEPRESSAO", "OSCILACAO", "IMPULSO", "ENERGIA", "RAPIDEZ"],
+            social: ["JULGAMENTO", "VERGONHA", "TREMEDEIRA", "ESQUIVA", "PALCO", "CORAR", "CRITICA"],
+            panico: ["SUFOCAMENTO", "ATAQUE", "CORACAO", "TONTURA", "MORTE", "CONTROLE", "MEDO"]
+        };
+
+        const gridSize = 12;
+        let grid = [];
+        let placedWords = [];
+        let firstSelection = null;
+
+        function startGame() {
+            document.getElementById('victoryModal').style.display = 'none';
+            document.getElementById('grid').innerHTML = '';
+            document.getElementById('wordList').innerHTML = '';
+            firstSelection = null;
+            
+            const category = document.getElementById('categorySelect').value;
+            const words = [...database[category]];
+
+            grid = Array(gridSize).fill(null).map(() => Array(gridSize).fill(''));
+            placedWords = [];
+
+            // Tenta colocar palavras (com limite de tentativas para não travar)
+            words.forEach(word => placeWordInGrid(word));
+
+            fillEmptySpaces();
+            renderGrid();
+            renderList();
+        }
+
+        function placeWordInGrid(word) {
+            let placed = false;
+            let attempts = 0;
+            const directions = [{ dr: 0, dc: 1 }, { dr: 1, dc: 0 }, { dr: 1, dc: 1 }];
+
+            while (!placed && attempts < 100) {
+                const dir = directions[Math.floor(Math.random() * directions.length)];
+                const row = Math.floor(Math.random() * gridSize);
+                const col = Math.floor(Math.random() * gridSize);
+
+                if (canPlace(word, row, col, dir)) {
+                    for (let i = 0; i < word.length; i++) {
+                        grid[row + i * dir.dr][col + i * dir.dc] = word[i];
+                    }
+                    placedWords.push({ word, found: false });
+                    placed = true;
+                }
+                attempts++;
+            }
+        }
+
+        function canPlace(word, row, col, dir) {
+            if (row + (word.length - 1) * dir.dr >= gridSize) return false;
+            if (col + (word.length - 1) * dir.dc >= gridSize) return false;
+
+            for (let i = 0; i < word.length; i++) {
+                const cell = grid[row + i * dir.dr][col + i * dir.dc];
+                if (cell !== '' && cell !== word[i]) return false;
+            }
+            return true;
+        }
+
+        function fillEmptySpaces() {
+            const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            for (let r = 0; r < gridSize; r++) {
+                for (let c = 0; c < gridSize; c++) {
+                    if (grid[r][c] === '') grid[r][c] = letters[Math.floor(Math.random() * letters.length)];
+                }
+            }
+        }
+
+        function renderGrid() {
+            const gridEl = document.getElementById('grid');
+            for (let r = 0; r < gridSize; r++) {
+                for (let c = 0; c < gridSize; c++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'letter-cell';
+                    cell.innerText = grid[r][c];
+                    cell.dataset.r = r;
+                    cell.dataset.c = c;
+                    cell.onclick = () => handleCellClick(cell, r, c);
+                    gridEl.appendChild(cell);
+                }
+            }
+        }
+
+        function renderList() {
+            const listEl = document.getElementById('wordList');
+            placedWords.forEach(obj => {
+                const item = document.createElement('div');
+                item.className = 'word-item';
+                item.id = 'word-' + obj.word;
+                item.innerText = obj.word;
+                listEl.appendChild(item);
+            });
+        }
+
+        function handleCellClick(el, r, c) {
+            if (el.classList.contains('found')) return;
+
+            if (!firstSelection) {
+                clearSelection();
+                firstSelection = { r, c, el };
+                el.classList.add('selected');
+            } else {
+                checkWord(firstSelection, { r, c, el });
+                firstSelection = null;
+            }
+        }
+
+        function clearSelection() {
+            document.querySelectorAll('.letter-cell.selected').forEach(el => el.classList.remove('selected'));
+        }
+
+        function checkWord(start, end) {
+            const dr = end.r - start.r;
+            const dc = end.c - start.c;
+            const length = Math.max(Math.abs(dr), Math.abs(dc));
+            
+            const stepR = dr === 0 ? 0 : dr / length;
+            const stepC = dc === 0 ? 0 : dc / length;
+
+            if (dr !== 0 && dc !== 0 && Math.abs(dr) !== Math.abs(dc)) {
+                clearSelection();
+                return;
+            }
+
+            let formedWord = "";
+            let pathCells = [];
+
+            for (let i = 0; i <= length; i++) {
+                const r = start.r + (i * stepR);
+                const c = start.c + (i * stepC);
+                const cell = document.querySelector(`.letter-cell[data-r="${r}"][data-c="${c}"]`);
+                if (cell) {
+                    formedWord += cell.innerText;
+                    pathCells.push(cell);
+                }
+            }
+
+            const reversedWord = formedWord.split('').reverse().join('');
+            const matchIndex = placedWords.findIndex(w => (w.word === formedWord || w.word === reversedWord) && !w.found);
+
+            if (matchIndex !== -1) {
+                const foundWordStr = placedWords[matchIndex].word;
+                placedWords[matchIndex].found = true;
+                
+                pathCells.forEach(cell => {
+                    cell.classList.remove('selected');
+                    cell.classList.add('found');
+                });
+                
+                document.getElementById('word-' + foundWordStr).classList.add('found');
+                checkVictory();
+            } else {
+                pathCells.forEach(cell => cell.classList.add('selected'));
+                setTimeout(clearSelection, 500);
+            }
+        }
+
+        function checkVictory() {
+            if (placedWords.every(w => w.found)) {
+                setTimeout(() => { document.getElementById('victoryModal').style.display = 'block'; }, 500);
+            }
+        }
+
+        startGame();
+    </script>
+
+</body>
+</html>
