@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NeuroView - Comprehensive Suite v12</title>
+    <title>NeuroView - Encyclopedia v13</title>
     <style>
         :root { 
             --accent: #00f3ff;           /* Anatomia */
@@ -64,7 +64,7 @@
         
         /* PAINEL INFO */
         #info {
-            position: absolute; top: 80px; right: 20px; width: 320px;
+            position: absolute; top: 80px; right: 20px; width: 340px;
             background: var(--panel-bg); border-right: 4px solid var(--accent);
             padding: 25px; border-radius: 12px; z-index: 20;
             box-shadow: -10px 10px 50px var(--shadow);
@@ -156,7 +156,7 @@
             #info { top: auto; bottom: 0; right: 0; left: 0; width: 100%; border-radius: 20px 20px 0 0; transform: translateY(120%); max-height: 60vh;}
             #info.active { transform: translateY(0); }
             #controls { width: 90%; gap: 15px; padding: 15px; }
-            .top-bar { top: 10px; right: 10px; gap: 8px; width: 90%; }
+            .top-bar { top: 10px; right: 10px; gap: 8px; width: auto; flex-direction: row; }
         }
     </style>
 </head>
@@ -164,7 +164,7 @@
 
     <div id="loader">
         <div style="font-weight: 800; font-size: 24px; color: var(--text-main); letter-spacing: 3px;">NEURO<span style="color:var(--accent)">VIEW</span></div>
-        <div style="font-size: 11px; color: var(--text-sec); margin-top: 5px;">PSYCHOLOGY COMPREHENSIVE SUITE</div>
+        <div style="font-size: 11px; color: var(--text-sec); margin-top: 5px;">PSYCHOLOGY ENCYCLOPEDIA</div>
         <div class="bar-container"><div class="bar-fill" id="progress"></div></div>
     </div>
 
@@ -195,7 +195,7 @@
         <h3 id="info-func">...</h3>
         <p id="info-desc">...</p>
         <div id="clinical-box" class="clinical-case" style="display:none;">
-            <span class="clinical-title">Caso Clínico / Relevância</span>
+            <span class="clinical-title" id="clinical-title">Caso Clínico</span>
             <span id="clinical-text">...</span>
         </div>
     </div>
@@ -238,46 +238,63 @@
             "wernicke": { name: "Área de Wernicke", func: "Compreensão", desc: "Entendimento da linguagem.", color: 0x0088FF, clinical: "Afasia de Wernicke: Fala fluente sem sentido.", keywords: ["supramarginal", "angular", "posterior transverse"] },
             "auditory": { name: "Córtex Auditivo", func: "Audição", desc: "Processamento de sons.", color: 0x76FF03, keywords: ["transverse temporal", "superior temporal"] },
             "fusiform": { name: "Giro Fusiforme", func: "Face", desc: "Reconhecimento de rostos.", color: 0xFF0055, clinical: "Prosopagnosia: Cegueira para rostos.", keywords: ["fusiform"] },
+            "uncus": { name: "Uncus (Olfativo)", func: "Olfato", desc: "Processamento de cheiros e emoção.", color: 0xFF4081, clinical: "Crises epilépticas uncinadas (cheiros fantasmas).", keywords: ["uncus"] },
             "hippocampus": { name: "Hipocampo", func: "Memória", desc: "Consolidação de memórias novas.", color: 0xFFEA00, clinical: "Caso HM: Amnésia anterógrada total.", keywords: ["hippocampus", "dentate", "fimbria", "subiculum", "fasciolar"] },
-            "amygdala": { name: "Amígdala", func: "Emoção", desc: "Processamento de medo.", color: 0xFF0000, clinical: "Hiperativa em TEPT e Ansiedade.", keywords: ["amygdala", "periamygdaloid"] },
-            "insula": { name: "Ínsula", func: "Interocepção", desc: "Sensação interna e empatia.", color: 0xD500F9, keywords: ["insula"] },
-            "thalamus": { name: "Tálamo", func: "Relé", desc: "Distribuição sensorial.", color: 0x304FFE, keywords: ["thalamus", "geniculate", "pulvinar"] },
-            "basal": { name: "Núcleos da Base", func: "Hábito", desc: "Controle motor fino e hábitos.", color: 0x6200EA, clinical: "Parkinson (tremores), TOC (rituais).", keywords: ["caudate", "putamen", "globus pallidus", "accumbens", "subthalamic", "substantia nigra"] },
-            "brainstem": { name: "Tronco", func: "Vital", desc: "Respiração e coração.", color: 0xFFFFFF, keywords: ["midbrain", "pons", "medulla", "oblongata", "colliculus", "nigra"] },
+            "amygdala": { name: "Amígdala", func: "Emoção", desc: "Processamento de medo e ameaça.", color: 0xFF0000, clinical: "Síndrome de Klüver-Bucy: Perda total de medo.", keywords: ["amygdala", "periamygdaloid"] },
+            "insula": { name: "Ínsula", func: "Interocepção", desc: "Sensação interna e empatia.", color: 0xD500F9, keywords: ["short gyrus of insula", "long gyrus of insula", "insula", "anterior accessory"] },
+            "cingulate": { name: "Córtex Cingulado", func: "Conflito", desc: "Detecção de erros e dor emocional.", color: 0x1DE9B6, keywords: ["cingulate"] },
+            "thalamus": { name: "Tálamo", func: "Relé", desc: "Distribuição sensorial.", color: 0x304FFE, keywords: ["thalamus", "geniculate", "pulvinar", "ventral posterior", "ventral lateral", "medial dorsal", "anterior nucleus", "centromedian", "parafascicular", "paratenial", "reuniens"] },
+            "hypothalamus": { name: "Hipotálamo", func: "Homeostase", desc: "Fome, sede, sono, temperatura.", color: 0xF50057, keywords: ["hypothalamus", "mammillary", "preoptic", "suprachiasmatic", "supraoptic", "tuber cinereum", "posterior nucleus", "arcuate"] },
+            "basal": { name: "Núcleos da Base", func: "Hábito", desc: "Controle motor fino e hábitos.", color: 0x6200EA, clinical: "Parkinson (rigidez), Coreia de Huntington.", keywords: ["caudate", "putamen", "globus pallidus", "accumbens", "subthalamic", "substantia nigra", "claustrum"] },
+            "brainstem": { name: "Tronco", func: "Vital", desc: "Respiração e coração.", color: 0xFFFFFF, keywords: ["midbrain", "pons", "medulla", "oblongata", "colliculus", "red nucleus", "tegmentum", "olive", "cerebral crus"] },
             "cerebellum": { name: "Cerebelo", func: "Equilíbrio", desc: "Coordenação motora.", color: 0xFFD600, clinical: "Ataxia: Perda de coordenação.", keywords: ["cerebellum"] },
-            "connect": { name: "Substância Branca", func: "Conexão", desc: "Vias de comunicação.", color: 0x607D8B, keywords: ["callosum", "capsule", "corona", "tract", "fasciculus", "fornix"] },
-            "ventricle": { name: "Ventrículos", func: "LCR", desc: "Proteção fluída.", color: 0x00E5FF, keywords: ["ventricle", "aqueduct"] }
+            "olfactory": { name: "Sistema Olfatório", func: "Olfato", desc: "Bulbo e tratos olfatórios.", color: 0x00C853, keywords: ["olfactory", "diagonal band"] },
+            "connect": { name: "Substância Branca", func: "Conexão", desc: "Vias de comunicação (axônios).", color: 0x607D8B, keywords: ["callosum", "capsule", "corona", "peduncle", "brachium", "lemniscus", "tract", "fasciculus", "commissure", "stria", "lamina terminalis", "fornix", "septum", "induseum", "subcallosal", "paraterminal", "radiation", "tapetum"] },
+            "ventricle": { name: "Ventrículos", func: "LCR", desc: "Proteção fluída.", color: 0x00E5FF, keywords: ["ventricle", "aqueduct", "choroid"] },
+            "temporal_inf": { name: "Temporal Inferior", func: "Memória Visual", desc: "Reconhecimento de objetos.", color: 0x00E676, keywords: ["inferior temporal", "middle temporal"] },
+            "occipital": { name: "Lobo Occipital", func: "Visão", desc: "Processamento visual primário.", color: 0xD50000, keywords: ["occipital", "cuneus", "lingual", "calcarine"] },
+            "parietal_assoc": { name: "Parietal Associativo", func: "Espaço", desc: "Orientação espacial.", color: 0xFFC400, keywords: ["superior parietal", "precuneus"] },
+            "parahippocampal": { name: "Giro Parahipocampal", func: "Cenas", desc: "Memória espacial de lugares.", color: 0xF8BBD0, keywords: ["parahippocampal", "entorhinal", "presubiculum", "parasubiculum"] },
+            "epithalamus": { name: "Epitálamo", func: "Sono", desc: "Regulação de ritmos.", color: 0x90CAF9, keywords: ["habenula", "pineal", "posterior commissure"] }
         };
 
-        // --- 2. NEUROQUÍMICA (EXPANDIDA) ---
+        // --- 2. NEUROQUÍMICA EXPANDIDA ---
         const chemMap = {
             "dopamine": { name: "Dopamina", func: "Prazer & Motor", color: 0x00E5FF, desc: "Recompensa e motivação. Falta: Parkinson. Excesso: Psicose.", targets: ["prefrontal", "basal", "brainstem", "hippocampus"] },
-            "serotonin": { name: "Serotonina", func: "Humor & Sono", color: 0xFF00FF, desc: "Regula humor e bem-estar. Alvo de antidepressivos.", targets: ["brainstem", "prefrontal", "amygdala", "hippocampus", "cingulate"] },
+            "serotonin": { name: "Serotonina", func: "Humor & Sono", color: 0xFF00FF, desc: "Regula humor e bem-estar. Alvo de antidepressivos (ISRS).", targets: ["brainstem", "prefrontal", "amygdala", "hippocampus", "cingulate"] },
             "noradrenaline": { name: "Noradrenalina", func: "Alerta", color: 0xFFA500, desc: "Luta ou fuga. Atenção e vigilância.", targets: ["brainstem", "amygdala", "prefrontal"] },
             "gaba": { name: "GABA", func: "Inibição", color: 0x00FF00, desc: "Calmante natural. Reduz ansiedade.", targets: ["cerebellum", "basal", "prefrontal", "occipital"] },
-            "glutamate": { name: "Glutamato", func: "Excitação", color: 0xFFD700, desc: "Aprendizado e memória.", targets: ["hippocampus", "prefrontal", "motor"] },
-            "oxytocin": { name: "Ocitocina", func: "Vínculo", color: 0xFF69B4, desc: "Amor e confiança social.", targets: ["hypothalamus", "amygdala", "basal"] },
-            "endorphin": { name: "Endorfinas", func: "Dor/Prazer", color: 0xFFFFFF, desc: "Analgesia natural e euforia.", targets: ["brainstem", "thalamus", "basal"] }
+            "glutamate": { name: "Glutamato", func: "Excitação", color: 0xFFD700, desc: "Aprendizado e memória (LTP).", targets: ["hippocampus", "prefrontal", "motor"] },
+            "oxytocin": { name: "Ocitocina", func: "Vínculo", color: 0xFF69B4, desc: "Amor, confiança e parto. Reduz atividade da amígdala.", targets: ["hypothalamus", "amygdala", "basal"] },
+            "endorphin": { name: "Endorfinas", func: "Analgesia", color: 0xFFFFFF, desc: "Alívio da dor e euforia.", targets: ["brainstem", "thalamus", "basal"] },
+            "cortisol": { name: "Cortisol", func: "Estresse", color: 0xA1887F, desc: "Hormônio do estresse. Níveis crônicos danificam o hipocampo.", targets: ["hippocampus", "amygdala", "prefrontal"] },
+            "adenosine": { name: "Adenosina", func: "Fadiga", color: 0x546E7A, desc: "Acumula durante o dia causando sono. A cafeína a bloqueia.", targets: ["basal", "prefrontal"] }
         };
 
-        // --- 3. PSICOPATOLOGIA (EXPANDIDA) ---
+        // --- 3. PSICOPATOLOGIA EXPANDIDA ---
         const pathMap = {
             "depression": { name: "Depressão", func: "Humor", color: 0x2E86C1, desc: "Hipoatividade frontal e hiperatividade da amígdala.", targets: ["prefrontal", "hippocampus", "amygdala", "cingulate"] },
             "anxiety": { name: "Ansiedade", func: "Medo", color: 0xE74C3C, desc: "Amígdala hiperativa detectando ameaças constantes.", targets: ["amygdala", "prefrontal", "insula"] },
-            "bipolar": { name: "Transtorno Bipolar", func: "Oscilação", color: 0x8E44AD, desc: "Flutuação entre mania (excesso frontal/límbico) e depressão.", targets: ["prefrontal", "amygdala", "thalamus"] },
-            "ptsd": { name: "TEPT", func: "Trauma", color: 0x5D4037, desc: "Falha do hipocampo em contextualizar o medo da amígdala.", targets: ["amygdala", "hippocampus", "prefrontal"] },
+            "bipolar": { name: "Bipolar", func: "Oscilação", color: 0x8E44AD, desc: "Alternância entre mania (frontal/límbico) e depressão.", targets: ["prefrontal", "amygdala", "thalamus"] },
+            "ptsd": { name: "TEPT", func: "Trauma", color: 0x5D4037, desc: "Falha do hipocampo em contextualizar o medo.", targets: ["amygdala", "hippocampus", "prefrontal"] },
+            "borderline": { name: "Borderline", func: "Instabilidade", color: 0xFF0055, desc: "Desregulação emocional severa e impulsividade.", targets: ["amygdala", "prefrontal", "cingulate"] },
             "adhd": { name: "TDAH", func: "Atenção", color: 0xF39C12, desc: "Disfunção executiva e de dopamina.", targets: ["prefrontal", "basal", "cerebellum"] },
-            "schizo": { name: "Esquizofrenia", func: "Psicose", color: 0x7D3C98, desc: "Excesso de dopamina límbica (alucinações).", targets: ["prefrontal", "basal", "ventricle", "hippocampus"] },
-            "addiction": { name: "Adicção", func: "Recompensa", color: 0xCB4335, desc: "Sequestro do circuito de recompensa pela substância.", targets: ["brainstem", "basal", "prefrontal"] }, // VTA->Accumbens
-            "alzheimer": { name: "Alzheimer", func: "Memória", color: 0x95A5A6, desc: "Atrofia do hipocampo e córtex.", targets: ["hippocampus", "parahippocampal", "temporal_inf", "prefrontal"] },
+            "schizo": { name: "Esquizofrenia", func: "Psicose", color: 0x7D3C98, desc: "Excesso de dopamina límbica.", targets: ["prefrontal", "basal", "ventricle", "hippocampus"] },
+            "anorexia": { name: "Anorexia", func: "Imagem", color: 0x00BCD4, desc: "Distorção da imagem corporal e controle inibitório excessivo.", targets: ["insula", "parietal_assoc", "basal", "prefrontal"] },
+            "dyslexia": { name: "Dislexia", func: "Leitura", color: 0xCDDC39, desc: "Hipoativação em áreas de processamento fonológico.", targets: ["wernicke", "temporal_inf", "parietal_assoc"] },
+            "epilepsy": { name: "Epilepsia", func: "Descarga", color: 0xFFFF00, desc: "Focos comuns em lobo temporal mesial.", targets: ["hippocampus", "amygdala", "uncus"] },
+            "toc": { name: "TOC", func: "Obsessão", color: 0x16A085, desc: "Loop hiperativo de verificação de erro.", targets: ["prefrontal", "cingulate", "basal"] },
             "parkinson": { name: "Parkinson", func: "Motor", color: 0x34495E, desc: "Morte de neurônios da Substância Negra.", targets: ["brainstem", "basal", "motor"] }
         };
 
-        // --- 4. REDES NEURAIS (NOVO 🌐) ---
+        // --- 4. REDES NEURAIS (NOVO) ---
         const netMap = {
-            "dmn": { name: "Rede Modo Padrão", func: "Repouso/Eu", color: 0x00FF88, desc: "Ativa quando não fazemos nada (devaneio, pensar em si mesmo).", targets: ["prefrontal", "cingulate", "parietal_assoc", "temporal_inf"] }, // Medial PFC + PCC
-            "salience": { name: "Rede de Saliência", func: "Alerta/Troca", color: 0xFF0055, desc: "Detecta o que é importante e troca entre DMN e Executiva.", targets: ["insula", "cingulate"] }, // Anterior Insula + ACC
-            "central": { name: "Rede Executiva", func: "Foco Externo", color: 0x0088FF, desc: "Resolução de problemas, matemática e memória de trabalho.", targets: ["prefrontal", "parietal_assoc"] } // DLPFC + PPC
+            "dmn": { name: "Rede Modo Padrão", func: "Repouso/Eu", color: 0x00FF88, desc: "Ativa quando não fazemos nada (devaneio).", targets: ["prefrontal", "cingulate", "parietal_assoc", "temporal_inf"] },
+            "salience": { name: "Rede de Saliência", func: "Alerta/Troca", color: 0xFF0055, desc: "Detecta o que é importante.", targets: ["insula", "cingulate"] },
+            "central": { name: "Rede Executiva", func: "Foco Externo", color: 0x0088FF, desc: "Resolução de problemas.", targets: ["prefrontal", "parietal_assoc"] },
+            "dorsal_att": { name: "Atenção Dorsal", func: "Foco Voluntário", color: 0xFFD700, desc: "Atenção 'Top-Down' sustentada.", targets: ["parietal_assoc", "motor"] }, // FEF + IPS
+            "visual": { name: "Rede Visual", func: "Visão", color: 0xD50000, desc: "Processamento visual completo.", targets: ["occipital", "temporal_inf", "parietal_assoc"] },
+            "limbic_net": { name: "Rede Límbica", func: "Emoção", color: 0xFF0000, desc: "Processamento emocional.", targets: ["amygdala", "hippocampus", "prefrontal"] }
         };
 
         const defaultRegion = { name: "Estrutura", func: "Anatomia", desc: "Estrutura anatômica.", color: 0x444444 };
