@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagrama de Conceitualização | Bruno de Souza</title>
+    
+    <script>
+        if(localStorage.getItem('logado') !== 'sim') {
+            window.location.href = "../../login.html";
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #f0f8ff;
+            --box-bg: #ffffff;
+            --border-color: #2d3436;
+            --connector-color: #b2bec3;
+            --primary: #6c5ce7;
+            --text: #2d3436;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0; padding: 20px;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* --- HEADER --- */
+        header {
+            text-align: center; margin-bottom: 40px;
+            background: white; padding: 20px 40px;
+            border-radius: 20px; border: 3px solid var(--border-color);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            max-width: 900px; width: 100%; position: relative;
+        }
+
+        header h1 { color: var(--border-color); margin: 0; font-weight: 800; font-size: 1.8rem; }
+        .subtitle { color: #636e72; font-weight: 600; margin-top: 5px; }
+
+        .btn-print {
+            position: absolute; top: 20px; right: 20px;
+            background: none; border: 2px solid var(--border-color); color: var(--border-color);
+            padding: 8px 15px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+        .btn-print:hover { background: var(--border-color); color: white; }
+
+        /* --- DIAGRAMA CONTAINER --- */
+        .diagram-container {
+            width: 100%; max-width: 900px;
+            display: flex; flex-direction: column; align-items: center;
+            gap: 20px; position: relative;
+            padding-bottom: 50px;
+        }
+
+        /* CAIXAS PADRÃO */
+        .box {
+            background: var(--box-bg); border: 2px solid var(--border-color);
+            border-radius: 10px; padding: 15px; position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); width: 100%;
+            transition: 0.3s; display: flex; flex-direction: column;
+        }
+        .box:focus-within { border-color: var(--primary); box-shadow: 0 8px 20px rgba(108, 92, 231, 0.2); transform: translateY(-2px); }
+
+        .box-label {
+            font-size: 0.85rem; font-weight: 800; text-transform: uppercase;
+            margin-bottom: 8px; color: #636e72; letter-spacing: 0.5px;
+        }
+
+        textarea {
+            width: 100%; border: none; resize: vertical; font-family: inherit; font-size: 0.95rem;
+            min-height: 60px; outline: none; background: transparent; line-height: 1.4;
+        }
+
+        /* --- ESTRUTURA DO DIAGRAMA --- */
+        
+        /* NÍVEL 1: HISTÓRIA */
+        .level-1 { width: 80%; }
+
+        /* SETAS VERTICAIS */
+        .arrow-down {
+            color: var(--connector-color); font-size: 1.5rem; margin: -10px 0; z-index: 0;
+        }
+
+        /* NÍVEL 2: ESQUEMAS (LADO A LADO) */
+        .level-2-wrapper {
+            display: grid; grid-template-columns: 1fr 40px 1fr; width: 100%; align-items: center;
+        }
+        
+        .double-arrow {
+            text-align: center; color: var(--connector-color); font-size: 1.5rem;
+        }
+
+        /* NÍVEL 3: PENSAMENTOS AUTOMÁTICOS */
+        .level-3 { width: 70%; }
+
+        /* NÍVEL 4: PRESSUPOSTOS */
+        .level-4 { width: 80%; }
+
+        /* NÍVEL 5: CRENÇAS E ESTRATÉGIAS (LADO A LADO) */
+        .level-5-wrapper {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 40px; width: 100%;
+        }
+
+        /* Conectores Complexos (Divs para desenhar linhas se necessário, mas usaremos FontAwesome para simplicidade no HTML puro) */
+        .split-arrow {
+            display: flex; justify-content: space-around; width: 80%; margin-top: -15px; color: var(--connector-color); font-size: 1.5rem;
+        }
+        .split-arrow i { transform: rotate(45deg); }
+        .split-arrow i:first-child { transform: rotate(135deg); } /* Seta esquerda */
+        .split-arrow i:last-child { transform: rotate(-135deg); } /* Seta direita */
+
+
+        /* CORES TEMÁTICAS DAS BORDAS (Opcional, para guiar o olho) */
+        .box-history { border-top: 5px solid #0984e3; }
+        .box-schema { border-top: 5px solid #d63031; }
+        .box-auto { border-top: 5px solid #e17055; }
+        .box-mal { border-top: 5px solid #fdcb6e; }
+        .box-cond { border-top: 5px solid #00b894; }
+        .box-strat { border-top: 5px solid #6c5ce7; }
+
+        @media (max-width: 768px) {
+            .level-2-wrapper, .level-5-wrapper { grid-template-columns: 1fr; gap: 20px; }
+            .double-arrow { transform: rotate(90deg); margin: 5px 0; }
+            .split-arrow { display: none; } /* Simplifica setas no mobile */
+            .level-1, .level-3, .level-4 { width: 100%; }
+            .btn-print span { display: none; }
+        }
+
+        /* --- IMPRESSÃO --- */
+        @media print {
+            body { background: white; padding: 0; }
+            header button, .btn-back-home { display: none !important; }
+            header { border: none; box-shadow: none; margin-bottom: 20px; padding-bottom: 0; }
+            
+            .diagram-container { padding-bottom: 0; }
+            .box { box-shadow: none; border: 1px solid #000; break-inside: avoid; }
+            textarea { resize: none; overflow: hidden; min-height: auto; }
+            
+            /* Garante cores de borda na impressão */
+            .box-history { border-top: 3px solid #0984e3 !important; }
+            .box-schema { border-top: 3px solid #d63031 !important; }
+            /* ... etc */
+        }
+    </style>
+</head>
+<body>
+
+    <header data-aos="fade-down">
+        <button class="btn-print" onclick="window.print()"><i class="fa-solid fa-print"></i> <span>Imprimir Diagrama</span></button>
+        <h1>Mapa da Mente</h1>
+        <div class="subtitle">Diagrama de Conceitualização Cognitiva</div>
+    </header>
+
+    <div class="diagram-container" data-aos="zoom-in">
+
+        <div class="box level-1 box-history">
+            <div class="box-label">História do Desenvolvimento</div>
+            <textarea placeholder="Eventos marcantes da infância/adolescência, traumas, experiências repetitivas..."></textarea>
+        </div>
+
+        <div class="split-arrow" style="width: 50%; margin: -5px 0 5px 0;">
+            <i class="fa-solid fa-arrow-down" style="transform: rotate(20deg);"></i>
+            <i class="fa-solid fa-arrow-down" style="transform: rotate(-20deg);"></i>
+        </div>
+
+        <div class="level-2-wrapper">
+            <div class="box box-schema">
+                <div class="box-label">Esquema Pessoal (Eu sou...)</div>
+                <textarea placeholder="Crenças centrais sobre si mesmo (Ex: Sou incompetente, Sou indesejável)."></textarea>
+            </div>
+            
+            <div class="double-arrow"><i class="fa-solid fa-arrow-right-arrow-left"></i></div>
+            
+            <div class="box box-schema">
+                <div class="box-label">Esquema sobre os Outros</div>
+                <textarea placeholder="Crenças sobre os outros/mundo (Ex: As pessoas são cruéis, O mundo é perigoso)."></textarea>
+            </div>
+        </div>
+
+        <i class="fa-solid fa-arrow-down arrow-down"></i>
+
+        <div class="box level-3 box-auto">
+            <div class="box-label">Pensamentos Automáticos</div>
+            <textarea placeholder="Palavras ou imagens que surgem na mente em situações difíceis."></textarea>
+        </div>
+
+        <i class="fa-solid fa-arrow-down arrow-down"></i>
+
+        <div class="box level-4 box-mal">
+            <div class="box-label">Pressupostos Mal-adaptativos</div>
+            <textarea placeholder="Regras rígidas ou atitudes (Ex: Se eu pedir ajuda, serei fraco)."></textarea>
+        </div>
+
+        <div class="split-arrow">
+            <i class="fa-solid fa-arrow-down" style="transform: rotate(30deg);"></i>
+            <i class="fa-solid fa-arrow-down" style="transform: rotate(-30deg);"></i>
+        </div>
+
+        <div class="level-5-wrapper">
+            <div class="box box-cond">
+                <div class="box-label">Crenças Condicionais</div>
+                <textarea placeholder="Se... Então... (Ex: Se eu não for perfeito, serei rejeitado)."></textarea>
+            </div>
+            
+            <div class="box box-strat">
+                <div class="box-label">Estratégias (Comportamento)</div>
+                <textarea placeholder="O que você faz para lidar com tudo isso? (Ex: Evitação, Perfeccionismo, Isolamento)."></textarea>
+            </div>
+        </div>
+
+    </div>
+
+    <center>
+        <a href="../listaferramentas.html" style="display:inline-block; margin-top:20px; color:#b2bec3; text-decoration:none; font-weight:600;" class="btn-back-home">
+            <i class="fa-solid fa-arrow-left"></i> Voltar
+        </a>
+    </center>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+        
+        // Auto-resize textareas
+        const tx = document.getElementsByTagName("textarea");
+        for (let i = 0; i < tx.length; i++) {
+            tx[i].setAttribute("style", "height:" + (tx[i].scrollHeight) + "px;overflow-y:hidden;");
+            tx[i].addEventListener("input", OnInput, false);
+        }
+
+        function OnInput() {
+            this.style.height = "auto";
+            this.style.height = (this.scrollHeight) + "px";
+        }
+    </script>
+
+</body>
+</html>
