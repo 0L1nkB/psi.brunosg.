@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O Quebra-Muro | Bruno de Souza</title>
+    
+    <script>
+        if(localStorage.getItem('logado') !== 'sim') {
+            window.location.href = "../../login.html";
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #f0f8ff;
+            --brick-color: #e17055;
+            --brick-border: #d35400;
+            --broken-color: #55efc4; /* Verde quando quebrado */
+            --text: #2d3436;
+            --mortar: #dfe6e9;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0; padding: 20px;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* --- HEADER --- */
+        header {
+            text-align: center; margin-bottom: 20px;
+            background: white; padding: 20px 40px;
+            border-radius: 20px; border: 3px solid var(--brick-border);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            max-width: 900px; width: 100%; position: relative;
+        }
+
+        header h1 { color: var(--brick-border); margin: 0; font-weight: 800; font-size: 1.8rem; text-transform: uppercase; }
+        .subtitle { color: #636e72; font-weight: 600; margin-top: 5px; }
+
+        .btn-print {
+            position: absolute; top: 20px; right: 20px;
+            background: none; border: 2px solid var(--brick-border); color: var(--brick-border);
+            padding: 8px 15px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+        .btn-print:hover { background: var(--brick-border); color: white; }
+
+        /* --- SELEÇÃO --- */
+        .controls-area {
+            background: white; padding: 20px; border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 30px;
+            display: flex; gap: 15px; align-items: center; justify-content: center; flex-wrap: wrap;
+        }
+
+        select {
+            padding: 10px 20px; border-radius: 10px; border: 2px solid #dfe6e9;
+            font-family: inherit; font-size: 1rem; font-weight: bold; color: var(--text);
+            cursor: pointer; min-width: 250px;
+        }
+
+        .btn-build {
+            background: var(--brick-color); color: white; border: none; padding: 10px 25px;
+            border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.3s;
+        }
+        .btn-build:hover { transform: scale(1.05); background: var(--brick-border); }
+
+        /* --- O MURO --- */
+        .wall-container {
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
+            width: 100%; max-width: 900px; padding: 20px;
+            background: var(--mortar); border-radius: 10px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
+            min-height: 300px; align-content: center;
+        }
+
+        .brick {
+            width: 200px; height: 100px;
+            background: var(--brick-color);
+            border-bottom: 4px solid #c0392b; border-right: 4px solid #c0392b;
+            border-radius: 5px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            padding: 10px; text-align: center;
+            color: white; font-weight: 700; font-size: 0.95rem;
+            position: relative; transition: all 0.3s;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+            user-select: none;
+        }
+
+        .brick:hover { transform: scale(1.02); filter: brightness(1.1); }
+        .brick::before { content: '🔨'; position: absolute; font-size: 2rem; opacity: 0; transition: 0.2s; }
+        .brick:hover::before { opacity: 1; transform: rotate(-20deg); }
+
+        /* Tijolo Quebrado (Respondido) */
+        .brick.broken {
+            background: var(--broken-color);
+            border-color: #00b894;
+            color: #006266;
+            transform: none !important;
+            cursor: default;
+        }
+        .brick.broken::before { content: '✨'; opacity: 1; font-size: 1.5rem; top: 5px; right: 5px; transform: none; }
+        .brick.broken:hover::before { opacity: 1; transform: none; }
+
+        /* --- MODAL DE DESAFIO --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 100;
+            display: none; align-items: center; justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .challenge-card {
+            background: white; width: 90%; max-width: 500px;
+            padding: 30px; border-radius: 20px; text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            animation: popUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .challenge-title { font-size: 1.5rem; color: var(--brick-color); margin-bottom: 10px; font-weight: 800; }
+        .challenge-text { font-size: 1.2rem; margin-bottom: 20px; font-weight: 600; }
+        
+        textarea {
+            width: 100%; padding: 15px; border: 2px solid #dfe6e9; border-radius: 10px;
+            font-family: inherit; font-size: 1rem; resize: none; height: 100px;
+            margin-bottom: 20px; outline: none; transition: 0.3s;
+        }
+        textarea:focus { border-color: var(--broken-color); }
+
+        .btn-smash {
+            background: var(--brick-color); color: white; border: none; padding: 12px 30px;
+            border-radius: 30px; font-weight: 800; cursor: pointer; font-size: 1.1rem; width: 100%;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .btn-smash:hover { background: var(--brick-border); }
+
+        @keyframes popUp { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes crumble { 
+            0% { transform: rotate(0deg); } 
+            25% { transform: rotate(5deg); } 
+            50% { transform: rotate(-5deg); } 
+            75% { transform: rotate(5deg); } 
+            100% { transform: rotate(0deg); opacity: 0; } 
+        }
+
+        /* --- IMPRESSÃO --- */
+        #print-table { display: none; }
+
+        @media print {
+            body { background: white; padding: 0; }
+            header button, .controls-area, .btn-back-home { display: none !important; }
+            header { border: none; box-shadow: none; margin-bottom: 20px; }
+            .wall-container { display: none; }
+            
+            #print-table {
+                display: table; width: 100%; border-collapse: collapse; font-family: sans-serif; margin-top: 20px;
+            }
+            #print-table th { background: #eee; padding: 10px; border: 1px solid #ccc; text-align: left; }
+            #print-table td { padding: 10px; border: 1px solid #ccc; }
+        }
+    </style>
+</head>
+<body>
+
+    <header data-aos="fade-down">
+        <button class="btn-print" onclick="window.print()"><i class="fa-solid fa-print"></i> <span>Imprimir Conquistas</span></button>
+        <h1>O Quebra-Muro</h1>
+        <div class="subtitle">Desconstruindo Crenças Centrais</div>
+    </header>
+
+    <div class="controls-area" data-aos="fade-up">
+        <label style="font-weight:bold; color:var(--text);">Escolha o Muro:</label>
+        <select id="beliefCategory">
+            <option value="desamparo">Muro do Desamparo (Incapacidade)</option>
+            <option value="desamor">Muro do Desamor (Rejeição)</option>
+            <option value="desvalor">Muro do Desvalor (Indignidade)</option>
+        </select>
+        <button class="btn-build" onclick="buildWall()"><i class="fa-solid fa-trowel-bricks"></i> Construir Muro</button>
+    </div>
+
+    <div class="wall-container" id="wall" data-aos="zoom-in">
+        <p style="color:#636e72; font-style:italic;">Selecione uma categoria e clique em Construir Muro.</p>
+    </div>
+
+    <div class="modal-overlay" id="modal">
+        <div class="challenge-card">
+            <div class="challenge-title"><i class="fa-solid fa-hammer"></i> Quebrar Crença</div>
+            <div class="challenge-text" id="modalBelief">...</div>
+            
+            <p style="font-size:0.9rem; color:#636e72; margin-bottom:10px;">Para derrubar este tijolo, escreva uma evidência de que isso <strong>NÃO</strong> é 100% verdade:</p>
+            
+            <textarea id="modalInput" placeholder="Ex: Eu consegui resolver aquele problema semana passada..."></textarea>
+            
+            <button class="btn-smash" onclick="smashBrick()">Quebrar Tijolo! 💥</button>
+            <button onclick="closeModal()" style="margin-top:10px; background:none; border:none; color:#b2bec3; cursor:pointer; text-decoration:underline;">Cancelar</button>
+        </div>
+    </div>
+
+    <div id="print-table">
+        <h3>Registro de Reestruturação Cognitiva</h3>
+        <table style="width:100%">
+            <thead>
+                <tr>
+                    <th width="40%">Crença Limitante (Tijolo)</th>
+                    <th width="60%">Nova Verdade / Evidência (Reconstrução)</th>
+                </tr>
+            </thead>
+            <tbody id="printBody"></tbody>
+        </table>
+    </div>
+
+    <center>
+        <a href="../listaferramentas.html" style="display:inline-block; margin-top:40px; color:#b2bec3; text-decoration:none; font-weight:600;" class="btn-back-home">
+            <i class="fa-solid fa-arrow-left"></i> Voltar
+        </a>
+    </center>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        // Dados baseados no PDF (Tabela 1, Pág 3)
+        const beliefs = {
+            desamparo: [
+                "Sou incapaz", "Sou inadequado", "Sou ineficiente", "Sou fraco",
+                "Sou descontrolado", "Sou vulnerável", "Sou um fracasso", "Sou um perdedor",
+                "Não consigo mudar", "Não tenho atitude"
+            ],
+            desamor: [
+                "Sou indesejável", "Sou indigno de amor", "Sou feio/diferente", "Sou imperfeito",
+                "Sou monótono", "Vou ser abandonado", "Sempre ficarei sozinho",
+                "Ninguém gosta de mim", "Não sou querido", "Não sou bom o suficiente"
+            ],
+            desvalor: [
+                "Não tenho valor", "Sou inaceitável", "Sou mau/ruim", "Sou um lixo",
+                "Sou cruel", "Sou perigoso", "Não mereço viver", "Não mereço atenção",
+                "Sou um nada", "Sou derrotado"
+            ]
+        };
+
+        let currentBrickElement = null;
+        let brokenCount = 0;
+
+        function buildWall() {
+            const category = document.getElementById('beliefCategory').value;
+            const wall = document.getElementById('wall');
+            const list = beliefs[category];
+            
+            wall.innerHTML = ''; // Limpa
+            document.getElementById('printBody').innerHTML = ''; // Limpa impressão
+            brokenCount = 0;
+
+            list.forEach(text => {
+                const brick = document.createElement('div');
+                brick.className = 'brick';
+                brick.innerText = text;
+                brick.onclick = () => openModal(brick, text);
+                wall.appendChild(brick);
+            });
+        }
+
+        function openModal(element, text) {
+            if (element.classList.contains('broken')) return; // Já quebrado
+
+            currentBrickElement = element;
+            document.getElementById('modalBelief').innerText = `"${text}"`;
+            document.getElementById('modalInput').value = '';
+            document.getElementById('modal').style.display = 'flex';
+            document.getElementById('modalInput').focus();
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+            currentBrickElement = null;
+        }
+
+        function smashBrick() {
+            const evidence = document.getElementById('modalInput').value.trim();
+            
+            if (!evidence) {
+                alert("Você precisa escrever uma evidência para quebrar a crença!");
+                return;
+            }
+
+            // Animação e transformação
+            if (currentBrickElement) {
+                const beliefText = currentBrickElement.innerText;
+                
+                // Muda estado visual
+                currentBrickElement.classList.add('broken');
+                currentBrickElement.innerText = evidence; // Substitui texto pelo novo
+                currentBrickElement.style.fontSize = "0.9rem"; // Ajusta fonte se texto for longo
+                
+                // Adiciona à lista de impressão
+                addToPrint(beliefText, evidence);
+                
+                closeModal();
+                brokenCount++;
+                
+                // Verifica vitória total
+                if (brokenCount === document.querySelectorAll('.brick').length) {
+                    setTimeout(() => alert("Parabéns! Você derrubou todo o muro de crenças negativas!"), 500);
+                }
+            }
+        }
+
+        function addToPrint(oldText, newText) {
+            const tbody = document.getElementById('printBody');
+            const row = document.createElement('tr');
+            row.innerHTML = `<td>${oldText}</td><td>${newText}</td>`;
+            tbody.appendChild(row);
+        }
+
+        // Constrói um inicial
+        buildWall();
+    </script>
+
+</body>
+</html>
