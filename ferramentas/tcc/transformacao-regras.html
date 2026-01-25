@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refinaria de Regras | Bruno de Souza</title>
+    
+    <script>
+        if(localStorage.getItem('logado') !== 'sim') {
+            window.location.href = "../../login.html";
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #f0f8ff;
+            --old-color: #e17055;     /* Laranja (Velho) */
+            --new-color: #00b894;     /* Verde (Novo) */
+            --text: #2d3436;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0; padding: 20px;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* --- HEADER --- */
+        header {
+            text-align: center; margin-bottom: 30px;
+            background: white; padding: 20px 40px;
+            border-radius: 20px; border: 3px solid var(--text);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            max-width: 1100px; width: 100%; position: relative;
+        }
+
+        header h1 { color: var(--text); margin: 0; font-weight: 800; font-size: 1.8rem; }
+        .subtitle { color: #636e72; font-weight: 600; margin-top: 5px; }
+
+        .btn-print {
+            position: absolute; top: 20px; right: 20px;
+            background: none; border: 2px solid var(--text); color: var(--text);
+            padding: 8px 15px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+        .btn-print:hover { background: var(--text); color: white; }
+
+        /* --- COMPARADOR (DASHBOARD) --- */
+        .comparison-container {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 30px;
+            width: 100%; max-width: 1200px; margin-bottom: 40px;
+        }
+
+        .rule-column {
+            background: white; border-radius: 25px; padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            display: flex; flex-direction: column; border-top: 8px solid;
+        }
+
+        .col-old { border-color: var(--old-color); }
+        .col-new { border-color: var(--new-color); }
+
+        .col-header {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
+        }
+        .col-title { font-size: 1.2rem; font-weight: 800; text-transform: uppercase; }
+        .score-badge { 
+            padding: 5px 15px; border-radius: 20px; color: white; font-weight: bold; font-size: 0.9rem;
+        }
+
+        textarea {
+            width: 100%; padding: 15px; border: 2px solid #dfe6e9; border-radius: 12px;
+            font-family: inherit; font-size: 1.1rem; resize: vertical; min-height: 100px;
+            transition: 0.3s; margin-bottom: 25px;
+        }
+        .col-old textarea:focus { border-color: var(--old-color); outline: none; background: #fff5f5; }
+        .col-new textarea:focus { border-color: var(--new-color); outline: none; background: #f0fff4; }
+
+        /* LISTA DE CRITÉRIOS */
+        .criteria-list { display: flex; flex-direction: column; gap: 15px; }
+
+        .criteria-item {
+            background: #f8f9fa; padding: 10px 15px; border-radius: 10px;
+        }
+
+        .criteria-label {
+            font-size: 0.85rem; font-weight: 700; color: #636e72; margin-bottom: 5px; display: block;
+            display: flex; justify-content: space-between;
+        }
+
+        /* Sliders Customizados */
+        input[type=range] {
+            width: 100%; cursor: pointer; height: 6px; border-radius: 5px; appearance: none; background: #dfe6e9;
+        }
+        
+        .col-old input[type=range]::-webkit-slider-thumb {
+            appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--old-color);
+        }
+        .col-new input[type=range]::-webkit-slider-thumb {
+            appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--new-color);
+        }
+
+        /* Barra de Progresso Visual */
+        .progress-bg { height: 6px; background: #dfe6e9; border-radius: 3px; margin-top: 5px; overflow: hidden; }
+        .progress-fill { height: 100%; width: 0%; transition: width 0.3s ease; }
+
+        /* --- PLANEJAMENTO (SIMULAÇÃO) --- */
+        .simulation-card {
+            width: 100%; max-width: 1200px;
+            background: white; padding: 30px; border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 50px;
+            border-left: 6px solid var(--new-color);
+        }
+
+        .sim-title { font-size: 1.2rem; font-weight: 800; color: var(--new-color); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+
+        .sim-grid {
+            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;
+        }
+
+        .sim-box label { font-weight: 700; font-size: 0.9rem; color: #2d3436; margin-bottom: 5px; display: block; }
+        .sim-box textarea { min-height: 80px; font-size: 0.95rem; }
+
+        .sim-full { grid-column: span 3; margin-top: 10px; }
+
+        /* Responsividade */
+        @media (max-width: 900px) {
+            .comparison-container, .sim-grid { grid-template-columns: 1fr; }
+            .sim-full { grid-column: span 1; }
+            .btn-print span { display: none; }
+        }
+
+        /* --- IMPRESSÃO --- */
+        #print-table { display: none; }
+
+        @media print {
+            body { background: white; padding: 0; }
+            header button, .btn-back-home { display: none !important; }
+            header { border: none; box-shadow: none; margin-bottom: 20px; }
+            
+            .comparison-container, .simulation-card { display: none; } /* Esconde interativo */
+            
+            #print-table {
+                display: table; width: 100%; border-collapse: collapse; font-family: sans-serif;
+            }
+            #print-table th, #print-table td {
+                border: 1px solid #000; padding: 10px; vertical-align: top;
+            }
+            #print-table th { background: #eee; font-weight: bold; }
+            
+            .print-score { font-weight: bold; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <header data-aos="fade-down">
+        <button class="btn-print" onclick="preparePrint()"><i class="fa-solid fa-print"></i> <span>Imprimir Relatório</span></button>
+        <h1>Refinaria de Regras</h1>
+        <div class="subtitle">Atualização do Sistema de Crenças</div>
+    </header>
+
+    <div class="comparison-container">
+        
+        <div class="rule-column col-old" data-aos="fade-right">
+            <div class="col-header">
+                <span class="col-title" style="color:var(--old-color)"><i class="fa-solid fa-floppy-disk"></i> Regra Antiga</span>
+                <span class="score-badge" style="background:var(--old-color)" id="scoreOld">Saúde: 0%</span>
+            </div>
+            
+            <textarea id="oldRule" placeholder='Digite a regra antiga (Ex: "Devo agradar a todos para ser valorizado").'></textarea>
+
+            <div class="criteria-list" id="listOld">
+                </div>
+        </div>
+
+        <div class="rule-column col-new" data-aos="fade-left">
+            <div class="col-header">
+                <span class="col-title" style="color:var(--new-color)"><i class="fa-solid fa-rocket"></i> Nova Regra</span>
+                <span class="score-badge" style="background:var(--new-color)" id="scoreNew">Saúde: 0%</span>
+            </div>
+            
+            <textarea id="newRule" placeholder='Digite a nova regra (Ex: "Posso ser valorizado mesmo que nem todos gostem de mim").'></textarea>
+
+            <div class="criteria-list" id="listNew">
+                </div>
+        </div>
+
+    </div>
+
+    <div class="simulation-card" data-aos="fade-up">
+        <div class="sim-title"><i class="fa-solid fa-play"></i> Instalação da Nova Regra</div>
+        
+        <div class="sim-grid">
+            <div class="sim-box">
+                <label>Custos (Dificuldades da mudança)</label>
+                <textarea id="simCosts" placeholder="Ex: Vou sentir ansiedade no começo..."></textarea>
+            </div>
+            <div class="sim-box">
+                <label>Benefícios (Ganhos da mudança)</label>
+                <textarea id="simBenefits" placeholder="Ex: Terei mais liberdade e menos peso..."></textarea>
+            </div>
+            <div class="sim-box">
+                <label>Comportamentos (O que fazer?)</label>
+                <textarea id="simActions" placeholder="Ex: Vou dizer 'não' para o convite hoje..."></textarea>
+            </div>
+            
+            <div class="sim-box sim-full">
+                <label>O que é mais provável que eu faria se realmente acreditasse neste novo pressuposto?</label>
+                <textarea id="simBelief" placeholder="Descreva como seria sua vida com essa regra instalada..."></textarea>
+            </div>
+        </div>
+    </div>
+
+    <table id="print-table">
+        <thead>
+            <tr>
+                <th width="20%">Critério (0-10)</th>
+                <th width="40%">Regra Antiga</th>
+                <th width="40%">Nova Regra</th>
+            </tr>
+        </thead>
+        <tbody id="printBody"></tbody>
+        <tfoot>
+            <tr>
+                <th>Plano de Ação</th>
+                <td colspan="2" id="printPlan"></td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <center>
+        <a href="../listaferramentas.html" style="display:inline-block; margin-top:40px; color:#b2bec3; text-decoration:none; font-weight:600;" class="btn-back-home">
+            <i class="fa-solid fa-arrow-left"></i> Voltar
+        </a>
+    </center>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        const criteria = [
+            "É flexível?",
+            "É justo?",
+            "É realista?",
+            "É positivo?",
+            "Orientado p/ crescimento?",
+            "Ajuda atingir objetivos?",
+            "Melhora a autoestima?",
+            "Aplicaria a todos?"
+        ];
+
+        // Estado dos sliders
+        const scores = {
+            old: new Array(8).fill(0),
+            new: new Array(8).fill(0)
+        };
+
+        function init() {
+            renderList('old', 'listOld');
+            renderList('new', 'listNew');
+        }
+
+        function renderList(type, containerId) {
+            const container = document.getElementById(containerId);
+            const color = type === 'old' ? 'var(--old-color)' : 'var(--new-color)';
+            
+            criteria.forEach((crit, idx) => {
+                const div = document.createElement('div');
+                div.className = 'criteria-item';
+                div.innerHTML = `
+                    <label class="criteria-label">
+                        <span>${crit}</span>
+                        <span id="val-${type}-${idx}">0</span>
+                    </label>
+                    <input type="range" min="0" max="10" value="0" oninput="updateVal('${type}', ${idx}, this.value)">
+                    <div class="progress-bg">
+                        <div class="progress-fill" id="bar-${type}-${idx}" style="width:0%; background:${color}"></div>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function updateVal(type, idx, val) {
+            scores[type][idx] = parseInt(val);
+            
+            // Atualiza UI local
+            document.getElementById(`val-${type}-${idx}`).innerText = val;
+            document.getElementById(`bar-${type}-${idx}`).style.width = (val * 10) + "%";
+
+            // Calcula Média Total
+            const total = scores[type].reduce((a, b) => a + b, 0);
+            const avg = Math.round((total / (criteria.length * 10)) * 100);
+            
+            document.getElementById(type === 'old' ? 'scoreOld' : 'scoreNew').innerText = `Saúde: ${avg}%`;
+        }
+
+        function preparePrint() {
+            const tbody = document.getElementById('printBody');
+            tbody.innerHTML = '';
+
+            // Linha dos Textos das Regras
+            const trText = document.createElement('tr');
+            trText.innerHTML = `
+                <td><strong>Descrição</strong></td>
+                <td>${document.getElementById('oldRule').value}</td>
+                <td>${document.getElementById('newRule').value}</td>
+            `;
+            tbody.appendChild(trText);
+
+            // Linhas dos Critérios
+            criteria.forEach((crit, idx) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${crit}</td>
+                    <td class="print-score">${scores.old[idx]}</td>
+                    <td class="print-score">${scores.new[idx]}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Média Final
+            const totalOld = scores.old.reduce((a, b) => a + b, 0);
+            const totalNew = scores.new.reduce((a, b) => a + b, 0);
+            const trTotal = document.createElement('tr');
+            trTotal.innerHTML = `
+                <td><strong>TOTAL (Saúde)</strong></td>
+                <td class="print-score">${totalOld} pts</td>
+                <td class="print-score">${totalNew} pts</td>
+            `;
+            tbody.appendChild(trTotal);
+
+            // Plano
+            const planText = `
+                <strong>Custos:</strong> ${document.getElementById('simCosts').value}<br>
+                <strong>Benefícios:</strong> ${document.getElementById('simBenefits').value}<br>
+                <strong>Comportamentos:</strong> ${document.getElementById('simActions').value}<br>
+                <strong>Visão de Futuro:</strong> ${document.getElementById('simBelief').value}
+            `;
+            document.getElementById('printPlan').innerHTML = planText;
+
+            window.print();
+        }
+
+        init();
+    </script>
+
+</body>
+</html>
