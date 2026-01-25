@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratório de Recaídas | Bruno de Souza</title>
+    
+    <script>
+        if(localStorage.getItem('logado') !== 'sim') {
+            window.location.href = "../../login.html";
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #f0f8ff;
+            --past-color: #0984e3;   /* Azul (Estabilidade) */
+            --lapse-color: #d63031;  /* Vermelho (O Evento) */
+            --future-color: #00b894; /* Verde (Aprendizado) */
+            --text: #2d3436;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0; padding: 20px;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* --- HEADER --- */
+        header {
+            text-align: center; margin-bottom: 30px;
+            background: white; padding: 20px 40px;
+            border-radius: 20px; border: 3px solid #636e72;
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            max-width: 1000px; width: 100%; position: relative;
+        }
+
+        header h1 { color: var(--text); margin: 0; font-weight: 800; font-size: 1.8rem; }
+        .subtitle { color: #636e72; font-weight: 600; margin-top: 5px; }
+
+        .btn-print {
+            position: absolute; top: 20px; right: 20px;
+            background: none; border: 2px solid var(--text); color: var(--text);
+            padding: 8px 15px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+        .btn-print:hover { background: var(--text); color: white; }
+
+        /* --- CONTEXTO --- */
+        .context-card {
+            width: 100%; max-width: 1100px;
+            background: white; padding: 25px; border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 40px;
+            border-left: 5px solid #636e72;
+        }
+        .context-card label { display: block; font-weight: 800; font-size: 1.1rem; margin-bottom: 10px; color: #636e72; }
+        .context-card input {
+            width: 100%; padding: 15px; border: 2px solid #dfe6e9; border-radius: 10px;
+            font-size: 1.1rem; font-family: inherit; transition: 0.3s;
+        }
+        .context-card input:focus { border-color: #636e72; outline: none; }
+
+        /* --- TIMELINE (3 COLUNAS) --- */
+        .timeline-container {
+            display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; 
+            gap: 15px; align-items: stretch;
+            width: 100%; max-width: 1200px; margin-bottom: 50px;
+        }
+
+        .time-card {
+            background: white; padding: 25px; border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            display: flex; flex-direction: column; border-top: 6px solid;
+            transition: 0.3s;
+        }
+        .time-card:hover { transform: translateY(-5px); }
+
+        .card-past { border-color: var(--past-color); }
+        .card-lapse { border-color: var(--lapse-color); }
+        .card-future { border-color: var(--future-color); }
+
+        .card-header {
+            font-size: 1.1rem; font-weight: 800; margin-bottom: 15px;
+            display: flex; align-items: center; gap: 10px;
+        }
+
+        .card-desc { font-size: 0.85rem; color: #b2bec3; margin-bottom: 15px; min-height: 40px; }
+
+        textarea {
+            flex: 1; width: 100%; padding: 15px; border: 2px solid #dfe6e9; border-radius: 12px;
+            font-family: inherit; font-size: 1rem; resize: vertical; min-height: 150px;
+            transition: 0.3s; background: #fdfdfd;
+        }
+        
+        .card-past textarea:focus { border-color: var(--past-color); outline: none; background: #f0f8ff; }
+        .card-lapse textarea:focus { border-color: var(--lapse-color); outline: none; background: #fff5f5; }
+        .card-future textarea:focus { border-color: var(--future-color); outline: none; background: #f0fff4; }
+
+        /* Setas entre cards */
+        .arrow-separator {
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; color: #b2bec3;
+        }
+
+        /* --- MINDSET (REFLEXÃO) --- */
+        .mindset-section {
+            width: 100%; max-width: 1100px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .mindset-box {
+            background: white; padding: 25px; border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); border: 1px solid #eee;
+        }
+
+        .mindset-title { font-weight: 800; margin-bottom: 10px; font-size: 1rem; color: var(--text); }
+        
+        .mindset-box textarea { min-height: 100px; border-color: #eee; }
+
+        /* Responsividade */
+        @media (max-width: 900px) {
+            .timeline-container { grid-template-columns: 1fr; gap: 30px; }
+            .arrow-separator { transform: rotate(90deg); margin: -15px 0; }
+            .mindset-section { grid-template-columns: 1fr; }
+            .btn-print span { display: none; }
+        }
+
+        /* --- IMPRESSÃO --- */
+        #print-table { display: none; }
+
+        @media print {
+            body { background: white; padding: 0; }
+            header button, .btn-back-home { display: none !important; }
+            header { border: none; box-shadow: none; margin-bottom: 20px; }
+            
+            .timeline-container { display: none; }
+            .mindset-section { display: none; }
+            .context-card { box-shadow: none; border: 1px solid #ccc; }
+
+            /* Tabela Impressa */
+            #print-table {
+                display: table; width: 100%; border-collapse: collapse; font-family: sans-serif; margin-top: 20px;
+            }
+            #print-table th, #print-table td {
+                border: 1px solid #000; padding: 10px; vertical-align: top;
+            }
+            #print-table th { background: #eee; font-weight: bold; width: 33%; }
+            
+            .print-mindset-row td { background: #f9f9f9; font-weight: bold; padding-top: 20px; border:none; border-top: 2px solid #000; }
+        }
+    </style>
+</head>
+<body>
+
+    <header data-aos="fade-down">
+        <button class="btn-print" onclick="preparePrint()"><i class="fa-solid fa-print"></i> <span>Imprimir</span></button>
+        <h1>Laboratório de Recaídas</h1>
+        <div class="subtitle">Transformando Erros em Dados</div>
+    </header>
+
+    <div class="context-card" data-aos="fade-up">
+        <label><i class="fa-solid fa-person-walking"></i> O comportamento em que estou trabalhando (e tive um lapso):</label>
+        <input type="text" id="behaviorInput" placeholder='Ex: "Fazer dieta", "Parar de fumar", "Estudar diariamente"'>
+    </div>
+
+    <div class="timeline-container">
+        
+        <div class="time-card card-past" data-aos="fade-right">
+            <div class="card-header" style="color:var(--past-color)">
+                <i class="fa-solid fa-thumbs-up"></i> O que estava funcionando?
+            </div>
+            <div class="card-desc">Liste o que você fez certo antes do lapso. Valide seu esforço.</div>
+            <textarea id="pastInput" placeholder="Ex: Estava conseguindo me exercitar 3x por semana porque deixava a roupa pronta..."></textarea>
+        </div>
+
+        <div class="arrow-separator"><i class="fa-solid fa-arrow-right"></i></div>
+
+        <div class="time-card card-lapse" data-aos="fade-up">
+            <div class="card-header" style="color:var(--lapse-color)">
+                <i class="fa-solid fa-bomb"></i> O que causou a recaída?
+            </div>
+            <div class="card-desc">Identifique o gatilho (pensamento, emoção ou situação). Sem julgamento.</div>
+            <textarea id="lapseInput" placeholder="Ex: Tive um dia estressante no trabalho, cheguei exausto e pensei 'eu mereço descansar', aí pedi pizza e não fui treinar."></textarea>
+        </div>
+
+        <div class="arrow-separator"><i class="fa-solid fa-arrow-right"></i></div>
+
+        <div class="time-card card-future" data-aos="fade-left">
+            <div class="card-header" style="color:var(--future-color)">
+                <i class="fa-solid fa-microchip"></i> O Aprendizado (Upgrade)
+            </div>
+            <div class="card-desc">Como melhorar o sistema para o futuro baseando-se no que aconteceu?</div>
+            <textarea id="futureInput" placeholder="Ex: Aprendi que quando estou exausto, minha força de vontade diminui. No futuro, se estiver cansado, vou fazer apenas 10min de treino leve em casa em vez de ir à academia."></textarea>
+        </div>
+
+    </div>
+
+    <div class="mindset-section" data-aos="fade-up">
+        <div class="mindset-box">
+            <div class="mindset-title" style="color:var(--future-color)">
+                <i class="fa-solid fa-lightbulb"></i> Vantagens de usar o erro como aprendizado:
+            </div>
+            <textarea id="advInput" placeholder="Ex: Eu descubro meus pontos fracos e posso corrigi-los. Eu paro de me sentir culpado e foco na solução."></textarea>
+        </div>
+        <div class="mindset-box">
+            <div class="mindset-title" style="color:var(--lapse-color)">
+                <i class="fa-solid fa-ban"></i> Desvantagens (ou riscos de se punir):
+            </div>
+            <textarea id="disadvInput" placeholder="Ex: Se eu só me criticar, fico desanimado e tenho vontade de desistir de tudo."></textarea>
+        </div>
+    </div>
+
+    <table id="print-table">
+        <thead>
+            <tr>
+                <th>O que estava dando certo antes?</th>
+                <th>O que me fez recair? (Gatilho)</th>
+                <th>O que aprendi para o futuro?</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td id="pPast"></td>
+                <td id="pLapse"></td>
+                <td id="pFuture"></td>
+            </tr>
+            <tr class="print-mindset-row">
+                <td colspan="3">Vantagens de aprender com o erro:</td>
+            </tr>
+            <tr>
+                <td colspan="3" id="pAdv"></td>
+            </tr>
+            <tr class="print-mindset-row">
+                <td colspan="3">Desvantagens de não aprender (apenas punir):</td>
+            </tr>
+            <tr>
+                <td colspan="3" id="pDisadv"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <center>
+        <a href="../listaferramentas.html" style="display:inline-block; margin-top:40px; color:#b2bec3; text-decoration:none; font-weight:600;" class="btn-back-home">
+            <i class="fa-solid fa-arrow-left"></i> Voltar
+        </a>
+    </center>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        function preparePrint() {
+            // Transfere dados para a tabela de impressão
+            document.getElementById('pPast').innerText = document.getElementById('pastInput').value;
+            document.getElementById('pLapse').innerText = document.getElementById('lapseInput').value;
+            document.getElementById('pFuture').innerText = document.getElementById('futureInput').value;
+            
+            document.getElementById('pAdv').innerText = document.getElementById('advInput').value;
+            document.getElementById('pDisadv').innerText = document.getElementById('disadvInput').value;
+            
+            window.print();
+        }
+    </script>
+
+</body>
+</html>
