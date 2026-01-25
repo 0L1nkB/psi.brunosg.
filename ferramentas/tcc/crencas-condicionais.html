@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapeador de Crenças Condicionais | Bruno de Souza</title>
+    
+    <script>
+        if(localStorage.getItem('logado') !== 'sim') {
+            window.location.href = "../../login.html";
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #f0f8ff;
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --accent: #fdcb6e;
+            --text: #2d3436;
+            --code-bg: #2d3436;
+            --code-text: #55efc4;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0; padding: 20px;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* --- HEADER --- */
+        header {
+            text-align: center; margin-bottom: 30px;
+            background: white; padding: 20px 40px;
+            border-radius: 20px; border: 3px dashed #636e72;
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            max-width: 900px; width: 100%; position: relative;
+        }
+
+        header h1 { color: #2d3436; margin: 0; font-weight: 800; font-size: 1.8rem; }
+        .subtitle { color: #636e72; font-weight: 600; margin-top: 5px; }
+
+        .btn-print {
+            position: absolute; top: 20px; right: 20px;
+            background: none; border: 2px solid #2d3436; color: #2d3436;
+            padding: 8px 15px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+        .btn-print:hover { background: #2d3436; color: white; }
+
+        /* --- ÁREA DE INPUT --- */
+        .input-card {
+            width: 100%; max-width: 900px;
+            background: white; padding: 30px; border-radius: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 40px;
+            border-top: 5px solid var(--primary);
+        }
+
+        /* 1. SELETOR DE ÁREA */
+        .area-section { margin-bottom: 30px; }
+        .area-section label { display: block; font-weight: 800; font-size: 1.1rem; margin-bottom: 15px; color: var(--primary); }
+        
+        .chips-container { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px; }
+        
+        .chip {
+            padding: 8px 15px; background: #f1f2f6; border-radius: 20px; cursor: pointer;
+            font-weight: 600; color: #636e72; transition: 0.2s; border: 2px solid transparent;
+        }
+        .chip:hover { background: #dfe6e9; }
+        .chip.active { background: var(--primary); color: white; border-color: var(--secondary); box-shadow: 0 4px 10px rgba(108, 92, 231, 0.3); }
+
+        .custom-area-input {
+            width: 100%; padding: 12px; border: 2px solid #dfe6e9; border-radius: 10px;
+            font-family: inherit; font-size: 1rem; display: none; margin-top: 10px;
+        }
+
+        /* 2. TERMÔMETRO */
+        .slider-section { margin-bottom: 30px; background: #f8f9fa; padding: 20px; border-radius: 15px; }
+        .slider-label { display: flex; justify-content: space-between; font-weight: 700; margin-bottom: 10px; }
+        input[type=range] { width: 100%; cursor: pointer; accent-color: var(--primary); height: 8px; }
+
+        /* 3. CONSTRUTOR DE LÓGICA */
+        .logic-section label { display: block; font-weight: 800; font-size: 1.1rem; margin-bottom: 15px; color: var(--primary); }
+        
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab-btn {
+            flex: 1; padding: 12px; background: white; border: 2px solid #dfe6e9; border-radius: 10px;
+            font-weight: 700; color: #b2bec3; cursor: pointer; transition: 0.2s;
+        }
+        .tab-btn.active { border-color: var(--primary); color: var(--primary); background: #f0f8ff; }
+
+        .logic-form { display: none; background: #fff; padding: 20px; border-radius: 15px; border: 1px solid #eee; }
+        .logic-form.active { display: block; animation: fadeIn 0.3s; }
+
+        .sentence-builder { font-size: 1.1rem; display: flex; flex-direction: column; gap: 15px; }
+        .sentence-part { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        
+        .inline-input {
+            flex: 1; padding: 10px; border: none; border-bottom: 2px solid #ccc;
+            font-family: inherit; font-size: 1.1rem; background: transparent; color: var(--primary); font-weight: 600;
+        }
+        .inline-input:focus { border-bottom-color: var(--primary); outline: none; }
+
+        .btn-add {
+            width: 100%; padding: 15px; border-radius: 50px; border: none; margin-top: 20px;
+            background: #2d3436; color: white; font-weight: 800; font-size: 1.1rem;
+            cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px;
+        }
+        .btn-add:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+
+        /* --- LISTA DE REGRAS --- */
+        .rules-list {
+            width: 100%; max-width: 900px; display: flex; flex-direction: column; gap: 20px;
+        }
+
+        .rule-card {
+            background: white; border-radius: 20px; padding: 0; overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); position: relative;
+            animation: slideUp 0.4s ease; display: flex;
+        }
+
+        .card-sidebar {
+            width: 15px; background: var(--primary);
+        }
+
+        .card-content { padding: 20px; flex: 1; }
+
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .card-area { font-weight: 800; text-transform: uppercase; font-size: 0.8rem; color: #b2bec3; letter-spacing: 1px; }
+        .card-worry { background: #ffeaa7; padding: 4px 10px; border-radius: 10px; font-weight: bold; font-size: 0.8rem; color: #d35400; }
+
+        .code-block {
+            background: var(--code-bg); color: var(--code-text); padding: 15px;
+            border-radius: 10px; font-family: 'Courier New', monospace; font-size: 0.95rem;
+            line-height: 1.5; position: relative;
+        }
+        .code-block::before { content: '</>'; position: absolute; right: 10px; top: 10px; color: #ffffff33; font-weight: bold; }
+
+        .btn-delete {
+            background: none; border: none; color: #d63031; cursor: pointer; opacity: 0.6; transition: 0.2s; margin-left: 10px;
+        }
+        .btn-delete:hover { opacity: 1; transform: scale(1.2); }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Responsividade */
+        @media (max-width: 700px) {
+            .btn-print span { display: none; }
+            .sentence-part { flex-direction: column; align-items: stretch; gap: 5px; }
+            .inline-input { text-align: center; }
+        }
+
+        /* --- IMPRESSÃO --- */
+        #print-table { display: none; }
+
+        @media print {
+            body { background: white; padding: 0; }
+            header button, .input-card, .btn-back-home, .btn-delete { display: none !important; }
+            header { border: none; box-shadow: none; margin-bottom: 20px; }
+            
+            #print-table {
+                display: table; width: 100%; border-collapse: collapse; font-family: sans-serif; margin-top: 20px;
+            }
+            #print-table th { background: #eee; padding: 10px; border: 1px solid #ccc; text-align: left; font-size: 0.9rem; }
+            #print-table td { padding: 10px; border: 1px solid #ccc; vertical-align: top; font-size: 0.9rem; }
+            
+            .rules-list { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <header data-aos="fade-down">
+        <button class="btn-print" onclick="window.print()"><i class="fa-solid fa-print"></i> <span>Imprimir</span></button>
+        <h1>Mapeador de Crenças</h1>
+        <div class="subtitle">Identificação de Regras Condicionais</div>
+    </header>
+
+    <div class="input-card" data-aos="fade-up">
+        
+        <div class="area-section">
+            <label><i class="fa-solid fa-layer-group"></i> Qual a área de preocupação?</label>
+            <div class="chips-container" id="areaChips">
+                <div class="chip" onclick="selectArea(this, 'Inteligência/Competência')">Inteligência</div>
+                <div class="chip" onclick="selectArea(this, 'Atratividade/Aparência')">Atratividade</div>
+                <div class="chip" onclick="selectArea(this, 'Aprovação/Rejeição')">Aprovação Social</div>
+                <div class="chip" onclick="selectArea(this, 'Controle Emocional')">Controle</div>
+                <div class="chip" onclick="selectArea(this, 'Outro')">Outro...</div>
+            </div>
+            <input type="text" id="customArea" class="custom-area-input" placeholder="Digite a área (Ex: Profissional)...">
+        </div>
+
+        <div class="slider-section">
+            <div class="slider-label">
+                <span><i class="fa-solid fa-fire"></i> O quanto isso me preocupa?</span>
+                <span id="worryVal" style="color:var(--primary)">50%</span>
+            </div>
+            <input type="range" id="worryInput" min="0" max="100" value="50" oninput="document.getElementById('worryVal').innerText = this.value + '%'">
+        </div>
+
+        <div class="logic-section">
+            <label><i class="fa-solid fa-gear"></i> Como você tenta lidar com isso? (A Regra)</label>
+            
+            <div class="tabs">
+                <div class="tab-btn active" onclick="switchTab('conquista')">Modo Conquista (Para ser...)</div>
+                <div class="tab-btn" onclick="switchTab('evitacao')">Modo Evitação (Se eu...)</div>
+            </div>
+
+            <div id="formConquista" class="logic-form active">
+                <div class="sentence-builder">
+                    <div class="sentence-part">
+                        <span>"Para ser</span>
+                        <input type="text" id="cq1" class="inline-input" placeholder="competente / amado">
+                        <span>,</span>
+                    </div>
+                    <div class="sentence-part">
+                        <span>eu preciso</span>
+                        <input type="text" id="cq2" class="inline-input" placeholder="fazer melhor que todos / agradar sempre">
+                        <span>."</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="formEvitacao" class="logic-form">
+                <div class="sentence-builder">
+                    <div class="sentence-part">
+                        <span>"Se eu</span>
+                        <input type="text" id="ev1" class="inline-input" placeholder="evitar desafios / ficar quieto">
+                        <span>,</span>
+                    </div>
+                    <div class="sentence-part">
+                        <span>então não</span>
+                        <input type="text" id="ev2" class="inline-input" placeholder="fracassarei / serei julgado">
+                        <span>."</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-add" onclick="addRule()">
+            <i class="fa-solid fa-plus-circle"></i> Adicionar Regra
+        </button>
+    </div>
+
+    <div class="rules-list" id="rulesList">
+        <div class="rule-card">
+            <div class="card-sidebar"></div>
+            <div class="card-content">
+                <div class="card-header">
+                    <span class="card-area">INTELIGÊNCIA</span>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <span class="card-worry">Preocupação: 95%</span>
+                        <button class="btn-delete" onclick="deleteRule(this)"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+                <div class="code-block">
+                    "Para ser competente, preciso fazer melhor do que todos."
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <table id="print-table">
+        <thead>
+            <tr>
+                <th width="20%">Área de Preocupação</th>
+                <th width="15%">Grau (%)</th>
+                <th width="65%">Crença Condicional / Regra de Enfrentamento</th>
+            </tr>
+        </thead>
+        <tbody id="printBody">
+            </tbody>
+    </table>
+
+    <center>
+        <a href="../listaferramentas.html" style="display:inline-block; margin-top:40px; color:#b2bec3; text-decoration:none; font-weight:600;" class="btn-back-home">
+            <i class="fa-solid fa-arrow-left"></i> Voltar
+        </a>
+    </center>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        let currentTab = 'conquista';
+        let selectedArea = '';
+
+        function selectArea(chip, areaName) {
+            // Remove active
+            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            
+            if (areaName === 'Outro') {
+                document.getElementById('customArea').style.display = 'block';
+                document.getElementById('customArea').focus();
+                selectedArea = 'Outro';
+            } else {
+                document.getElementById('customArea').style.display = 'none';
+                selectedArea = areaName;
+            }
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.logic-form').forEach(f => f.classList.remove('active'));
+            
+            // Ativa o correto
+            if (tab === 'conquista') {
+                document.querySelector('.tab-btn:first-child').classList.add('active');
+                document.getElementById('formConquista').classList.add('active');
+            } else {
+                document.querySelector('.tab-btn:last-child').classList.add('active');
+                document.getElementById('formEvitacao').classList.add('active');
+            }
+        }
+
+        function addRule() {
+            // 1. Pega Área
+            let area = selectedArea;
+            if (area === 'Outro') {
+                area = document.getElementById('customArea').value.trim();
+            }
+            if (!area) {
+                alert("Selecione uma área de preocupação!");
+                return;
+            }
+
+            // 2. Pega Preocupação
+            const worry = document.getElementById('worryInput').value;
+
+            // 3. Pega Frase
+            let ruleText = "";
+            if (currentTab === 'conquista') {
+                const v1 = document.getElementById('cq1').value.trim();
+                const v2 = document.getElementById('cq2').value.trim();
+                if (!v1 || !v2) { alert("Preencha os campos da frase!"); return; }
+                ruleText = `Para ser ${v1}, preciso ${v2}.`;
+            } else {
+                const v1 = document.getElementById('ev1').value.trim();
+                const v2 = document.getElementById('ev2').value.trim();
+                if (!v1 || !v2) { alert("Preencha os campos da frase!"); return; }
+                ruleText = `Se eu ${v1}, então não ${v2}.`;
+            }
+
+            // 4. Cria Card
+            const list = document.getElementById('rulesList');
+            const div = document.createElement('div');
+            div.className = 'rule-card';
+            
+            div.innerHTML = `
+                <div class="card-sidebar"></div>
+                <div class="card-content">
+                    <div class="card-header">
+                        <span class="card-area">${area}</span>
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <span class="card-worry">Preocupação: ${worry}%</span>
+                            <button class="btn-delete" onclick="deleteRule(this)"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <div class="code-block rule-text">
+                        "${ruleText}"
+                    </div>
+                </div>
+            `;
+
+            list.prepend(div);
+            
+            // 5. Reset simples
+            document.querySelectorAll('.inline-input').forEach(i => i.value = '');
+            updatePrintTable();
+        }
+
+        function deleteRule(btn) {
+            if(confirm("Remover esta crença?")) {
+                btn.closest('.rule-card').remove();
+                updatePrintTable();
+            }
+        }
+
+        function updatePrintTable() {
+            const tbody = document.getElementById('printBody');
+            tbody.innerHTML = '';
+            
+            const cards = document.querySelectorAll('.rule-card');
+            
+            cards.forEach(card => {
+                const area = card.querySelector('.card-area').innerText;
+                const worry = card.querySelector('.card-worry').innerText.replace('Preocupação: ', '');
+                const rule = card.querySelector('.rule-text').innerText.replace(/"/g, '');
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${area}</td><td>${worry}</td><td>${rule}</td>`;
+                tbody.appendChild(tr);
+            });
+        }
+    </script>
+
+</body>
+</html>
