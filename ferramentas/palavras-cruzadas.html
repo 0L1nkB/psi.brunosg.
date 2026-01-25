@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cruzadinha Terapêutica | Bruno de Souza</title>
+    
+    <script>
+        if(localStorage.getItem('logado') !== 'sim') {
+            window.location.href = "../../login.html";
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #f0f8ff;
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --accent: #fdcb6e;
+            --text: #2d3436;
+            --correct: #00b894;
+            --wrong: #d63031;
+            --cell-size: 40px;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0; padding: 20px;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* --- HEADER --- */
+        header {
+            text-align: center; margin-bottom: 20px;
+            background: white; padding: 20px 40px;
+            border-radius: 20px; border: 3px dashed var(--primary);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            max-width: 900px; width: 100%; position: relative;
+        }
+
+        header h1 { color: var(--primary); margin: 0; font-weight: 800; font-size: 1.8rem; }
+        .subtitle { color: #636e72; font-weight: 600; margin-top: 5px; }
+
+        .btn-print {
+            position: absolute; top: 20px; right: 20px;
+            background: none; border: 2px solid var(--primary); color: var(--primary);
+            padding: 8px 15px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+        .btn-print:hover { background: var(--primary); color: white; }
+
+        /* --- CONTROLES --- */
+        .controls-area {
+            background: white; padding: 20px; border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 20px;
+            display: flex; gap: 15px; align-items: center; justify-content: center; flex-wrap: wrap;
+        }
+
+        select {
+            padding: 10px 20px; border-radius: 10px; border: 2px solid #dfe6e9;
+            font-family: inherit; font-size: 1rem; font-weight: bold; color: var(--text);
+            cursor: pointer; min-width: 250px;
+        }
+
+        .btn-action {
+            background: var(--primary); color: white; border: none; padding: 10px 20px;
+            border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.3s;
+        }
+        .btn-action:hover { transform: translateY(-2px); box-shadow: 0 5px 10px rgba(0,0,0,0.1); }
+        .btn-check { background: var(--correct); }
+        .btn-reset { background: var(--text); }
+
+        /* --- JOGO --- */
+        .game-layout {
+            display: grid; grid-template-columns: 1fr 300px; gap: 30px;
+            width: 100%; max-width: 1000px;
+        }
+
+        /* GRID DA CRUZADINHA */
+        .crossword-container {
+            background: white; padding: 20px; border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            overflow: auto; display: flex; justify-content: center;
+        }
+
+        .crossword-grid {
+            display: grid; gap: 2px;
+            background: #2d3436; border: 2px solid #2d3436;
+        }
+
+        .cell {
+            width: var(--cell-size); height: var(--cell-size);
+            background: #2d3436; /* Fundo preto padrão */
+            position: relative;
+        }
+
+        .cell.active {
+            background: white;
+        }
+
+        .cell input {
+            width: 100%; height: 100%; border: none; text-align: center;
+            font-family: 'Quicksand', sans-serif; font-weight: 800; font-size: 1.2rem;
+            text-transform: uppercase; color: var(--text); background: transparent;
+            padding: 0; outline: none; cursor: pointer;
+        }
+        
+        .cell input:focus { background: #e3f2fd; }
+        
+        .cell-number {
+            position: absolute; top: 2px; left: 2px;
+            font-size: 0.6rem; color: #636e72; pointer-events: none; font-weight: bold;
+        }
+
+        /* Estados de Validação */
+        .cell.correct input { color: var(--correct); background: #e0f7fa; }
+        .cell.wrong input { color: var(--wrong); background: #ffebee; }
+
+        /* LISTA DE PISTAS */
+        .clues-container {
+            background: white; padding: 25px; border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); height: fit-content;
+        }
+
+        .clues-section h3 {
+            margin: 0 0 10px 0; color: var(--primary); border-bottom: 2px solid #f0f0f0; padding-bottom: 5px;
+            font-size: 1.1rem;
+        }
+
+        .clues-list { list-style: none; padding: 0; margin: 0 0 20px 0; }
+        .clue-item {
+            margin-bottom: 10px; font-size: 0.95rem; line-height: 1.4; color: #636e72;
+            cursor: pointer; padding: 5px; border-radius: 5px; transition: 0.2s;
+        }
+        .clue-item:hover { background: #f0f8ff; color: var(--text); }
+        .clue-item strong { color: var(--primary); margin-right: 5px; }
+
+        @media (max-width: 900px) {
+            .game-layout { grid-template-columns: 1fr; }
+            .crossword-container { order: 1; }
+            .clues-container { order: 2; }
+        }
+
+        @media print {
+            header button, .btn-back-home, .controls-area { display: none !important; }
+            .game-layout { display: block; }
+            .crossword-container, .clues-container { box-shadow: none; border: 1px solid #ccc; margin-bottom: 20px; }
+            .cell { border: 1px solid #000; }
+            .cell.active { background: white !important; }
+            .cell input { color: transparent !important; } /* Esconde respostas na impressão */
+            .cell-number { color: black; }
+        }
+    </style>
+</head>
+<body>
+
+    <header data-aos="fade-down">
+        <button class="btn-print" onclick="window.print()"><i class="fa-solid fa-print"></i> <span>Imprimir Vazio</span></button>
+        <h1>Cruzadinha Terapêutica</h1>
+        <div class="subtitle">Exercite a mente e fixe os conceitos</div>
+    </header>
+
+    <div class="controls-area" data-aos="fade-up">
+        <label style="font-weight:bold; color:var(--text);">Tema:</label>
+        <select id="levelSelect" onchange="loadLevel()">
+            <option value="ansiedade">Ansiedade: Sintomas e Coping</option>
+            <option value="depressao">Depressão: Sinais e Ativação</option>
+            <option value="autoestima">Autoestima: Pilares</option>
+            <option value="tdah">TDAH: Funções Executivas</option>
+        </select>
+        
+        <button class="btn-action btn-check" onclick="checkAnswers()"><i class="fa-solid fa-check"></i> Verificar</button>
+        <button class="btn-action btn-reset" onclick="resetGame()"><i class="fa-solid fa-eraser"></i> Limpar</button>
+    </div>
+
+    <div class="game-layout">
+        
+        <div class="crossword-container" data-aos="fade-right">
+            <div id="gridWrapper" class="crossword-grid">
+                </div>
+        </div>
+
+        <div class="clues-container" data-aos="fade-left">
+            <div class="clues-section">
+                <h3><i class="fa-solid fa-arrows-left-right"></i> Horizontais</h3>
+                <ul class="clues-list" id="cluesAcross"></ul>
+            </div>
+            <div class="clues-section">
+                <h3><i class="fa-solid fa-arrows-up-down"></i> Verticais</h3>
+                <ul class="clues-list" id="cluesDown"></ul>
+            </div>
+        </div>
+
+    </div>
+
+    <center>
+        <a href="../listaferramentas.html" style="display:inline-block; margin-top:40px; color:#b2bec3; text-decoration:none; font-weight:600;" class="btn-back-home">
+            <i class="fa-solid fa-arrow-left"></i> Voltar
+        </a>
+    </center>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        // DADOS DOS NÍVEIS
+        // Formato do Grid: '.' = vazio (preto), Letra = célula ativa
+        // O layout precisa ser desenhado manualmente para garantir cruzamento correto.
+        const levels = {
+            ansiedade: {
+                cols: 10,
+                rows: 10,
+                layout: [
+                    "......M...", // 0
+                    "RESPIRAR..", // 1 (H: RESPIRAR, V: MEDO começa em 0,6)
+                    "......D...", // 2
+                    ".FUTURO...", // 3 (H: FUTURO, V: MEDO termina em O)
+                    "..........", // 4
+                    "...E......", // 5 (V: EVITACAO começa)
+                    "...V......", // 6
+                    "...I......", // 7
+                    "...T......", // 8
+                    "PANICO....", // 9 (H: PANICO, V: EVITACAO cruza em A) - Ajuste manual necessário na lógica
+                ],
+                // Ajuste fino do layout para bater certo:
+                // Vamos usar um objeto de palavras com coordenadas para ser mais seguro
+                words: [
+                    { term: "RESPIRAR", start: [1, 0], dir: "H", clue: "1. Técnica usada para acalmar o corpo." },
+                    { term: "MEDO", start: [0, 6], dir: "V", clue: "2. Emoção básica ligada à percepção de perigo." },
+                    { term: "FUTURO", start: [3, 1], dir: "H", clue: "3. Onde está o foco do pensamento ansioso." },
+                    { term: "PANICO", start: [9, 0], dir: "H", clue: "4. Ataque súbito de medo intenso." },
+                    { term: "EVITACAO", start: [5, 3], dir: "V", clue: "5. Comportamento de fugir do que causa ansiedade." },
+                    { term: "SONO", start: [3, 9], dir: "V", clue: "6. Frequentemente prejudicado pela preocupação." }
+                ]
+            },
+            depressao: {
+                cols: 11,
+                rows: 11,
+                words: [
+                    { term: "ATIVACAO", start: [0, 2], dir: "H", clue: "1. comportamental: técnica para combater a inércia." },
+                    { term: "ISOLAMENTO", start: [0, 4], dir: "V", clue: "2. Afastar-se das pessoas e do convívio social." },
+                    { term: "CULPA", start: [4, 0], dir: "H", clue: "3. Sentimento de responsabilidade excessiva por erros." },
+                    { term: "APATIA", start: [3, 6], dir: "V", clue: "4. Falta de emoção ou motivação." },
+                    { term: "ROTINA", start: [8, 3], dir: "H", clue: "5. Estrutura diária que ajuda na recuperação." }
+                ]
+            },
+            autoestima: {
+                cols: 12,
+                rows: 10,
+                words: [
+                    { term: "VALOR", start: [0, 0], dir: "H", clue: "1. O que você tem independentemente de erros." },
+                    { term: "AMOR", start: [0, 2], dir: "V", clue: "2. Sentimento que devemos nutrir por nós mesmos." },
+                    { term: "LIMITES", start: [3, 0], dir: "H", clue: "3. Saber dizer não é estabelecer..." },
+                    { term: "RESPEITO", start: [0, 8], dir: "V", clue: "4. Tratar a si mesmo com dignidade." },
+                    { term: "ELOGIO", start: [6, 2], dir: "H", clue: "5. Reconhecimento positivo que devemos aceitar." }
+                ]
+            },
+            tdah: {
+                cols: 10,
+                rows: 10,
+                words: [
+                    { term: "FOCO", start: [0, 0], dir: "H", clue: "1. Atenção concentrada em um estímulo." },
+                    { term: "ORGANIZAR", start: [0, 1], dir: "V", clue: "2. Colocar ordem no ambiente ou tarefas." },
+                    { term: "IMPULSO", start: [5, 0], dir: "H", clue: "3. Agir sem pensar nas consequências." },
+                    { term: "LISTA", start: [2, 6], dir: "V", clue: "4. Ferramenta para não esquecer tarefas." },
+                    { term: "POMODORO", start: [8, 1], dir: "H", clue: "5. Técnica de tempo para estudo/trabalho." }
+                ]
+            }
+        };
+
+        let currentGrid = [];
+        let solutionGrid = [];
+
+        function loadLevel() {
+            const theme = document.getElementById('levelSelect').value;
+            const data = levels[theme];
+            const gridEl = document.getElementById('gridWrapper');
+            const listH = document.getElementById('cluesAcross');
+            const listV = document.getElementById('cluesDown');
+
+            // Setup CSS Grid
+            gridEl.style.gridTemplateColumns = `repeat(${data.cols}, var(--cell-size))`;
+            gridEl.innerHTML = '';
+            listH.innerHTML = '';
+            listV.innerHTML = '';
+
+            // Inicializa Arrays
+            currentGrid = Array(data.rows).fill(null).map(() => Array(data.cols).fill(null));
+            solutionGrid = Array(data.rows).fill(null).map(() => Array(data.cols).fill(null));
+
+            // Mapeia Palavras no Grid
+            data.words.forEach((w, index) => {
+                const number = index + 1;
+                const [startRow, startCol] = w.start;
+                
+                // Adiciona Pista na Lista
+                const li = document.createElement('li');
+                li.className = 'clue-item';
+                li.innerHTML = `<strong>${number}.</strong> ${w.clue.split('. ')[1]}`;
+                if (w.dir === 'H') listH.appendChild(li);
+                else listV.appendChild(li);
+
+                // Preenche Solução
+                for (let i = 0; i < w.term.length; i++) {
+                    let r = startRow + (w.dir === 'V' ? i : 0);
+                    let c = startCol + (w.dir === 'H' ? i : 0);
+                    
+                    if (!solutionGrid[r][c]) {
+                        solutionGrid[r][c] = { char: w.term[i], num: (i===0 ? number : null) };
+                    } else if (i === 0) {
+                        // Se cruza e é o início de outra, adiciona o número
+                        solutionGrid[r][c].num = number; 
+                    }
+                }
+            });
+
+            // Renderiza Grid HTML
+            for (let r = 0; r < data.rows; r++) {
+                for (let c = 0; c < data.cols; c++) {
+                    const cellData = solutionGrid[r][c];
+                    const div = document.createElement('div');
+                    
+                    if (cellData) {
+                        div.className = 'cell active';
+                        div.innerHTML = `
+                            <input type="text" maxlength="1" data-r="${r}" data-c="${c}" onkeyup="handleInput(this, event)">
+                            ${cellData.num ? `<span class="cell-number">${cellData.num}</span>` : ''}
+                        `;
+                    } else {
+                        div.className = 'cell'; // Célula preta
+                    }
+                    gridEl.appendChild(div);
+                }
+            }
+        }
+
+        function handleInput(input, e) {
+            input.value = input.value.toUpperCase();
+            
+            const r = parseInt(input.dataset.r);
+            const c = parseInt(input.dataset.c);
+            
+            // Navegação básica
+            if (input.value.length === 1) {
+                // Tenta mover para direita ou baixo
+                // Simplificação: tenta direita primeiro, se não existir, tenta baixo
+                focusNext(r, c + 1) || focusNext(r + 1, c);
+            }
+            
+            // Backspace
+            if (e.key === "Backspace") {
+                focusNext(r, c - 1) || focusNext(r - 1, c);
+            }
+        }
+
+        function focusNext(r, c) {
+            const next = document.querySelector(`input[data-r="${r}"][data-c="${c}"]`);
+            if (next) {
+                next.focus();
+                return true;
+            }
+            return false;
+        }
+
+        function checkAnswers() {
+            const inputs = document.querySelectorAll('.cell.active input');
+            
+            inputs.forEach(inp => {
+                const r = inp.dataset.r;
+                const c = inp.dataset.c;
+                const correctChar = solutionGrid[r][c].char;
+                
+                inp.parentElement.classList.remove('correct', 'wrong');
+                
+                if (inp.value === correctChar) {
+                    inp.parentElement.classList.add('correct');
+                } else if (inp.value !== "") {
+                    inp.parentElement.classList.add('wrong');
+                }
+            });
+        }
+
+        function resetGame() {
+            const inputs = document.querySelectorAll('.cell.active input');
+            inputs.forEach(inp => {
+                inp.value = '';
+                inp.parentElement.classList.remove('correct', 'wrong');
+            });
+        }
+
+        // Inicia
+        loadLevel();
+    </script>
+
+</body>
+</html>
