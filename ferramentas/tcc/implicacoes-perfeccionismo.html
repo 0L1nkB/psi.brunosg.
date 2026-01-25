@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O Contrato da Perfeição | Bruno de Souza</title>
+    
+    <script>
+        if(localStorage.getItem('logado') !== 'sim') {
+            window.location.href = "../../login.html";
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #f0f8ff;
+            --fantasy-color: #a29bfe; /* Roxo (Ilusão/Sonho) */
+            --reality-color: #636e72; /* Cinza (Realidade/Concreto) */
+            --highlight: #6c5ce7;
+            --text: #2d3436;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0; padding: 20px;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* --- HEADER --- */
+        header {
+            text-align: center; margin-bottom: 30px;
+            background: white; padding: 20px 40px;
+            border-radius: 20px; border: 3px solid var(--highlight);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            max-width: 900px; width: 100%; position: relative;
+        }
+
+        header h1 { color: var(--highlight); margin: 0; font-weight: 800; font-size: 1.8rem; }
+        .subtitle { color: #636e72; font-weight: 600; margin-top: 5px; }
+
+        .btn-print {
+            position: absolute; top: 20px; right: 20px;
+            background: none; border: 2px solid var(--highlight); color: var(--highlight);
+            padding: 8px 15px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+        .btn-print:hover { background: var(--highlight); color: white; }
+
+        /* --- O CONTRATO (PARTE 1) --- */
+        .contract-sheet {
+            width: 100%; max-width: 900px;
+            background: white; padding: 40px; border-radius: 5px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-bottom: 40px;
+            border-top: 10px solid var(--fantasy-color);
+            position: relative;
+        }
+        /* Efeito de papel */
+        .contract-sheet::before {
+            content: ''; position: absolute; top: 0; right: 0; border-width: 0 30px 30px 0;
+            border-style: solid; border-color: #eee #f0f8ff #eee #eee;
+        }
+
+        .contract-title {
+            text-align: center; font-family: 'Times New Roman', serif; font-size: 1.5rem;
+            font-weight: bold; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 2px;
+            border-bottom: 2px solid #eee; padding-bottom: 10px;
+        }
+
+        .clause-box {
+            margin-bottom: 25px; padding: 20px; background: #fdfdfd; border: 1px dashed var(--fantasy-color); border-radius: 10px;
+        }
+
+        .clause-label {
+            font-weight: 800; font-size: 1rem; color: var(--highlight); margin-bottom: 10px; display: block;
+        }
+
+        textarea {
+            width: 100%; padding: 10px; border: none; border-bottom: 2px solid #ccc;
+            font-family: 'Quicksand', sans-serif; font-size: 1.1rem; resize: vertical; min-height: 60px;
+            background: transparent; transition: 0.3s;
+        }
+        textarea:focus { border-color: var(--highlight); outline: none; background: #f8f9fa; }
+
+        /* --- A ANÁLISE (PARTE 2) --- */
+        .reality-check-section {
+            width: 100%; max-width: 900px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 40px;
+        }
+
+        .check-card {
+            background: white; padding: 25px; border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-left: 5px solid;
+        }
+        .check-prob { border-color: var(--reality-color); }
+        .check-cost { border-color: #d63031; }
+
+        .card-icon { font-size: 2rem; margin-bottom: 15px; display: block; }
+
+        /* Slider */
+        .slider-container { margin-top: 20px; text-align: center; }
+        input[type=range] { width: 100%; accent-color: var(--highlight); cursor: pointer; height: 8px; }
+        .prob-value { font-size: 2rem; font-weight: 800; color: var(--highlight); margin-top: 10px; display: block; }
+
+        /* --- HISTÓRICO E CONCLUSÃO --- */
+        .history-card {
+            width: 100%; max-width: 900px;
+            background: #e3f2fd; padding: 25px; border-radius: 20px;
+            border: 2px dashed var(--highlight); margin-bottom: 50px;
+        }
+
+        .history-label { font-weight: 800; color: var(--text); font-size: 1.1rem; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+
+        /* Responsividade */
+        @media (max-width: 800px) {
+            .reality-check-section { grid-template-columns: 1fr; }
+            .btn-print span { display: none; }
+        }
+
+        /* --- IMPRESSÃO --- */
+        #print-table { display: none; }
+
+        @media print {
+            body { background: white; padding: 0; }
+            header button, .btn-back-home { display: none !important; }
+            header { border: none; box-shadow: none; margin-bottom: 20px; }
+            
+            .contract-sheet, .reality-check-section, .history-card { display: none; } /* Esconde interativo */
+            
+            #print-table {
+                display: table; width: 100%; border-collapse: collapse; font-family: sans-serif;
+            }
+            #print-table th, #print-table td {
+                border: 1px solid #000; padding: 12px; vertical-align: top;
+            }
+            #print-table th { background: #eee; text-align: left; }
+            
+            .print-prob-val { font-size: 1.2rem; font-weight: bold; }
+        }
+    </style>
+</head>
+<body>
+
+    <header data-aos="fade-down">
+        <button class="btn-print" onclick="preparePrint()"><i class="fa-solid fa-print"></i> <span>Imprimir Análise</span></button>
+        <h1>O Contrato da Perfeição</h1>
+        <div class="subtitle">Exame das Implicações e Expectativas</div>
+    </header>
+
+    <div class="contract-sheet" data-aos="zoom-in">
+        <div class="contract-title">Termos do Acordo Interno</div>
+        
+        <div class="clause-box">
+            <span class="clause-label">CLÁUSULA 1 (A Condição):</span>
+            <label style="font-size:0.9rem; color:#636e72;">"Se eu atingir a perfeição nesta atividade..."</label>
+            <textarea id="ifInput" placeholder="Ex: Se eu tirar nota máxima em tudo, se eu nunca errar no trabalho..."></textarea>
+        </div>
+
+        <div class="clause-box">
+            <span class="clause-label">CLÁUSULA 2 (A Promessa):</span>
+            <label style="font-size:0.9rem; color:#636e72;">"Então o seguinte será verdade (benefícios garantidos)..."</label>
+            <textarea id="thenInput" placeholder="Ex: Todos vão me admirar, eu nunca serei criticado, eu serei feliz para sempre."></textarea>
+        </div>
+    </div>
+
+    <div class="reality-check-section">
+        
+        <div class="check-card check-prob" data-aos="fade-right">
+            <span class="card-icon" style="color:var(--reality-color)">🎲</span>
+            <label style="font-weight:800; color:var(--text);">Probabilidade Real</label>
+            <p style="font-size:0.9rem; color:#636e72; margin-top:5px;">Qual a chance real de que buscar a perfeição garanta o resultado acima?</p>
+            
+            <div class="slider-container">
+                <input type="range" id="probInput" min="0" max="100" value="50" oninput="updateProb(this.value)">
+                <span id="probDisplay" class="prob-value">50%</span>
+            </div>
+        </div>
+
+        <div class="check-card check-cost" data-aos="fade-left">
+            <span class="card-icon" style="color:#d63031">⚠️</span>
+            <label style="font-weight:800; color:var(--text);">Letras Miúdas (Problemas)</label>
+            <p style="font-size:0.9rem; color:#636e72; margin-top:5px;">Quais são os efeitos colaterais e problemas desta abordagem?</p>
+            
+            <textarea id="problemsInput" style="border:1px solid #eee; margin-top:10px; background:#fff;" placeholder="Ex: Ansiedade extrema, nunca termino nada, exaustão..."></textarea>
+        </div>
+
+    </div>
+
+    <div class="history-card" data-aos="fade-up">
+        <div class="history-label">
+            <i class="fa-solid fa-clock-rotate-left"></i> Checagem de Histórico
+        </div>
+        <label style="display:block; margin-bottom:10px; color:#555;">Com que frequência você <strong>realmente</strong> já atingiu a perfeição total no passado? Por que foi tão difícil?</label>
+        <textarea id="historyInput" style="background:white; border:1px solid #b2bec3; min-height:80px;" placeholder="Ex: Quase nunca. Sempre acho um defeito. Foi exaustivo e não valeu a pena."></textarea>
+    </div>
+
+    <table id="print-table">
+        <tbody>
+            <tr>
+                <th width="50%">Se eu atingir a perfeição nesta atividade...</th>
+                <th width="50%">Então o seguinte será verdade (Expectativa)...</th>
+            </tr>
+            <tr>
+                <td id="pIf" style="height:100px;"></td>
+                <td id="pThen"></td>
+            </tr>
+            <tr>
+                <th colspan="2">Probabilidade real de que isso aconteça:</th>
+            </tr>
+            <tr>
+                <td colspan="2" id="pProb" class="print-prob-val" style="text-align:center;"></td>
+            </tr>
+            <tr>
+                <th colspan="2">Problemas e custos desta abordagem (Letras Miúdas):</th>
+            </tr>
+            <tr>
+                <td colspan="2" id="pProblems" style="height:100px;"></td>
+            </tr>
+            <tr>
+                <th colspan="2">Com que frequência você realmente já atingiu a perfeição?</th>
+            </tr>
+            <tr>
+                <td colspan="2" id="pHistory" style="height:80px;"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <center>
+        <a href="../listaferramentas.html" style="display:inline-block; margin-top:40px; color:#b2bec3; text-decoration:none; font-weight:600;" class="btn-back-home">
+            <i class="fa-solid fa-arrow-left"></i> Voltar
+        </a>
+    </center>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        function updateProb(val) {
+            document.getElementById('probDisplay').innerText = val + "%";
+        }
+
+        function preparePrint() {
+            document.getElementById('pIf').innerText = document.getElementById('ifInput').value;
+            document.getElementById('pThen').innerText = document.getElementById('thenInput').value;
+            document.getElementById('pProb').innerText = document.getElementById('probInput').value + "%";
+            document.getElementById('pProblems').innerText = document.getElementById('problemsInput').value;
+            document.getElementById('pHistory').innerText = document.getElementById('historyInput').value;
+            
+            window.print();
+        }
+    </script>
+
+</body>
+</html>
