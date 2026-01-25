@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NeuroView - Psychology Edition</title>
+    <title>NeuroView - Comprehensive Suite v12</title>
     <style>
         :root { 
-            --accent: #00f3ff; 
-            --accent-chem: #ff00ea;
-            --accent-path: #ffae00; /* Laranja para Patologias */
+            --accent: #00f3ff;           /* Anatomia */
+            --accent-chem: #ff00ea;      /* Química */
+            --accent-path: #ffae00;      /* Patologia */
+            --accent-net: #00ff88;       /* Redes */
+            
             --bg-color: #121214; 
             --panel-bg: rgba(20, 22, 28, 0.96); 
             --text-main: #ffffff;
@@ -22,6 +24,7 @@
             --accent: #0051ff;
             --accent-chem: #cc00bd;
             --accent-path: #d97700;
+            --accent-net: #009955;
             --bg-color: #f0f2f5;
             --panel-bg: rgba(255, 255, 255, 0.98);
             --text-main: #1a1a1a;
@@ -34,20 +37,21 @@
         
         /* HEADER */
         .top-bar {
-            position: absolute; top: 20px; right: 20px; z-index: 200; display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; width: 300px;
+            position: absolute; top: 15px; right: 15px; z-index: 200; display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; width: auto; max-width: 90vw;
         }
         .icon-btn {
             background: var(--panel-bg); border: 1px solid var(--border);
-            color: var(--text-main); width: 42px; height: 42px; border-radius: 50%;
+            color: var(--text-main); width: 40px; height: 40px; border-radius: 50%;
             cursor: pointer; display: flex; align-items: center; justify-content: center;
             font-size: 18px; box-shadow: 0 4px 12px var(--shadow); transition: all 0.2s ease;
         }
         .icon-btn:hover { transform: scale(1.1); }
         
-        /* Cores Ativas */
+        /* Cores Ativas por Modo */
         .icon-btn.active-anat { background: var(--accent); color: #000; border-color: var(--accent); }
         .icon-btn.active-chem { background: var(--accent-chem); color: #fff; border-color: var(--accent-chem); }
         .icon-btn.active-path { background: var(--accent-path); color: #000; border-color: var(--accent-path); }
+        .icon-btn.active-net { background: var(--accent-net); color: #000; border-color: var(--accent-net); }
 
         /* LOADING */
         #loader {
@@ -60,7 +64,7 @@
         
         /* PAINEL INFO */
         #info {
-            position: absolute; top: 80px; right: 20px; width: 340px;
+            position: absolute; top: 80px; right: 20px; width: 320px;
             background: var(--panel-bg); border-right: 4px solid var(--accent);
             padding: 25px; border-radius: 12px; z-index: 20;
             box-shadow: -10px 10px 50px var(--shadow);
@@ -107,12 +111,15 @@
         /* Cores de Seleção por Modo */
         .chem-mode .menu-row.selected { background: rgba(255, 0, 234, 0.15); border-right-color: var(--accent-chem); }
         .path-mode .menu-row.selected { background: rgba(255, 174, 0, 0.15); border-right-color: var(--accent-path); }
+        .net-mode .menu-row.selected { background: rgba(0, 255, 136, 0.15); border-right-color: var(--accent-net); }
         
+        /* Cores do Painel por Modo */
         .chem-mode #info { border-right-color: var(--accent-chem); }
         .chem-mode #info h3 { color: var(--accent-chem); }
-        
         .path-mode #info { border-right-color: var(--accent-path); }
         .path-mode #info h3 { color: var(--accent-path); }
+        .net-mode #info { border-right-color: var(--accent-net); }
+        .net-mode #info h3 { color: var(--accent-net); }
 
         .menu-row.hidden-layer { opacity: 0.4; filter: grayscale(1); }
 
@@ -149,7 +156,7 @@
             #info { top: auto; bottom: 0; right: 0; left: 0; width: 100%; border-radius: 20px 20px 0 0; transform: translateY(120%); max-height: 60vh;}
             #info.active { transform: translateY(0); }
             #controls { width: 90%; gap: 15px; padding: 15px; }
-            .top-bar { top: 10px; right: 10px; gap: 5px; width: auto; flex-direction: row; }
+            .top-bar { top: 10px; right: 10px; gap: 8px; width: 90%; }
         }
     </style>
 </head>
@@ -157,11 +164,12 @@
 
     <div id="loader">
         <div style="font-weight: 800; font-size: 24px; color: var(--text-main); letter-spacing: 3px;">NEURO<span style="color:var(--accent)">VIEW</span></div>
-        <div style="font-size: 11px; color: var(--text-sec); margin-top: 5px;">PSYCHOLOGY STUDENT EDITION</div>
+        <div style="font-size: 11px; color: var(--text-sec); margin-top: 5px;">PSYCHOLOGY COMPREHENSIVE SUITE</div>
         <div class="bar-container"><div class="bar-fill" id="progress"></div></div>
     </div>
 
     <div class="top-bar">
+        <button id="net-toggle" class="icon-btn" onclick="toggleMode('net')" title="Redes Neurais">🌐</button>
         <button id="path-toggle" class="icon-btn" onclick="toggleMode('path')" title="Psicopatologia">☣️</button>
         <button id="chem-toggle" class="icon-btn" onclick="toggleMode('chem')" title="Neurotransmissores">🧪</button>
         <button id="anat-toggle" class="icon-btn active-anat" onclick="toggleMode('anat')" title="Anatomia">🧠</button>
@@ -187,7 +195,7 @@
         <h3 id="info-func">...</h3>
         <p id="info-desc">...</p>
         <div id="clinical-box" class="clinical-case" style="display:none;">
-            <span class="clinical-title">Caso Clínico</span>
+            <span class="clinical-title">Caso Clínico / Relevância</span>
             <span id="clinical-text">...</span>
         </div>
     </div>
@@ -221,151 +229,63 @@
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
         import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
 
-        // --- 1. DADOS ANATÔMICOS + CASOS CLÍNICOS ---
+        // --- 1. DADOS ANATÔMICOS ---
         const anatMap = {
-            "prefrontal": { 
-                name: "Córtex Pré-Frontal", func: "Executivo Central", color: 0x00FFFF, 
-                desc: "Sede da personalidade, planejamento e controle de impulsos.",
-                clinical: "Caso Phineas Gage: Lesão maciça nesta área resultou em mudança drástica de personalidade (de responsável para impulsivo), sem perda de memória ou fala.",
-                keywords: ["superior frontal", "middle frontal", "straight", "rectus", "orbital"] 
-            },
-            "motor": { 
-                name: "Córtex Motor", func: "Movimento", color: 0xFF2A2A, 
-                desc: "Inicia e coordena movimentos voluntários.",
-                clinical: "Lesão nesta área causa paralisia do lado oposto do corpo (Hemiplegia), sem afetar a sensação de toque.",
-                keywords: ["precentral"] 
-            },
-            "somato": { 
-                name: "Córtex Somatossensorial", func: "Sensação", color: 0xFFA500, 
-                desc: "Processa tato, dor e temperatura.",
-                clinical: "Dano causa perda de sensibilidade tátil e proprioceptiva (não saber onde o membro está sem olhar).",
-                keywords: ["postcentral"] 
-            },
-            "broca": { 
-                name: "Área de Broca", func: "Expressão", color: 0x9D00FF, 
-                desc: "Produção da linguagem falada.",
-                clinical: "Afasia de Broca: Paciente compreende tudo, mas fala de forma lenta, telegráfica e com grande esforço ('Eu... casa... ir').",
-                keywords: ["inferior frontal"] 
-            },
-            "wernicke": { 
-                name: "Área de Wernicke", func: "Compreensão", color: 0x0088FF, 
-                desc: "Entendimento da linguagem.",
-                clinical: "Afasia de Wernicke: Fala fluente e rápida, mas sem sentido ('Salada de palavras'). O paciente não percebe que não faz sentido.",
-                keywords: ["supramarginal", "angular", "posterior transverse"] 
-            },
-            "fusiform": { 
-                name: "Giro Fusiforme", func: "Reconhecimento", color: 0xFF0055, 
-                desc: "Identificação de rostos.",
-                clinical: "Prosopagnosia: Incapacidade de reconhecer rostos familiares, inclusive o próprio no espelho, mantendo a visão normal.",
-                keywords: ["fusiform"] 
-            },
-            "hippocampus": { 
-                name: "Hipocampo", func: "Memória", color: 0xFFEA00, 
-                desc: "Consolidação de memórias novas.",
-                clinical: "Caso H.M.: Após remoção bilateral, perdeu a capacidade de formar novas memórias (Amnésia Anterógrada), vivendo num eterno presente.",
-                keywords: ["hippocampus", "dentate", "fimbria", "subiculum", "fasciolar"] 
-            },
-            "amygdala": { 
-                name: "Amígdala", func: "Emoção", color: 0xFF0000, 
-                desc: "Processamento de medo e ameaça.",
-                clinical: "Síndrome de Klüver-Bucy: Lesão bilateral causa perda total de medo (docilidade excessiva), hiperoralidade e hipersexualidade.",
-                keywords: ["amygdala", "periamygdaloid"] 
-            },
-            "basal": { 
-                name: "Núcleos da Base", func: "Hábito & Motor", color: 0x6200EA, 
-                desc: "Controle motor fino e hábitos.",
-                clinical: "Doença de Parkinson (rigidez/tremor) e TOC (rituais/hábitos excessivos) estão ligados à disfunção neste circuito.",
-                keywords: ["caudate", "putamen", "globus pallidus", "accumbens", "subthalamic", "substantia nigra"] 
-            },
-            "cerebellum": { 
-                name: "Cerebelo", func: "Equilíbrio", color: 0xFFD600, 
-                desc: "Coordenação motora fina.",
-                clinical: "Ataxia Cerebelar: Marcha instável ('de bêbado'), tremor ao tentar pegar objetos e fala arrastada.",
-                keywords: ["cerebellum"] 
-            },
-            // Padrão para outros
-            "default": { clinical: "Estrutura fundamental para a integração neural." }
+            "prefrontal": { name: "Córtex Pré-Frontal", func: "Executivo Central", desc: "Planejamento, personalidade e controle de impulsos.", color: 0x00FFFF, clinical: "Lesões: Impulsividade, mudança de personalidade (Caso Phineas Gage).", keywords: ["superior frontal", "middle frontal", "straight", "rectus", "orbital"] },
+            "motor": { name: "Córtex Motor", func: "Movimento", desc: "Controle muscular voluntário.", color: 0xFF2A2A, clinical: "Lesões: Paralisia do lado oposto do corpo.", keywords: ["precentral"] },
+            "somato": { name: "Córtex Somatossensorial", func: "Sensação", desc: "Processa tato, dor e temperatura.", color: 0xFFA500, clinical: "Lesões: Perda de sensibilidade tátil.", keywords: ["postcentral"] },
+            "broca": { name: "Área de Broca", func: "Fala", desc: "Produção da linguagem.", color: 0x9D00FF, clinical: "Afasia de Broca: Fala lenta e difícil, compreensão preservada.", keywords: ["inferior frontal"] },
+            "wernicke": { name: "Área de Wernicke", func: "Compreensão", desc: "Entendimento da linguagem.", color: 0x0088FF, clinical: "Afasia de Wernicke: Fala fluente sem sentido.", keywords: ["supramarginal", "angular", "posterior transverse"] },
+            "auditory": { name: "Córtex Auditivo", func: "Audição", desc: "Processamento de sons.", color: 0x76FF03, keywords: ["transverse temporal", "superior temporal"] },
+            "fusiform": { name: "Giro Fusiforme", func: "Face", desc: "Reconhecimento de rostos.", color: 0xFF0055, clinical: "Prosopagnosia: Cegueira para rostos.", keywords: ["fusiform"] },
+            "hippocampus": { name: "Hipocampo", func: "Memória", desc: "Consolidação de memórias novas.", color: 0xFFEA00, clinical: "Caso HM: Amnésia anterógrada total.", keywords: ["hippocampus", "dentate", "fimbria", "subiculum", "fasciolar"] },
+            "amygdala": { name: "Amígdala", func: "Emoção", desc: "Processamento de medo.", color: 0xFF0000, clinical: "Hiperativa em TEPT e Ansiedade.", keywords: ["amygdala", "periamygdaloid"] },
+            "insula": { name: "Ínsula", func: "Interocepção", desc: "Sensação interna e empatia.", color: 0xD500F9, keywords: ["insula"] },
+            "thalamus": { name: "Tálamo", func: "Relé", desc: "Distribuição sensorial.", color: 0x304FFE, keywords: ["thalamus", "geniculate", "pulvinar"] },
+            "basal": { name: "Núcleos da Base", func: "Hábito", desc: "Controle motor fino e hábitos.", color: 0x6200EA, clinical: "Parkinson (tremores), TOC (rituais).", keywords: ["caudate", "putamen", "globus pallidus", "accumbens", "subthalamic", "substantia nigra"] },
+            "brainstem": { name: "Tronco", func: "Vital", desc: "Respiração e coração.", color: 0xFFFFFF, keywords: ["midbrain", "pons", "medulla", "oblongata", "colliculus", "nigra"] },
+            "cerebellum": { name: "Cerebelo", func: "Equilíbrio", desc: "Coordenação motora.", color: 0xFFD600, clinical: "Ataxia: Perda de coordenação.", keywords: ["cerebellum"] },
+            "connect": { name: "Substância Branca", func: "Conexão", desc: "Vias de comunicação.", color: 0x607D8B, keywords: ["callosum", "capsule", "corona", "tract", "fasciculus", "fornix"] },
+            "ventricle": { name: "Ventrículos", func: "LCR", desc: "Proteção fluída.", color: 0x00E5FF, keywords: ["ventricle", "aqueduct"] }
         };
 
-        // --- 2. NEUROQUÍMICA EXPANDIDA (🧪) ---
+        // --- 2. NEUROQUÍMICA (EXPANDIDA) ---
         const chemMap = {
-            "dopamine": { 
-                name: "Dopamina", func: "Prazer & Motor", color: 0x00E5FF, 
-                desc: "Motivação, recompensa e movimento. Excesso: Esquizofrenia (alucinações). Falta: Parkinson e Depressão (anedonia).", 
-                targets: ["prefrontal", "basal", "brainstem", "hippocampus"] 
-            },
-            "serotonin": { 
-                name: "Serotonina", func: "Humor & Sono", color: 0xFF00FF, 
-                desc: "Regula humor, ansiedade e sono. Alvo principal dos antidepressivos (ISRS).", 
-                targets: ["brainstem", "prefrontal", "amygdala", "hippocampus", "cingulate"] 
-            },
-            "noradrenaline": { 
-                name: "Noradrenalina", func: "Alerta & Foco", color: 0xFFA500, 
-                desc: "Resposta de 'Luta ou Fuga'. Aumenta atenção e vigilância. Ligada à Ansiedade e Pânico.", 
-                targets: ["brainstem", "amygdala", "prefrontal"] 
-            },
-            "gaba": { 
-                name: "GABA", func: "Inibição", color: 0x00FF00, 
-                desc: "O 'calmante' natural. Reduz atividade neuronal. Alvo de ansiolíticos (Rivotril/Xanax).", 
-                targets: ["cerebellum", "basal", "prefrontal", "occipital"] 
-            },
-            "oxytocin": { 
-                name: "Ocitocina", func: "Vínculo Social", color: 0xFF69B4, 
-                desc: "Hormônio do amor e confiança. Reduz medo na amígdala e fortalece laços sociais.", 
-                targets: ["hypothalamus", "amygdala", "basal"] // Accumbens
-            },
-            "endorphin": { 
-                name: "Endorfinas", func: "Analgesia", color: 0xFFFFFF, 
-                desc: "Analgésico natural do corpo. Liberada em exercícios e dor intensa. Causa euforia.", 
-                targets: ["brainstem", "thalamus", "basal"] // PAG
-            },
-            "glutamate": { 
-                name: "Glutamato", func: "Excitação", color: 0xFFD700, 
-                desc: "Principal excitatório. Vital para memória e aprendizado.", 
-                targets: ["hippocampus", "prefrontal", "motor"] 
-            }
+            "dopamine": { name: "Dopamina", func: "Prazer & Motor", color: 0x00E5FF, desc: "Recompensa e motivação. Falta: Parkinson. Excesso: Psicose.", targets: ["prefrontal", "basal", "brainstem", "hippocampus"] },
+            "serotonin": { name: "Serotonina", func: "Humor & Sono", color: 0xFF00FF, desc: "Regula humor e bem-estar. Alvo de antidepressivos.", targets: ["brainstem", "prefrontal", "amygdala", "hippocampus", "cingulate"] },
+            "noradrenaline": { name: "Noradrenalina", func: "Alerta", color: 0xFFA500, desc: "Luta ou fuga. Atenção e vigilância.", targets: ["brainstem", "amygdala", "prefrontal"] },
+            "gaba": { name: "GABA", func: "Inibição", color: 0x00FF00, desc: "Calmante natural. Reduz ansiedade.", targets: ["cerebellum", "basal", "prefrontal", "occipital"] },
+            "glutamate": { name: "Glutamato", func: "Excitação", color: 0xFFD700, desc: "Aprendizado e memória.", targets: ["hippocampus", "prefrontal", "motor"] },
+            "oxytocin": { name: "Ocitocina", func: "Vínculo", color: 0xFF69B4, desc: "Amor e confiança social.", targets: ["hypothalamus", "amygdala", "basal"] },
+            "endorphin": { name: "Endorfinas", func: "Dor/Prazer", color: 0xFFFFFF, desc: "Analgesia natural e euforia.", targets: ["brainstem", "thalamus", "basal"] }
         };
 
-        // --- 3. PSICOPATOLOGIA (NOVO MODO ☣️) ---
+        // --- 3. PSICOPATOLOGIA (EXPANDIDA) ---
         const pathMap = {
-            "depression": {
-                name: "Depressão Maior", func: "Transtorno de Humor", color: 0x2E86C1,
-                desc: "Hipoatividade no Córtex Pré-Frontal (decisão) e Hipocampo (memória), com hiperatividade na Amígdala (tristeza/medo).",
-                targets: ["prefrontal", "hippocampus", "amygdala", "cingulate"]
-            },
-            "anxiety": {
-                name: "Transtorno de Ansiedade", func: "Medo Excessivo", color: 0xE74C3C,
-                desc: "Amígdala hiperativa detectando ameaças onde não existem. Falha no 'freio' do Pré-Frontal.",
-                targets: ["amygdala", "prefrontal", "insula"]
-            },
-            "adhd": {
-                name: "TDAH", func: "Déficit de Atenção", color: 0xF39C12,
-                desc: "Maturação tardia do Pré-Frontal (foco) e disfunção nos Núcleos da Base (controle de impulsos/dopamina).",
-                targets: ["prefrontal", "basal", "cerebellum", "cingulate"]
-            },
-            "schizo": {
-                name: "Esquizofrenia", func: "Psicose", color: 0x8E44AD,
-                desc: "Alargamento de Ventrículos. Hiperatividade dopaminérgica no sistema límbico (alucinações) e hipoatividade frontal.",
-                targets: ["prefrontal", "basal", "ventricle", "hippocampus"]
-            },
-            "alzheimer": {
-                name: "Alzheimer", func: "Neurodegeneração", color: 0x95A5A6,
-                desc: "Atrofia severa começando no Hipocampo (memória recente) e espalhando para o Córtex.",
-                targets: ["hippocampus", "parahippocampal", "temporal_inf", "prefrontal"]
-            },
-            "toc": {
-                name: "TOC", func: "Obsessão-Compulsão", color: 0x16A085,
-                desc: "Loop hiperativo entre Córtex Orbital, Cingulado e Núcleos da Base (circuito de verificação de erro).",
-                targets: ["prefrontal", "cingulate", "basal"] // Orbitofrontal
-            }
+            "depression": { name: "Depressão", func: "Humor", color: 0x2E86C1, desc: "Hipoatividade frontal e hiperatividade da amígdala.", targets: ["prefrontal", "hippocampus", "amygdala", "cingulate"] },
+            "anxiety": { name: "Ansiedade", func: "Medo", color: 0xE74C3C, desc: "Amígdala hiperativa detectando ameaças constantes.", targets: ["amygdala", "prefrontal", "insula"] },
+            "bipolar": { name: "Transtorno Bipolar", func: "Oscilação", color: 0x8E44AD, desc: "Flutuação entre mania (excesso frontal/límbico) e depressão.", targets: ["prefrontal", "amygdala", "thalamus"] },
+            "ptsd": { name: "TEPT", func: "Trauma", color: 0x5D4037, desc: "Falha do hipocampo em contextualizar o medo da amígdala.", targets: ["amygdala", "hippocampus", "prefrontal"] },
+            "adhd": { name: "TDAH", func: "Atenção", color: 0xF39C12, desc: "Disfunção executiva e de dopamina.", targets: ["prefrontal", "basal", "cerebellum"] },
+            "schizo": { name: "Esquizofrenia", func: "Psicose", color: 0x7D3C98, desc: "Excesso de dopamina límbica (alucinações).", targets: ["prefrontal", "basal", "ventricle", "hippocampus"] },
+            "addiction": { name: "Adicção", func: "Recompensa", color: 0xCB4335, desc: "Sequestro do circuito de recompensa pela substância.", targets: ["brainstem", "basal", "prefrontal"] }, // VTA->Accumbens
+            "alzheimer": { name: "Alzheimer", func: "Memória", color: 0x95A5A6, desc: "Atrofia do hipocampo e córtex.", targets: ["hippocampus", "parahippocampal", "temporal_inf", "prefrontal"] },
+            "parkinson": { name: "Parkinson", func: "Motor", color: 0x34495E, desc: "Morte de neurônios da Substância Negra.", targets: ["brainstem", "basal", "motor"] }
         };
 
-        const defaultRegion = { name: "Estrutura", func: "Anatomia", desc: "Parte estrutural.", color: 0x444444 };
+        // --- 4. REDES NEURAIS (NOVO 🌐) ---
+        const netMap = {
+            "dmn": { name: "Rede Modo Padrão", func: "Repouso/Eu", color: 0x00FF88, desc: "Ativa quando não fazemos nada (devaneio, pensar em si mesmo).", targets: ["prefrontal", "cingulate", "parietal_assoc", "temporal_inf"] }, // Medial PFC + PCC
+            "salience": { name: "Rede de Saliência", func: "Alerta/Troca", color: 0xFF0055, desc: "Detecta o que é importante e troca entre DMN e Executiva.", targets: ["insula", "cingulate"] }, // Anterior Insula + ACC
+            "central": { name: "Rede Executiva", func: "Foco Externo", color: 0x0088FF, desc: "Resolução de problemas, matemática e memória de trabalho.", targets: ["prefrontal", "parietal_assoc"] } // DLPFC + PPC
+        };
+
+        const defaultRegion = { name: "Estrutura", func: "Anatomia", desc: "Estrutura anatômica.", color: 0x444444 };
         
-        // Mantendo keywords globais para fallback
+        // Keywords globais (Fallback)
         const globalKeywords = {};
         Object.keys(anatMap).forEach(k => globalKeywords[k] = anatMap[k].keywords || []);
-        // Adiciona keywords extras
+        // Adicionando extras para garantir cobertura
         globalKeywords["thalamus"] = ["thalamus", "geniculate", "pulvinar", "ventral posterior"];
         globalKeywords["hypothalamus"] = ["hypothalamus", "mammillary", "preoptic", "suprachiasmatic", "tuber cinereum"];
         globalKeywords["brainstem"] = ["midbrain", "pons", "medulla", "oblongata", "colliculus", "nigra", "red nucleus", "cerebral crus"];
@@ -388,7 +308,7 @@
         let objectsByKey = {}; 
         let activeExplode = 0;
         let isDarkTheme = true;
-        let currentMode = "anat"; // 'anat', 'chem', 'path'
+        let currentMode = "anat"; // 'anat', 'chem', 'path', 'net'
 
         const loaderManager = new THREE.LoadingManager();
         const basePositions = new Map();
@@ -402,6 +322,7 @@
         window.toggleMode = toggleMode;
         window.activateChem = activateChem;
         window.activatePath = activatePath;
+        window.activateNet = activateNet;
         window.toggleMenuMobile = () => document.getElementById('menu').classList.toggle('open');
         window.closeInfo = () => document.getElementById('info').classList.remove('active');
 
@@ -491,13 +412,16 @@
         function toggleMode(mode) {
             currentMode = mode;
             
+            document.getElementById('net-toggle').classList.toggle('active-net', mode === 'net');
             document.getElementById('chem-toggle').classList.toggle('active-chem', mode === 'chem');
             document.getElementById('path-toggle').classList.toggle('active-path', mode === 'path');
             document.getElementById('anat-toggle').classList.toggle('active-anat', mode === 'anat');
             
-            document.body.className = isDarkTheme ? '' : 'light-mode'; // Reset classes base
+            // Remove classes antigas
+            document.body.classList.remove('chem-mode', 'path-mode', 'net-mode');
             if(mode === 'chem') document.body.classList.add('chem-mode');
             if(mode === 'path') document.body.classList.add('path-mode');
+            if(mode === 'net') document.body.classList.add('net-mode');
 
             selectedKey = null;
             document.getElementById('info').classList.remove('active');
@@ -536,7 +460,8 @@
             let dataMap, title;
             if (currentMode === 'anat') { dataMap = anatMap; title = 'Estruturas'; }
             else if (currentMode === 'chem') { dataMap = chemMap; title = 'Neurotransmissores'; }
-            else { dataMap = pathMap; title = 'Psicopatologias'; }
+            else if (currentMode === 'path') { dataMap = pathMap; title = 'Psicopatologias'; }
+            else { dataMap = netMap; title = 'Redes Funcionais'; }
 
             document.getElementById('menu-title').innerText = title;
             document.getElementById('bulk-actions').style.display = currentMode === 'anat' ? 'flex' : 'none';
@@ -561,7 +486,11 @@
                         list.appendChild(row);
                     }
                 } else {
-                    const fnName = currentMode === 'chem' ? 'activateChem' : 'activatePath';
+                    let fnName;
+                    if(currentMode === 'chem') fnName = 'activateChem';
+                    else if(currentMode === 'path') fnName = 'activatePath';
+                    else fnName = 'activateNet';
+
                     row.innerHTML = `
                         <div class="dot" style="background:#${item.color.toString(16)}"></div>
                         <div class="menu-label" onclick="${fnName}('${key}')">${item.name}</div>
@@ -571,7 +500,7 @@
             });
         }
 
-        // --- LÓGICA DE ATIVAÇÃO ---
+        // --- ATIVADORES ---
         function activateChem(key) {
             const data = chemMap[key];
             dimAll();
@@ -582,6 +511,14 @@
 
         function activatePath(key) {
             const data = pathMap[key];
+            dimAll();
+            highlightTargets(data.targets, data.color);
+            updateInfoPanelCustom(data.name, data.func, data.color, data.desc, null);
+            highlightMenuRow(key);
+        }
+
+        function activateNet(key) {
+            const data = netMap[key];
             dimAll();
             highlightTargets(data.targets, data.color);
             updateInfoPanelCustom(data.name, data.func, data.color, data.desc, null);
@@ -616,14 +553,13 @@
                     const nameLower = filename.toLowerCase();
                     let key = "other";
                     
-                    // Lógica de Matching com Keywords Globais
+                    // Lógica de Matching
                     for (const [k, kwords] of Object.entries(globalKeywords)) {
                         if (kwords.some(w => nameLower.includes(w))) {
                             key = k;
                             break;
                         }
                     }
-                    // Fallback para nomes diretos no map se não achou
                     if (key === "other") {
                          for (const [k, val] of Object.entries(anatMap)) {
                             if (val.keywords && val.keywords.some(w => nameLower.includes(w))) {
@@ -834,6 +770,7 @@
             brainGroup.children.forEach(g => g.traverse(c => {
                 if(c.isMesh) {
                     c.material.opacity = 0.1; 
+                    c.material.transparent = true;
                     c.material.emissive.setHex(0x000000);
                     if(c.userData.outline) c.userData.outline.material.opacity = 0;
                 }
@@ -843,6 +780,7 @@
             if(objectsByKey[key]) {
                 objectsByKey[key].forEach(mesh => {
                     mesh.material.opacity = 1; 
+                    mesh.material.transparent = false;
                     mesh.material.emissive.setHex(0x333333);
                     if(mesh.userData.outline) mesh.userData.outline.material.opacity = 0.5;
                 });
