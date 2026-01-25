@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dominó de Regras | Bruno de Souza</title>
+    
+    <script>
+        if(localStorage.getItem('logado') !== 'sim') {
+            window.location.href = "../../login.html";
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #f0f8ff;
+            --step1: #74b9ff; /* Azul Claro (Gatilho) */
+            --step2: #e17055; /* Laranja (Regra 1) */
+            --step3: #d63031; /* Vermelho (Regra 2 - Profunda) */
+            --text: #2d3436;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0; padding: 20px;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* --- HEADER --- */
+        header {
+            text-align: center; margin-bottom: 30px;
+            background: white; padding: 20px 40px;
+            border-radius: 20px; border: 3px solid var(--text);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            max-width: 900px; width: 100%; position: relative;
+        }
+
+        header h1 { color: var(--text); margin: 0; font-weight: 800; font-size: 1.8rem; }
+        .subtitle { color: #636e72; font-weight: 600; margin-top: 5px; }
+
+        .btn-print {
+            position: absolute; top: 20px; right: 20px;
+            background: none; border: 2px solid var(--text); color: var(--text);
+            padding: 8px 15px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+        .btn-print:hover { background: var(--text); color: white; }
+
+        /* --- INPUT CHAIN (FLUXO) --- */
+        .chain-container {
+            width: 100%; max-width: 1000px;
+            display: flex; gap: 10px; align-items: stretch; justify-content: center;
+            margin-bottom: 30px; flex-wrap: wrap;
+        }
+
+        .chain-step {
+            flex: 1; min-width: 280px;
+            background: white; padding: 25px; border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            display: flex; flex-direction: column; position: relative;
+            border-top: 6px solid; transition: 0.3s;
+        }
+        .chain-step:hover { transform: translateY(-5px); }
+
+        /* Cores das etapas */
+        .step-if { border-color: var(--step1); }
+        .step-then1 { border-color: var(--step2); }
+        .step-then2 { border-color: var(--step3); }
+
+        /* Setas entre cards */
+        .chain-step:not(:last-child)::after {
+            content: '\f061'; font-family: "Font Awesome 6 Free"; font-weight: 900;
+            position: absolute; right: -25px; top: 50%; transform: translateY(-50%);
+            color: #b2bec3; font-size: 1.5rem; z-index: 1;
+        }
+
+        .step-label {
+            font-size: 0.9rem; font-weight: 800; text-transform: uppercase; margin-bottom: 15px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .step-if .step-label { color: var(--step1); }
+        .step-then1 .step-label { color: var(--step2); }
+        .step-then2 .step-label { color: var(--step3); }
+
+        textarea {
+            width: 100%; padding: 15px; border: 2px solid #dfe6e9; border-radius: 12px;
+            font-family: inherit; font-size: 1rem; resize: vertical; min-height: 100px;
+            background: #fdfdfd; transition: 0.3s;
+        }
+        .step-if textarea:focus { border-color: var(--step1); outline: none; }
+        .step-then1 textarea:focus { border-color: var(--step2); outline: none; }
+        .step-then2 textarea:focus { border-color: var(--step3); outline: none; }
+
+        .helper-text { font-size: 0.8rem; color: #b2bec3; margin-top: 10px; font-style: italic; }
+
+        /* --- BOTÕES --- */
+        .action-bar {
+            width: 100%; max-width: 1000px; display: flex; justify-content: center; gap: 15px; margin-bottom: 40px;
+        }
+
+        .btn-add {
+            background: var(--text); color: white; border: none; padding: 15px 40px;
+            border-radius: 50px; font-weight: 800; font-size: 1.1rem;
+            cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 10px;
+        }
+        .btn-add:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+
+        .btn-example {
+            background: white; border: 2px dashed #b2bec3; color: #636e72; padding: 15px 25px;
+            border-radius: 50px; font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+        .btn-example:hover { border-color: var(--step1); color: var(--step1); }
+
+        /* --- LISTA DE CORRENTES --- */
+        .history-list {
+            width: 100%; max-width: 1000px; display: flex; flex-direction: column; gap: 20px;
+        }
+
+        .chain-card {
+            background: white; border-radius: 15px; padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); position: relative;
+            display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 10px; align-items: center;
+            border-left: 5px solid var(--text); animation: slideUp 0.4s ease;
+        }
+
+        .chain-part { font-size: 0.95rem; color: var(--text); font-weight: 600; line-height: 1.4; }
+        .chain-arrow { color: #dfe6e9; font-size: 1.2rem; }
+
+        .btn-delete {
+            position: absolute; top: 10px; right: 10px;
+            background: none; border: none; color: #d63031; cursor: pointer; opacity: 0.4; transition: 0.2s;
+        }
+        .btn-delete:hover { opacity: 1; transform: scale(1.2); }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Responsividade */
+        @media (max-width: 900px) {
+            .chain-container { flex-direction: column; }
+            .chain-step::after { display: none; } /* Remove seta lateral no mobile */
+            .chain-card { grid-template-columns: 1fr; border-left: none; border-top: 5px solid var(--text); padding-top: 30px; text-align: center; }
+            .chain-arrow { transform: rotate(90deg); margin: 5px 0; }
+            .btn-print span { display: none; }
+        }
+
+        /* --- IMPRESSÃO --- */
+        #print-table { display: none; }
+
+        @media print {
+            body { background: white; padding: 0; }
+            header button, .action-bar, .btn-back-home, .btn-delete, .chain-container { display: none !important; }
+            header { border: none; box-shadow: none; margin-bottom: 20px; }
+            
+            #print-table {
+                display: table; width: 100%; border-collapse: collapse; font-family: sans-serif; margin-top: 20px;
+            }
+            #print-table th { background: #eee; padding: 10px; border: 1px solid #ccc; text-align: left; font-size: 0.9rem; }
+            #print-table td { padding: 10px; border: 1px solid #ccc; vertical-align: top; font-size: 0.9rem; }
+            
+            .history-list { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <header data-aos="fade-down">
+        <button class="btn-print" onclick="window.print()"><i class="fa-solid fa-print"></i> <span>Imprimir</span></button>
+        <h1>Dominó de Regras</h1>
+        <div class="subtitle">Avaliação de Pressupostos Secundários</div>
+    </header>
+
+    <div class="chain-container" data-aos="fade-up">
+        
+        <div class="chain-step step-if">
+            <div class="step-label"><i class="fa-solid fa-bolt"></i> 1. Se isto acontecer...</div>
+            <textarea id="inputIf" placeholder="Ex: Eu cometer um erro..."></textarea>
+            <div class="helper-text">O gatilho ou evento temido.</div>
+        </div>
+
+        <div class="chain-step step-then1">
+            <div class="step-label"><i class="fa-solid fa-gavel"></i> 2. Então devo...</div>
+            <textarea id="inputThen1" placeholder="Ex: Devo me criticar duramente..."></textarea>
+            <div class="helper-text">A regra ou autocrítica imediata.</div>
+        </div>
+
+        <div class="chain-step step-then2">
+            <div class="step-label"><i class="fa-solid fa-lock"></i> 3. E se for verdade, devo...</div>
+            <textarea id="inputThen2" placeholder="Ex: Nunca baixar a guarda ou relaxar."></textarea>
+            <div class="helper-text">A regra secundária que mantém o problema.</div>
+        </div>
+
+    </div>
+
+    <div class="action-bar" data-aos="fade-up">
+        <button class="btn-example" onclick="loadExample()">
+            <i class="fa-regular fa-lightbulb"></i> Carregar Exemplo
+        </button>
+        <button class="btn-add" onclick="addChain()">
+            <i class="fa-solid fa-link"></i> Registrar Corrente
+        </button>
+    </div>
+
+    <div class="history-list" id="historyList">
+        </div>
+
+    <table id="print-table">
+        <thead>
+            <tr>
+                <th width="30%">Se isto acontecer...</th>
+                <th width="35%">Então penso que eu deveria...</th>
+                <th width="35%">E se isso for verdade, então eu deveria...</th>
+            </tr>
+        </thead>
+        <tbody id="printBody"></tbody>
+    </table>
+
+    <center>
+        <a href="../listaferramentas.html" style="display:inline-block; margin-top:40px; color:#b2bec3; text-decoration:none; font-weight:600;" class="btn-back-home">
+            <i class="fa-solid fa-arrow-left"></i> Voltar
+        </a>
+    </center>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        function loadExample() {
+            document.getElementById('inputIf').value = "Se alguma coisa ruim pode acontecer";
+            document.getElementById('inputThen1').value = "então devo me preocupar antecipadamente";
+            document.getElementById('inputThen2').value = "devo continuar pensando nisso e não baixar a guarda";
+        }
+
+        function addChain() {
+            const val1 = document.getElementById('inputIf').value.trim();
+            const val2 = document.getElementById('inputThen1').value.trim();
+            const val3 = document.getElementById('inputThen2').value.trim();
+
+            if (!val1 || !val2) {
+                alert("Preencha pelo menos os dois primeiros campos!");
+                return;
+            }
+
+            const list = document.getElementById('historyList');
+            const div = document.createElement('div');
+            div.className = 'chain-card';
+            
+            div.innerHTML = `
+                <div class="chain-part" style="color:var(--step1)"><strong>Se:</strong> ${val1}</div>
+                <div class="chain-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="chain-part" style="color:var(--step2)"><strong>Então:</strong> ${val2}</div>
+                <div class="chain-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="chain-part" style="color:var(--step3)"><strong>Logo:</strong> ${val3 || "..."}</div>
+                <button class="btn-delete" onclick="deleteChain(this)"><i class="fa-solid fa-trash"></i></button>
+            `;
+
+            list.prepend(div);
+            
+            // Clear
+            document.getElementById('inputIf').value = '';
+            document.getElementById('inputThen1').value = '';
+            document.getElementById('inputThen2').value = '';
+
+            updatePrintTable();
+        }
+
+        function deleteChain(btn) {
+            if(confirm("Remover esta sequência?")) {
+                btn.closest('.chain-card').remove();
+                updatePrintTable();
+            }
+        }
+
+        function updatePrintTable() {
+            const tbody = document.getElementById('printBody');
+            tbody.innerHTML = '';
+            
+            const cards = document.querySelectorAll('.chain-card');
+            
+            cards.forEach(card => {
+                const parts = card.querySelectorAll('.chain-part');
+                // Extrai texto removendo o label bold
+                const t1 = parts[0].innerText.replace('Se: ', '');
+                const t2 = parts[1].innerText.replace('Então: ', '');
+                const t3 = parts[2].innerText.replace('Logo: ', '');
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${t1}</td><td>${t2}</td><td>${t3}</td>`;
+                tbody.appendChild(tr);
+            });
+        }
+    </script>
+
+</body>
+</html>
