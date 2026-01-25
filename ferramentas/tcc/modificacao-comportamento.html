@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratório de Ação | Bruno de Souza</title>
+    
+    <script>
+        if(localStorage.getItem('logado') !== 'sim') {
+            window.location.href = "../../login.html";
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #f0f8ff;
+            --primary: #0984e3;       /* Azul (Foco/Ação) */
+            --secondary: #74b9ff;
+            --action-color: #00b894;  /* Verde (Realização) */
+            --text: #2d3436;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0; padding: 20px;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* --- HEADER --- */
+        header {
+            text-align: center; margin-bottom: 30px;
+            background: white; padding: 20px 40px;
+            border-radius: 20px; border: 3px dashed #636e72;
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            max-width: 900px; width: 100%; position: relative;
+        }
+
+        header h1 { color: #2d3436; margin: 0; font-weight: 800; font-size: 1.8rem; }
+        .subtitle { color: #636e72; font-weight: 600; margin-top: 5px; }
+
+        .btn-print {
+            position: absolute; top: 20px; right: 20px;
+            background: none; border: 2px solid #2d3436; color: #2d3436;
+            padding: 8px 15px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+        .btn-print:hover { background: #2d3436; color: white; }
+
+        /* --- O PROBLEMA --- */
+        .problem-card {
+            width: 100%; max-width: 900px;
+            background: white; padding: 25px; border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 30px;
+            border-left: 5px solid #d63031;
+        }
+        .problem-card label { display: block; font-weight: 800; font-size: 1.1rem; margin-bottom: 10px; color: #d63031; }
+        .problem-card input {
+            width: 100%; padding: 15px; border: 2px solid #dfe6e9; border-radius: 10px;
+            font-size: 1.1rem; font-family: inherit; transition: 0.3s;
+        }
+        .problem-card input:focus { border-color: #d63031; outline: none; }
+
+        /* --- GERADOR DE SOLUÇÕES --- */
+        .brainstorm-area {
+            width: 100%; max-width: 900px;
+            background: white; padding: 30px; border-radius: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 40px;
+            border-top: 5px solid var(--primary);
+        }
+
+        .input-row {
+            display: grid; grid-template-columns: 1fr auto; gap: 15px; margin-bottom: 20px;
+        }
+
+        textarea.solution-input {
+            width: 100%; padding: 15px; border: 2px solid #dfe6e9; border-radius: 12px;
+            font-family: inherit; font-size: 1rem; resize: none; height: 60px;
+        }
+        textarea.solution-input:focus { border-color: var(--primary); outline: none; }
+
+        .btn-add {
+            background: var(--primary); color: white; border: none; padding: 0 25px;
+            border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.3s;
+            display: flex; align-items: center; gap: 10px; font-size: 1rem;
+        }
+        .btn-add:hover { background: var(--secondary); transform: translateY(-2px); }
+
+        /* LISTA DE AÇÃO */
+        .action-list {
+            display: flex; flex-direction: column; gap: 15px;
+        }
+
+        .action-card {
+            background: #f8f9fa; padding: 15px 20px; border-radius: 15px;
+            border: 1px solid #eee; display: flex; align-items: center; justify-content: space-between;
+            animation: slideIn 0.3s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .action-card:hover { border-color: var(--primary); background: white; }
+
+        .action-content { flex: 1; margin-right: 20px; }
+        .action-text { font-weight: 600; font-size: 1rem; color: var(--text); display: block; margin-bottom: 5px; }
+        
+        .action-meta {
+            display: flex; align-items: center; gap: 10px;
+        }
+
+        .date-picker {
+            padding: 8px; border: 1px solid #ccc; border-radius: 8px;
+            font-family: inherit; color: #636e72; cursor: pointer;
+        }
+
+        .btn-delete {
+            background: none; border: none; color: #d63031; cursor: pointer; opacity: 0.5; transition: 0.2s;
+        }
+        .btn-delete:hover { opacity: 1; transform: scale(1.1); }
+
+        /* --- CONCLUSÃO --- */
+        .conclusion-section {
+            width: 100%; max-width: 900px;
+            background: #e0f7fa; padding: 25px; border-radius: 20px;
+            border: 2px solid #006064; margin-bottom: 50px;
+        }
+        .conclusion-section textarea {
+            width: 100%; padding: 15px; border: 1px solid #b2bec3; border-radius: 10px;
+            font-family: inherit; font-size: 1rem; resize: vertical; min-height: 80px; background: white;
+        }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Responsividade */
+        @media (max-width: 700px) {
+            .input-row { grid-template-columns: 1fr; }
+            .btn-add { width: 100%; padding: 15px; justify-content: center; }
+            .action-card { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .action-meta { width: 100%; justify-content: space-between; }
+            .btn-print span { display: none; }
+        }
+
+        /* --- IMPRESSÃO --- */
+        #print-table { display: none; }
+
+        @media print {
+            body { background: white; padding: 0; }
+            header button, .btn-back-home, .input-row, .btn-delete { display: none !important; }
+            header { border: none; box-shadow: none; margin-bottom: 20px; }
+            
+            .problem-card, .conclusion-section { box-shadow: none; border: 1px solid #ccc; }
+            .brainstorm-area { display: none; } /* Esconde área interativa */
+            
+            #print-table {
+                display: table; width: 100%; border-collapse: collapse; font-family: sans-serif; margin-top: 20px;
+            }
+            #print-table th { background: #eee; padding: 10px; border: 1px solid #ccc; text-align: left; }
+            #print-table td { padding: 10px; border: 1px solid #ccc; }
+        }
+    </style>
+</head>
+<body>
+
+    <header data-aos="fade-down">
+        <button class="btn-print" onclick="window.print()"><i class="fa-solid fa-print"></i> <span>Imprimir Plano</span></button>
+        <h1>Laboratório de Ação</h1>
+        <div class="subtitle">Modificando Pensamentos com Comportamentos</div>
+    </header>
+
+    <div class="problem-card" data-aos="fade-up">
+        <label><i class="fa-solid fa-triangle-exclamation"></i> Pensamento Negativo (Que pode ser verdade):</label>
+        <input type="text" id="problemInput" placeholder='Ex: "Não sou bom em entrevistas de emprego."'>
+    </div>
+
+    <div class="brainstorm-area" data-aos="fade-up">
+        <h3 style="margin-top:0; color:var(--primary);"><i class="fa-solid fa-list-check"></i> Plano de Soluções</h3>
+        <p style="font-size:0.9rem; color:#636e72; margin-bottom:15px;">Se isso é verdade, o que você pode fazer para mudar essa realidade ou lidar melhor com ela?</p>
+        
+        <div class="input-row">
+            <textarea id="actionInput" class="solution-input" placeholder="Ex: Pesquisar perguntas comuns de entrevista e treinar respostas..."></textarea>
+            <button class="btn-add" onclick="addAction()">
+                <i class="fa-solid fa-plus"></i> Adicionar
+            </button>
+        </div>
+
+        <div class="action-list" id="actionList">
+            </div>
+    </div>
+
+    <div class="conclusion-section" data-aos="fade-up">
+        <label style="font-weight:800; color:#006064; display:block; margin-bottom:10px;">Conclusão / Compromisso:</label>
+        <textarea id="conclusionInput" placeholder="Como você se sente agora que tem um plano?"></textarea>
+    </div>
+
+    <table id="print-table">
+        <thead>
+            <tr>
+                <th width="70%">Ação / Comportamento (O que fazer?)</th>
+                <th width="30%">Data / Prazo (Quando?)</th>
+            </tr>
+        </thead>
+        <tbody id="printBody"></tbody>
+    </table>
+
+    <center>
+        <a href="../listaferramentas.html" style="display:inline-block; margin-top:40px; color:#b2bec3; text-decoration:none; font-weight:600;" class="btn-back-home">
+            <i class="fa-solid fa-arrow-left"></i> Voltar
+        </a>
+    </center>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        let actions = [];
+
+        function addAction() {
+            const input = document.getElementById('actionInput');
+            const text = input.value.trim();
+            
+            if(!text) {
+                alert("Escreva uma ação!");
+                return;
+            }
+
+            actions.push({ text, date: "" });
+            input.value = '';
+            
+            renderList();
+        }
+
+        function removeAction(index) {
+            actions.splice(index, 1);
+            renderList();
+        }
+
+        function updateDate(index, val) {
+            actions[index].date = val;
+            updatePrintTable();
+        }
+
+        function renderList() {
+            const list = document.getElementById('actionList');
+            list.innerHTML = '';
+
+            actions.forEach((act, idx) => {
+                const card = document.createElement('div');
+                card.className = 'action-card';
+                card.innerHTML = `
+                    <div class="action-content">
+                        <span class="action-text">${act.text}</span>
+                    </div>
+                    <div class="action-meta">
+                        <input type="date" class="date-picker" value="${act.date}" onchange="updateDate(${idx}, this.value)">
+                        <button class="btn-delete" onclick="removeAction(${idx})"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+
+            updatePrintTable();
+        }
+
+        function updatePrintTable() {
+            const tbody = document.getElementById('printBody');
+            tbody.innerHTML = '';
+
+            actions.forEach(act => {
+                const tr = document.createElement('tr');
+                // Formata data se existir
+                let dateStr = act.date;
+                if(dateStr) {
+                    const [y, m, d] = dateStr.split('-');
+                    dateStr = `${d}/${m}/${y}`;
+                } else {
+                    dateStr = "___/___/___";
+                }
+
+                tr.innerHTML = `<td>${act.text}</td><td>${dateStr}</td>`;
+                tbody.appendChild(tr);
+            });
+        }
+    </script>
+
+</body>
+</html>
