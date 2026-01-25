@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizza da Responsabilidade | Bruno de Souza</title>
+    
+    <script>
+        if(localStorage.getItem('logado') !== 'sim') {
+            window.location.href = "../../login.html";
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #f0f8ff;
+            --primary: #6c5ce7;
+            --text: #2d3436;
+            --card-bg: #ffffff;
+            --pie-base: #dfe6e9;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0; padding: 20px;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* --- HEADER --- */
+        header {
+            text-align: center; margin-bottom: 30px;
+            background: white; padding: 20px 40px;
+            border-radius: 20px; border: 3px dashed #636e72;
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            max-width: 900px; width: 100%; position: relative;
+        }
+
+        header h1 { color: var(--text); margin: 0; font-weight: 800; font-size: 1.8rem; }
+        .subtitle { color: #636e72; font-weight: 600; margin-top: 5px; }
+
+        .btn-print {
+            position: absolute; top: 20px; right: 20px;
+            background: none; border: 2px solid #2d3436; color: #2d3436;
+            padding: 8px 15px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+        .btn-print:hover { background: #2d3436; color: white; }
+
+        /* --- EVENTO --- */
+        .event-card {
+            width: 100%; max-width: 900px;
+            background: white; padding: 25px; border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 30px;
+            border-left: 5px solid var(--primary);
+        }
+        .event-card label { display: block; font-weight: 800; font-size: 1.1rem; margin-bottom: 10px; color: var(--primary); }
+        .event-card input {
+            width: 100%; padding: 15px; border: 2px solid #dfe6e9; border-radius: 10px;
+            font-size: 1.1rem; font-family: inherit; transition: 0.3s;
+        }
+        .event-card input:focus { border-color: var(--primary); outline: none; }
+
+        /* --- ÁREA PRINCIPAL --- */
+        .workspace {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+            width: 100%; max-width: 1000px; margin-bottom: 40px;
+        }
+
+        /* LADO ESQUERDO: CONTROLES */
+        .controls-panel {
+            background: white; padding: 30px; border-radius: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); height: fit-content;
+        }
+
+        .input-row {
+            display: grid; grid-template-columns: 2fr 1fr auto; gap: 10px; margin-bottom: 15px;
+        }
+
+        input[type="text"], input[type="number"] {
+            padding: 12px; border: 2px solid #dfe6e9; border-radius: 10px;
+            font-family: inherit; font-size: 1rem;
+        }
+
+        .btn-add {
+            background: var(--primary); color: white; border: none; border-radius: 10px;
+            width: 50px; font-size: 1.2rem; cursor: pointer; transition: 0.2s;
+        }
+        .btn-add:hover { transform: scale(1.1); }
+
+        .factors-list {
+            display: flex; flex-direction: column; gap: 10px; margin-top: 20px;
+            max-height: 300px; overflow-y: auto;
+        }
+
+        .factor-item {
+            display: flex; justify-content: space-between; align-items: center;
+            background: #f8f9fa; padding: 10px 15px; border-radius: 10px;
+            border-left: 5px solid #ccc; animation: slideIn 0.3s ease;
+        }
+        
+        .btn-remove { color: #d63031; background: none; border: none; cursor: pointer; }
+
+        /* LADO DIREITO: GRÁFICO */
+        .chart-panel {
+            background: white; padding: 30px; border-radius: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+
+        .pie-chart {
+            width: 300px; height: 300px; border-radius: 50%;
+            background: conic-gradient(var(--pie-base) 0% 100%);
+            border: 5px solid white; box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            transition: background 0.5s ease; position: relative;
+        }
+
+        /* Legenda Central do Gráfico */
+        .chart-center {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: white; width: 120px; height: 120px; border-radius: 50%;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .chart-total { font-size: 1.5rem; font-weight: 800; color: var(--text); }
+        .chart-label { font-size: 0.7rem; color: #636e72; text-transform: uppercase; }
+
+        .remaining-alert {
+            margin-top: 20px; padding: 10px 20px; background: #e0f7fa; color: #006064;
+            border-radius: 20px; font-weight: 600; font-size: 0.9rem;
+        }
+
+        /* --- CONCLUSÃO --- */
+        .conclusion-card {
+            width: 100%; max-width: 900px;
+            background: white; padding: 25px; border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        textarea {
+            width: 100%; padding: 15px; border: 2px solid #dfe6e9; border-radius: 10px;
+            font-family: inherit; font-size: 1rem; resize: vertical; min-height: 80px;
+        }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+
+        /* Responsividade */
+        @media (max-width: 850px) {
+            .workspace { grid-template-columns: 1fr; }
+            .pie-chart { width: 250px; height: 250px; }
+            .btn-print span { display: none; }
+        }
+
+        /* --- IMPRESSÃO --- */
+        #print-table { display: none; }
+
+        @media print {
+            body { background: white; padding: 0; }
+            header button, .btn-back-home, .input-row, .btn-remove, .remaining-alert { display: none !important; }
+            header { border: none; box-shadow: none; margin-bottom: 20px; }
+            
+            .pie-chart { border: 1px solid #ccc; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .controls-panel, .chart-panel, .event-card, .conclusion-card { box-shadow: none; border: 1px solid #eee; }
+            
+            #print-table {
+                display: table; width: 100%; border-collapse: collapse; font-family: sans-serif; margin-top: 20px;
+            }
+            #print-table th { background: #eee; padding: 10px; border: 1px solid #ccc; text-align: left; }
+            #print-table td { padding: 10px; border: 1px solid #ccc; }
+            .factors-list { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <header data-aos="fade-down">
+        <button class="btn-print" onclick="window.print()"><i class="fa-solid fa-print"></i> <span>Imprimir</span></button>
+        <h1>Pizza da Responsabilidade</h1>
+        <div class="subtitle">Reatribuição de Culpa</div>
+    </header>
+
+    <div class="event-card" data-aos="fade-up">
+        <label><i class="fa-solid fa-burst"></i> Evento Negativo:</label>
+        <input type="text" placeholder='Ex: "Meu filho foi mal na prova da escola."'>
+    </div>
+
+    <div class="workspace">
+        
+        <div class="controls-panel" data-aos="fade-right">
+            <h3 style="margin-top:0; color:var(--text)">Adicionar Fatores</h3>
+            <p style="font-size:0.9rem; color:#636e72; margin-bottom:15px;">Quem ou o que mais contribuiu para isso? (Inclua você)</p>
+            
+            <div class="input-row">
+                <input type="text" id="factorName" placeholder="Fator (Ex: O Professor)">
+                <input type="number" id="factorPercent" placeholder="%" min="1" max="100">
+                <button class="btn-add" onclick="addFactor()"><i class="fa-solid fa-plus"></i></button>
+            </div>
+
+            <div class="factors-list" id="factorsList">
+                </div>
+        </div>
+
+        <div class="chart-panel" data-aos="fade-left">
+            <div class="pie-chart" id="pieChart">
+                <div class="chart-center">
+                    <div class="chart-total" id="totalUsed">0%</div>
+                    <div class="chart-label">Atribuído</div>
+                </div>
+            </div>
+
+            <div class="remaining-alert" id="msgAlert">
+                Ainda faltam 100% para completar a realidade.
+            </div>
+        </div>
+
+    </div>
+
+    <div class="conclusion-card" data-aos="fade-up">
+        <label style="font-weight:800; color:var(--text); display:block; margin-bottom:10px;">Conclusão Racional:</label>
+        <textarea placeholder="Olhando para o gráfico, qual é a sua real parcela de responsabilidade?"></textarea>
+    </div>
+
+    <table id="print-table">
+        <thead>
+            <tr>
+                <th>Fator Contribuinte</th>
+                <th>Porcentagem (%)</th>
+            </tr>
+        </thead>
+        <tbody id="printBody"></tbody>
+    </table>
+
+    <center>
+        <a href="../listaferramentas.html" style="display:inline-block; margin-top:40px; color:#b2bec3; text-decoration:none; font-weight:600;" class="btn-back-home">
+            <i class="fa-solid fa-arrow-left"></i> Voltar
+        </a>
+    </center>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        let factors = [];
+        const colors = [
+            "#6c5ce7", "#00b894", "#fdcb6e", "#e17055", "#0984e3", 
+            "#d63031", "#e84393", "#00cec9", "#636e72", "#2d3436"
+        ];
+
+        function addFactor() {
+            const name = document.getElementById('factorName').value.trim();
+            const percent = parseInt(document.getElementById('factorPercent').value);
+
+            if (!name || isNaN(percent) || percent <= 0) {
+                alert("Preencha o nome e uma porcentagem válida.");
+                return;
+            }
+
+            const currentTotal = factors.reduce((sum, f) => sum + f.percent, 0);
+            if (currentTotal + percent > 100) {
+                alert(`A soma não pode passar de 100%. Você só tem ${100 - currentTotal}% restante.`);
+                return;
+            }
+
+            factors.push({ name, percent, color: colors[factors.length % colors.length] });
+            
+            // Reset inputs
+            document.getElementById('factorName').value = '';
+            document.getElementById('factorPercent').value = '';
+            document.getElementById('factorName').focus();
+
+            updateUI();
+        }
+
+        function removeFactor(index) {
+            factors.splice(index, 1);
+            updateUI();
+        }
+
+        function updateUI() {
+            // 1. Atualiza Lista
+            const list = document.getElementById('factorsList');
+            const printBody = document.getElementById('printBody');
+            list.innerHTML = '';
+            printBody.innerHTML = '';
+
+            factors.forEach((f, idx) => {
+                // UI List
+                const item = document.createElement('div');
+                item.className = 'factor-item';
+                item.style.borderLeftColor = f.color;
+                item.innerHTML = `
+                    <span style="font-weight:bold">${f.name}</span>
+                    <span style="color:${f.color}; font-weight:800;">${f.percent}%</span>
+                    <button class="btn-remove" onclick="removeFactor(${idx})"><i class="fa-solid fa-trash"></i></button>
+                `;
+                list.appendChild(item);
+
+                // Print Table
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${f.name}</td><td>${f.percent}%</td>`;
+                printBody.appendChild(row);
+            });
+
+            // 2. Calcula Totais
+            const total = factors.reduce((sum, f) => sum + f.percent, 0);
+            document.getElementById('totalUsed').innerText = total + "%";
+
+            const remaining = 100 - total;
+            const msg = document.getElementById('msgAlert');
+            if (remaining === 0) {
+                msg.innerText = "Gráfico completo! A realidade está toda mapeada.";
+                msg.style.background = "#d1f2eb"; msg.style.color = "#0e6655";
+            } else {
+                msg.innerText = `Ainda faltam ${remaining}% para completar a torta.`;
+                msg.style.background = "#e0f7fa"; msg.style.color = "#006064";
+            }
+
+            // 3. Desenha o Gráfico (CSS Conic Gradient)
+            drawChart(factors);
+        }
+
+        function drawChart(data) {
+            const chart = document.getElementById('pieChart');
+            
+            if (data.length === 0) {
+                chart.style.background = `conic-gradient(var(--pie-base) 0% 100%)`;
+                return;
+            }
+
+            let gradientStr = "";
+            let currentAngle = 0;
+
+            data.forEach((f, idx) => {
+                const start = currentAngle;
+                const end = currentAngle + f.percent;
+                
+                // Formato CSS: color start% end%, color2 start% end%...
+                gradientStr += `${f.color} ${start}% ${end}%, `;
+                currentAngle = end;
+            });
+
+            // Adiciona o resto (fundo)
+            gradientStr += `var(--pie-base) ${currentAngle}% 100%`;
+
+            chart.style.background = `conic-gradient(${gradientStr})`;
+        }
+    </script>
+
+</body>
+</html>
