@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O Inspetor de Regras | Bruno de Souza</title>
+    
+    <script>
+        if(localStorage.getItem('logado') !== 'sim') {
+            window.location.href = "../../login.html";
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #f0f8ff;
+            --primary: #2d3436;       /* Cinza Escuro (Estrutura) */
+            --highlight: #0984e3;     /* Azul (Lógica) */
+            --alert: #d63031;         /* Vermelho (Rigidez) */
+            --text: #2d3436;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
+            background-size: 20px 20px;
+            margin: 0; padding: 20px;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* --- HEADER --- */
+        header {
+            text-align: center; margin-bottom: 30px;
+            background: white; padding: 20px 40px;
+            border-radius: 20px; border: 3px solid var(--primary);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            max-width: 900px; width: 100%; position: relative;
+        }
+
+        header h1 { color: var(--primary); margin: 0; font-weight: 800; font-size: 1.8rem; }
+        .subtitle { color: #636e72; font-weight: 600; margin-top: 5px; }
+
+        .btn-print {
+            position: absolute; top: 20px; right: 20px;
+            background: none; border: 2px solid var(--primary); color: var(--primary);
+            padding: 8px 15px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+        .btn-print:hover { background: var(--primary); color: white; }
+
+        /* --- INPUT CARD --- */
+        .inspection-card {
+            width: 100%; max-width: 900px;
+            background: white; padding: 30px; border-radius: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 40px;
+            border-top: 6px solid var(--primary);
+        }
+
+        .section-title {
+            font-size: 1.1rem; font-weight: 800; color: var(--primary); margin-bottom: 15px;
+            display: flex; align-items: center; gap: 10px;
+        }
+
+        /* DETECTOR DE REGRA */
+        .rule-input-container { position: relative; margin-bottom: 25px; }
+        
+        .rule-input {
+            width: 100%; padding: 15px; border: 2px solid #dfe6e9; border-radius: 12px;
+            font-family: inherit; font-size: 1.1rem; transition: 0.3s; outline: none;
+        }
+        .rule-input:focus { border-color: var(--highlight); }
+
+        .keyword-alert {
+            position: absolute; right: 15px; top: 50%; transform: translateY(-50%);
+            font-size: 0.8rem; color: var(--alert); font-weight: bold;
+            background: #ffeaa7; padding: 5px 10px; border-radius: 10px;
+            display: none; animation: popIn 0.3s;
+        }
+
+        /* LOGICA CONDICIONAL (SE... ENTÃO) */
+        .logic-container {
+            background: #f1f2f6; padding: 20px; border-radius: 15px; margin-bottom: 25px;
+            border: 1px dashed #b2bec3;
+        }
+        
+        .logic-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .logic-label { font-weight: 800; color: var(--highlight); min-width: 60px; }
+        .logic-input {
+            flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-family: inherit;
+        }
+
+        /* SLIDER DE CRENÇA */
+        .slider-group { margin-bottom: 25px; }
+        .slider-header { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 10px; color: #636e72; }
+        input[type=range] { width: 100%; accent-color: var(--primary); cursor: pointer; }
+
+        /* LISTA DE PROBLEMAS */
+        .problems-area textarea {
+            width: 100%; padding: 12px; border: 2px solid #dfe6e9; border-radius: 10px;
+            font-family: inherit; font-size: 0.95rem; min-height: 80px; resize: vertical;
+        }
+
+        .btn-save {
+            width: 100%; padding: 15px; background: var(--primary); color: white;
+            border: none; border-radius: 50px; font-weight: 800; font-size: 1.1rem;
+            cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px;
+            margin-top: 20px;
+        }
+        .btn-save:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+
+        /* --- LISTA DE CARTÕES --- */
+        .rules-list {
+            width: 100%; max-width: 900px; display: flex; flex-direction: column; gap: 20px;
+        }
+
+        .rule-card {
+            background: white; border-radius: 20px; padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); position: relative;
+            border-left: 5px solid var(--alert); animation: slideUp 0.4s ease;
+        }
+
+        .card-header { font-size: 1.2rem; font-weight: 800; color: var(--text); margin-bottom: 10px; }
+        .card-logic { font-style: italic; color: #636e72; background: #f8f9fa; padding: 10px; border-radius: 8px; margin-bottom: 10px; }
+        .card-logic strong { color: var(--highlight); }
+        .card-problems { font-size: 0.9rem; color: #d63031; }
+
+        .belief-tag {
+            position: absolute; top: 20px; right: 20px;
+            background: var(--primary); color: white; padding: 5px 10px; border-radius: 10px; font-weight: bold; font-size: 0.8rem;
+        }
+
+        .btn-delete {
+            position: absolute; bottom: 20px; right: 20px;
+            background: none; border: none; color: #b2bec3; cursor: pointer; transition: 0.2s;
+        }
+        .btn-delete:hover { color: #d63031; }
+
+        @keyframes popIn { from { transform: translateY(-50%) scale(0.8); opacity: 0; } to { transform: translateY(-50%) scale(1); opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Responsividade */
+        @media (max-width: 700px) {
+            .btn-print span { display: none; }
+            .logic-row { flex-direction: column; align-items: flex-start; gap: 5px; }
+            .logic-input { width: 100%; }
+        }
+
+        /* --- IMPRESSÃO --- */
+        #print-table { display: none; }
+
+        @media print {
+            body { background: white; padding: 0; }
+            header button, .inspection-card, .btn-back-home, .btn-delete { display: none !important; }
+            header { border: none; box-shadow: none; margin-bottom: 20px; }
+            
+            #print-table {
+                display: table; width: 100%; border-collapse: collapse; font-family: sans-serif; margin-top: 20px;
+            }
+            #print-table th { background: #eee; padding: 10px; border: 1px solid #ccc; text-align: left; font-size: 0.9rem; }
+            #print-table td { padding: 10px; border: 1px solid #ccc; vertical-align: top; font-size: 0.9rem; }
+            
+            .rules-list { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <header data-aos="fade-down">
+        <button class="btn-print" onclick="window.print()"><i class="fa-solid fa-print"></i> <span>Imprimir</span></button>
+        <h1>O Inspetor de Regras</h1>
+        <div class="subtitle">Monitoramento de Pressupostos e Padrões</div>
+    </header>
+
+    <div class="inspection-card" data-aos="fade-up">
+        
+        <div class="section-title"><i class="fa-solid fa-triangle-exclamation"></i> 1. Identifique a Regra Rígida</div>
+        <div class="rule-input-container">
+            <input type="text" id="ruleInput" class="rule-input" placeholder='Ex: "Devo ser perfeito em tudo o que faço."' oninput="checkKeywords(this)">
+            <div id="keywordAlert" class="keyword-alert"><i class="fa-solid fa-circle-exclamation"></i> Palavra Rígida Detectada!</div>
+        </div>
+
+        <div class="slider-group">
+            <div class="slider-header">
+                <span>Quanto você acredita nisso? (Endosso)</span>
+                <span id="beliefVal" style="color:var(--primary)">80%</span>
+            </div>
+            <input type="range" id="beliefInput" min="0" max="100" value="80" oninput="document.getElementById('beliefVal').innerText = this.value + '%'">
+        </div>
+
+        <div class="section-title"><i class="fa-solid fa-microchip"></i> 2. Traduza a Lógica (O Pressuposto)</div>
+        <div class="logic-container">
+            <div class="logic-row">
+                <span class="logic-label">SE...</span>
+                <input type="text" id="ifInput" class="logic-input" placeholder="eu falhar em alguma coisa...">
+            </div>
+            <div class="logic-row">
+                <span class="logic-label">ENTÃO...</span>
+                <input type="text" id="thenInput" class="logic-input" placeholder="sou um fracasso total.">
+            </div>
+        </div>
+
+        <div class="section-title"><i class="fa-solid fa-bug"></i> 3. Problemas / Bugs dessa Regra</div>
+        <div class="problems-area">
+            <textarea id="problemsInput" placeholder="Por que seguir essa regra é ruim para você? (Ex: Me deixa ansioso, me impede de tentar coisas novas...)"></textarea>
+        </div>
+
+        <button class="btn-save" onclick="addRule()">
+            <i class="fa-solid fa-file-circle-check"></i> Registrar Análise
+        </button>
+    </div>
+
+    <div class="rules-list" id="rulesList">
+        <div class="rule-card">
+            <div class="belief-tag">Endosso: 90%</div>
+            <div class="card-header">"O fracasso é intolerável."</div>
+            <div class="card-logic">
+                <strong>SE</strong> eu falhar, <strong>ENTÃO</strong> serei rejeitado por todos.
+            </div>
+            <div class="card-problems">
+                <strong>Problemas:</strong> Me causa pânico antes de provas e insônia.
+            </div>
+            <button class="btn-delete" onclick="deleteRule(this)"><i class="fa-solid fa-trash"></i></button>
+        </div>
+    </div>
+
+    <table id="print-table">
+        <thead>
+            <tr>
+                <th width="25%">Regra / Padrão</th>
+                <th width="35%">Pressuposto Subjacente (Se... Então...)</th>
+                <th width="30%">Problemas da Regra</th>
+                <th width="10%">Crença</th>
+            </tr>
+        </thead>
+        <tbody id="printBody">
+            </tbody>
+    </table>
+
+    <center>
+        <a href="../listaferramentas.html" style="display:inline-block; margin-top:40px; color:#b2bec3; text-decoration:none; font-weight:600;" class="btn-back-home">
+            <i class="fa-solid fa-arrow-left"></i> Voltar
+        </a>
+    </center>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        const rigidWords = ['devo', 'deve', 'tenho que', 'tem que', 'preciso', 'precisa', 'sempre', 'nunca', 'obrigação', 'intolerável', 'insuportável'];
+
+        function checkKeywords(input) {
+            const val = input.value.toLowerCase();
+            const alertBox = document.getElementById('keywordAlert');
+            const found = rigidWords.some(word => val.includes(word));
+            
+            if (found) {
+                alertBox.style.display = 'block';
+                input.style.borderColor = 'var(--alert)';
+            } else {
+                alertBox.style.display = 'none';
+                input.style.borderColor = '#dfe6e9';
+            }
+        }
+
+        function addRule() {
+            const rule = document.getElementById('ruleInput').value.trim();
+            const belief = document.getElementById('beliefInput').value;
+            const ifText = document.getElementById('ifInput').value.trim();
+            const thenText = document.getElementById('thenInput').value.trim();
+            const problems = document.getElementById('problemsInput').value.trim();
+
+            if (!rule) {
+                alert("Escreva a regra ou padrão!");
+                return;
+            }
+
+            const list = document.getElementById('rulesList');
+            const div = document.createElement('div');
+            div.className = 'rule-card';
+            
+            let logicHTML = "";
+            if (ifText || thenText) {
+                logicHTML = `<div class="card-logic"><strong>SE</strong> ${ifText || '...'}, <strong>ENTÃO</strong> ${thenText || '...'}</div>`;
+            }
+
+            div.innerHTML = `
+                <div class="belief-tag">Endosso: ${belief}%</div>
+                <div class="card-header rule-text">"${rule}"</div>
+                ${logicHTML}
+                <div class="card-problems"><strong>Problemas:</strong> ${problems || "Não listados."}</div>
+                <button class="btn-delete" onclick="deleteRule(this)"><i class="fa-solid fa-trash"></i></button>
+                
+                <span style="display:none" class="raw-if">${ifText}</span>
+                <span style="display:none" class="raw-then">${thenText}</span>
+            `;
+
+            list.prepend(div);
+            
+            // Reset
+            document.getElementById('ruleInput').value = '';
+            document.getElementById('ifInput').value = '';
+            document.getElementById('thenInput').value = '';
+            document.getElementById('problemsInput').value = '';
+            document.getElementById('keywordAlert').style.display = 'none';
+            document.getElementById('ruleInput').style.borderColor = '#dfe6e9';
+
+            updatePrintTable();
+        }
+
+        function deleteRule(btn) {
+            if(confirm("Remover esta regra?")) {
+                btn.closest('.rule-card').remove();
+                updatePrintTable();
+            }
+        }
+
+        function updatePrintTable() {
+            const tbody = document.getElementById('printBody');
+            tbody.innerHTML = '';
+            
+            const cards = document.querySelectorAll('.rule-card');
+            
+            cards.forEach(card => {
+                const r = card.querySelector('.rule-text').innerText.replace(/"/g, '');
+                const b = card.querySelector('.belief-tag').innerText.replace('Endosso: ', '');
+                const p = card.querySelector('.card-problems').innerText.replace('Problemas: ', '');
+                
+                const ifT = card.querySelector('.raw-if').innerText;
+                const thenT = card.querySelector('.raw-then').innerText;
+                const logic = (ifT || thenT) ? `Se ${ifT}, então ${thenT}` : '-';
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${r}</td><td>${logic}</td><td>${p}</td><td>${b}</td>`;
+                tbody.appendChild(tr);
+            });
+        }
+
+        updatePrintTable(); // Init example
+    </script>
+
+</body>
+</html>
