@@ -16,6 +16,9 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <style>
+        /* --- RESET --- */
+        * { box-sizing: border-box; }
+
         :root {
             --bg-color: #f0f8ff;
             --col-a: #74b9ff; /* Evento (Azul) */
@@ -40,7 +43,7 @@
             text-align: center; margin-bottom: 30px;
             background: white; padding: 20px 40px;
             border-radius: 20px; border: 3px dashed #636e72;
-            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
             max-width: 900px; width: 100%; position: relative;
         }
 
@@ -56,48 +59,53 @@
 
         /* --- ÁREA DE INPUT (INVESTIGAÇÃO) --- */
         .investigation-panel {
-            width: 100%; max-width: 900px;
+            width: 100%; max-width: 1000px;
             background: white; border-radius: 25px; padding: 30px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             margin-bottom: 40px;
         }
 
         .abc-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 25px;
         }
 
         .input-card {
-            padding: 20px; border-radius: 15px;
-            border: 2px solid transparent; background: #f8f9fa;
-            display: flex; flex-direction: column; gap: 10px;
+            padding: 25px; border-radius: 20px;
+            border: 2px solid transparent; 
+            display: flex; flex-direction: column; gap: 15px;
+            transition: 0.3s;
         }
+        .input-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
 
-        .input-card.a { border-color: var(--col-a); background: #eef6ff; }
-        .input-card.b { border-color: var(--col-b); background: #fffbf0; }
-        .input-card.c { border-color: var(--col-c); background: #fff0f0; }
+        .input-card.a { border-color: var(--col-a); background: #f0f7ff; }
+        .input-card.b { border-color: var(--col-b); background: #fffcf4; }
+        .input-card.c { border-color: var(--col-c); background: #fff5f5; }
 
         .card-label { font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
-        .card-desc { font-size: 0.85rem; opacity: 0.8; margin-bottom: 5px; min-height: 40px; }
+        .card-desc { font-size: 0.9rem; opacity: 0.8; line-height: 1.4; }
 
         textarea {
-            width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 10px;
-            font-family: inherit; resize: vertical; min-height: 80px;
+            width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 12px;
+            font-family: inherit; resize: vertical; min-height: 100px; font-size: 1rem;
+            background: white; transition: 0.3s; outline: none;
         }
-        textarea:focus { outline: none; border-color: #636e72; }
+        .input-card.a textarea:focus { border-color: var(--col-a); box-shadow: 0 0 0 3px rgba(116, 185, 255, 0.2); }
+        .input-card.b textarea:focus { border-color: var(--col-b); box-shadow: 0 0 0 3px rgba(253, 203, 110, 0.2); }
+        .input-card.c textarea:focus { border-color: var(--col-c); box-shadow: 0 0 0 3px rgba(255, 118, 117, 0.2); }
 
         .btn-add {
             width: 100%; padding: 15px; border-radius: 50px; border: none;
             background: #2d3436; color: white; font-weight: 800; font-size: 1.1rem;
             cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px;
         }
-        .btn-add:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .btn-add:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
 
         /* --- LISTA DE REGISTROS --- */
         .records-list {
-            width: 100%; max-width: 900px;
+            width: 100%; max-width: 1000px;
             display: flex; flex-direction: column; gap: 20px;
         }
 
@@ -105,34 +113,33 @@
             background: white; border-radius: 20px; padding: 0;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05); overflow: hidden;
             display: flex; flex-direction: column;
-            border-left: 5px solid #2d3436;
+            border-left: 6px solid #2d3436;
             animation: slideUp 0.4s ease;
         }
 
         .record-header {
-            padding: 15px 20px; background: #f8f9fa; border-bottom: 1px solid #eee;
+            padding: 15px 25px; background: #f8f9fa; border-bottom: 1px solid #eee;
             display: flex; justify-content: space-between; align-items: center; font-weight: bold; color: #636e72;
         }
 
         .record-body {
-            display: grid; grid-template-columns: 1fr 1fr 1fr;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
         }
 
-        .record-col { padding: 20px; border-right: 1px solid #eee; }
+        .record-col { padding: 25px; border-right: 1px solid #eee; }
         .record-col:last-child { border-right: none; }
         
-        .col-title { font-size: 0.8rem; text-transform: uppercase; font-weight: 800; margin-bottom: 10px; }
-        .col-text { font-size: 1rem; line-height: 1.5; color: #2d3436; }
+        .col-title { font-size: 0.8rem; text-transform: uppercase; font-weight: 800; margin-bottom: 10px; letter-spacing: 0.5px; }
+        .col-text { font-size: 1rem; line-height: 1.6; color: #2d3436; }
 
-        .btn-delete { background: none; border: none; color: #d63031; cursor: pointer; transition: 0.2s; font-size: 1rem; }
-        .btn-delete:hover { transform: scale(1.2); }
+        .btn-delete { background: none; border: none; color: #b2bec3; cursor: pointer; transition: 0.2s; font-size: 1rem; }
+        .btn-delete:hover { color: #d63031; transform: scale(1.2); }
 
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         /* Responsividade */
-        @media (max-width: 768px) {
-            .abc-grid { grid-template-columns: 1fr; }
-            .record-body { grid-template-columns: 1fr; }
+        @media (max-width: 800px) {
+            .investigation-panel { padding: 20px; }
             .record-col { border-right: none; border-bottom: 1px solid #eee; }
             .btn-print span { display: none; }
         }
@@ -143,13 +150,13 @@
         @media print {
             body { background: white; padding: 0; }
             header button, .investigation-panel, .btn-back-home, .btn-delete { display: none !important; }
-            header { border: none; box-shadow: none; margin-bottom: 20px; }
+            header { border: none; box-shadow: none; margin-bottom: 20px; padding: 0; }
             
             #print-table {
                 display: table; width: 100%; border-collapse: collapse; font-family: sans-serif; margin-top: 20px;
             }
             #print-table th { background: #eee; padding: 10px; text-align: left; border: 1px solid #ccc; font-weight: bold; }
-            #print-table td { padding: 10px; border: 1px solid #ccc; vertical-align: top; }
+            #print-table td { padding: 12px; border: 1px solid #ccc; vertical-align: top; }
             
             /* Esconde cards visuais para usar a tabela limpa */
             .records-list { display: none; }
@@ -171,24 +178,24 @@
                 <div class="card-label" style="color:var(--col-a)">
                     <i class="fa-solid fa-bolt"></i> A = Evento Ativador
                 </div>
-                <div class="card-desc">O que aconteceu? (Fato)</div>
-                <textarea id="inputA" placeholder="Ex: Meu chefe criticou meu trabalho..."></textarea>
+                <div class="card-desc">O que aconteceu de fato? (A situação gatilho)</div>
+                <textarea id="inputA" placeholder="Ex: Meu chefe criticou meu relatório na frente da equipe..."></textarea>
             </div>
 
             <div class="input-card b">
                 <div class="card-label" style="color:#d4ac0d">
                     <i class="fa-solid fa-lightbulb"></i> B = Crença (Belief)
                 </div>
-                <div class="card-desc">O que você pensou na hora?</div>
-                <textarea id="inputB" placeholder="Ex: Sou incompetente, vou ser demitido..."></textarea>
+                <div class="card-desc">O que passou pela sua cabeça? (Interpretação)</div>
+                <textarea id="inputB" placeholder="Ex: Sou incompetente, todos estão rindo de mim, vou ser demitido..."></textarea>
             </div>
 
             <div class="input-card c">
                 <div class="card-label" style="color:var(--col-c)">
                     <i class="fa-solid fa-masks-theater"></i> C = Consequência
                 </div>
-                <div class="card-desc">O que você sentiu ou fez?</div>
-                <textarea id="inputC" placeholder="Ex: Ansiedade, fiquei quieto, procrastinei..."></textarea>
+                <div class="card-desc">O que você sentiu (emoção) ou fez (comportamento)?</div>
+                <textarea id="inputC" placeholder="Ex: Senti vergonha intensa e ansiedade. Fiquei quieto o resto do dia e evitei olhar para o chefe."></textarea>
             </div>
 
         </div>
@@ -206,15 +213,15 @@
             <div class="record-body">
                 <div class="record-col">
                     <div class="col-title" style="color:var(--col-a)">A - Evento</div>
-                    <div class="col-text">A prova é amanhã.</div>
+                    <div class="col-text a-text">A prova é amanhã.</div>
                 </div>
                 <div class="record-col">
                     <div class="col-title" style="color:#d4ac0d">B - Crença</div>
-                    <div class="col-text">"Não estou preparado, vou reprovar."</div>
+                    <div class="col-text b-text">"Não estou preparado, com certeza vou reprovar."</div>
                 </div>
                 <div class="record-col">
                     <div class="col-title" style="color:var(--col-c)">C - Consequência</div>
-                    <div class="col-text">Ansiedade, dor de barriga, estudar desesperado.</div>
+                    <div class="col-text c-text">Ansiedade forte, dor de barriga, tentar estudar desesperado sem foco.</div>
                 </div>
             </div>
         </div>
