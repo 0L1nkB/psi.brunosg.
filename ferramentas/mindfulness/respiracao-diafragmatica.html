@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Respiração Diafragmática | Bruno de Souza</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #fdfbf7; /* Tom creme suave */
+            --belly-color: #ff9f43; /* Laranja suave (chakra sacral/barriga) */
+            --text-color: #2d3436;
+            --accent: #ee5253;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
+            overflow: hidden;
+        }
+
+        /* --- INSTRUÇÕES --- */
+        .header-info {
+            text-align: center; margin-bottom: 20px; z-index: 2;
+        }
+        h1 { color: var(--text-color); margin-bottom: 5px; }
+        .sub-text { color: #636e72; font-size: 1.1rem; }
+
+        /* --- VISUALIZADOR (BARRIGA) --- */
+        .visual-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        /* O "Torso" (Fundo estático) */
+        .torso-bg {
+            position: absolute;
+            width: 280px; height: 280px;
+            border: 4px dashed #dfe6e9;
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        /* A Barriga (Dinâmica) */
+        .belly-circle {
+            width: 150px; height: 150px;
+            background: linear-gradient(135deg, #ff9f43, #ff6b6b);
+            border-radius: 50%;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+            position: relative;
+            transition: transform 0.1s linear; /* Controlado via JS */
+        }
+
+        /* Ícone da Mão */
+        .hand-icon {
+            font-size: 4rem;
+            color: rgba(255,255,255,0.9);
+            transition: transform 0.1s linear;
+        }
+
+        /* Indicadores de Nariz/Boca */
+        .indicator {
+            position: absolute;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0;
+            transition: opacity 0.5s;
+            background: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .ind-top { top: -40px; color: #0984e3; }
+        .ind-bottom { bottom: -40px; color: #d63031; }
+
+        /* --- TEXTO DE COMANDO --- */
+        .command-text {
+            font-size: 2.5rem;
+            font-weight: 800;
+            height: 60px;
+            margin-bottom: 10px;
+            color: var(--text-color);
+        }
+
+        /* --- CONTROLES --- */
+        .controls { margin-top: 20px; text-align: center; }
+
+        .btn {
+            padding: 12px 30px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            font-family: inherit;
+            transition: 0.2s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .btn-start { background: var(--text-color); color: white; }
+        .btn-start:hover { transform: scale(1.05); background: #000; }
+
+        .counter-box {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: #b2bec3;
+        }
+        #countVal { color: var(--text-color); font-weight: bold; font-size: 1.5rem; }
+
+        /* --- CLASSES DE ANIMAÇÃO --- */
+        /* Definidas no CSS para transições suaves de cor/sombra, mas o tamanho será JS */
+        .inhale-style {
+            box-shadow: 0 20px 50px rgba(255, 159, 67, 0.6);
+        }
+        .exhale-style {
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.2);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="header-info">
+        <h1>Respiração Abdominal</h1>
+        <div class="sub-text">Coloque uma mão sobre a barriga. Sinta-a empurrar sua mão.</div>
+    </div>
+
+    <div class="visual-container">
+        <div class="torso-bg"></div>
+        
+        <div class="indicator ind-top" id="indNose">Nariz <i class="fa-solid fa-arrow-down"></i></div>
+        
+        <div class="belly-circle" id="belly">
+            <i class="fa-solid fa-hand hand-icon" id="hand"></i>
+        </div>
+
+        <div class="indicator ind-bottom" id="indMouth">Boca <i class="fa-solid fa-arrow-up"></i></div>
+    </div>
+
+    <div class="command-text" id="command">Preparar...</div>
+
+    <div class="controls">
+        <button class="btn btn-start" onclick="toggleExercise()" id="btnAction">Iniciar</button>
+        <div class="counter-box">Repetições: <span id="countVal">0</span>/10</div>
+    </div>
+
+    <script>
+        let isRunning = false;
+        let count = 0;
+        const maxCount = 10;
+        
+        const belly = document.getElementById('belly');
+        const hand = document.getElementById('hand');
+        const command = document.getElementById('command');
+        const btn = document.getElementById('btnAction');
+        const countDisplay = document.getElementById('countVal');
+        const indNose = document.getElementById('indNose');
+        const indMouth = document.getElementById('indMouth');
+
+        function toggleExercise() {
+            if (isRunning) {
+                stopExercise();
+            } else {
+                startExercise();
+            }
+        }
+
+        async function startExercise() {
+            isRunning = true;
+            count = 0;
+            countDisplay.innerText = count;
+            btn.innerText = "Parar";
+            btn.style.backgroundColor = "#ff7675";
+
+            while (isRunning && count < maxCount) {
+                await runBreathCycle();
+                if (isRunning) {
+                    count++;
+                    countDisplay.innerText = count;
+                }
+            }
+
+            if (count >= maxCount) {
+                command.innerText = "Muito bem!";
+                command.style.color = "#27ae60";
+                stopExercise(true);
+            }
+        }
+
+        function stopExercise(finished = false) {
+            isRunning = false;
+            if(!finished) {
+                command.innerText = "Pausa";
+                command.style.color = "#2d3436";
+            }
+            btn.innerText = "Reiniciar";
+            btn.style.backgroundColor = "#2d3436";
+            
+            // Reset visual
+            belly.style.transform = "scale(1)";
+            hand.style.transform = "scale(1)";
+            indNose.style.opacity = "0";
+            indMouth.style.opacity = "0";
+        }
+
+        function wait(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        async function runBreathCycle() {
+            if (!isRunning) return;
+
+            // 1. INSPIRAR (4 Segundos) - Barriga Cresce
+            command.innerText = "Inspire (Infle a barriga)";
+            indNose.style.opacity = "1";
+            indMouth.style.opacity = "0";
+            belly.classList.add('inhale-style');
+            belly.classList.remove('exhale-style');
+            
+            // Animação JS para controle total
+            belly.style.transition = "transform 4s ease-out";
+            hand.style.transition = "transform 4s ease-out";
+            belly.style.transform = "scale(1.8)";
+            hand.style.transform = "scale(1.3)"; // Mão cresce (perspectiva de aproximação)
+
+            await wait(4000);
+
+            if (!isRunning) return;
+
+            // Pequena pausa natural (1s)
+            // command.innerText = "Segure...";
+            await wait(1000);
+
+            if (!isRunning) return;
+
+            // 2. EXPIRAR (6 Segundos) - Barriga Encolhe
+            command.innerText = "Solte (Esvazie a barriga)";
+            indNose.style.opacity = "0";
+            indMouth.style.opacity = "1";
+            belly.classList.remove('inhale-style');
+            belly.classList.add('exhale-style');
+
+            belly.style.transition = "transform 6s ease-in-out";
+            hand.style.transition = "transform 6s ease-in-out";
+            belly.style.transform = "scale(1)";
+            hand.style.transform = "scale(1)";
+
+            await wait(6000);
+        }
+    </script>
+
+</body>
+</html>
