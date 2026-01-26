@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Respiração 4-7-8 | Mente Tranquila</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #e0f2f1; /* Verde menta suave */
+            --circle-color: #80cbc4;
+            --text-color: #004d40;
+            --accent: #009688;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            color: var(--text-color);
+        }
+
+        .container {
+            text-align: center;
+            width: 100%;
+            max-width: 600px;
+            position: relative;
+            padding: 20px;
+        }
+
+        /* --- TELA INICIAL --- */
+        #start-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: fadeIn 1s;
+        }
+
+        h1 { font-size: 2.5rem; margin-bottom: 10px; color: var(--accent); }
+        p { font-size: 1.2rem; color: #555; margin-bottom: 30px; line-height: 1.6; }
+
+        .btn-start {
+            background: var(--accent); color: white; border: none;
+            padding: 15px 40px; font-size: 1.5rem; border-radius: 50px;
+            cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+        .btn-start:hover { transform: scale(1.05); background: var(--text-color); }
+
+        /* --- TELA DO EXERCÍCIO --- */
+        #exercise-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100%;
+        }
+
+        .text-container {
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .instruction-text {
+            font-size: 2rem;
+            margin-bottom: 5px;
+            font-weight: bold;
+            transition: opacity 0.5s;
+        }
+
+        .timer-text {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        /* --- CONTAINER VISUAL --- */
+        .visual-container {
+            height: 350px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* CÍRCULO PRINCIPAL */
+        .breathing-circle {
+            width: 180px; height: 180px;
+            background-color: var(--circle-color);
+            border-radius: 50%;
+            box-shadow: 0 0 50px rgba(128, 203, 196, 0.6);
+            transform: scale(1);
+            position: absolute;
+            z-index: 1;
+        }
+
+        /* CÍRCULO GUIA (FUNDO) */
+        .guide-circle {
+            width: 300px; height: 300px;
+            border: 2px dashed #b2dfdb;
+            border-radius: 50%;
+            position: absolute;
+            z-index: 0;
+        }
+
+        /* ANIMAÇÕES 4-7-8 */
+        /* Inspire (4s) */
+        .inhale-anim { animation: grow 4s ease-in-out forwards; }
+        
+        /* Segure (7s) - Mantém o tamanho, talvez pulsa levemente */
+        .hold-anim { animation: pulseHold 7s ease-in-out forwards; }
+        
+        /* Expire (8s) */
+        .exhale-anim { animation: shrink 8s ease-in-out forwards; }
+
+        @keyframes grow { from { transform: scale(1); } to { transform: scale(1.6); } }
+        @keyframes shrink { from { transform: scale(1.6); } to { transform: scale(1); } }
+        @keyframes pulseHold { 
+            0% { transform: scale(1.6); } 
+            50% { transform: scale(1.65); } 
+            100% { transform: scale(1.6); } 
+        }
+
+        /* CONTADOR DE CICLOS */
+        .cycle-counter {
+            margin-top: 30px;
+            font-size: 1.1rem;
+            color: #777;
+        }
+
+        /* TELA FINAL */
+        #end-screen { display: none; text-align: center; animation: fadeIn 2s; }
+        .final-msg { font-size: 3rem; color: var(--accent); font-weight: bold; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    </style>
+</head>
+<body>
+
+    <div id="start-screen" class="container">
+        <div style="font-size: 4rem; margin-bottom: 20px;">🌬️</div>
+        <h1>Técnica 4-7-8</h1>
+        <p>Este exercício é um tranquilizante natural para o sistema nervoso.<br>
+        1. Inspire pelo nariz (4s)<br>
+        2. Segure o ar (7s)<br>
+        3. Solte pela boca (8s)</p>
+        <button class="btn-start" onclick="startExercise()">Iniciar</button>
+    </div>
+
+    <div id="exercise-screen">
+        <div class="text-container">
+            <div class="instruction-text" id="instruct">Prepare-se...</div>
+            <div class="timer-text" id="timer"></div>
+        </div>
+        
+        <div class="visual-container">
+            <div class="guide-circle"></div>
+            <div class="breathing-circle" id="circle"></div>
+        </div>
+
+        <div class="cycle-counter">Ciclo: <span id="cycle-count">1</span>/4</div>
+    </div>
+
+    <div id="end-screen" class="container">
+        <div class="final-msg">Relaxamento Completo</div>
+        <p style="font-size:1.5rem; margin-top:20px;">Sinta a calma em seu corpo.</p>
+        <button class="btn-start" style="margin-top:40px; font-size:1rem;" onclick="location.reload()">Repetir</button>
+    </div>
+
+    <script>
+        const totalCycles = 4;
+        let currentCycle = 1;
+
+        const startScreen = document.getElementById('start-screen');
+        const exerciseScreen = document.getElementById('exercise-screen');
+        const endScreen = document.getElementById('end-screen');
+        const instruct = document.getElementById('instruct');
+        const timerDisplay = document.getElementById('timer');
+        const circle = document.getElementById('circle');
+        const cycleDisplay = document.getElementById('cycle-count');
+
+        function startExercise() {
+            startScreen.style.display = 'none';
+            exerciseScreen.style.display = 'flex';
+            
+            // Pequena pausa inicial
+            setTimeout(() => {
+                runCycle();
+            }, 1000);
+        }
+
+        async function runCycle() {
+            if (currentCycle > totalCycles) {
+                finishExercise();
+                return;
+            }
+
+            cycleDisplay.innerText = currentCycle;
+
+            // 1. INSPIRE (4s)
+            instruct.innerText = "Inspire pelo nariz";
+            circle.className = 'breathing-circle inhale-anim';
+            await runTimer(4);
+
+            // 2. SEGURE (7s)
+            instruct.innerText = "Segure o ar";
+            circle.className = 'breathing-circle hold-anim';
+            await runTimer(7);
+
+            // 3. EXPIRE (8s)
+            instruct.innerText = "Solte pela boca";
+            circle.className = 'breathing-circle exhale-anim';
+            await runTimer(8);
+
+            currentCycle++;
+            runCycle(); // Próximo ciclo
+        }
+
+        function runTimer(seconds) {
+            return new Promise(resolve => {
+                let timeLeft = 1; // Começa mostrando 1
+                timerDisplay.innerText = timeLeft;
+                
+                const interval = setInterval(() => {
+                    timeLeft++;
+                    if (timeLeft > seconds) {
+                        clearInterval(interval);
+                        timerDisplay.innerText = ""; // Limpa timer na transição
+                        resolve();
+                    } else {
+                        timerDisplay.innerText = timeLeft;
+                    }
+                }, 1000);
+            });
+        }
+
+        function finishExercise() {
+            exerciseScreen.style.display = 'none';
+            endScreen.style.display = 'block';
+        }
+    </script>
+
+</body>
+</html>
