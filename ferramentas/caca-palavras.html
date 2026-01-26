@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Caça-Sintomas | Bruno de Souza</title>
+    <title>Caça-Sintomas DSM-5 | Bruno de Souza</title>
     
     <script>
         if(localStorage.getItem('logado') !== 'sim') {
@@ -18,9 +18,9 @@
     <style>
         :root {
             --bg-color: #f0f8ff;
-            --primary: #6c5ce7;
-            --secondary: #a29bfe;
-            --accent: #fdcb6e;
+            --primary: #2c3e50;
+            --secondary: #34495e;
+            --accent: #e67e22;
             --text: #2d3436;
             --selected: #fab1a0;
             --found: #55efc4;
@@ -62,16 +62,17 @@
             background: white; padding: 20px; border-radius: 15px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 20px;
             display: flex; gap: 15px; align-items: center; justify-content: center; flex-wrap: wrap;
+            width: 100%; max-width: 1000px;
         }
 
         select {
-            padding: 10px 20px; border-radius: 10px; border: 2px solid #dfe6e9;
+            padding: 12px 20px; border-radius: 10px; border: 2px solid #dfe6e9;
             font-family: inherit; font-size: 1rem; font-weight: bold; color: var(--text);
-            cursor: pointer; min-width: 250px;
+            cursor: pointer; min-width: 300px; flex: 1;
         }
 
         .btn-new {
-            background: var(--primary); color: white; border: none; padding: 10px 20px;
+            background: var(--primary); color: white; border: none; padding: 12px 25px;
             border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.3s;
         }
         .btn-new:hover { background: var(--secondary); transform: scale(1.05); }
@@ -79,24 +80,24 @@
         /* --- JOGO --- */
         .game-container {
             display: flex; flex-direction: column; align-items: center; gap: 30px;
-            width: 100%; max-width: 800px;
+            width: 100%; max-width: 900px;
         }
 
         /* GRID */
         .word-grid {
             display: grid; 
-            grid-template-columns: repeat(12, 1fr);
-            gap: 5px; 
+            grid-template-columns: repeat(14, 1fr); /* Grid maior */
+            gap: 4px; 
             background: white; padding: 15px; border-radius: 15px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             touch-action: manipulation;
         }
 
         .letter-cell {
-            width: 35px; height: 35px; 
+            width: 32px; height: 32px; 
             display: flex; align-items: center; justify-content: center;
-            font-weight: 700; font-size: 1.2rem; text-transform: uppercase;
-            border-radius: 5px; cursor: pointer; transition: 0.2s;
+            font-weight: 700; font-size: 1.1rem; text-transform: uppercase;
+            border-radius: 4px; cursor: pointer; transition: 0.2s;
             background: #f8f9fa; color: #2d3436;
         }
 
@@ -113,12 +114,12 @@
         .words-list h3 { margin: 0 0 15px 0; color: var(--primary); font-size: 1.1rem; }
         
         .words-wrapper {
-            display: flex; flex-wrap: wrap; gap: 15px; justify-content: center;
+            display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
         }
 
         .word-item {
-            background: #f1f2f6; padding: 8px 15px; border-radius: 20px;
-            font-weight: 600; font-size: 0.9rem; color: #636e72; transition: 0.3s;
+            background: #f1f2f6; padding: 6px 12px; border-radius: 20px;
+            font-weight: 600; font-size: 0.85rem; color: #636e72; transition: 0.3s;
         }
         .word-item.found {
             background: var(--found); color: #006266; text-decoration: line-through; opacity: 0.6;
@@ -138,8 +139,8 @@
         @keyframes popUp { from { transform: translate(-50%, 0); opacity: 0; } to { transform: translate(-50%, -50%); opacity: 1; } }
 
         @media (max-width: 600px) {
-            .word-grid { gap: 2px; padding: 5px; }
-            .letter-cell { width: 25px; height: 25px; font-size: 0.9rem; }
+            .word-grid { gap: 2px; padding: 5px; grid-template-columns: repeat(12, 1fr); }
+            .letter-cell { width: 24px; height: 24px; font-size: 0.8rem; }
             .btn-print span { display: none; }
         }
 
@@ -155,40 +156,42 @@
 
     <header data-aos="fade-down">
         <button class="btn-print" onclick="window.print()"><i class="fa-solid fa-print"></i> <span>Imprimir</span></button>
-        <h1>Caça-Sintomas</h1>
-        <div class="subtitle">Aprenda os conceitos brincando</div>
+        <h1>Caça-Palavras DSM-5</h1>
+        <div class="subtitle">Psicopatologia e Diagnóstico</div>
     </header>
 
     <div class="controls-area" data-aos="fade-up">
-        <label style="font-weight:bold; color:var(--text);"><i class="fa-solid fa-brain"></i> Tema:</label>
+        <label style="font-weight:bold; color:var(--text);"><i class="fa-solid fa-book-medical"></i> Categoria:</label>
         <select id="categorySelect" onchange="startGame()">
-            <option value="ansiedade">Ansiedade Generalizada</option>
-            <option value="depressao">Depressão</option>
-            <option value="tdah">TDAH (Atenção/Hiperatividade)</option>
-            <option value="toc">TOC (Obsessivo-Compulsivo)</option>
-            <option value="tept">TEPT (Pós-Traumático)</option>
-            <option value="social">Ansiedade Social (Fobia)</option>
-            <option value="bipolar">Transtorno Bipolar</option>
-            <option value="panico">Síndrome do Pânico</option>
-            <option value="burnout">Burnout (Esgotamento)</option>
-            <option value="autoestima">Autoestima (Pilares)</option>
+            <option value="neuro">1. Neurodesenvolvimento (TDAH/TEA)</option>
+            <option value="esquizofrenia">2. Espectro da Esquizofrenia</option>
+            <option value="bipolar">3. Bipolar & Humor</option>
+            <option value="ansiedade">4. Transtornos de Ansiedade</option>
+            <option value="toc">5. TOC & Relacionados</option>
+            <option value="trauma">6. Trauma & Estresse (TEPT)</option>
+            <option value="alimentar">7. Transtornos Alimentares</option>
+            <option value="sono">8. Sono-Vigília</option>
+            <option value="personalidade">9. Personalidade (Clusters)</option>
+            <option value="substancias">10. Uso de Substâncias</option>
+            <option value="neurocog">11. Neurocognitivos (Demências)</option>
+            <option value="disruptivo">12. Disruptivos & Conduta</option>
         </select>
-        <button class="btn-new" onclick="startGame()"><i class="fa-solid fa-rotate"></i> Novo Jogo</button>
+        <button class="btn-new" onclick="startGame()"><i class="fa-solid fa-rotate"></i> Gerar Novo</button>
     </div>
 
     <div class="game-container" data-aos="zoom-in">
         <div class="word-grid" id="grid"></div>
         <div class="words-list">
-            <h3>Encontre estas palavras:</h3>
+            <h3>Encontre os Termos:</h3>
             <div class="words-wrapper" id="wordList"></div>
         </div>
     </div>
 
     <div class="victory-msg" id="victoryModal">
         <i class="fa-solid fa-trophy" style="font-size: 4rem; color: #f1c40f; margin-bottom: 20px;"></i>
-        <h2>Parabéns!</h2>
-        <p>Você encontrou todos os termos!</p>
-        <button class="btn-new" onclick="startGame()">Jogar Novamente</button>
+        <h2>Excelente!</h2>
+        <p>Você dominou este tema!</p>
+        <button class="btn-new" onclick="startGame()">Jogar Outra Categoria</button>
     </div>
 
     <center>
@@ -198,26 +201,27 @@
     </center>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script>
         AOS.init();
 
-        // BANCO DE DADOS EXPANDIDO
+        // 📚 BANCO DE DADOS COMPLETO DSM-5
         const database = {
-            ansiedade: ["TAQUICARDIA", "MEDO", "TENSAO", "INSONIA", "TREMOR", "FUTURO", "PREOCUPACAO", "SUOR"],
-            depressao: ["TRISTEZA", "CULPA", "SONO", "APETITE", "DESANIMO", "ISOLAMENTO", "CANSACO", "VAZIO"],
-            tdah: ["DESATENCAO", "FOCO", "AGITACAO", "IMPULSO", "ESQUECIMENTO", "HIPERFOCO", "MENTE", "INQUIETO"],
-            burnout: ["EXAUSTAO", "CINISMO", "ESTRESSE", "TRABALHO", "LIMITE", "FADIGA", "IRRITACAO"],
-            autoestima: ["AMOR", "VALOR", "RESPEITO", "CONFIANCA", "ACEITACAO", "CUIDADO", "MERECIMENTO"],
-            
-            // NOVOS TRANSTORNOS
-            toc: ["RITUAL", "OBSESSAO", "LIMPEZA", "ORDEM", "DUVIDA", "REPETICAO", "CONTROLE", "SIMETRIA"],
-            tept: ["FLASHBACK", "TRAUMA", "ALERTA", "PESADELO", "EVITACAO", "MEMORIA", "GATILHO"],
-            bipolar: ["EUFORIA", "MANIA", "DEPRESSAO", "OSCILACAO", "IMPULSO", "ENERGIA", "RAPIDEZ"],
-            social: ["JULGAMENTO", "VERGONHA", "TREMEDEIRA", "ESQUIVA", "PALCO", "CORAR", "CRITICA"],
-            panico: ["SUFOCAMENTO", "ATAQUE", "CORACAO", "TONTURA", "MORTE", "CONTROLE", "MEDO"]
+            neuro: ["AUTISMO", "HIPERFOCO", "ECOLALIA", "DESATENCAO", "IMPULSIVIDADE", "TDAH", "DISLEXIA", "TIC", "ESTEREO", "GENETICA", "MOTOR", "ATRASO"],
+            esquizofrenia: ["DELIRIO", "ALUCINACAO", "CATATONIA", "PARANOIA", "SURTO", "APATIA", "NEGATIVOS", "PSICOSE", "REALIDADE", "AFETO", "DISCURSO", "LOGICA"],
+            bipolar: ["MANIA", "EUFORIA", "DEPRESSAO", "CICLOTIMIA", "HIPOMANIA", "LITIO", "OSCILACAO", "MISTO", "IRRITACAO", "ENERGIA", "SONO", "RISCO"],
+            ansiedade: ["PANICO", "AGORAFOBIA", "GENERALIZADA", "SOCIAL", "SEPARACAO", "MUTISMO", "FOBIA", "MEDO", "EVITACAO", "TAQUICARDIA", "FUTURO", "TREMOR"],
+            toc: ["OBSESSAO", "COMPULSAO", "RITUAL", "SIMETRIA", "LIMPEZA", "ACUMULACAO", "DISMORFICO", "TRICOTILO", "DUVIDA", "REPETICAO", "CONTROLE", "PELE"],
+            trauma: ["TEPT", "FLASHBACK", "PESADELO", "GATILHO", "ESTRESSE", "APEGO", "DISSOCIACAO", "ALERTA", "MEMORIA", "TRAUMA", "EVITACAO", "AGUDO"],
+            alimentar: ["ANOREXIA", "BULIMIA", "COMPULSAO", "PICA", "RUMINACAO", "RESTRITIVO", "IMAGEM", "PESO", "PURGACAO", "CONTROLE", "CALORIA", "MEDO"],
+            sono: ["INSONIA", "APNEIA", "NARCOLEPSIA", "TERROR", "SONAMBULO", "HIPER", "CIRCADIANO", "REM", "PIERNAS", "CANSACO", "VIGILIA", "HIGIENE"],
+            personalidade: ["BORDERLINE", "NARCISISTA", "ANTISSOCIAL", "PARANOIDE", "ESQUIZOIDE", "HISTRIONICA", "EVITATIVA", "DEPENDENTE", "OBSESSIVA", "RIGIDEZ", "DRAMATICO", "EMPATIA"],
+            substancias: ["ALCOOL", "CANNABIS", "OPIOIDE", "ABSTINENCIA", "TOLERANCIA", "CRAVING", "RECAIDA", "JOGO", "VICIO", "DOPAMINA", "INTOXICA", "SEDATIVO"],
+            neurocog: ["ALZHEIMER", "DEMENCIA", "DELIRIUM", "MEMORIA", "AFASIA", "AGNOSIA", "VASCULAR", "LEWY", "PARKINSON", "EXECUCAO", "DECLINIO", "IDADE"],
+            disruptivo: ["OPOSITIVO", "DESAFIADOR", "CONDUTA", "EXPLOSIVO", "INTERMITENTE", "RAIVA", "AGRESSAO", "FURTO", "PIROMANIA", "CLEPTOMANIA", "REGRAS", "IMPULSO"]
         };
 
-        const gridSize = 12;
+        const GRID_SIZE = 14; // Grid 14x14 para caber palavras maiores
         let grid = [];
         let placedWords = [];
         let firstSelection = null;
@@ -229,12 +233,14 @@
             firstSelection = null;
             
             const category = document.getElementById('categorySelect').value;
-            const words = [...database[category]];
+            // Pega 10 palavras aleatórias da categoria para não poluir demais
+            const allWords = [...database[category]];
+            const words = allWords.sort(() => 0.5 - Math.random()).slice(0, 10);
 
-            grid = Array(gridSize).fill(null).map(() => Array(gridSize).fill(''));
+            grid = Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(''));
             placedWords = [];
 
-            // Tenta colocar palavras (com limite de tentativas para não travar)
+            // Tenta colocar palavras
             words.forEach(word => placeWordInGrid(word));
 
             fillEmptySpaces();
@@ -245,12 +251,16 @@
         function placeWordInGrid(word) {
             let placed = false;
             let attempts = 0;
-            const directions = [{ dr: 0, dc: 1 }, { dr: 1, dc: 0 }, { dr: 1, dc: 1 }];
+            // Direções: Horizontal, Vertical, Diagonal (\), Diagonal (/)
+            const directions = [
+                { dr: 0, dc: 1 }, { dr: 1, dc: 0 }, 
+                { dr: 1, dc: 1 }, { dr: 1, dc: -1 }
+            ];
 
             while (!placed && attempts < 100) {
                 const dir = directions[Math.floor(Math.random() * directions.length)];
-                const row = Math.floor(Math.random() * gridSize);
-                const col = Math.floor(Math.random() * gridSize);
+                const row = Math.floor(Math.random() * GRID_SIZE);
+                const col = Math.floor(Math.random() * GRID_SIZE);
 
                 if (canPlace(word, row, col, dir)) {
                     for (let i = 0; i < word.length; i++) {
@@ -264,8 +274,8 @@
         }
 
         function canPlace(word, row, col, dir) {
-            if (row + (word.length - 1) * dir.dr >= gridSize) return false;
-            if (col + (word.length - 1) * dir.dc >= gridSize) return false;
+            if (row + (word.length - 1) * dir.dr >= GRID_SIZE || row + (word.length - 1) * dir.dr < 0) return false;
+            if (col + (word.length - 1) * dir.dc >= GRID_SIZE || col + (word.length - 1) * dir.dc < 0) return false;
 
             for (let i = 0; i < word.length; i++) {
                 const cell = grid[row + i * dir.dr][col + i * dir.dc];
@@ -276,8 +286,8 @@
 
         function fillEmptySpaces() {
             const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            for (let r = 0; r < gridSize; r++) {
-                for (let c = 0; c < gridSize; c++) {
+            for (let r = 0; r < GRID_SIZE; r++) {
+                for (let c = 0; c < GRID_SIZE; c++) {
                     if (grid[r][c] === '') grid[r][c] = letters[Math.floor(Math.random() * letters.length)];
                 }
             }
@@ -285,8 +295,10 @@
 
         function renderGrid() {
             const gridEl = document.getElementById('grid');
-            for (let r = 0; r < gridSize; r++) {
-                for (let c = 0; c < gridSize; c++) {
+            gridEl.style.gridTemplateColumns = `repeat(${GRID_SIZE}, 1fr)`;
+            
+            for (let r = 0; r < GRID_SIZE; r++) {
+                for (let c = 0; c < GRID_SIZE; c++) {
                     const cell = document.createElement('div');
                     cell.className = 'letter-cell';
                     cell.innerText = grid[r][c];
@@ -334,6 +346,7 @@
             const stepR = dr === 0 ? 0 : dr / length;
             const stepC = dc === 0 ? 0 : dc / length;
 
+            // Valida se é linha reta
             if (dr !== 0 && dc !== 0 && Math.abs(dr) !== Math.abs(dc)) {
                 clearSelection();
                 return;
@@ -345,7 +358,11 @@
             for (let i = 0; i <= length; i++) {
                 const r = start.r + (i * stepR);
                 const c = start.c + (i * stepC);
-                const cell = document.querySelector(`.letter-cell[data-r="${r}"][data-c="${c}"]`);
+                // Proteção contra float
+                const finalR = Math.round(r);
+                const finalC = Math.round(c);
+                
+                const cell = document.querySelector(`.letter-cell[data-r="${finalR}"][data-c="${finalC}"]`);
                 if (cell) {
                     formedWord += cell.innerText;
                     pathCells.push(cell);
@@ -374,7 +391,12 @@
 
         function checkVictory() {
             if (placedWords.every(w => w.found)) {
-                setTimeout(() => { document.getElementById('victoryModal').style.display = 'block'; }, 500);
+                confetti({
+                    particleCount: 150,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+                setTimeout(() => { document.getElementById('victoryModal').style.display = 'block'; }, 800);
             }
         }
 
