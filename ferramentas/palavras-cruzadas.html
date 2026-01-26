@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cruzadinha Terapêutica Pro | Bruno de Souza</title>
+    <title>Cruzadinha DSM-5 & TCC | Bruno de Souza</title>
     
     <script>
         if(localStorage.getItem('logado') !== 'sim') {
@@ -13,22 +13,26 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
-        /* --- CORE VARIABLES & RESET --- */
+        /* --- SYSTEM VARS --- */
         :root {
-            --bg-body: #f4f7f6;
-            --primary: #6c5ce7;
-            --primary-dark: #5849be;
-            --accent: #00cec9;
-            --text-main: #2d3436;
-            --text-light: #636e72;
-            --cell-bg: #ffffff;
-            --cell-blocked: #2d3436;
-            --correct: #00b894;
-            --wrong: #d63031;
-            --cell-size: 38px; /* Tamanho base da célula */
+            --primary: #2c3e50;
+            --secondary: #34495e;
+            --accent: #e67e22; /* Laranja Energético */
+            --bg-body: #ecf0f1;
+            --card-bg: #ffffff;
+            --text-main: #2c3e50;
+            --text-light: #7f8c8d;
+            --cell-size: 36px;
+            --cell-bg: #fff;
+            --cell-border: #bdc3c7;
+            --correct-bg: #27ae60;
+            --correct-text: #fff;
+            --wrong-bg: #c0392b;
+            --wrong-text: #fff;
         }
 
         * { box-sizing: border-box; }
@@ -42,253 +46,265 @@
             display: flex; flex-direction: column; align-items: center;
         }
 
-        /* --- HEADER PREMIUM --- */
+        /* --- HEADER --- */
         header {
-            text-align: center; margin-bottom: 30px;
-            background: white; padding: 20px 50px;
-            border-radius: 30px; 
-            box-shadow: 0 10px 30px rgba(108, 92, 231, 0.1);
-            border-bottom: 5px solid var(--primary);
-            max-width: 1000px; width: 100%; position: relative;
+            background: var(--card-bg); padding: 20px 40px; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); text-align: center;
+            width: 100%; max-width: 1200px; margin-bottom: 30px;
+            border-bottom: 5px solid var(--accent); position: relative;
         }
 
-        header h1 { 
-            color: var(--primary); margin: 0; font-weight: 800; font-size: 2rem; 
-            text-transform: uppercase; letter-spacing: 1px;
-        }
-        .subtitle { color: var(--text-light); font-weight: 600; margin-top: 5px; }
+        header h1 { margin: 0; color: var(--primary); font-size: 2rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .subtitle { color: var(--text-light); font-weight: 600; margin-top: 5px; font-size: 1rem; }
 
         .btn-print {
             position: absolute; top: 25px; right: 30px;
             background: transparent; border: 2px solid var(--primary); color: var(--primary);
-            padding: 8px 20px; border-radius: 50px; font-weight: 700; cursor: pointer; 
-            transition: all 0.3s ease;
+            padding: 8px 20px; border-radius: 30px; font-weight: 700; cursor: pointer; transition: 0.3s;
         }
-        .btn-print:hover { background: var(--primary); color: white; transform: translateY(-2px); }
+        .btn-print:hover { background: var(--primary); color: white; }
 
-        /* --- CONTROL BAR --- */
-        .controls-wrapper {
-            background: white; padding: 15px 30px; border-radius: 20px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05); margin-bottom: 30px;
+        /* --- CONTROL PANEL --- */
+        .control-panel {
+            width: 100%; max-width: 1200px; background: var(--card-bg);
+            padding: 20px; border-radius: 15px; margin-bottom: 30px;
             display: flex; gap: 20px; align-items: center; flex-wrap: wrap;
-            border: 1px solid #eee;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
         }
 
+        .select-wrapper { flex: 1; min-width: 300px; position: relative; }
         select {
-            padding: 12px 20px; border-radius: 12px; border: 2px solid #dfe6e9;
+            width: 100%; padding: 15px 20px; border-radius: 10px; border: 2px solid #dfe6e9;
             font-family: inherit; font-size: 1rem; font-weight: 700; color: var(--text-main);
-            cursor: pointer; min-width: 300px; transition: 0.3s; background: #fff;
+            background: white; cursor: pointer; appearance: none;
         }
-        select:focus { border-color: var(--primary); outline: none; }
+        /* Icone da seta customizado via CSS pure */
+        .select-wrapper::after {
+            content: '▼'; font-size: 0.8rem; color: var(--primary);
+            position: absolute; right: 20px; top: 50%; transform: translateY(-50%); pointer-events: none;
+        }
 
-        .btn-action {
-            padding: 12px 25px; border-radius: 12px; border: none; 
-            font-weight: 800; cursor: pointer; transition: all 0.3s;
-            color: white; font-size: 0.95rem; display: flex; align-items: center; gap: 8px;
+        .btn-game {
+            padding: 12px 25px; border-radius: 10px; border: none; cursor: pointer;
+            font-weight: 800; font-size: 0.95rem; color: white; display: flex; align-items: center; gap: 8px;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-        .btn-action:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.15); }
+        .btn-game:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         
-        .btn-check { background: var(--correct); }
-        .btn-answers { background: var(--accent); color: #fff; } /* Botão Gabarito */
-        .btn-reset { background: var(--text-light); }
+        .btn-check { background: #27ae60; }
+        .btn-answers { background: #f39c12; }
+        .btn-reset { background: #95a5a6; }
+        .btn-new { background: var(--primary); }
 
-        /* --- GAME LAYOUT (GRID + PISTAS) --- */
-        .game-board {
-            display: grid; grid-template-columns: auto 350px; gap: 40px;
-            width: 100%; max-width: 1200px; align-items: start;
+        /* --- GAME BOARD LAYOUT --- */
+        .game-layout {
+            display: grid; grid-template-columns: 2fr 1fr; gap: 30px;
+            width: 100%; max-width: 1300px;
         }
 
-        /* 1. O GRID */
-        .grid-container {
-            background: var(--primary); padding: 10px; border-radius: 15px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            overflow: auto; display: flex; justify-content: center;
+        /* --- THE GRID --- */
+        .grid-wrapper {
+            background: var(--primary); padding: 15px; border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: auto; display: flex; justify-content: center; align-items: center;
+            min-height: 500px; position: relative;
         }
 
-        .crossword-grid {
-            display: grid; gap: 1px; 
-            background: var(--cell-blocked); border: 5px solid var(--cell-blocked);
+        #crosswordGrid {
+            display: grid; gap: 2px;
+            /* Grid dinâmico definido via JS */
         }
 
         .cell {
             width: var(--cell-size); height: var(--cell-size);
-            background: var(--cell-blocked);
-            position: relative;
+            background: transparent; position: relative;
         }
 
-        .cell.active { background: var(--cell-bg); }
+        .cell.active { background: var(--cell-bg); border-radius: 4px; }
 
         .cell input {
             width: 100%; height: 100%; border: none; text-align: center;
             font-family: 'Quicksand', sans-serif; font-weight: 800; font-size: 1.1rem;
             text-transform: uppercase; color: var(--text-main); background: transparent;
-            padding: 0; outline: none; cursor: text; caret-color: var(--primary);
+            padding: 0; outline: none; cursor: pointer; border-radius: 4px;
         }
         
-        /* Foco e Estados */
-        .cell input:focus { background: #e3f2fd; }
-        .cell.correct input { color: var(--correct); background: #e0f7fa; }
-        .cell.wrong input { color: var(--wrong); background: #ffebee; animation: shake 0.3s; }
+        .cell input:focus { background: #dff9fb; box-shadow: inset 0 0 0 2px var(--accent); }
+        
+        .cell.correct input { background: var(--correct-bg); color: var(--correct-text); }
+        .cell.wrong input { background: var(--wrong-bg); color: var(--wrong-text); animation: shake 0.4s; }
 
-        .cell-number {
-            position: absolute; top: 2px; left: 3px;
-            font-size: 0.65rem; color: var(--primary); pointer-events: none; font-weight: 800;
+        .cell-num {
+            position: absolute; top: 1px; left: 2px; font-size: 9px;
+            color: var(--primary); font-weight: 800; pointer-events: none;
         }
 
-        /* 2. AS PISTAS */
+        /* Loading Overlay */
+        .loading-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(44, 62, 80, 0.9); z-index: 10; border-radius: 15px;
+            display: none; flex-direction: column; justify-content: center; align-items: center; color: white;
+        }
+        .spinner {
+            width: 40px; height: 40px; border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid var(--accent); border-radius: 50%;
+            animation: spin 1s linear infinite; margin-bottom: 15px;
+        }
+
+        /* --- CLUES PANEL --- */
         .clues-panel {
-            background: white; border-radius: 20px; overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05); display: flex; flex-direction: column;
-            height: 600px; /* Altura fixa com scroll interno */
+            background: white; border-radius: 15px; padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); height: 600px;
+            display: flex; flex-direction: column;
         }
 
-        .clues-header {
-            background: var(--primary); color: white; padding: 15px; text-align: center;
-            font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+        .clues-tabs { display: flex; border-bottom: 2px solid #ecf0f1; margin-bottom: 15px; }
+        .tab-btn {
+            flex: 1; padding: 10px; border: none; background: none; cursor: pointer;
+            font-weight: 800; color: var(--text-light); border-bottom: 3px solid transparent;
+            transition: 0.3s;
         }
+        .tab-btn.active { color: var(--primary); border-color: var(--primary); }
 
-        .clues-content {
-            padding: 20px; overflow-y: auto; flex: 1;
-        }
+        .clues-content { flex: 1; overflow-y: auto; padding-right: 5px; }
         
-        /* Scrollbar estilizada */
-        .clues-content::-webkit-scrollbar { width: 8px; }
+        /* Scrollbar */
+        .clues-content::-webkit-scrollbar { width: 6px; }
         .clues-content::-webkit-scrollbar-track { background: #f1f1f1; }
-        .clues-content::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+        .clues-content::-webkit-scrollbar-thumb { background: #bdc3c7; border-radius: 10px; }
 
-        .clue-group-title {
-            color: var(--primary); border-bottom: 2px solid #eee; margin: 15px 0 10px 0;
-            padding-bottom: 5px; font-weight: 800; display: flex; align-items: center; gap: 8px;
-        }
-        
-        .clue-list { list-style: none; padding: 0; margin: 0; }
-        
         .clue-item {
-            margin-bottom: 12px; font-size: 0.9rem; line-height: 1.4; color: var(--text-light);
-            cursor: pointer; padding: 8px; border-radius: 8px; transition: 0.2s; border-left: 3px solid transparent;
+            padding: 8px 10px; border-radius: 8px; margin-bottom: 8px; cursor: pointer;
+            font-size: 0.9rem; line-height: 1.4; color: var(--text-main); transition: 0.2s;
+            border-left: 3px solid transparent;
         }
-        .clue-item:hover { background: #f8f9fa; border-left-color: var(--accent); color: var(--text-main); }
-        .clue-item strong { color: var(--primary); margin-right: 5px; font-size: 1rem; }
+        .clue-item:hover { background: #f7f9fa; border-left-color: var(--accent); }
+        .clue-item.highlight { background: #e0f2f1; border-left-color: var(--correct-bg); }
+        .clue-item strong { color: var(--primary); margin-right: 5px; }
 
-        /* --- MODAL DE RESPOSTAS (CHEAT SHEET) --- */
-        .modal-overlay {
+        /* --- ANSWERS MODAL --- */
+        .modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); z-index: 1000; display: none;
-            justify-content: center; align-items: center; backdrop-filter: blur(5px);
+            background: rgba(0,0,0,0.5); backdrop-filter: blur(5px);
+            z-index: 1000; display: none; align-items: center; justify-content: center;
         }
-        .modal-content {
-            background: white; width: 90%; max-width: 600px; border-radius: 20px;
-            padding: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.2);
-            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            max-height: 80vh; overflow-y: auto;
+        .modal-box {
+            background: white; width: 90%; max-width: 800px; height: 80vh;
+            border-radius: 20px; padding: 30px; box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            display: flex; flex-direction: column; animation: slideUp 0.3s ease;
         }
-        .modal-header {
-            display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 2px solid #f0f0f0; padding-bottom: 15px; margin-bottom: 20px;
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .modal-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-light); }
+        
+        .answers-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px;
+            overflow-y: auto; flex: 1; padding: 10px;
         }
-        .modal-title { font-size: 1.5rem; font-weight: 800; color: var(--text-main); }
-        .btn-close {
-            background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #b2bec3; transition: 0.2s;
+        .answer-card {
+            background: #f8f9fa; padding: 15px; border-radius: 10px; border: 1px solid #eee;
         }
-        .btn-close:hover { color: var(--wrong); transform: rotate(90deg); }
+        .ans-term { font-weight: 800; color: var(--correct-bg); display: block; margin-bottom: 5px; }
+        .ans-def { font-size: 0.85rem; color: var(--text-light); }
 
-        .answer-list {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 15px;
-        }
-        .ans-item {
-            background: #f8f9fa; padding: 10px; border-radius: 8px; border: 1px solid #eee;
-            font-size: 0.9rem;
-        }
-        .ans-word { font-weight: 800; color: var(--correct); display: block; }
-        .ans-def { font-size: 0.8rem; color: #636e72; margin-top: 3px; }
+        /* Keyframes */
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(5px); } 75% { transform: translateX(-5px); } }
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-        /* Animações */
-        @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(5px); } 75% { transform: translateX(-5px); } 100% { transform: translateX(0); } }
-        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-
-        /* Responsividade */
+        /* Responsive */
         @media (max-width: 900px) {
-            .game-board { grid-template-columns: 1fr; }
-            .clues-panel { height: auto; max-height: 400px; }
+            .game-layout { grid-template-columns: 1fr; }
+            .grid-wrapper { min-height: 400px; }
+            .clues-panel { height: 400px; }
             .btn-print span { display: none; }
         }
 
-        /* --- IMPRESSÃO OTIMIZADA --- */
+        /* Print */
         @media print {
-            body { background: white; padding: 0; }
-            header button, .controls-wrapper { display: none !important; }
-            .game-board { display: block; }
-            .grid-container { box-shadow: none; padding: 0; background: transparent; }
-            .crossword-grid { border: 2px solid #000; background: #000; }
-            .cell { background: #000; }
-            .cell.active { background: white !important; }
-            .cell input { color: transparent !important; } /* Oculta respostas */
-            .cell-number { color: black; font-size: 8px; }
-            .clues-panel { box-shadow: none; border: 1px solid #ccc; height: auto; overflow: visible; margin-top: 20px; }
-            .clues-header { background: #eee; color: #000; border-bottom: 1px solid #000; }
-            .clue-group-title { color: #000; border-color: #000; }
+            header button, .control-panel, .btn-back-home { display: none !important; }
+            .game-layout { display: block; }
+            .grid-wrapper { box-shadow: none; padding: 0; background: transparent; }
+            .cell { border: 1px solid #000; }
+            .cell input { color: transparent !important; } /* Esconde respostas */
+            .clues-panel { box-shadow: none; height: auto; margin-top: 30px; }
+            .clues-content { overflow: visible; }
         }
     </style>
 </head>
 <body>
 
-    <header data-aos="fade-down">
-        <button class="btn-print" onclick="window.print()"><i class="fa-solid fa-print"></i> <span>Imprimir Vazio</span></button>
-        <h1>Cruzadinha Terapêutica</h1>
-        <div class="subtitle">Exercício Cognitivo: Consolidação de Conceitos</div>
+    <header>
+        <button class="btn-print" onclick="window.print()"><i class="fa-solid fa-print"></i> <span>Imprimir</span></button>
+        <h1>Psico-Cruzada DSM-5</h1>
+        <div class="subtitle">Neurodesenvolvimento, Psicopatologia & Terapia Cognitiva</div>
     </header>
 
-    <div class="controls-wrapper" data-aos="fade-up">
-        <label><i class="fa-solid fa-layer-group"></i> Selecione o Tema:</label>
-        <select id="levelSelect" onchange="loadLevel()">
-            <option value="ansiedade">Nível 1: Ansiedade & Pânico (DSM-5)</option>
-            <option value="depressao">Nível 2: Depressão & Humor</option>
-            <option value="autoestima">Nível 3: Autoestima & Self</option>
-            <option value="crencas">Nível 4: Crenças Centrais (TCC)</option>
-        </select>
-        
-        <div style="flex:1"></div> <button class="btn-action btn-check" onclick="checkAnswers()">
-            <i class="fa-solid fa-check-double"></i> Corrigir
+    <div class="control-panel">
+        <div class="select-wrapper">
+            <select id="categorySelect" onchange="generateGame()">
+                <option value="neuro">1. Neurodesenvolvimento (TDAH/TEA)</option>
+                <option value="psicotico">2. Espectro da Esquizofrenia</option>
+                <option value="bipolar">3. Bipolar & Humor</option>
+                <option value="ansiedade">4. Transtornos de Ansiedade</option>
+                <option value="toc">5. TOC & Relacionados</option>
+                <option value="trauma">6. Trauma & Estresse (TEPT)</option>
+                <option value="alimentar">7. Transtornos Alimentares</option>
+                <option value="sono">8. Sono-Vigília</option>
+                <option value="personalidade">9. Personalidade (Clusters A, B, C)</option>
+                <option value="substancias">10. Uso de Substâncias</option>
+                <option value="neurocog">11. Neurocognitivos (Demências)</option>
+                <option value="burnout">12. Burnout & Trabalho</option>
+                <option value="tcc">13. Conceitos TCC (Bônus)</option>
+            </select>
+        </div>
+
+        <button class="btn-game btn-new" onclick="generateGame()">
+            <i class="fa-solid fa-shuffle"></i> Novo Jogo
         </button>
         
-        <button class="btn-action btn-answers" onclick="openAnswers()">
+        <button class="btn-game btn-check" onclick="checkGame()">
+            <i class="fa-solid fa-check"></i> Verificar
+        </button>
+        
+        <button class="btn-game btn-answers" onclick="showAnswers()">
             <i class="fa-solid fa-key"></i> Gabarito
         </button>
         
-        <button class="btn-action btn-reset" onclick="resetGame()">
-            <i class="fa-solid fa-rotate-right"></i>
+        <button class="btn-game btn-reset" onclick="resetGrid()">
+            <i class="fa-solid fa-eraser"></i> Limpar
         </button>
     </div>
 
-    <div class="game-board">
-        <div class="grid-container" data-aos="zoom-in">
-            <div id="gridWrapper" class="crossword-grid">
-                </div>
+    <div class="game-layout">
+        
+        <div class="grid-wrapper">
+            <div class="loading-overlay" id="loading">
+                <div class="spinner"></div>
+                <span>Gerando Layout...</span>
+            </div>
+            <div id="crosswordGrid"></div>
         </div>
 
-        <div class="clues-panel" data-aos="fade-left">
-            <div class="clues-header">
-                <i class="fa-solid fa-list"></i> Pistas
+        <div class="clues-panel">
+            <div class="clues-tabs">
+                <button class="tab-btn active" onclick="switchTab('H')">Horizontais</button>
+                <button class="tab-btn" onclick="switchTab('V')">Verticais</button>
             </div>
             <div class="clues-content">
-                <div class="clue-group-title"><i class="fa-solid fa-arrow-right"></i> Horizontais</div>
-                <ul class="clue-list" id="cluesAcross"></ul>
-                
-                <div class="clue-group-title"><i class="fa-solid fa-arrow-down"></i> Verticais</div>
-                <ul class="clue-list" id="cluesDown"></ul>
+                <div id="listH"></div>
+                <div id="listV" style="display:none;"></div>
             </div>
         </div>
+
     </div>
 
-    <div class="modal-overlay" id="answerModal">
-        <div class="modal-content">
+    <div class="modal" id="modalAnswers">
+        <div class="modal-box">
             <div class="modal-header">
-                <div class="modal-title"><i class="fa-solid fa-unlock"></i> Gabarito do Nível</div>
-                <button class="btn-close" onclick="closeAnswers()"><i class="fa-solid fa-xmark"></i></button>
+                <h2 style="margin:0; color:var(--primary);">Gabarito Completo</h2>
+                <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <p style="margin-bottom:20px; color:#e17055; font-weight:bold;">Atenção: Use apenas para conferência final!</p>
-            <div class="answer-list" id="answerListContent">
-                </div>
+            <div class="answers-grid" id="modalList"></div>
         </div>
     </div>
 
@@ -298,213 +314,442 @@
         </a>
     </center>
 
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    
     <script>
-        AOS.init();
-
-        // ==========================================
-        // 🧠 MOTOR DE DADOS DO JOGO
-        // ==========================================
-        
-        const levels = {
-            // NÍVEL 1: ANSIEDADE
-            ansiedade: {
-                cols: 13, rows: 13,
-                words: [
-                    { term: "RESPIRACAO", start: [1, 1], dir: "H", clue: "Técnica fisiológica fundamental para reduzir a ativação do sistema nervoso." },
-                    { term: "EVITACAO", start: [1, 2], dir: "V", clue: "Comportamento de fugir de situações temidas, que mantém a ansiedade." },
-                    { term: "PANICO", start: [6, 0], dir: "H", clue: "Ataque súbito de medo intenso com sintomas físicos severos." },
-                    { term: "CATASTROFE", start: [0, 6], dir: "V", clue: "Distorção cognitiva: prever o pior cenário possível." },
-                    { term: "FUTURO", start: [3, 6], dir: "H", clue: "Tempo verbal onde vive a mente ansiosa ('E se...?')." },
-                    { term: "TAG", start: [3, 8], dir: "V", clue: "Sigla para Transtorno de Ansiedade Generalizada." },
-                    { term: "TREMOR", start: [9, 6], dir: "H", clue: "Sintoma físico comum nas mãos ou pernas durante a ansiedade." },
-                    { term: "MEDO", start: [8, 9], dir: "V", clue: "Emoção básica de proteção, mas desproporcional na ansiedade." },
-                    { term: "SUDORESE", start: [5, 4], dir: "V", clue: "Produção excessiva de suor, sintoma físico." },
-                    { term: "AGORA", start: [11, 7], dir: "H", clue: "Focar no momento presente (Mindfulness) combate a ansiedade." }
-                ]
-            },
-            
-            // NÍVEL 2: DEPRESSÃO
-            depressao: {
-                cols: 14, rows: 14,
-                words: [
-                    { term: "ANEDONIA", start: [2, 3], dir: "H", clue: "Incapacidade de sentir prazer em atividades antes agradáveis." },
-                    { term: "CULPA", start: [0, 5], dir: "V", clue: "Sentimento de responsabilidade excessiva e injustificada." },
-                    { term: "INSÓNIA", start: [2, 12], dir: "V", clue: "Dificuldade para dormir, sintoma comum." },
-                    { term: "APATIA", start: [5, 1], dir: "H", clue: "Falta de motivação, indiferença afetiva." },
-                    { term: "ATIVACAO", start: [5, 1], dir: "V", clue: "Técnica comportamental de 'fazer para sentir' (___ Comportamental)." },
-                    { term: "ISOLAMENTO", start: [8, 0], dir: "H", clue: "Afastamento do convívio social." },
-                    { term: "FADIGA", start: [1, 9], dir: "V", clue: "Cansaço extremo sem causa física aparente." },
-                    { term: "LIBIDO", start: [10, 6], dir: "H", clue: "Perda do desejo sexual." },
-                    { term: "TRISTEZA", start: [4, 7], dir: "V", clue: "Emoção base, mas persistente e profunda na depressão." },
-                    { term: "ROTINA", start: [12, 2], dir: "H", clue: "Estrutura diária que ajuda a regular o humor." }
-                ]
-            },
-
-            // NÍVEL 3: AUTOESTIMA
-            autoestima: {
-                cols: 15, rows: 12,
-                words: [
-                    { term: "AUTOACEITACAO", start: [1, 1], dir: "H", clue: "Reconhecer e abraçar quem você é, com qualidades e defeitos." },
-                    { term: "COMPARACAO", start: [1, 5], dir: "V", clue: "Hábito tóxico de medir seu valor pela régua do outro." },
-                    { term: "LIMITES", start: [5, 4], dir: "H", clue: "Saber dizer 'não' é uma forma de estabelecer..." },
-                    { term: "ASSERTIVO", start: [4, 9], dir: "V", clue: "Estilo de comunicação que respeita a si e ao outro." },
-                    { term: "MERITO", start: [8, 2], dir: "H", clue: "Sentimento de que você merece coisas boas." },
-                    { term: "IMAGEM", start: [6, 2], dir: "V", clue: "Como você se vê (Auto___)." },
-                    { term: "ELOGIO", start: [3, 9], dir: "H", clue: "Reconhecimento externo que devemos aprender a receber." },
-                    { term: "RESPEITO", start: [8, 4], dir: "V", clue: "Tratar a si mesmo com dignidade." },
-                    { term: "CRITICA", start: [10, 8], dir: "H", clue: "Voz interna que julga e diminui (Auto___)." },
-                    { term: "VALOR", start: [0, 7], dir: "V", clue: "O que você tem intrinsecamente, não pelo que faz." }
-                ]
-            },
-
-            // NÍVEL 4: CRENÇAS TCC
-            crencas: {
-                cols: 15, rows: 15,
-                words: [
-                    { term: "CRENCAS", start: [2, 2], dir: "H", clue: "Ideias profundas e rígidas sobre si, o mundo e o futuro." },
-                    { term: "CENTRAL", start: [2, 2], dir: "V", clue: "Tipo de crença mais profunda (o 'núcleo')." },
-                    { term: "REGRAS", start: [5, 1], dir: "H", clue: "Pressupostos do tipo 'Se eu fizer isso, então...'" },
-                    { term: "DESAMOR", start: [0, 8], dir: "V", clue: "Categoria de crença: 'Eu não sou amável'." },
-                    { term: "DESAMPARO", start: [8, 0], dir: "H", clue: "Categoria de crença: 'Eu sou incompetente/fraco'." },
-                    { term: "AUTOMATICO", start: [4, 6], dir: "V", clue: "Tipo de pensamento que surge rápido e sem controle." },
-                    { term: "VALIA", start: [10, 6], dir: "H", clue: "Crença de des___: 'Eu não tenho valor'." },
-                    { term: "EVIDENCIA", start: [1, 12], dir: "V", clue: "O que buscamos para contestar um pensamento disfuncional." },
-                    { term: "SOCRATICO", start: [13, 3], dir: "H", clue: "Questionamento usado para desafiar pensamentos." },
-                    { term: "COPING", start: [7, 8], dir: "V", clue: "Estratégia usada para lidar com a ativação da crença." }
-                ]
-            }
+        // ============================================
+        // 📚 BANCO DE DADOS (DATABASE)
+        // ============================================
+        const wordDatabase = {
+            neuro: [
+                {t:"HIPERFOCO", d:"Estado de concentração intensa comum no TDAH."},
+                {t:"ECOLALIA", d:"Repetição involuntária de palavras (comum no TEA)."},
+                {t:"DESATENCAO", d:"Dificuldade em manter o foco em tarefas repetitivas."},
+                {t:"IMPULSIVIDADE", d:"Agir sem pensar nas consequências."},
+                {t:"SENSORIAL", d:"Hipersensibilidade a luz, som ou toque no autismo."},
+                {t:"ESTEREOTIPIA", d:"Movimentos repetitivos (ex: balançar as mãos)."},
+                {t:"EXECUTIVAS", d:"Funções mentais prejudicadas no TDAH (planejamento)."},
+                {t:"DOPAMINA", d:"Neurotransmissor associado ao sistema de recompensa."},
+                {t:"GENETICA", d:"Fator de risco biológico predominante nestes transtornos."},
+                {t:"ROTINA", d:"Necessidade de rigidez e previsão no TEA."}
+            ],
+            psicotico: [
+                {t:"DELIRIO", d:"Crença fixa e falsa que não muda diante de evidências."},
+                {t:"ALUCINACAO", d:"Percepção sensorial sem estímulo externo (ex: ouvir vozes)."},
+                {t:"CATATONIA", d:"Imobilidade motora ou agitação excessiva."},
+                {t:"NEGATIVOS", d:"Sintomas como apatia e falta de afeto na esquizofrenia."},
+                {t:"PARANOIA", d:"Sentimento de perseguição constante."},
+                {t:"DESORGANIZADO", d:"Tipo de pensamento ou fala sem nexo."},
+                {t:"PRODROMO", d:"Fase inicial com sintomas leves antes do surto."},
+                {t:"SURTO", d:"Episódio agudo de desconexão com a realidade."},
+                {t:"AFETO", d:"Pode estar embotado ou plano nestes transtornos."},
+                {t:"REALIDADE", d:"O que é perdido durante a psicose."}
+            ],
+            bipolar: [
+                {t:"MANIA", d:"Fase de euforia, energia excessiva e grandiosidade."},
+                {t:"DEPRESSAO", d:"Fase de baixa energia e tristeza profunda."},
+                {t:"CICLOTIMIA", d:"Forma mais leve e crônica de oscilação de humor."},
+                {t:"LITIO", d:"Medicamento estabilizador de humor clássico."},
+                {t:"MISTO", d:"Episódio com sintomas de mania e depressão simultâneos."},
+                {t:"HIPOMANIA", d:"Mania menos severa, sem prejuízo social grave."},
+                {t:"SONO", d:"Necessidade reduzida durante a fase maníaca."},
+                {t:"COMPRAS", d:"Comportamento de risco comum na euforia."},
+                {t:"OSCILACAO", d:"Mudança entre polos de humor."},
+                {t:"SUICIDIO", d:"Risco elevado que requer atenção constante."}
+            ],
+            ansiedade: [
+                {t:"GENERALIZADA", d:"TAG: Preocupação excessiva com tudo."},
+                {t:"PANICO", d:"Ataque súbito de medo intenso e sintomas físicos."},
+                {t:"AGORAFOBIA", d:"Medo de lugares onde a fuga seria difícil."},
+                {t:"SOCIAL", d:"Medo intenso de julgamento em situações públicas."},
+                {t:"SEPARACAO", d:"Ansiedade ao afastar-se de figuras de apego."},
+                {t:"MUTISMO", d:"Incapacidade de falar em situações específicas."},
+                {t:"EVITACAO", d:"Comportamento que mantém a ansiedade a longo prazo."},
+                {t:"TAQUICARDIA", d:"Sintoma físico: coração acelerado."},
+                {t:"CATASTROFE", d:"Pensar que o pior cenário vai acontecer."},
+                {t:"FUTURO", d:"Tempo verbal onde a ansiedade reside."}
+            ],
+            toc: [
+                {t:"OBSESSAO", d:"Pensamento intrusivo, recorrente e indesejado."},
+                {t:"COMPULSAO", d:"Comportamento repetitivo para aliviar a ansiedade."},
+                {t:"RITUAL", d:"Sequência rígida de ações (ex: lavar mãos)."},
+                {t:"DUVIDA", d:"Sentimento constante de incerteza ('Fechei a porta?')."},
+                {t:"SIMETRIA", d:"Necessidade de alinhar objetos perfeitamente."},
+                {t:"CONTAMINACAO", d:"Medo excessivo de sujeira ou germes."},
+                {t:"ACUMULACAO", d:"Dificuldade em descartar objetos (Hoarding)."},
+                {t:"TRICOTILOMANIA", d:"Arrancar os próprios cabelos/pelos."},
+                {t:"ALIVIO", d:"Sensação temporária após realizar a compulsão."},
+                {t:"INTRUSIVO", d:"Adjetivo para o pensamento que invade a mente."}
+            ],
+            trauma: [
+                {t:"FLASHBACK", d:"Reviver o trauma como se estivesse acontecendo agora."},
+                {t:"TEPT", d:"Transtorno de Estresse Pós-Traumático."},
+                {t:"DISSOCIACAO", d:"Desconexão da realidade ou do próprio corpo."},
+                {t:"PESADELO", d:"Sonho perturbador recorrente sobre o evento."},
+                {t:"GATILHO", d:"Estímulo que dispara a memória traumática."},
+                {t:"HIPERVIGILANCIA", d:"Estado de alerta constante para perigos."},
+                {t:"EVITACAO", d:"Fugir de locais/pessoas que lembram o trauma."},
+                {t:"APEGO", d:"Estilo de vínculo afetado por traumas na infância."},
+                {t:"ESTRESSE", d:"Reação aguda a eventos ameaçadores."},
+                {t:"RESILIENCIA", d:"Capacidade de recuperar-se após o trauma."}
+            ],
+            alimentar: [
+                {t:"ANOREXIA", d:"Restrição alimentar severa e distorção de imagem."},
+                {t:"BULIMIA", d:"Compulsão seguida de purgação (vômito/laxante)."},
+                {t:"COMPULSAO", d:"Ingestão exagerada de comida sem purgação."},
+                {t:"PICA", d:"Ingestão de substâncias não nutritivas (terra, giz)."},
+                {t:"IMAGEM", d:"Percepção distorcida do próprio corpo."},
+                {t:"CONTROLE", d:"Tema central psicológico na anorexia."},
+                {t:"IMC", d:"Índice de Massa Corporal (muito baixo na anorexia)."},
+                {t:"PURGACAO", d:"Método compensatório para não ganhar peso."},
+                {t:"RUMINACAO", d:"Regurgitação repetida do alimento."},
+                {t:"CULPA", d:"Sentimento comum após episódio de compulsão."}
+            ],
+            sono: [
+                {t:"INSONIA", d:"Dificuldade para iniciar ou manter o sono."},
+                {t:"APNEIA", d:"Parada respiratória durante o sono."},
+                {t:"NARCOLEPSIA", d:"Ataques súbitos de sono durante o dia."},
+                {t:"HIGIENE", d:"Conjunto de hábitos para dormir melhor."},
+                {t:"MELATONINA", d:"Hormônio que regula o ciclo sono-vigília."},
+                {t:"CIRCADIANO", d:"Ritmo biológico de aproximadamente 24 horas."},
+                {t:"PARASSONIA", d:"Eventos anormais como sonambulismo."},
+                {t:"REM", d:"Fase do sono onde ocorrem os sonhos vívidos."},
+                {t:"TERROR", d:"Noturno: despertar com gritos e medo intenso."},
+                {t:"CANSACO", d:"Consequência diurna da má qualidade do sono."}
+            ],
+            personalidade: [
+                {t:"BORDERLINE", d:"Instabilidade emocional, medo de abandono, impulsividade."},
+                {t:"NARCISISTA", d:"Grandiosidade, necessidade de admiração, falta de empatia."},
+                {t:"ANTISSOCIAL", d:"Desrespeito pelas normas, leis e direitos alheios."},
+                {t:"PARANOIDE", d:"Desconfiança excessiva e suspeita dos outros."},
+                {t:"ESQUIZOIDE", d:"Desapego social e restrição emocional."},
+                {t:"HISTRIONICO", d:"Busca excessiva de atenção e emotividade."},
+                {t:"DEPENDENTE", d:"Necessidade excessiva de ser cuidado."},
+                {t:"EVITATIVA", d:"Inibição social e hipersensibilidade a críticas."},
+                {t:"RIGIDEZ", d:"Característica comum no transtorno obsessivo-compulsivo (TPOC)."},
+                {t:"CLUSTER", d:"Nome dado aos grupos A, B e C dos transtornos."}
+            ],
+            substancias: [
+                {t:"TOLERANCIA", d:"Necessidade de doses maiores para o mesmo efeito."},
+                {t:"ABSTINENCIA", d:"Sintomas físicos ao parar o uso da substância."},
+                {t:"CRAVING", d:"Fissura ou desejo intenso de usar."},
+                {t:"RECOMPENSA", d:"Sistema cerebral ativado pelas drogas."},
+                {t:"ALCOOL", d:"Depressor do sistema nervoso central muito comum."},
+                {t:"OPIOIDE", d:"Classe de drogas usada para dor, altamente viciante."},
+                {t:"CONTROLE", d:"Perda deste é critério fundamental do vício."},
+                {t:"OVERDOSE", d:"Intoxicação aguda que pode levar à morte."},
+                {t:"RECAIDA", d:"Retorno ao uso após período de sobriedade."},
+                {t:"DOPAMINA", d:"Neurotransmissor liberado no uso."}
+            ],
+            neurocog: [
+                {t:"ALZHEIMER", d:"Causa mais comum de demência, afeta memória recente."},
+                {t:"DEMENCIA", d:"Declínio cognitivo que interfere na independência."},
+                {t:"DELIRIUM", d:"Estado confusional agudo e flutuante."},
+                {t:"MEMORIA", d:"Função cognitiva geralmente a primeira a falhar."},
+                {t:"AFASIA", d:"Dificuldade na linguagem (fala ou compreensão)."},
+                {t:"AGNOSIA", d:"Incapacidade de reconhecer objetos ou rostos."},
+                {t:"EXECUCAO", d:"Perda da capacidade de planejar tarefas."},
+                {t:"VASCULAR", d:"Demência causada por AVCs ou problemas circulatórios."},
+                {t:"LEWY", d:"Demência com corpos de... (alucinações visuais)."},
+                {t:"IDADE", d:"Principal fator de risco para transtornos neurocognitivos."}
+            ],
+            burnout: [
+                {t:"EXAUSTAO", d:"Sentimento de estar drenado física e emocionalmente."},
+                {t:"CINISMO", d:"Despersonalização e atitude negativa com o trabalho."},
+                {t:"EFICACIA", d:"Sentimento de baixa realização profissional."},
+                {t:"TRABALHO", d:"Contexto exclusivo onde ocorre o Burnout (OMS)."},
+                {t:"ESTRESSE", d:"Crônico: a causa raiz do problema."},
+                {t:"LIMITES", d:"Necessidade de estabelecer... para prevenir."},
+                {t:"FERIAS", d:"Pausa necessária, mas nem sempre cura o burnout."},
+                {t:"AMBIENTE", d:"Se for tóxico, contribui para o adoecimento."},
+                {t:"VALORES", d:"Conflito entre os seus e os da empresa gera burnout."},
+                {t:"APOIO", d:"Social: fator de proteção importante."}
+            ],
+            tcc: [
+                {t:"CRENCA", d:"Ideia central e rígida sobre si mesmo ('Sou incapaz')."},
+                {t:"AUTOMATICO", d:"Pensamento rápido que surge diante de uma situação."},
+                {t:"EVIDENCIA", d:"Fatos que usamos para testar a validade do pensamento."},
+                {t:"DISTORCAO", d:"Erro de lógica mental (ex: catastrofização)."},
+                {t:"COMPORTAMENTO", d:"O que fazemos (C) em resposta ao pensamento (B)."},
+                {t:"EMOCAO", d:"O que sentimos (C) derivado da interpretação."},
+                {t:"SOCRATICO", d:"Questionamento usado para desafiar ideias."},
+                {t:"EXPOSICAO", d:"Técnica para vencer medos enfrentando-os."},
+                {t:"REGRA", d:"Suposição: 'Se eu fizer isso, então...'"},
+                {t:"ATIVACAO", d:"Técnica para combater a depressão."}
+            ]
         };
 
-        // VARIÁVEIS GLOBAIS
-        let currentLevel = null;
-        let solutionGrid = [];
-        let currentGridState = []; // Para controle de estado se necessário
+        // ============================================
+        // ⚙️ ENGINE DE GERAÇÃO (CROSSWORD GENERATOR)
+        // ============================================
+        
+        const GRID_SIZE = 15;
+        let gridArray = [];
+        let placedWords = [];
 
-        // ==========================================
-        // 🎮 LÓGICA DO JOGO
-        // ==========================================
+        function generateGame() {
+            const loading = document.getElementById('loading');
+            loading.style.display = 'flex';
 
-        function loadLevel() {
-            const themeKey = document.getElementById('levelSelect').value;
-            const data = levels[themeKey];
-            currentLevel = data;
-
-            // Elementos DOM
-            const gridEl = document.getElementById('gridWrapper');
-            const listH = document.getElementById('cluesAcross');
-            const listV = document.getElementById('cluesDown');
-
-            // Reset Visual
-            gridEl.innerHTML = '';
-            listH.innerHTML = '';
-            listV.innerHTML = '';
-            
-            // Configura Grid CSS
-            gridEl.style.gridTemplateColumns = `repeat(${data.cols}, var(--cell-size))`;
-
-            // Inicializa Matriz de Solução (Vazia)
-            solutionGrid = Array(data.rows).fill(null).map(() => Array(data.cols).fill(null));
-
-            // 1. Mapeia Palavras na Matriz de Solução
-            data.words.forEach((w, idx) => {
-                const num = idx + 1;
-                const [rStart, cStart] = w.start;
-
-                // Adiciona Pista na Lista
-                const li = document.createElement('li');
-                li.className = 'clue-item';
-                li.innerHTML = `<strong>${num}.</strong> ${w.clue}`;
-                li.onclick = () => highlightWord(num); // Feature futura: realçar no grid
+            // Pequeno delay para a UI atualizar
+            setTimeout(() => {
+                const category = document.getElementById('categorySelect').value;
+                const wordList = [...wordDatabase[category]]; // Copia para não alterar original
                 
-                if(w.dir === 'H') listH.appendChild(li);
-                else listV.appendChild(li);
-
-                // Preenche letras no grid virtual
-                for(let i=0; i < w.term.length; i++) {
-                    let r = rStart + (w.dir === 'V' ? i : 0);
-                    let c = cStart + (w.dir === 'H' ? i : 0);
-
-                    // Cria ou atualiza célula
-                    if(!solutionGrid[r][c]) {
-                        solutionGrid[r][c] = { char: w.term[i], num: (i===0 ? num : null) };
-                    } else {
-                        // Interseção: mantém char, se for início de outra, adiciona num
-                        if(i===0) solutionGrid[r][c].num = num;
+                // Tenta gerar um grid válido (tenta 10x se falhar)
+                let success = false;
+                for(let i=0; i<10; i++) {
+                    if(createGrid(wordList)) {
+                        success = true;
+                        break;
                     }
                 }
+
+                if(!success) {
+                    alert("Erro ao gerar um layout complexo. Tentando simplificar...");
+                    createGrid(wordList.slice(0, 6)); // Tenta com menos palavras
+                }
+
+                renderGrid();
+                renderClues();
+                renderAnswersModal();
+                loading.style.display = 'none';
+            }, 100);
+        }
+
+        function createGrid(words) {
+            // Reinicia
+            gridArray = Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(null));
+            placedWords = [];
+            
+            // Ordena palavras por tamanho (maiores primeiro para ser a "espinha dorsal")
+            words.sort((a, b) => b.t.length - a.t.length);
+
+            // Coloca a primeira palavra no meio (Horizontal)
+            const first = words[0];
+            const startRow = Math.floor(GRID_SIZE / 2);
+            const startCol = Math.floor((GRID_SIZE - first.t.length) / 2);
+            
+            if(!placeWord(first, startRow, startCol, 'H')) return false;
+
+            // Tenta colocar as outras
+            for (let i = 1; i < words.length; i++) {
+                const word = words[i];
+                findBestPosition(word);
+            }
+
+            // Filtra se conseguiu colocar pelo menos 5 palavras
+            return placedWords.length >= 5;
+        }
+
+        function findBestPosition(wordObj) {
+            const text = wordObj.t;
+            
+            // Embaralha tentativas para criar layouts diferentes
+            const potentialSpots = [];
+
+            // Percorre letras da palavra que queremos colocar
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+
+                // Procura esse char no grid já existente
+                for (let r = 0; r < GRID_SIZE; r++) {
+                    for (let c = 0; c < GRID_SIZE; c++) {
+                        if (gridArray[r][c] === char) {
+                            // Achou intersecção. Verifica se é possível cruzar.
+                            // Se a letra no grid é parte de uma palavra H, tentamos colocar V. E vice-versa.
+                            
+                            // Tentativa Vertical
+                            if (canPlace(text, r - i, c, 'V')) {
+                                potentialSpots.push({r: r-i, c: c, dir: 'V'});
+                            }
+                            // Tentativa Horizontal
+                            if (canPlace(text, r, c - i, 'H')) {
+                                potentialSpots.push({r: r, c: c-i, dir: 'H'});
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (potentialSpots.length > 0) {
+                // Pega uma aleatória válida
+                const spot = potentialSpots[Math.floor(Math.random() * potentialSpots.length)];
+                placeWord(wordObj, spot.r, spot.c, spot.dir);
+                return true;
+            }
+            return false;
+        }
+
+        function canPlace(word, row, col, dir) {
+            if (row < 0 || col < 0) return false;
+            if (dir === 'H' && col + word.length > GRID_SIZE) return false;
+            if (dir === 'V' && row + word.length > GRID_SIZE) return false;
+
+            // Verifica colisão e vizinhos
+            for (let i = 0; i < word.length; i++) {
+                let r = row + (dir === 'V' ? i : 0);
+                let c = col + (dir === 'H' ? i : 0);
+
+                const currentCell = gridArray[r][c];
+                
+                // Se célula já tem letra, tem que ser a MESMA letra (intersecção)
+                if (currentCell !== null && currentCell !== word[i]) return false;
+
+                // Verificação de vizinhos (não pode colar em outras palavras sem ser na intersecção)
+                // Se a célula está vazia, ela não pode ter vizinhos nas direções ortogonais
+                if (currentCell === null) {
+                    if (hasNeighbors(r, c, dir)) return false;
+                }
+            }
+            
+            // Verifica células antes e depois da palavra (não pode "emendar")
+            let beforeR = row - (dir === 'V' ? 1 : 0);
+            let beforeC = col - (dir === 'H' ? 1 : 0);
+            if(beforeR >= 0 && beforeC >= 0 && gridArray[beforeR][beforeC] !== null) return false;
+
+            let afterR = row + (dir === 'V' ? word.length : 0);
+            let afterC = col + (dir === 'H' ? word.length : 0);
+            if(afterR < GRID_SIZE && afterC < GRID_SIZE && gridArray[afterR][afterC] !== null) return false;
+
+            return true;
+        }
+
+        function hasNeighbors(r, c, dir) {
+            // Se estou colocando H, verifico vizinhos V (cima/baixo)
+            if(dir === 'H') {
+                if(r > 0 && gridArray[r-1][c] !== null) return true;
+                if(r < GRID_SIZE-1 && gridArray[r+1][c] !== null) return true;
+            } else {
+                if(c > 0 && gridArray[r][c-1] !== null) return true;
+                if(c < GRID_SIZE-1 && gridArray[r][c+1] !== null) return true;
+            }
+            return false;
+        }
+
+        function placeWord(wordObj, r, c, dir) {
+            for (let i = 0; i < wordObj.t.length; i++) {
+                let currR = r + (dir === 'V' ? i : 0);
+                let currC = c + (dir === 'H' ? i : 0);
+                gridArray[currR][currC] = wordObj.t[i];
+            }
+            
+            placedWords.push({
+                ...wordObj,
+                row: r, col: c, dir: dir, number: placedWords.length + 1
+            });
+            return true;
+        }
+
+        // ============================================
+        // 🎨 RENDERIZAÇÃO E UI
+        // ============================================
+
+        function renderGrid() {
+            const gridEl = document.getElementById('crosswordGrid');
+            gridEl.innerHTML = '';
+            gridEl.style.gridTemplateColumns = `repeat(${GRID_SIZE}, var(--cell-size))`;
+
+            // Mapa para colocar números
+            const numbersMap = {};
+            placedWords.forEach(w => {
+                const key = `${w.row},${w.col}`;
+                if(!numbersMap[key]) numbersMap[key] = w.number;
             });
 
-            // 2. Renderiza o HTML do Grid baseado na Matriz
-            for(let r=0; r < data.rows; r++) {
-                for(let c=0; c < data.cols; c++) {
-                    const cellData = solutionGrid[r][c];
+            for(let r=0; r<GRID_SIZE; r++) {
+                for(let c=0; c<GRID_SIZE; c++) {
+                    const char = gridArray[r][c];
                     const div = document.createElement('div');
                     
-                    if(cellData) {
+                    if(char) {
                         div.className = 'cell active';
+                        const num = numbersMap[`${r},${c}`] || '';
+                        
                         div.innerHTML = `
                             <input type="text" maxlength="1" 
                                 data-r="${r}" data-c="${c}" 
-                                onkeydown="handleNavigation(this, event)"
+                                data-char="${char}"
+                                onkeydown="handleNav(this, event)"
                                 oninput="this.value = this.value.toUpperCase()">
-                            ${cellData.num ? `<span class="cell-number">${cellData.num}</span>` : ''}
+                            ${num ? `<span class="cell-num">${num}</span>` : ''}
                         `;
                     } else {
-                        div.className = 'cell'; // Célula preta
+                        div.className = 'cell';
                     }
                     gridEl.appendChild(div);
                 }
             }
         }
 
-        // --- NAVEGAÇÃO INTELIGENTE ---
-        function handleNavigation(input, e) {
+        function renderClues() {
+            const listH = document.getElementById('listH');
+            const listV = document.getElementById('listV');
+            listH.innerHTML = ''; listV.innerHTML = '';
+
+            placedWords.forEach(w => {
+                const item = document.createElement('div');
+                item.className = 'clue-item';
+                item.innerHTML = `<strong>${w.number}.</strong> ${w.d}`;
+                item.onclick = () => highlightWord(w);
+
+                if(w.dir === 'H') listH.appendChild(item);
+                else listV.appendChild(item);
+            });
+            
+            // Ativa aba H por padrão
+            switchTab('H');
+        }
+
+        function switchTab(type) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-btn')[type === 'H' ? 0 : 1].classList.add('active');
+            
+            document.getElementById('listH').style.display = type === 'H' ? 'block' : 'none';
+            document.getElementById('listV').style.display = type === 'V' ? 'block' : 'none';
+        }
+
+        // --- NAVEGAÇÃO ---
+        function handleNav(input, e) {
             const r = parseInt(input.dataset.r);
             const c = parseInt(input.dataset.c);
-            
-            // Setas
-            if(e.key === "ArrowRight") focusCell(r, c+1);
-            if(e.key === "ArrowLeft") focusCell(r, c-1);
-            if(e.key === "ArrowDown") focusCell(r+1, c);
-            if(e.key === "ArrowUp") focusCell(r-1, c);
 
-            // Backspace (apaga e volta)
+            if(e.key.startsWith("Arrow")) {
+                e.preventDefault();
+                if(e.key === "ArrowRight") focusNext(r, c+1, 0, 1);
+                if(e.key === "ArrowLeft") focusNext(r, c-1, 0, -1);
+                if(e.key === "ArrowDown") focusNext(r+1, c, 1, 0);
+                if(e.key === "ArrowUp") focusNext(r-1, c, -1, 0);
+            }
+            
             if(e.key === "Backspace" && input.value === "") {
-                // Tenta voltar na horizontal primeiro, se não der, vertical
-                // Lógica simples: tenta esquerda, senão cima
-                if(!focusCell(r, c-1)) focusCell(r-1, c);
+                // Tenta voltar
+                if(!focusNext(r, c-1, 0, -1)) focusNext(r-1, c, -1, 0);
             }
         }
 
-        function focusCell(r, c) {
-            const nextInput = document.querySelector(`input[data-r="${r}"][data-c="${c}"]`);
-            if(nextInput) {
-                nextInput.focus();
+        function focusNext(r, c, dr, dc) {
+            // Procura a próxima célula válida na direção
+            // Lógica simples: tenta a célula imediata
+            const next = document.querySelector(`input[data-r="${r}"][data-c="${c}"]`);
+            if(next) {
+                next.focus();
                 return true;
             }
             return false;
         }
 
-        // --- VERIFICAÇÃO ---
-        function checkAnswers() {
+        function checkGame() {
             const inputs = document.querySelectorAll('.cell.active input');
             let allCorrect = true;
-            let filledCount = 0;
+            let filled = 0;
 
             inputs.forEach(inp => {
-                const r = inp.dataset.r;
-                const c = inp.dataset.c;
-                const correctChar = solutionGrid[r][c].char;
+                const correctChar = inp.dataset.char;
                 const userChar = inp.value.toUpperCase();
-
-                // Limpa estados
+                
                 inp.parentElement.classList.remove('correct', 'wrong');
 
                 if(userChar) {
-                    filledCount++;
+                    filled++;
                     if(userChar === correctChar) {
                         inp.parentElement.classList.add('correct');
                     } else {
@@ -512,57 +757,62 @@
                         allCorrect = false;
                     }
                 } else {
-                    allCorrect = false; // Se tem vazio, não tá 100% certo
+                    allCorrect = false;
                 }
             });
 
-            // Vitória
-            if(allCorrect && filledCount === inputs.length) {
-                confetti({
-                    particleCount: 150,
-                    spread: 70,
-                    origin: { y: 0.6 }
-                });
-                alert("Parabéns! Você completou a cruzadinha perfeitamente.");
+            if(allCorrect && filled === inputs.length) {
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+                alert("Parabéns! Você domina este tema!");
             }
         }
 
-        function resetGame() {
-            if(confirm("Deseja apagar tudo e recomeçar?")) {
-                const inputs = document.querySelectorAll('.cell.active input');
-                inputs.forEach(inp => {
-                    inp.value = '';
-                    inp.parentElement.classList.remove('correct', 'wrong');
+        function highlightWord(w) {
+            // Limpa highlights anteriores
+            document.querySelectorAll('.cell input').forEach(i => i.parentElement.style.background = '');
+            
+            // Foca na primeira letra
+            const first = document.querySelector(`input[data-r="${w.row}"][data-c="${w.col}"]`);
+            if(first) first.focus();
+        }
+
+        function resetGrid() {
+            if(confirm("Limpar todo o progresso?")) {
+                document.querySelectorAll('.cell input').forEach(i => {
+                    i.value = '';
+                    i.parentElement.classList.remove('correct', 'wrong');
                 });
             }
         }
 
-        // --- SISTEMA DE GABARITO ---
-        function openAnswers() {
-            if(!confirm("Tem certeza que deseja ver as respostas? Tente se desafiar primeiro!")) return;
-
-            const list = document.getElementById('answerListContent');
+        // --- GABARITO ---
+        function renderAnswersModal() {
+            const list = document.getElementById('modalList');
             list.innerHTML = '';
-
-            currentLevel.words.forEach((w, idx) => {
+            
+            // Ordena por número
+            placedWords.sort((a,b) => a.number - b.number).forEach(w => {
                 const div = document.createElement('div');
-                div.className = 'ans-item';
+                div.className = 'answer-card';
                 div.innerHTML = `
-                    <span class="ans-word">${idx+1}. ${w.term}</span>
-                    <span class="ans-def">${w.clue}</span>
+                    <span class="ans-term">${w.number}. ${w.t}</span>
+                    <span class="ans-def">${w.d}</span>
                 `;
                 list.appendChild(div);
             });
-
-            document.getElementById('answerModal').style.display = 'flex';
         }
 
-        function closeAnswers() {
-            document.getElementById('answerModal').style.display = 'none';
+        function showAnswers() {
+            if(confirm("Tem certeza que deseja ver as respostas?")) {
+                document.getElementById('modalAnswers').style.display = 'flex';
+            }
+        }
+        function closeModal() {
+            document.getElementById('modalAnswers').style.display = 'none';
         }
 
-        // Inicializa o jogo
-        loadLevel();
+        // Inicia o jogo
+        window.onload = generateGame;
 
     </script>
 </body>
