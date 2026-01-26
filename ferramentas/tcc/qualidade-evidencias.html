@@ -16,11 +16,16 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <style>
+        /* --- RESET E BASES --- */
+        * { box-sizing: border-box; }
+
         :root {
             --bg-color: #f0f8ff;
             --primary: #6c5ce7;
             --grade-a: #00b894; /* Verde */
+            --grade-b: #0984e3; /* Azul */
             --grade-c: #fdcb6e; /* Amarelo */
+            --grade-d: #e17055; /* Laranja */
             --grade-f: #d63031; /* Vermelho */
             --text: #2d3436;
             --card-bg: #ffffff;
@@ -42,7 +47,7 @@
             text-align: center; margin-bottom: 30px;
             background: white; padding: 20px 40px;
             border-radius: 20px; border: 3px dashed #636e72;
-            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
             max-width: 900px; width: 100%; position: relative;
         }
 
@@ -74,60 +79,66 @@
         .audit-panel {
             width: 100%; max-width: 900px;
             background: white; padding: 30px; border-radius: 25px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 40px;
             display: grid; grid-template-columns: 1fr 1fr; gap: 30px;
+            align-items: start; /* Importante para não esticar colunas estranhamente */
         }
 
-        .input-group { display: flex; flex-direction: column; gap: 10px; }
-        label { font-weight: 800; color: #636e72; font-size: 0.95rem; }
+        .input-group { display: flex; flex-direction: column; gap: 10px; height: 100%; }
+        label { font-weight: 800; color: #636e72; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; }
 
         textarea {
-            width: 100%; padding: 12px; border: 2px solid #dfe6e9; border-radius: 12px;
-            font-family: inherit; font-size: 1rem; resize: vertical; min-height: 100px;
-            transition: 0.3s; background: #fdfdfd;
+            width: 100%; padding: 15px; border: 2px solid #dfe6e9; border-radius: 12px;
+            font-family: inherit; font-size: 1rem; resize: vertical; 
+            transition: 0.3s; background: #fdfdfd; outline: none;
         }
-        textarea:focus { border-color: var(--primary); outline: none; background: white; }
+        
+        /* Ajuste fino: Textarea da esquerda mais alto para equilibrar com a direita */
+        #evidenceInput { min-height: 220px; }
+        #problemInput { min-height: 80px; }
+
+        textarea:focus { border-color: var(--primary); background: white; }
 
         /* Chips de Problemas */
-        .problem-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+        .problem-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 5px; }
         .chip {
-            background: #f1f2f6; padding: 6px 12px; border-radius: 20px; font-size: 0.8rem;
-            font-weight: 600; color: #636e72; cursor: pointer; transition: 0.2s; border: 1px solid transparent;
+            background: #f1f2f6; padding: 8px 12px; border-radius: 20px; font-size: 0.8rem;
+            font-weight: 700; color: #636e72; cursor: pointer; transition: 0.2s; border: 1px solid transparent;
         }
-        .chip:hover { background: #dfe6e9; color: #2d3436; }
+        .chip:hover { background: #dfe6e9; color: #2d3436; transform: translateY(-2px); }
         .chip.active { background: #ffeaa7; color: #d35400; border-color: #d35400; }
 
         /* Seletor de Nota */
-        .grade-selector { display: flex; justify-content: space-between; gap: 5px; margin-top: 5px; }
+        .grade-selector { display: flex; justify-content: space-between; gap: 8px; margin-top: 5px; flex-wrap: wrap; }
         .grade-btn {
-            flex: 1; padding: 10px; border: 2px solid #eee; border-radius: 10px;
+            flex: 1; min-width: 40px; padding: 12px 0; border: 2px solid #eee; border-radius: 12px;
             background: white; font-weight: 800; cursor: pointer; transition: 0.2s;
-            color: #b2bec3;
+            color: #b2bec3; font-size: 1rem;
         }
-        .grade-btn:hover { transform: translateY(-2px); }
+        .grade-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 10px rgba(0,0,0,0.1); }
         
         /* Cores das Notas */
         .grade-btn[data-val="A"] { border-color: var(--grade-a); color: var(--grade-a); }
-        .grade-btn[data-val="A"].selected { background: var(--grade-a); color: white; }
+        .grade-btn[data-val="A"].selected { background: var(--grade-a); color: white; box-shadow: 0 5px 15px rgba(0,184,148,0.3); }
         
-        .grade-btn[data-val="B"] { border-color: #0984e3; color: #0984e3; }
-        .grade-btn[data-val="B"].selected { background: #0984e3; color: white; }
+        .grade-btn[data-val="B"] { border-color: var(--grade-b); color: var(--grade-b); }
+        .grade-btn[data-val="B"].selected { background: var(--grade-b); color: white; box-shadow: 0 5px 15px rgba(9,132,227,0.3); }
 
         .grade-btn[data-val="C"] { border-color: var(--grade-c); color: var(--grade-c); }
-        .grade-btn[data-val="C"].selected { background: var(--grade-c); color: white; }
+        .grade-btn[data-val="C"].selected { background: var(--grade-c); color: white; box-shadow: 0 5px 15px rgba(253,203,110,0.3); }
 
-        .grade-btn[data-val="D"] { border-color: #e17055; color: #e17055; }
-        .grade-btn[data-val="D"].selected { background: #e17055; color: white; }
+        .grade-btn[data-val="D"] { border-color: var(--grade-d); color: var(--grade-d); }
+        .grade-btn[data-val="D"].selected { background: var(--grade-d); color: white; box-shadow: 0 5px 15px rgba(225,112,85,0.3); }
 
         .grade-btn[data-val="F"] { border-color: var(--grade-f); color: var(--grade-f); }
-        .grade-btn[data-val="F"].selected { background: var(--grade-f); color: white; }
+        .grade-btn[data-val="F"].selected { background: var(--grade-f); color: white; box-shadow: 0 5px 15px rgba(214,48,49,0.3); }
 
         .btn-add {
-            grid-column: span 2; padding: 15px; border-radius: 50px; border: none;
+            grid-column: span 2; padding: 15px; border-radius: 50px; border: none; margin-top: 10px;
             background: #2d3436; color: white; font-weight: 800; font-size: 1.1rem;
             cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px;
         }
-        .btn-add:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .btn-add:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
 
         /* --- LISTA DE REGISTROS --- */
         .evidence-list {
@@ -135,41 +146,49 @@
         }
 
         .evidence-card {
-            background: white; border-radius: 20px; padding: 20px 25px;
+            background: white; border-radius: 20px; padding: 25px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05); position: relative;
-            display: grid; grid-template-columns: 1fr 1fr auto; gap: 20px; align-items: center;
-            border-right: 10px solid; animation: slideUp 0.4s ease;
+            display: grid; grid-template-columns: 1fr 1fr auto; gap: 30px; 
+            align-items: start; /* Alinhamento corrigido para o topo */
+            border-right: 8px solid; animation: slideUp 0.4s ease; transition: 0.3s;
         }
+        .evidence-card:hover { transform: translateX(-5px); }
 
-        .ev-title { font-size: 0.8rem; text-transform: uppercase; color: #b2bec3; font-weight: 800; margin-bottom: 5px; }
-        .ev-text { font-size: 1rem; color: #2d3436; font-weight: 600; }
+        .ev-col { display: flex; flex-direction: column; gap: 5px; }
+        .ev-title { font-size: 0.75rem; text-transform: uppercase; color: #b2bec3; font-weight: 800; letter-spacing: 1px; }
+        .ev-text { font-size: 1rem; color: #2d3436; font-weight: 600; line-height: 1.5; }
         
         .grade-badge {
-            width: 50px; height: 50px; border-radius: 50%; color: white;
+            width: 50px; height: 50px; border-radius: 12px; color: white;
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.5rem; font-weight: 800;
+            font-size: 1.5rem; font-weight: 800; box-shadow: 0 5px 10px rgba(0,0,0,0.1);
         }
 
         .btn-delete {
             background: none; border: none; color: #b2bec3; cursor: pointer; font-size: 1.1rem;
+            position: absolute; bottom: 15px; right: 15px; transition: 0.2s;
         }
-        .btn-delete:hover { color: #d63031; }
+        .btn-delete:hover { color: var(--grade-f); transform: scale(1.2); }
 
         /* --- CONCLUSÃO --- */
         .conclusion-section {
             width: 100%; max-width: 900px;
-            background: #fff; padding: 25px; border-radius: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-top: 30px; margin-bottom: 50px;
+            background: #fff; padding: 30px; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-top: 40px; margin-bottom: 50px;
         }
 
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         /* Responsividade */
         @media (max-width: 800px) {
-            .audit-panel { grid-template-columns: 1fr; }
+            .audit-panel { grid-template-columns: 1fr; gap: 20px; }
             .btn-add { grid-column: span 1; }
-            .evidence-card { grid-template-columns: 1fr; border-right: none; border-bottom: 10px solid; }
+            #evidenceInput { min-height: 120px; } /* Reseta altura forçada no mobile */
+            
+            .evidence-card { grid-template-columns: 1fr; border-right: none; border-left: 8px solid; gap: 15px; }
             .grade-badge { position: absolute; top: 20px; right: 20px; }
+            .btn-delete { position: static; margin-top: 10px; text-align: left; }
+            
             .btn-print span { display: none; }
         }
 
@@ -179,12 +198,12 @@
         @media print {
             body { background: white; padding: 0; }
             header button, .btn-back-home, .audit-panel, .btn-delete { display: none !important; }
-            header { border: none; box-shadow: none; margin-bottom: 20px; }
+            header { border: none; box-shadow: none; margin-bottom: 20px; padding: 0; }
             
             #print-table {
                 display: table; width: 100%; border-collapse: collapse; font-family: sans-serif; margin: 20px 0;
             }
-            #print-table th { background: #eee; padding: 10px; border: 1px solid #ccc; font-weight: bold; font-size: 0.9rem; }
+            #print-table th { background: #eee; padding: 10px; border: 1px solid #ccc; font-weight: bold; font-size: 0.9rem; text-align: left; }
             #print-table td { padding: 10px; border: 1px solid #ccc; vertical-align: top; font-size: 0.9rem; }
             
             .thought-card, .conclusion-section { border: 1px solid #ccc; box-shadow: none; }
@@ -213,7 +232,7 @@
         </div>
 
         <div class="input-group">
-            <label><i class="fa-solid fa-bug"></i> Problemas de Qualidade</label>
+            <label><i class="fa-solid fa-magnifying-glass-chart"></i> Problemas de Qualidade</label>
             <div class="problem-chips">
                 <div class="chip" onclick="toggleChip(this)">Raciocínio Emocional</div>
                 <div class="chip" onclick="toggleChip(this)">Irrelevante</div>
@@ -222,9 +241,9 @@
                 <div class="chip" onclick="toggleChip(this)">Filtro Negativo</div>
                 <div class="chip" onclick="toggleChip(this)">Fato Isolado</div>
             </div>
-            <textarea id="problemInput" placeholder="Descreva por que essa evidência é fraca ou falha..." style="min-height: 60px;"></textarea>
+            <textarea id="problemInput" placeholder="Descreva por que essa evidência é fraca ou falha..."></textarea>
             
-            <label style="margin-top:10px;"><i class="fa-solid fa-graduation-cap"></i> Nota da Evidência</label>
+            <label style="margin-top:5px;"><i class="fa-solid fa-graduation-cap"></i> Nota da Evidência</label>
             <div class="grade-selector">
                 <button class="grade-btn" data-val="A" onclick="selectGrade('A')">A</button>
                 <button class="grade-btn" data-val="B" onclick="selectGrade('B')">B</button>
@@ -240,16 +259,16 @@
     </div>
 
     <div class="evidence-list" id="evidenceList">
-        <div class="evidence-card" style="border-right-color: #d63031;">
-            <div>
+        <div class="evidence-card" style="border-right-color: var(--grade-f); border-left-color: var(--grade-f);">
+            <div class="ev-col">
                 <div class="ev-title">Evidência</div>
                 <div class="ev-text">"Sinto que sou um fracasso."</div>
             </div>
-            <div>
-                <div class="ev-title">Problemas</div>
+            <div class="ev-col">
+                <div class="ev-title">Problemas Identificados</div>
                 <div class="ev-text">Raciocínio Emocional. Sentir não torna isso um fato.</div>
             </div>
-            <div class="grade-badge" style="background: #d63031;">F</div>
+            <div class="grade-badge" style="background: var(--grade-f);">F</div>
             <button class="btn-delete" onclick="deleteRecord(this)"><i class="fa-solid fa-trash"></i></button>
         </div>
     </div>
@@ -289,14 +308,7 @@
         }
 
         function updateProblemText() {
-            const activeChips = Array.from(document.querySelectorAll('.chip.active')).map(c => c.innerText);
-            const textArea = document.getElementById('problemInput');
-            
-            // Simplesmente adiciona os chips ao texto se estiver vazio ou anexa
-            if (activeChips.length > 0) {
-                // Lógica simples: Se o usuário ainda não digitou muito, preenche com os chips
-                // Se já digitou, não sobrescreve, mas o usuário vê os chips ativos
-            }
+            // Opcional: auto preencher texto. Deixado manual para liberdade do usuário.
         }
 
         function selectGrade(val) {
@@ -308,7 +320,7 @@
         }
 
         function getGradeColor(grade) {
-            const colors = { 'A': '#00b894', 'B': '#0984e3', 'C': '#fdcb6e', 'D': '#e17055', 'F': '#d63031' };
+            const colors = { 'A': 'var(--grade-a)', 'B': 'var(--grade-b)', 'C': 'var(--grade-c)', 'D': 'var(--grade-d)', 'F': 'var(--grade-f)' };
             return colors[grade] || '#ccc';
         }
 
@@ -331,18 +343,25 @@
             const list = document.getElementById('evidenceList');
             const div = document.createElement('div');
             div.className = 'evidence-card';
-            div.style.borderRightColor = getGradeColor(selectedGrade);
+            const colorVar = getGradeColor(selectedGrade);
+            
+            // Ajuste responsivo via style inline para bordas
+            if(window.innerWidth > 800) {
+                div.style.borderRightColor = colorVar;
+            } else {
+                div.style.borderLeftColor = colorVar;
+            }
             
             div.innerHTML = `
-                <div>
+                <div class="ev-col">
                     <div class="ev-title">Evidência</div>
                     <div class="ev-text ev-content">${ev}</div>
                 </div>
-                <div>
-                    <div class="ev-title">Problemas</div>
+                <div class="ev-col">
+                    <div class="ev-title">Problemas Identificados</div>
                     <div class="ev-text ev-prob">${prob || "Nenhum problema identificado."}</div>
                 </div>
-                <div class="grade-badge ev-grade" style="background: ${getGradeColor(selectedGrade)};">${selectedGrade}</div>
+                <div class="grade-badge ev-grade" style="background: ${colorVar};">${selectedGrade}</div>
                 <button class="btn-delete" onclick="deleteRecord(this)"><i class="fa-solid fa-trash"></i></button>
             `;
 
