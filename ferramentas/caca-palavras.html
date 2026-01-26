@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Caça-Sintomas DSM-5 | Bruno de Souza</title>
+    <title>Caça-Sintomas DSM-5 Completo</title>
     
     <script>
         if(localStorage.getItem('logado') !== 'sim') {
@@ -13,45 +13,47 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
         :root {
-            --bg-color: #f0f8ff;
+            --bg-color: #f4f7f6;
             --primary: #2c3e50;
             --secondary: #34495e;
-            --accent: #e67e22;
+            --accent: #27ae60;
+            --highlight: #f1c40f;
             --text: #2d3436;
-            --selected: #fab1a0;
-            --found: #55efc4;
+            --selected-bg: #ffeaa7; /* Cor da seleção */
+            --found-bg: #81ecec;    /* Cor de palavra encontrada */
+            --found-text: #006266;
         }
 
         body {
             font-family: 'Quicksand', sans-serif;
             background-color: var(--bg-color);
-            background-image: radial-gradient(#dfe6e9 2px, transparent 2px);
+            background-image: radial-gradient(#dcdde1 1px, transparent 1px);
             background-size: 20px 20px;
             margin: 0; padding: 20px;
             color: var(--text);
             min-height: 100vh;
             display: flex; flex-direction: column; align-items: center;
-            user-select: none;
+            user-select: none; /* Impede seleção de texto padrão */
         }
 
         /* --- HEADER --- */
         header {
             text-align: center; margin-bottom: 20px;
             background: white; padding: 20px 40px;
-            border-radius: 20px; border: 3px dashed var(--primary);
-            box-shadow: 8px 8px 0 rgba(0,0,0,0.05);
-            max-width: 900px; width: 100%; position: relative;
+            border-radius: 20px; border-bottom: 5px solid var(--primary);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            max-width: 1000px; width: 100%; position: relative;
         }
 
-        header h1 { color: var(--primary); margin: 0; font-weight: 800; font-size: 1.8rem; }
-        .subtitle { color: #636e72; font-weight: 600; margin-top: 5px; }
+        header h1 { color: var(--primary); margin: 0; font-weight: 800; font-size: 1.8rem; text-transform: uppercase; }
+        .subtitle { color: #7f8c8d; font-weight: 600; margin-top: 5px; }
 
         .btn-print {
-            position: absolute; top: 20px; right: 20px;
+            position: absolute; top: 25px; right: 25px;
             background: none; border: 2px solid var(--primary); color: var(--primary);
             padding: 8px 15px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: 0.3s;
         }
@@ -60,95 +62,119 @@
         /* --- CONTROLES --- */
         .controls-area {
             background: white; padding: 20px; border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 25px;
             display: flex; gap: 15px; align-items: center; justify-content: center; flex-wrap: wrap;
-            width: 100%; max-width: 1000px;
+            width: 100%; max-width: 1000px; border: 1px solid #dfe6e9;
         }
 
+        .select-wrapper {
+            position: relative; max-width: 500px; width: 100%;
+        }
+        
         select {
-            padding: 12px 20px; border-radius: 10px; border: 2px solid #dfe6e9;
-            font-family: inherit; font-size: 1rem; font-weight: bold; color: var(--text);
-            cursor: pointer; min-width: 300px; flex: 1;
+            width: 100%; padding: 12px 20px; border-radius: 10px; border: 2px solid #bdc3c7;
+            font-family: inherit; font-size: 1rem; font-weight: 700; color: var(--text);
+            cursor: pointer; appearance: none; background: #fff;
+        }
+        .select-arrow {
+            position: absolute; right: 15px; top: 50%; transform: translateY(-50%);
+            color: var(--primary); pointer-events: none;
         }
 
         .btn-new {
             background: var(--primary); color: white; border: none; padding: 12px 25px;
             border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.3s;
+            display: flex; align-items: center; gap: 8px;
         }
-        .btn-new:hover { background: var(--secondary); transform: scale(1.05); }
+        .btn-new:hover { background: var(--secondary); transform: translateY(-2px); }
 
         /* --- JOGO --- */
-        .game-container {
-            display: flex; flex-direction: column; align-items: center; gap: 30px;
-            width: 100%; max-width: 900px;
+        .game-layout {
+            display: grid; grid-template-columns: 2fr 1fr; gap: 30px;
+            width: 100%; max-width: 1200px; align-items: start;
         }
 
         /* GRID */
+        .grid-container {
+            background: white; padding: 20px; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: flex; justify-content: center; overflow: auto;
+        }
+
         .word-grid {
-            display: grid; 
-            grid-template-columns: repeat(14, 1fr); /* Grid maior */
-            gap: 4px; 
-            background: white; padding: 15px; border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            touch-action: manipulation;
+            display: grid; gap: 3px; /* Espaço entre letras */
+            user-select: none;
         }
 
         .letter-cell {
             width: 32px; height: 32px; 
             display: flex; align-items: center; justify-content: center;
-            font-weight: 700; font-size: 1.1rem; text-transform: uppercase;
-            border-radius: 4px; cursor: pointer; transition: 0.2s;
-            background: #f8f9fa; color: #2d3436;
+            font-weight: 800; font-size: 1.1rem; text-transform: uppercase;
+            border-radius: 4px; cursor: pointer; transition: 0.1s;
+            background: #f1f2f6; color: #2d3436; border: 1px solid #dfe6e9;
         }
 
-        .letter-cell:hover { background: #dfe6e9; }
-        .letter-cell.selected { background: var(--selected); color: #d35400; transform: scale(1.1); }
-        .letter-cell.found { background: var(--found); color: #006266; animation: popIn 0.3s; }
+        .letter-cell:hover { background: #dfe6e9; transform: scale(1.1); z-index: 2; }
+        .letter-cell.selected { background: var(--selected-bg); color: #d35400; border-color: #e67e22; }
+        .letter-cell.found { background: var(--found-bg); color: var(--found-text); border-color: #00b894; animation: popIn 0.3s; }
 
-        /* LISTA */
-        .words-list {
-            background: white; padding: 20px; border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05); width: 100%;
-            text-align: center;
+        /* LISTA DE PALAVRAS */
+        .words-list-panel {
+            background: white; padding: 25px; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); height: 100%; max-height: 650px;
+            display: flex; flex-direction: column;
         }
-        .words-list h3 { margin: 0 0 15px 0; color: var(--primary); font-size: 1.1rem; }
+        .words-list-panel h3 { 
+            margin: 0 0 15px 0; color: var(--primary); font-size: 1.2rem; 
+            border-bottom: 2px solid #eee; padding-bottom: 10px; 
+        }
         
         .words-wrapper {
-            display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+            display: flex; flex-wrap: wrap; gap: 8px; overflow-y: auto; padding-right: 5px;
         }
 
         .word-item {
-            background: #f1f2f6; padding: 6px 12px; border-radius: 20px;
-            font-weight: 600; font-size: 0.85rem; color: #636e72; transition: 0.3s;
+            background: #f8f9fa; padding: 6px 12px; border-radius: 15px; border: 1px solid #eee;
+            font-weight: 600; font-size: 0.85rem; color: #636e72; transition: 0.3s; cursor: default;
         }
         .word-item.found {
-            background: var(--found); color: #006266; text-decoration: line-through; opacity: 0.6;
+            background: var(--found-bg); color: var(--found-text); 
+            text-decoration: line-through; opacity: 0.8; border-color: transparent;
         }
 
         /* --- VITÓRIA --- */
-        .victory-msg {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: white; padding: 40px; border-radius: 30px; text-align: center;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3); z-index: 100; display: none;
-            border: 5px solid var(--found); animation: popUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        .victory-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 1000; display: none;
+            justify-content: center; align-items: center; backdrop-filter: blur(5px);
         }
-        .victory-msg h2 { color: var(--found); font-size: 2.5rem; margin: 0 0 10px 0; }
-        .victory-msg p { font-size: 1.2rem; margin-bottom: 20px; }
+        .victory-card {
+            background: white; padding: 40px; border-radius: 30px; text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3); border-top: 10px solid var(--accent);
+            animation: slideUp 0.4s ease; max-width: 400px;
+        }
+        .victory-card h2 { color: var(--primary); font-size: 2rem; margin: 10px 0; }
+        .victory-card p { font-size: 1.1rem; color: #636e72; margin-bottom: 25px; }
 
         @keyframes popIn { from { transform: scale(0.5); } to { transform: scale(1); } }
-        @keyframes popUp { from { transform: translate(-50%, 0); opacity: 0; } to { transform: translate(-50%, -50%); opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-        @media (max-width: 600px) {
-            .word-grid { gap: 2px; padding: 5px; grid-template-columns: repeat(12, 1fr); }
-            .letter-cell { width: 24px; height: 24px; font-size: 0.8rem; }
+        /* Responsividade */
+        @media (max-width: 900px) {
+            .game-layout { grid-template-columns: 1fr; }
+            .grid-container { order: 1; padding: 10px; }
+            .words-list-panel { order: 2; height: auto; max-height: 300px; }
+            .letter-cell { width: 22px; height: 22px; font-size: 0.8rem; }
             .btn-print span { display: none; }
         }
 
         @media print {
-            body { background: white; }
+            body { background: white; padding: 0; }
             header button, .btn-back-home, .btn-new { display: none !important; }
-            .controls-area { border: none; box-shadow: none; }
-            .word-grid { box-shadow: none; border: 1px solid #ccc; }
+            .controls-area { border: none; box-shadow: none; margin-bottom: 10px; }
+            .grid-container, .words-list-panel { box-shadow: none; border: 1px solid #000; }
+            .letter-cell { border: 1px solid #ccc; color: #000; }
+            .word-item { border: 1px solid #ccc; color: #000; }
         }
     </style>
 </head>
@@ -156,42 +182,117 @@
 
     <header data-aos="fade-down">
         <button class="btn-print" onclick="window.print()"><i class="fa-solid fa-print"></i> <span>Imprimir</span></button>
-        <h1>Caça-Palavras DSM-5</h1>
-        <div class="subtitle">Psicopatologia e Diagnóstico</div>
+        <h1>Caça-Sintomas Clínico</h1>
+        <div class="subtitle">Baseado nos Critérios Diagnósticos do DSM-5</div>
     </header>
 
     <div class="controls-area" data-aos="fade-up">
-        <label style="font-weight:bold; color:var(--text);"><i class="fa-solid fa-book-medical"></i> Categoria:</label>
-        <select id="categorySelect" onchange="startGame()">
-            <option value="neuro">1. Neurodesenvolvimento (TDAH/TEA)</option>
-            <option value="esquizofrenia">2. Espectro da Esquizofrenia</option>
-            <option value="bipolar">3. Bipolar & Humor</option>
-            <option value="ansiedade">4. Transtornos de Ansiedade</option>
-            <option value="toc">5. TOC & Relacionados</option>
-            <option value="trauma">6. Trauma & Estresse (TEPT)</option>
-            <option value="alimentar">7. Transtornos Alimentares</option>
-            <option value="sono">8. Sono-Vigília</option>
-            <option value="personalidade">9. Personalidade (Clusters)</option>
-            <option value="substancias">10. Uso de Substâncias</option>
-            <option value="neurocog">11. Neurocognitivos (Demências)</option>
-            <option value="disruptivo">12. Disruptivos & Conduta</option>
-        </select>
-        <button class="btn-new" onclick="startGame()"><i class="fa-solid fa-rotate"></i> Gerar Novo</button>
+        <label style="font-weight:bold; color:var(--primary);"><i class="fa-solid fa-notes-medical"></i> Transtorno:</label>
+        <div class="select-wrapper">
+            <select id="categorySelect" onchange="startGame()">
+                <optgroup label="1. Neurodesenvolvimento">
+                    <option value="tea">Transtorno do Espectro Autista (TEA)</option>
+                    <option value="tdah">TDAH</option>
+                </optgroup>
+                
+                <optgroup label="2. Espectro da Esquizofrenia">
+                    <option value="esquizofrenia">Esquizofrenia</option>
+                </optgroup>
+
+                <optgroup label="3. Humor (Bipolar & Depressivo)">
+                    <option value="bipolar">Transtorno Bipolar</option>
+                    <option value="depressao_maior">Transtorno Depressivo Maior</option>
+                    <option value="tdpm">Disfórico Pré-Menstrual (TDPM)</option>
+                </optgroup>
+
+                <optgroup label="4. Ansiedade">
+                    <option value="separacao">Ansiedade de Separação</option>
+                    <option value="social">Ansiedade Social (Fobia Social)</option>
+                    <option value="panico">Transtorno do Pânico</option>
+                    <option value="agorafobia">Agorafobia</option>
+                    <option value="tag">Ansiedade Generalizada (TAG)</option>
+                </optgroup>
+
+                <optgroup label="5. TOC & Relacionados">
+                    <option value="toc">Obsessivo-Compulsivo (TOC)</option>
+                    <option value="dismorfico">Dismórfico Corporal</option>
+                </optgroup>
+
+                <optgroup label="6. Trauma & Estresse">
+                    <option value="apego_reativo">Apego Reativo</option>
+                    <option value="tept">Estresse Pós-Traumático (TEPT)</option>
+                    <option value="estresse_agudo">Estresse Agudo</option>
+                </optgroup>
+
+                <optgroup label="7. Alimentares">
+                    <option value="pica">Pica</option>
+                    <option value="ruminacao">Ruminação</option>
+                    <option value="arfid">Restritivo/Evitativo (ARFID)</option>
+                    <option value="anorexia">Anorexia Nervosa</option>
+                    <option value="bulimia">Bulimia Nervosa</option>
+                    <option value="compulsao_alim">Compulsão Alimentar</option>
+                </optgroup>
+
+                <optgroup label="8. Sono-Vigília">
+                    <option value="insonia">Insônia</option>
+                    <option value="hipersonolencia">Hipersonolência</option>
+                </optgroup>
+
+                <optgroup label="9. Disruptivos & Conduta">
+                    <option value="tod">Opositivo Desafiador (TOD)</option>
+                    <option value="explosivo">Explosivo Intermitente</option>
+                    <option value="conduta">Transtorno da Conduta</option>
+                    <option value="piromania">Piromania</option>
+                    <option value="cleptomania">Cleptomania</option>
+                </optgroup>
+
+                <optgroup label="10. Substâncias & Adição">
+                    <option value="substancias">Uso de Substâncias (Geral)</option>
+                    <option value="jogo">Jogo de Azar (Gambling)</option>
+                </optgroup>
+
+                <optgroup label="11. Personalidade (Cluster A - Excêntricos)">
+                    <option value="paranoide">Paranoide</option>
+                    <option value="esquizoide">Esquizoide</option>
+                    <option value="esquizotipica">Esquizotípica</option>
+                </optgroup>
+                <optgroup label="11. Personalidade (Cluster B - Dramáticos)">
+                    <option value="antissocial">Antissocial</option>
+                    <option value="borderline">Borderline</option>
+                    <option value="histrionica">Histriônica</option>
+                    <option value="narcisista">Narcisista</option>
+                </optgroup>
+                <optgroup label="11. Personalidade (Cluster C - Ansiosos)">
+                    <option value="evitativa">Evitativa</option>
+                    <option value="dependente">Dependente</option>
+                    <option value="tpoc">Obsessivo-Compulsiva (TPOC)</option>
+                </optgroup>
+            </select>
+            <div class="select-arrow"><i class="fa-solid fa-chevron-down"></i></div>
+        </div>
+        <button class="btn-new" onclick="startGame()"><i class="fa-solid fa-rotate-right"></i> Gerar Novo Tabuleiro</button>
     </div>
 
-    <div class="game-container" data-aos="zoom-in">
-        <div class="word-grid" id="grid"></div>
-        <div class="words-list">
-            <h3>Encontre os Termos:</h3>
-            <div class="words-wrapper" id="wordList"></div>
+    <div class="game-layout">
+        <div class="grid-container" data-aos="zoom-in">
+            <div class="word-grid" id="grid">
+                </div>
+        </div>
+        
+        <div class="words-list-panel" data-aos="fade-left">
+            <h3><i class="fa-solid fa-list-check"></i> Sintomas a Localizar:</h3>
+            <div class="words-wrapper" id="wordList">
+                </div>
         </div>
     </div>
 
-    <div class="victory-msg" id="victoryModal">
-        <i class="fa-solid fa-trophy" style="font-size: 4rem; color: #f1c40f; margin-bottom: 20px;"></i>
-        <h2>Excelente!</h2>
-        <p>Você dominou este tema!</p>
-        <button class="btn-new" onclick="startGame()">Jogar Outra Categoria</button>
+    <div class="victory-modal" id="victoryModal">
+        <div class="victory-card">
+            <i class="fa-solid fa-medal" style="font-size: 4rem; color: #f1c40f; margin-bottom: 20px;"></i>
+            <h2>Excelente!</h2>
+            <p>Você identificou todos os sintomas deste quadro.</p>
+            <button class="btn-new" onclick="closeModalAndRestart()" style="width:100%; justify-content:center;">Próximo Desafio</button>
+        </div>
     </div>
 
     <center>
@@ -201,27 +302,80 @@
     </center>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script>
         AOS.init();
 
-        // 📚 BANCO DE DADOS COMPLETO DSM-5
+        // ==========================================
+        // 📚 BANCO DE DADOS DSM-5 (COMPLETO)
+        // ==========================================
         const database = {
-            neuro: ["AUTISMO", "HIPERFOCO", "ECOLALIA", "DESATENCAO", "IMPULSIVIDADE", "TDAH", "DISLEXIA", "TIC", "ESTEREO", "GENETICA", "MOTOR", "ATRASO"],
-            esquizofrenia: ["DELIRIO", "ALUCINACAO", "CATATONIA", "PARANOIA", "SURTO", "APATIA", "NEGATIVOS", "PSICOSE", "REALIDADE", "AFETO", "DISCURSO", "LOGICA"],
-            bipolar: ["MANIA", "EUFORIA", "DEPRESSAO", "CICLOTIMIA", "HIPOMANIA", "LITIO", "OSCILACAO", "MISTO", "IRRITACAO", "ENERGIA", "SONO", "RISCO"],
-            ansiedade: ["PANICO", "AGORAFOBIA", "GENERALIZADA", "SOCIAL", "SEPARACAO", "MUTISMO", "FOBIA", "MEDO", "EVITACAO", "TAQUICARDIA", "FUTURO", "TREMOR"],
-            toc: ["OBSESSAO", "COMPULSAO", "RITUAL", "SIMETRIA", "LIMPEZA", "ACUMULACAO", "DISMORFICO", "TRICOTILO", "DUVIDA", "REPETICAO", "CONTROLE", "PELE"],
-            trauma: ["TEPT", "FLASHBACK", "PESADELO", "GATILHO", "ESTRESSE", "APEGO", "DISSOCIACAO", "ALERTA", "MEMORIA", "TRAUMA", "EVITACAO", "AGUDO"],
-            alimentar: ["ANOREXIA", "BULIMIA", "COMPULSAO", "PICA", "RUMINACAO", "RESTRITIVO", "IMAGEM", "PESO", "PURGACAO", "CONTROLE", "CALORIA", "MEDO"],
-            sono: ["INSONIA", "APNEIA", "NARCOLEPSIA", "TERROR", "SONAMBULO", "HIPER", "CIRCADIANO", "REM", "PIERNAS", "CANSACO", "VIGILIA", "HIGIENE"],
-            personalidade: ["BORDERLINE", "NARCISISTA", "ANTISSOCIAL", "PARANOIDE", "ESQUIZOIDE", "HISTRIONICA", "EVITATIVA", "DEPENDENTE", "OBSESSIVA", "RIGIDEZ", "DRAMATICO", "EMPATIA"],
-            substancias: ["ALCOOL", "CANNABIS", "OPIOIDE", "ABSTINENCIA", "TOLERANCIA", "CRAVING", "RECAIDA", "JOGO", "VICIO", "DOPAMINA", "INTOXICA", "SEDATIVO"],
-            neurocog: ["ALZHEIMER", "DEMENCIA", "DELIRIUM", "MEMORIA", "AFASIA", "AGNOSIA", "VASCULAR", "LEWY", "PARKINSON", "EXECUCAO", "DECLINIO", "IDADE"],
-            disruptivo: ["OPOSITIVO", "DESAFIADOR", "CONDUTA", "EXPLOSIVO", "INTERMITENTE", "RAIVA", "AGRESSAO", "FURTO", "PIROMANIA", "CLEPTOMANIA", "REGRAS", "IMPULSO"]
+            // 1. NEURODESENVOLVIMENTO
+            tea: ["ECOLALIA", "HIPERFOCO", "ROTINA", "SENSORIAL", "ISOLAMENTO", "RIGIDEZ", "ESTEREO", "REPETICAO", "LITERAL", "CONTATO", "INTERESSE", "ATIPICO"],
+            tdah: ["DESATENCAO", "HIPERATIVO", "IMPULSO", "AGITACAO", "ESQUECER", "PERDER", "TAGARELAR", "INTERROMPER", "INQUIETO", "DESORGANIZA", "FOCO", "ERROS", "MENTAL"],
+            
+            // 2. ESQUIZOFRENIA
+            esquizofrenia: ["DELIRIO", "ALUCINACAO", "CATATONIA", "DESORGANIZA", "NEGATIVOS", "APATIA", "ABULIA", "ALOGIA", "ANEDONIA", "AFETO", "AGITACAO", "PARANOIA", "SURTO"],
+
+            // 3. HUMOR
+            bipolar: ["MANIA", "DEPRESSAO", "EUFORIA", "GRANDEZA", "SONO", "FALA", "FUGA", "IDEIAS", "AGITACAO", "RISCO", "COMPRAS", "SEXUAL", "OSCILACAO"],
+            depressao_maior: ["TRISTEZA", "ANEDONIA", "PESO", "INSONIA", "AGITACAO", "FADIGA", "CULPA", "INUTIL", "CONCENTRA", "MORTE", "VAZIO", "CHORO", "LENTIDAO"],
+            tdpm: ["LABILIDADE", "IRRITA", "HUMOR", "ANSIEDADE", "INTERESSE", "CONCENTRA", "LETARGIA", "APETITE", "SONO", "INCHACO", "DOR", "MAMA", "CICLO"],
+
+            // 4. ANSIEDADE
+            separacao: ["AFASTAMENTO", "PERDA", "DANO", "RECUSA", "PESADELO", "SINTOMAS", "MEDO", "SOZINHO", "CAMA", "ESCOLA", "APEGO", "CHORO"],
+            social: ["JULGAMENTO", "ESTRANHOS", "VERGONHA", "FALAR", "COMER", "TREMER", "RUBOR", "EVITACAO", "ANSIEDADE", "MEDO", "PUBLICO", "CRITICA"],
+            panico: ["CORACAO", "SUOR", "TREMOR", "AR", "SUFOCAR", "DOR", "NAUSEA", "TONTURA", "CALAFRIO", "FORMIGA", "REALIDADE", "CONTROLE", "MORTE"],
+            agorafobia: ["TRANSPORTE", "ABERTO", "FECHADO", "FILA", "MULTIDAO", "SOZINHO", "FUGA", "SOCORRO", "MEDO", "CASA", "EVITACAO", "PANICO"],
+            tag: ["ANSIEDADE", "PREOCUPA", "CONTROLE", "NERVOS", "CANSACO", "BRANCO", "IRRITA", "TENSAO", "SONO", "FUTURO", "MEDO", "INQUIETO"],
+
+            // 5. TOC
+            toc: ["OBSESSAO", "COMPULSAO", "RITUAL", "LIMPEZA", "SIMETRIA", "ORDEM", "CONTAGEM", "VERIFICA", "REPETE", "MEDO", "DUVIDA", "NOJO", "IMAGEM"],
+            dismorfico: ["DEFEITO", "APARENCIA", "ESPELHO", "TOCAR", "COMPARAR", "CAMUFLAR", "ROUPA", "FEIO", "ROSTO", "CORPO", "CIRURGIA", "FOCO"],
+
+            // 6. TRAUMA
+            apego_reativo: ["INIBIDO", "EMOCIONAL", "CONFORTO", "MEDO", "IRRITA", "TRISTEZA", "CUIDADOR", "NEGLIGENCIA", "SOCIAL", "RETRAIDO", "AFETO"],
+            tept: ["FLASHBACK", "SONHO", "GATILHO", "SUOR", "EVITACAO", "MEMORIA", "CRENCA", "CULPA", "MEDO", "RAIVA", "ALERTA", "SUSTO", "SONO"],
+            estresse_agudo: ["INTRUSAO", "HUMOR", "DISSOCIA", "EVITACAO", "ALERTA", "TRAUMA", "REALIDADE", "MEMORIA", "SONHO", "ANGUSTIA", "MEDO", "DIAS"],
+
+            // 7. ALIMENTAR
+            pica: ["INGESTAO", "NAO_NUTRITIVO", "TERRA", "GELO", "CABELO", "PAPEL", "GIZ", "SABAO", "TINTA", "METAL", "PEDRA", "DESEJO"],
+            ruminacao: ["REGURGITA", "COSPE", "ENGOLE", "REPETIDA", "SEM_NAUSEA", "SEM_ANSIA", "PERDA", "PESO", "SOCIAL", "EVITACAO"],
+            arfid: ["FALTA", "INTERESSE", "SENSORIAL", "TEXTURA", "COR", "ODOR", "MEDO", "ENGASGO", "PERDA", "PESO", "NUTRICAO", "SUPLEMENTO"],
+            anorexia: ["RESTRICAO", "CALORIA", "PESO", "MEDO", "GORDURA", "DISTORCAO", "MAGREZA", "JEJUM", "EXERCICIO", "CONTROLE", "NEGACAO", "CORPO"],
+            bulimia: ["COMPULSAO", "DESCONTROLE", "PURGACAO", "VOMITO", "LAXANTE", "JEJUM", "EXERCICIO", "FORMA", "PESO", "CULPA", "SEGREDO", "COMER"],
+            compulsao_alim: ["RAPIDO", "CHEIO", "SOZINHO", "VERGONHA", "DESGOSTO", "CULPA", "DESCONTROLE", "GRANDE", "QUANTIDADE", "SEM_FOME", "ANGUSTIA"],
+
+            // 8. SONO
+            insonia: ["INICIAR", "MANTER", "DESPERTAR", "PRECOCE", "QUALIDADE", "CANSACO", "MEMORIA", "HUMOR", "ENERGIA", "SONO", "NOITE", "PREOCUPA"],
+            hipersonolencia: ["SONO", "EXCESSIVO", "COCHILO", "DIURNO", "DIFICIL", "ACORDAR", "CONFUSAO", "DESORIENTA", "MEMORIA", "AUTOMATICO", "SONOLENTO"],
+
+            // 9. DISRUPTIVO
+            tod: ["RAIVA", "IRRITA", "DISCUTE", "DESAFIA", "INCOMODA", "CULPA", "SUSCETIVEL", "VINGATIVO", "REGRAS", "AUTORIDADE", "NEGATIVO", "TEIMOSO"],
+            explosivo: ["RAIVA", "AGRESSAO", "VERBAL", "FISICA", "DANOS", "ANIMAL", "PROPRIEDADE", "DESPROPORCIONAL", "IMPULSO", "REMORSO", "ATAQUE"],
+            conduta: ["AGRESSAO", "AMEACA", "BRIGA", "ARMA", "CRUELDADE", "ROUBO", "SEXUAL", "FOGO", "MENTIRA", "FUGIR", "GAZETA", "DESTRUICAO"],
+            piromania: ["FOGO", "INCENDIO", "PRAZER", "ALIVIO", "TENSAO", "FASCINIO", "CURIOSIDADE", "EQUIPAMENTO", "BOMBEIRO", "QUEIMAR", "INTENCAO"],
+            cleptomania: ["FURTO", "ROUBO", "OBJETO", "TENSAO", "PRAZER", "ALIVIO", "DESNECESSARIO", "VALOR", "CULPA", "TRISTEZA", "IMPULSO", "LOJA"],
+
+            // 10. SUBSTÂNCIAS
+            substancias: ["MAIOR", "TEMPO", "DESEJO", "CRAVING", "FALHA", "SOCIAL", "LAZER", "PERIGO", "FISICO", "TOLERANCIA", "ABSTINENCIA", "DOSE"],
+            jogo: ["APOSTAR", "DINHEIRO", "RECUPERAR", "PERDA", "MENTIR", "CRIME", "RELACAO", "EMPREGO", "DESESPERO", "ALIVIO", "ESCONDER", "DIVIDA"],
+
+            // 11. PERSONALIDADE
+            paranoide: ["DESCONFIANCA", "SUSPEITA", "EXPLORADO", "LEALDADE", "SEGREDO", "AMEACA", "RENCOR", "TRAICAO", "CIUME", "HOSTIL", "RIGIDO"],
+            esquizoide: ["DISTANTE", "SOLITARIO", "FRIO", "SEXO", "PRAZER", "AMIGO", "INDIFERENTE", "ELOGIO", "CRITICA", "EMOCAO", "APATICO"],
+            esquizotipica: ["REFERENCIA", "CRENCA", "MAGICO", "ILUSAO", "ESTRANHO", "PARANOIA", "AFETO", "APARENCIA", "AMIGOS", "ANSIEDADE", "SOCIAL"],
+            antissocial: ["LEI", "MENTIRA", "NOME", "IMPULSO", "BRIGA", "SEGURANCA", "RESPONSAVEL", "REMORSO", "INDIFERENTE", "ROUBO", "DANO", "MANIPULA"],
+            borderline: ["ABANDONO", "INSTAVEL", "INTENSO", "IDENTIDADE", "IMPULSO", "SUICIDIO", "HUMOR", "VAZIO", "RAIVA", "PARANOIA", "DISSOCIA", "CORTES"],
+            histrionica: ["CENTRO", "ATENCAO", "SEDUTOR", "EMOCAO", "SUPERFICIAL", "FISICO", "DRAMA", "TEATRAL", "SUGESTAO", "INTIMO", "EXAGERO"],
+            narcisista: ["GRANDEZA", "SUCESSO", "PODER", "ADMIRACAO", "ESPECIAL", "DIREITO", "EXPLORA", "EMPATIA", "INVEJA", "ARROGANTE", "SOBERBA"],
+            evitativa: ["CRITICA", "REJEICAO", "ENVOLVER", "CERTEZA", "INTIMO", "MEDO", "VERGONHA", "INADEQUADO", "INFERIOR", "RISCO", "TIMIDO", "ISOLADO"],
+            dependente: ["CONSELHO", "DECISAO", "RESPONSAVEL", "DISCORDAR", "APOIO", "SOZINHO", "CUIDADO", "URGENTE", "RELACAO", "MEDO", "SUBMISSO"],
+            tpoc: ["DETALHE", "REGRA", "ORDEM", "PERFEITO", "LAZER", "AMIGO", "MORAL", "VALOR", "VELHO", "DELEGAR", "AVAREZA", "TEIMOSO"]
         };
 
-        const GRID_SIZE = 14; // Grid 14x14 para caber palavras maiores
+        // --- LÓGICA DO JOGO ---
+        const GRID_SIZE_BASE = 14; 
+        let gridSize = 14;
         let grid = [];
         let placedWords = [];
         let firstSelection = null;
@@ -233,11 +387,13 @@
             firstSelection = null;
             
             const category = document.getElementById('categorySelect').value;
-            // Pega 10 palavras aleatórias da categoria para não poluir demais
-            const allWords = [...database[category]];
-            const words = allWords.sort(() => 0.5 - Math.random()).slice(0, 10);
+            // Pega as palavras
+            const words = [...database[category]];
+            
+            // Ajusta grid se tiver muitas palavras
+            gridSize = words.length > 12 ? 15 : 14;
 
-            grid = Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(''));
+            grid = Array(gridSize).fill(null).map(() => Array(gridSize).fill(''));
             placedWords = [];
 
             // Tenta colocar palavras
@@ -251,16 +407,13 @@
         function placeWordInGrid(word) {
             let placed = false;
             let attempts = 0;
-            // Direções: Horizontal, Vertical, Diagonal (\), Diagonal (/)
-            const directions = [
-                { dr: 0, dc: 1 }, { dr: 1, dc: 0 }, 
-                { dr: 1, dc: 1 }, { dr: 1, dc: -1 }
-            ];
+            // Horizontal, Vertical, Diagonal 1, Diagonal 2
+            const directions = [{ dr: 0, dc: 1 }, { dr: 1, dc: 0 }, { dr: 1, dc: 1 }, { dr: 1, dc: -1 }];
 
-            while (!placed && attempts < 100) {
+            while (!placed && attempts < 150) {
                 const dir = directions[Math.floor(Math.random() * directions.length)];
-                const row = Math.floor(Math.random() * GRID_SIZE);
-                const col = Math.floor(Math.random() * GRID_SIZE);
+                const row = Math.floor(Math.random() * gridSize);
+                const col = Math.floor(Math.random() * gridSize);
 
                 if (canPlace(word, row, col, dir)) {
                     for (let i = 0; i < word.length; i++) {
@@ -274,9 +427,11 @@
         }
 
         function canPlace(word, row, col, dir) {
-            if (row + (word.length - 1) * dir.dr >= GRID_SIZE || row + (word.length - 1) * dir.dr < 0) return false;
-            if (col + (word.length - 1) * dir.dc >= GRID_SIZE || col + (word.length - 1) * dir.dc < 0) return false;
+            // Verifica limites
+            if (row + (word.length - 1) * dir.dr >= gridSize || row + (word.length - 1) * dir.dr < 0) return false;
+            if (col + (word.length - 1) * dir.dc >= gridSize || col + (word.length - 1) * dir.dc < 0) return false;
 
+            // Verifica colisão
             for (let i = 0; i < word.length; i++) {
                 const cell = grid[row + i * dir.dr][col + i * dir.dc];
                 if (cell !== '' && cell !== word[i]) return false;
@@ -286,8 +441,8 @@
 
         function fillEmptySpaces() {
             const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            for (let r = 0; r < GRID_SIZE; r++) {
-                for (let c = 0; c < GRID_SIZE; c++) {
+            for (let r = 0; r < gridSize; r++) {
+                for (let c = 0; c < gridSize; c++) {
                     if (grid[r][c] === '') grid[r][c] = letters[Math.floor(Math.random() * letters.length)];
                 }
             }
@@ -295,16 +450,19 @@
 
         function renderGrid() {
             const gridEl = document.getElementById('grid');
-            gridEl.style.gridTemplateColumns = `repeat(${GRID_SIZE}, 1fr)`;
+            gridEl.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
             
-            for (let r = 0; r < GRID_SIZE; r++) {
-                for (let c = 0; c < GRID_SIZE; c++) {
+            for (let r = 0; r < gridSize; r++) {
+                for (let c = 0; c < gridSize; c++) {
                     const cell = document.createElement('div');
                     cell.className = 'letter-cell';
                     cell.innerText = grid[r][c];
                     cell.dataset.r = r;
                     cell.dataset.c = c;
+                    
+                    // Eventos Mouse/Touch
                     cell.onclick = () => handleCellClick(cell, r, c);
+                    
                     gridEl.appendChild(cell);
                 }
             }
@@ -325,10 +483,12 @@
             if (el.classList.contains('found')) return;
 
             if (!firstSelection) {
+                // Primeiro clique
                 clearSelection();
                 firstSelection = { r, c, el };
                 el.classList.add('selected');
             } else {
+                // Segundo clique (fim da palavra)
                 checkWord(firstSelection, { r, c, el });
                 firstSelection = null;
             }
@@ -343,10 +503,11 @@
             const dc = end.c - start.c;
             const length = Math.max(Math.abs(dr), Math.abs(dc));
             
+            // Calcula passo (direção)
             const stepR = dr === 0 ? 0 : dr / length;
             const stepC = dc === 0 ? 0 : dc / length;
 
-            // Valida se é linha reta
+            // Valida se é linha reta (diagonal perfeita ou reta)
             if (dr !== 0 && dc !== 0 && Math.abs(dr) !== Math.abs(dc)) {
                 clearSelection();
                 return;
@@ -355,24 +516,23 @@
             let formedWord = "";
             let pathCells = [];
 
+            // Reconstrói a palavra clicada
             for (let i = 0; i <= length; i++) {
                 const r = start.r + (i * stepR);
                 const c = start.c + (i * stepC);
-                // Proteção contra float
-                const finalR = Math.round(r);
-                const finalC = Math.round(c);
-                
-                const cell = document.querySelector(`.letter-cell[data-r="${finalR}"][data-c="${finalC}"]`);
+                const cell = document.querySelector(`.letter-cell[data-r="${Math.round(r)}"][data-c="${Math.round(c)}"]`);
                 if (cell) {
                     formedWord += cell.innerText;
                     pathCells.push(cell);
                 }
             }
 
+            // Verifica normal e invertida
             const reversedWord = formedWord.split('').reverse().join('');
             const matchIndex = placedWords.findIndex(w => (w.word === formedWord || w.word === reversedWord) && !w.found);
 
             if (matchIndex !== -1) {
+                // ACHOU!
                 const foundWordStr = placedWords[matchIndex].word;
                 placedWords[matchIndex].found = true;
                 
@@ -384,23 +544,33 @@
                 document.getElementById('word-' + foundWordStr).classList.add('found');
                 checkVictory();
             } else {
-                pathCells.forEach(cell => cell.classList.add('selected'));
-                setTimeout(clearSelection, 500);
+                // ERROU
+                pathCells.forEach(cell => cell.classList.add('selected')); // Feedback visual rápido
+                setTimeout(clearSelection, 400);
             }
         }
 
         function checkVictory() {
             if (placedWords.every(w => w.found)) {
+                // Confetti Effect
                 confetti({
                     particleCount: 150,
                     spread: 70,
                     origin: { y: 0.6 }
                 });
-                setTimeout(() => { document.getElementById('victoryModal').style.display = 'block'; }, 800);
+                setTimeout(() => { document.getElementById('victoryModal').style.display = 'flex'; }, 800);
             }
         }
 
-        startGame();
+        function closeModalAndRestart() {
+            document.getElementById('victoryModal').style.display = 'none';
+            // Opcional: mudar categoria automaticamente ou apenas reiniciar
+            startGame();
+        }
+
+        // Inicia o jogo
+        window.onload = startGame;
+
     </script>
 
 </body>
