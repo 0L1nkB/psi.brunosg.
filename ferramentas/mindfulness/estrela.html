@@ -3,206 +3,293 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exercício: Estrela da Respiração</title>
+    <title>Respiração 4-2-6 | Céu de Estrelas</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
-    
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            --primary: #7DB9B6; 
-            --secondary: #E9EDC9; 
-            --accent: #E29578; 
-            --dark-green: #2D5A58;
-            --text-color: #444;
-            --bg-body: #FBFBFB;
+            --bg-gradient: linear-gradient(180deg, #1a2a6c, #b21f1f, #fdbb2d); /* Pôr do sol calmo */
+            --bg-solid: #2c3e50;
+            --circle-color: rgba(255, 255, 255, 0.2);
+            --circle-active: rgba(255, 255, 255, 0.9);
+            --star-color: #f1c40f;
+            --text-color: #fff;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            font-family: 'Open Sans', sans-serif;
-            background-color: var(--bg-body);
+            font-family: 'Quicksand', sans-serif;
+            background: var(--bg-solid);
+            background: radial-gradient(circle at bottom, #203a43, #2c3e50);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             color: var(--text-color);
-            line-height: 1.8;
-            overflow-x: hidden;
+            overflow: hidden;
         }
 
-        h1, h2 { font-family: 'Quicksand', sans-serif; color: var(--dark-green); }
-
-        .container { max-width: 900px; margin: 0 auto; padding: 0 25px; }
-
-        /* --- Header --- */
-        header {
-            height: 40vh;
-            background: linear-gradient(135deg, var(--primary) 0%, #A2D2FF 100%);
-            display: flex; align-items: center; justify-content: center;
-            text-align: center; color: white; border-radius: 0 0 60px 60px;
+        /* --- ÁREA DAS ESTRELAS (SCORE) --- */
+        .stars-sky {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            width: 100%;
+            height: 150px;
             padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            pointer-events: none;
+            z-index: 0;
         }
 
-        header h1 { font-size: 2.8rem; color: white; margin-bottom: 15px; }
-        header p { font-size: 1.1rem; max-width: 600px; opacity: 0.95; }
+        .star-item {
+            font-size: 1.5rem;
+            color: var(--star-color);
+            filter: drop-shadow(0 0 5px rgba(241, 196, 15, 0.8));
+            animation: popStar 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            opacity: 0;
+            transform: scale(0);
+        }
 
-        /* --- Mindfulness Tool --- */
-        .tool-section { padding: 60px 0; text-align: center; }
+        @keyframes popStar {
+            0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        /* --- GUIA CENTRAL --- */
+        .focus-container {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .breathing-orb {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: var(--circle-color);
+            border: 2px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: all 0.1s linear; /* Controlado via JS para precisão */
+            box-shadow: 0 0 30px rgba(255,255,255,0.1);
+        }
+
+        .orb-text {
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .counter-display {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-top: 20px;
+            color: rgba(255,255,255,0.8);
+        }
+
+        /* --- CONTROLES --- */
+        .controls {
+            margin-top: 50px;
+            z-index: 2;
+        }
+
+        .btn {
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.5);
+            color: white;
+            padding: 12px 35px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: inherit;
+            font-weight: 700;
+        }
+
+        .btn:hover {
+            background: white;
+            color: #2c3e50;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(255,255,255,0.3);
+        }
+
+        /* Classes de Animação CSS para suavidade */
+        .inhale-state {
+            transform: scale(1.5);
+            background: rgba(129, 236, 236, 0.3);
+            box-shadow: 0 0 60px rgba(129, 236, 236, 0.4);
+            transition: transform 4s linear, background 4s;
+        }
+
+        .hold-state {
+            transform: scale(1.5); /* Mantém tamanho */
+            background: rgba(253, 203, 110, 0.3);
+            box-shadow: 0 0 60px rgba(253, 203, 110, 0.4);
+            transition: background 0.5s; /* Transição de cor rápida */
+        }
+
+        .exhale-state {
+            transform: scale(1);
+            background: var(--circle-color);
+            box-shadow: 0 0 30px rgba(255,255,255,0.1);
+            transition: transform 6s linear, background 6s;
+        }
 
         .instruction-box {
-            background: white; padding: 30px; border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
-            border-left: 6px solid var(--primary);
-            margin-bottom: 40px; text-align: left;
+            position: absolute;
+            bottom: 20px;
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.5);
+            text-align: center;
         }
 
-        .star-container {
-            position: relative;
-            width: 350px;
-            height: 350px;
-            margin: 40px auto;
-        }
-
-        svg {
-            width: 100%;
-            height: 100%;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.05));
-        }
-
-        .star-path {
-            fill: none;
-            stroke: var(--secondary);
-            stroke-width: 8;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        .star-progress {
-            fill: none;
-            stroke: var(--primary);
-            stroke-width: 8;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            stroke-dasharray: 1000;
-            stroke-dashoffset: 1000;
-            animation: dash 20s linear infinite;
-        }
-
-        /* Guia Visual (Bolinha) */
-        .guide-dot {
-            fill: var(--accent);
-            filter: blur(2px);
-            animation: followPath 20s linear infinite;
-        }
-
-        @keyframes dash {
-            to { stroke-dashoffset: 0; }
-        }
-
-        @keyframes followPath {
-            0% { offset-distance: 0%; }
-            100% { offset-distance: 100%; }
-        }
-
-        .breathe-text-display {
-            font-family: 'Quicksand', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--dark-green);
-            margin-top: 20px;
-            height: 60px;
-            transition: all 0.3s;
-        }
-
-        /* --- Footer --- */
-        footer { background: #f4f4f4; padding: 60px 0; font-size: 0.9rem; color: #777; border-top: 1px solid #eee; text-align: center; }
-
-        @media (max-width: 768px) {
-            header h1 { font-size: 2.2rem; }
-            .star-container { width: 280px; height: 280px; }
-        }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="container" data-aos="fade-up">
-            <h1>Estrela da Respiração</h1>
-            <p>Um guia visual para acalmar a mente e equilibrar as emoções.</p>
+    <div class="stars-sky" id="starSky"></div>
+
+    <div class="focus-container">
+        <div class="breathing-orb" id="orb">
+            <div class="orb-text" id="statusText">Pronto?</div>
         </div>
-    </header>
+        <div class="counter-display" id="timerDisplay">4-2-6</div>
+    </div>
 
-    <main class="container">
+    <div class="controls">
+        <button class="btn" id="actionBtn" onclick="toggleExercise()">Iniciar Prática</button>
+    </div>
 
-        <section class="tool-section" data-aos="fade-up">
-            <div class="instruction-box">
-                <p><strong>Como praticar:</strong> Acompanhe o guia visual pelo contorno da estrela.
-                <ul>
-                    <li><strong>Inspirar:</strong> Suba pela ponta da estrela.</li>
-                    <li><strong>Prender:</strong> Mantenha o ar nos vértices (pontas e curvas).</li>
-                    <li><strong>Expirar:</strong> Desça pelo trajeto seguinte.</li>
-                </ul>
-                Repita até completar todo o percurso.</p>
-            </div>
+    <div class="instruction-box">
+        Ciclos Completos: <span id="cycleCount">0</span>
+    </div>
 
-            <div class="star-container">
-                <svg viewBox="0 0 200 200">
-                    <path id="starPath" class="star-path" d="M100,10 L123,70 L187,70 L135,108 L155,170 L100,132 L45,170 L65,108 L13,70 L77,70 Z" />
-                    <path class="star-progress" d="M100,10 L123,70 L187,70 L135,108 L155,170 L100,132 L45,170 L65,108 L13,70 L77,70 Z" />
-                    
-                    <circle r="6" class="guide-dot">
-                        <animateMotion dur="20s" repeatCount="indefinite">
-                            <mpath href="#starPath" />
-                        </animateMotion>
-                    </circle>
-                </svg>
-            </div>
-
-            <div class="breathe-text-display" id="breatheText">Prepare-se...</div>
-        </section>
-
-    </main>
-
-    <footer>
-        <div class="container">
-            <p><strong>Fonte:</strong> Estrela da Respiração</p>
-            <p style="margin-top: 10px;">Adaptado para suporte clínico por Bruno de Souza (CRP 07/44472)</p>
-        </div>
-    </footer>
-
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        AOS.init({ duration: 1000, once: true });
+        let isRunning = false;
+        let cycleCounter = 0;
+        const orb = document.getElementById('orb');
+        const statusText = document.getElementById('statusText');
+        const timerDisplay = document.getElementById('timerDisplay');
+        const btn = document.getElementById('actionBtn');
+        const starSky = document.getElementById('starSky');
+        const cycleCountLabel = document.getElementById('cycleCount');
 
-        const breatheText = document.getElementById('breatheText');
-        
-        // Sincronização do texto com a animação da estrela (20 segundos total para 10 segmentos)
-        // Cada subida/descida leva 2 segundos
-        const cycle = [
-            { text: "Inspirar", time: 0 },
-            { text: "Prender", time: 2000 },
-            { text: "Expirar", time: 4000 },
-            { text: "Prender", time: 6000 },
-            { text: "Inspirar", time: 8000 },
-            { text: "Prender", time: 10000 },
-            { text: "Expirar", time: 12000 },
-            { text: "Prender", time: 14000 },
-            { text: "Inspirar", time: 16000 },
-            { text: "Prender", time: 18000 }
-        ];
-
-        function runBreatheCycle() {
-            cycle.forEach(step => {
-                setTimeout(() => {
-                    breatheText.innerText = step.text;
-                    if(step.text === "Inspirar") breatheText.style.color = "#7DB9B6";
-                    if(step.text === "Prender") breatheText.style.color = "#E29578";
-                    if(step.text === "Expirar") breatheText.style.color = "#A2D2FF";
-                }, step.time);
-            });
+        function toggleExercise() {
+            if (isRunning) {
+                stopExercise();
+            } else {
+                startExercise();
+            }
         }
 
-        runBreatheCycle();
-        setInterval(runBreatheCycle, 20000);
+        async function startExercise() {
+            isRunning = true;
+            btn.innerText = "Parar";
+            btn.style.borderColor = "#e74c3c";
+            
+            // Loop infinito enquanto isRunning for true
+            while (isRunning) {
+                await runCycle();
+                if(isRunning) addStar(); // Só adiciona estrela se não tiver parado
+            }
+        }
+
+        function stopExercise() {
+            isRunning = false;
+            btn.innerText = "Reiniciar";
+            btn.style.borderColor = "rgba(255,255,255,0.5)";
+            resetUI();
+        }
+
+        function resetUI() {
+            orb.className = "breathing-orb"; // Remove classes de animação
+            statusText.innerText = "Pausa";
+            timerDisplay.innerText = "4-2-6";
+        }
+
+        function addStar() {
+            cycleCounter++;
+            cycleCountLabel.innerText = cycleCounter;
+            
+            const star = document.createElement('i');
+            star.className = "fa-solid fa-star star-item";
+            starSky.appendChild(star);
+            
+            // Efeito sonoro sutil opcional (pode ser removido)
+            // playSoftChime(); 
+        }
+
+        function playSoftChime() {
+            // Placeholder para áudio se desejar no futuro
+        }
+
+        // Função auxiliar para esperar tempo (Promessa)
+        function wait(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        async function runCycle() {
+            if (!isRunning) return;
+
+            // 1. INSPIRE (4 Segundos)
+            statusText.innerText = "Inspire";
+            orb.className = "breathing-orb inhale-state"; // Aplica classe CSS de transição 4s
+            await runTimer(4);
+
+            if (!isRunning) return;
+
+            // 2. SEGURE (2 Segundos)
+            statusText.innerText = "Segure";
+            orb.className = "breathing-orb hold-state"; // Mantém tamanho, muda cor
+            await runTimer(2);
+
+            if (!isRunning) return;
+
+            // 3. EXPIRE (6 Segundos)
+            statusText.innerText = "Expire";
+            orb.className = "breathing-orb exhale-state"; // Aplica classe CSS de transição 6s
+            await runTimer(6);
+        }
+
+        // Lógica do contador numérico
+        function runTimer(seconds) {
+            return new Promise(resolve => {
+                let remaining = 1;
+                timerDisplay.innerText = remaining;
+                
+                // Intervalo de 1 segundo para atualizar o número
+                const interval = setInterval(() => {
+                    if (!isRunning) {
+                        clearInterval(interval);
+                        resolve();
+                        return;
+                    }
+
+                    remaining++;
+                    if (remaining > seconds) {
+                        clearInterval(interval);
+                        resolve();
+                    } else {
+                        timerDisplay.innerText = remaining;
+                    }
+                }, 1000);
+            });
+        }
     </script>
+
 </body>
 </html>
