@@ -16,6 +16,9 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <style>
+        /* --- RESET DE LAYOUT --- */
+        * { box-sizing: border-box; }
+
         :root {
             --bg-color: #f0f8ff;
             --primary: #00cec9;       /* Ciano (Clareza) */
@@ -74,10 +77,10 @@
         input[type="text"], textarea {
             width: 100%; padding: 12px; border: 2px solid #dfe6e9;
             border-radius: 12px; font-family: inherit; font-size: 1rem;
-            transition: 0.3s; background: #fdfdfd;
+            transition: 0.3s; background: #fdfdfd; outline: none;
         }
         textarea { resize: vertical; min-height: 80px; }
-        input:focus, textarea:focus { border-color: var(--primary); outline: none; background: white; }
+        input:focus, textarea:focus { border-color: var(--primary); background: white; }
 
         /* Área do "Teste do Público" */
         .public-test-area {
@@ -89,9 +92,7 @@
             display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;
         }
         
-        .tag-check {
-            display: none;
-        }
+        .tag-check { display: none; }
         
         .tag-label {
             background: white; padding: 8px 15px; border-radius: 20px;
@@ -194,7 +195,7 @@
                 <input type="checkbox" id="tag1" class="tag-check" value="Muito Vago">
                 <label for="tag1" class="tag-label"><i class="fa-solid fa-cloud"></i> Muito Vago</label>
 
-                <input type="checkbox" id="tag2" class="tag-check" value="Idiosincrático (Só meu)">
+                <input type="checkbox" id="tag2" class="tag-check" value="Só eu entendo">
                 <label for="tag2" class="tag-label"><i class="fa-solid fa-user-lock"></i> Só eu entendo</label>
 
                 <input type="checkbox" id="tag3" class="tag-check" value="Difícil de Provar">
@@ -216,15 +217,15 @@
         <div class="record-card">
             <div class="rec-col">
                 <h4>Termo</h4>
-                <div class="rec-text">"Burro"</div>
+                <div class="rec-text term-text">"Burro"</div>
             </div>
             <div class="rec-col">
                 <h4>Definição Pessoal</h4>
-                <div class="rec-text">"Alguém que comete erros no trabalho."</div>
+                <div class="rec-text def-text">"Alguém que comete erros no trabalho."</div>
             </div>
             <div class="rec-col">
                 <h4>Análise do Público</h4>
-                <div class="rec-text">As pessoas diriam que errar é humano, não burrice. A definição é exagerada e absoluta.</div>
+                <div class="rec-text analysis-text">As pessoas diriam que errar é humano, não burrice. A definição é exagerada e absoluta.</div>
                 <div class="rec-tags">
                     <span class="mini-tag">Exagerado</span>
                     <span class="mini-tag">Difícil de Provar</span>
