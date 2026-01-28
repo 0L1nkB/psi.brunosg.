@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini-Mental (MEEM) | Rastreio Cognitivo</title>
+    
+    <script>
+        if(localStorage.getItem('logado') !== 'sim') {
+            window.location.href = "../../login.html"; 
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="../../assets/style.css">
+    <script src="../../assets/layout.js"></script>
+    <script src="../../assets/print.js"></script>
+
+    <style>
+        /* Estilos Locais */
+        :root {
+            --score-color: #00b894;
+        }
+
+        .test-section {
+            background: white; border: 1px solid #eee; border-radius: 15px;
+            padding: 20px; margin-bottom: 20px; box-shadow: 0 5px 10px rgba(0,0,0,0.02);
+        }
+
+        .section-header {
+            font-size: 1rem; font-weight: 800; color: #2d3436; margin-bottom: 15px;
+            text-transform: uppercase; border-bottom: 2px solid #f0f0f0; padding-bottom: 5px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .item-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 0; border-bottom: 1px dashed #eee; font-size: 0.95rem;
+        }
+        .item-row:last-child { border-bottom: none; }
+
+        .score-input {
+            width: 60px; padding: 5px; border-radius: 8px; border: 1px solid #ccc;
+            text-align: center; font-weight: bold; font-family: 'Quicksand', sans-serif;
+        }
+
+        /* Placar Flutuante */
+        .score-panel {
+            background: #2d3436; color: white; padding: 20px; border-radius: 15px;
+            text-align: center; margin-bottom: 30px; position: sticky; top: 20px; z-index: 50;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .total-display { font-size: 3rem; font-weight: 800; color: var(--score-color); line-height: 1; }
+        .total-label { font-size: 0.8rem; text-transform: uppercase; opacity: 0.7; }
+
+        /* Tabela de Referência */
+        .ref-table {
+            width: 100%; font-size: 0.85rem; border-collapse: collapse; margin-top: 10px;
+        }
+        .ref-table th, .ref-table td { border: 1px solid #ddd; padding: 5px; text-align: center; }
+        .ref-table th { background: #f9f9f9; }
+
+        /* IA Config */
+        .ai-config-float { position: fixed; top: 100px; right: 20px; z-index: 100; }
+        .btn-config-ia {
+            background: #2d3436; color: white; padding: 8px 15px; border-radius: 30px;
+            font-size: 0.8rem; border: none; cursor: pointer; display: flex; align-items: center; gap: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #ff7675; }
+        .status-dot.active { background: #00b894; box-shadow: 0 0 5px #00b894; }
+
+        /* Botão Mágico */
+        .magic-input-wrapper { position: relative; }
+        .btn-magic {
+            position: absolute; bottom: 10px; right: 10px; background: #6c5ce7; color: white; border: none;
+            width: 30px; height: 30px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); opacity: 0.7; transition: 0.3s;
+        }
+        .btn-magic:hover { opacity: 1; transform: scale(1.1); }
+        .btn-magic.loading { background: #b2bec3; cursor: wait; animation: pulse 1s infinite; }
+        @keyframes pulse { 0% {transform: scale(0.9);} 50% {transform: scale(1.1);} 100% {transform: scale(0.9);} }
+
+        @media (max-width: 1200px) { .ai-config-float { top: auto; bottom: 20px; left: 20px; right: auto; } }
+
+        @media print {
+            .no-print, .ai-config-float, .app-header, .fab, .btn-back-home { display: none !important; }
+            .score-panel { position: static; border: 1px solid #000; background: white; color: black; box-shadow: none; }
+            .total-display { color: black; }
+            .test-section { border: 1px solid #ccc; box-shadow: none; break-inside: avoid; }
+            input, textarea { border: none !important; }
+            /* O print.js cuida do cabeçalho */
+        }
+    </style>
+</head>
+<body>
+
+    <script>
+        carregarHeader("Mini-Mental (MEEM)", "Exame do Estado Mental (Folstein et al.)");
+    </script>
+
+    <div class="ai-config-float no-print">
+        <button class="btn-config-ia" onclick="configureKey()">
+            <div class="status-dot" id="status-dot"></div> Configurar IA
+        </button>
+    </div>
+
+    <div class="container" style="max-width: 1000px; width:100%; display:flex; gap:30px; align-items:flex-start;">
+        
+        <div style="flex:2;">
+            
+            <div class="test-section">
+                <div class="section-header">Dados do Paciente</div>
+                <div class="grid-2">
+                    <div>
+                        <label class="form-label">Nome:</label>
+                        <input type="text" id="paciente" class="form-control">
+                    </div>
+                    <div>
+                        <label class="form-label">Escolaridade:</label>
+                        <select id="escolaridade" class="form-control" onchange="updateCutoff()">
+                            <option value="analfabeto">Analfabeto</option>
+                            <option value="1a8">1 a 8 anos (Fundamental)</option>
+                            <option value="9mais">9 anos ou mais (Médio/Superior)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="test-section">
+                <div class="section-header">I. Orientação <span style="font-size:0.8rem; color:#999;">(Máx 10)</span></div>
+                
+                <div class="item-row">
+                    <span>Temporal (Ano, Estação, Mês, Dia, Dia da semana)</span>
+                    <input type="number" min="0" max="5" class="score-input calc" onchange="calcTotal()">
+                </div>
+                <div class="item-row">
+                    <span>Espacial (Estado, Cidade, Bairro, Local, Andar/Rua)</span>
+                    <input type="number" min="0" max="5" class="score-input calc" onchange="calcTotal()">
+                </div>
+            </div>
+
+            <div class="test-section">
+                <div class="section-header">II. Registro <span style="font-size:0.8rem; color:#999;">(Máx 3)</span></div>
+                <div class="item-row">
+                    <span>Repetir: CARRO, VASO, TIJOLO (1 pt cada)</span>
+                    <input type="number" min="0" max="3" class="score-input calc" onchange="calcTotal()">
+                </div>
+            </div>
+
+            <div class="test-section">
+                <div class="section-header">III. Atenção e Cálculo <span style="font-size:0.8rem; color:#999;">(Máx 5)</span></div>
+                <div class="item-row">
+                    <span>Subtração (100-7 cinco vezes) OU Soletração Inversa (MUNDO)</span>
+                    <input type="number" min="0" max="5" class="score-input calc" onchange="calcTotal()">
+                </div>
+            </div>
+
+            <div class="test-section">
+                <div class="section-header">IV. Evocação <span style="font-size:0.8rem; color:#999;">(Máx 3)</span></div>
+                <div class="item-row">
+                    <span>Lembrar das 3 palavras anteriores (Carro, Vaso, Tijolo)</span>
+                    <input type="number" min="0" max="3" class="score-input calc" onchange="calcTotal()">
+                </div>
+            </div>
+
+            <div class="test-section">
+                <div class="section-header">V. Linguagem <span style="font-size:0.8rem; color:#999;">(Máx 9)</span></div>
+                <div class="item-row">
+                    <span>Nomear: Relógio e Caneta (2 pts)</span>
+                    <input type="number" min="0" max="2" class="score-input calc" onchange="calcTotal()">
+                </div>
+                <div class="item-row">
+                    <span>Repetir: "Nem aqui, nem ali, nem lá" (1 pt)</span>
+                    <input type="number" min="0" max="1" class="score-input calc" onchange="calcTotal()">
+                </div>
+                <div class="item-row">
+                    <span>Comando 3 estágios (Pegar papel, dobrar, colocar no chão) (3 pts)</span>
+                    <input type="number" min="0" max="3" class="score-input calc" onchange="calcTotal()">
+                </div>
+                <div class="item-row">
+                    <span>Ler e executar: "FECHE OS OLHOS" (1 pt)</span>
+                    <input type="number" min="0" max="1" class="score-input calc" onchange="calcTotal()">
+                </div>
+                <div class="item-row">
+                    <span>Escrever uma frase completa (Sujeito + Verbo + Sentido) (1 pt)</span>
+                    <input type="number" min="0" max="1" class="score-input calc" onchange="calcTotal()">
+                </div>
+                <div class="item-row">
+                    <span>Copiar desenho (Pentágonos interseccionados) (1 pt)</span>
+                    <input type="number" min="0" max="1" class="score-input calc" onchange="calcTotal()">
+                </div>
+            </div>
+
+            <div class="test-section">
+                <div class="section-header">Conclusão / Observações Clínicas</div>
+                <div class="magic-input-wrapper">
+                    <textarea id="conclusao" class="form-control" rows="5" placeholder="Descreva o comportamento durante o teste, dificuldades específicas e a interpretação do escore..."></textarea>
+                    <button class="btn-magic" onclick="gerarInterpretacao()" title="IA: Interpretar Resultado"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
+                </div>
+            </div>
+
+        </div>
+
+        <div style="flex:1;">
+            <div class="score-panel">
+                <div class="total-label">Pontuação Total</div>
+                <div class="total-display" id="totalScore">0</div>
+                <div style="font-size:1.2rem; color:#dfe6e9;">/ 30</div>
+                
+                <hr style="border-color:#555; margin: 15px 0;">
+                
+                <div style="font-size:0.8rem; margin-bottom:5px;">Ponto de Corte Sugerido:</div>
+                <div style="font-weight:bold; font-size:1.2rem; color:#fdcb6e;" id="cutoffDisplay">20</div>
+                <div style="font-size:0.7rem;">(Brucki et al., 2003)</div>
+            </div>
+
+            <div class="card-panel no-print" style="font-size:0.85rem;">
+                <strong>Referência (Brucki et al.):</strong>
+                <table class="ref-table">
+                    <tr><th>Escolaridade</th><th>Corte</th></tr>
+                    <tr><td>Analfabeto</td><td>20</td></tr>
+                    <tr><td>1 a 8 anos</td><td>26</td></tr>
+                    <tr><td>9+ anos</td><td>28</td></tr>
+                </table>
+            </div>
+
+            <button class="btn-primary no-print" onclick="window.print()" style="width:100%; margin-top:20px;">
+                <i class="fa-solid fa-print"></i> Imprimir Laudo
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        // CONFIGURAÇÃO INICIAL
+        if (localStorage.getItem('gemini_api_key')) {
+            document.getElementById('status-dot').classList.add('active');
+        }
+
+        function configureKey() {
+            const key = prompt("Insira sua API Key do Google Gemini:");
+            if (key) {
+                localStorage.setItem('gemini_api_key', key.trim());
+                document.getElementById('status-dot').classList.add('active');
+                alert("Chave salva!");
+            }
+        }
+
+        // LÓGICA DO MEEM
+        function updateCutoff() {
+            const esc = document.getElementById('escolaridade').value;
+            const display = document.getElementById('cutoffDisplay');
+            if (esc === 'analfabeto') display.innerText = '20';
+            else if (esc === '1a8') display.innerText = '26';
+            else display.innerText = '28';
+        }
+
+        function calcTotal() {
+            let total = 0;
+            const inputs = document.querySelectorAll('.calc');
+            inputs.forEach(input => {
+                let val = parseInt(input.value);
+                let max = parseInt(input.getAttribute('max'));
+                if (val > max) { val = max; input.value = max; } // Limita ao máx
+                if (val < 0) { val = 0; input.value = 0; }
+                if (!isNaN(val)) total += val;
+            });
+            document.getElementById('totalScore').innerText = total;
+            
+            // Muda cor se estiver abaixo do corte
+            const corte = parseInt(document.getElementById('cutoffDisplay').innerText);
+            const display = document.getElementById('totalScore');
+            if (total < corte) display.style.color = '#ff7675'; // Vermelho
+            else display.style.color = '#00b894'; // Verde
+        }
+
+        // IA PARA INTERPRETAÇÃO
+        async function gerarInterpretacao() {
+            const apiKey = localStorage.getItem('gemini_api_key');
+            if (!apiKey) { alert("Configure a IA primeiro!"); configureKey(); return; }
+
+            const nome = document.getElementById('paciente').value || "Paciente";
+            const score = document.getElementById('totalScore').innerText;
+            const corte = document.getElementById('cutoffDisplay').innerText;
+            const escolaridade = document.getElementById('escolaridade').options[document.getElementById('escolaridade').selectedIndex].text;
+            const obsUsuario = document.getElementById('conclusao').value;
+
+            // Loading
+            const btn = document.querySelector('.btn-magic');
+            const originalHtml = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+            btn.classList.add('loading');
+
+            const prompt = `
+                Atue como um Psicólogo Avaliador.
+                Redija uma breve conclusão técnica para o Mini-Exame do Estado Mental (MEEM).
+                
+                DADOS:
+                - Paciente: ${nome}
+                - Escolaridade: ${escolaridade}
+                - Pontuação Obtida: ${score} / 30
+                - Ponto de Corte (Referência): ${corte}
+                - Observações do aplicador: "${obsUsuario}"
+
+                INSTRUÇÕES:
+                1. Indique se o desempenho está preservado ou sugere declínio cognitivo com base no corte.
+                2. Use linguagem técnica e cautelosa (ex: "sugere", "indica", "compatível com").
+                3. Mencione a importância da avaliação clínica global além do escore.
+                4. Seja sucinto (1 parágrafo bem construído).
+            `;
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                });
+
+                const data = await response.json();
+                document.getElementById('conclusao').value = data.candidates[0].content.parts[0].text.trim();
+
+            } catch (error) {
+                alert("Erro na IA: " + error.message);
+            } finally {
+                btn.innerHTML = originalHtml;
+                btn.classList.remove('loading');
+            }
+        }
+
+        // Inicializa
+        updateCutoff();
+        carregarFooter();
+    </script>
+
+</body>
+</html>
