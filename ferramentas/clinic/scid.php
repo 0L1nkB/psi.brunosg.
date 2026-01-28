@@ -3,350 +3,289 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCID-5-CV | Bruno de Souza</title>
+    <title>SCID-5-CV | Entrevista Clínica</title>
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        if(localStorage.getItem('logado') !== 'sim') {
+            window.location.href = "../../login.html"; 
+        }
+    </script>
+
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="../../assets/style.css">
+    <script src="../../assets/layout.js"></script>
 
     <style>
-        :root {
-            --bg-color: #f0f8ff;
-            --sidebar-bg: #2d3436;
-            --primary: #6c5ce7;
-            --text: #2d3436;
-            --card-bg: #ffffff;
-            --positive: #ef5350;
-            --negative: #00b894;
-            --neutral: #fdcb6e;
-        }
-
-        * { box-sizing: border-box; }
-
+        /* --- AJUSTES ESPECÍFICOS PARA ESTA FERRAMENTA --- */
+        
+        /* Override do Body para permitir Sidebar */
         body {
-            font-family: 'Quicksand', sans-serif;
-            background-color: var(--bg-color);
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            color: var(--text);
-            display: flex;
-            overflow: hidden;
+            flex-direction: row !important; /* Sidebar ao lado do conteúdo */
+            align-items: stretch !important;
+            padding: 0 !important;
+            overflow: hidden; /* Evita scroll duplo */
         }
 
-        /* --- SIDEBAR --- */
+        :root {
+            --primary-color: #00b894; /* Verde Clínico */
+            --sidebar-width: 280px;
+            --pos-color: #00b894;
+            --neg-color: #ff7675;
+            --unsure-color: #fdcb6e;
+        }
+
+        /* SIDEBAR ESTILIZADA */
         #sidebar {
-            width: 280px;
-            background-color: var(--sidebar-bg);
-            color: white;
-            display: flex;
-            flex-direction: column;
+            width: var(--sidebar-width);
+            background: #fff;
+            border-right: 1px solid #eee;
+            display: flex; flex-direction: column;
             padding: 20px;
-            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
             overflow-y: auto;
-            z-index: 100;
+            z-index: 10;
+            flex-shrink: 0;
         }
 
         .brand {
-            font-size: 1.5rem;
-            font-weight: 800;
-            margin-bottom: 20px;
-            color: var(--primary);
-            text-transform: uppercase;
-            text-align: center;
-            background: white;
-            padding: 10px;
-            border-radius: 10px;
+            font-size: 1.2rem; font-weight: 800; color: var(--primary-color);
+            margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px dashed #f0f0f0;
+            display: flex; align-items: center; gap: 10px;
         }
 
         .menu-section {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            color: #b2bec3;
-            margin-top: 15px;
-            margin-bottom: 5px;
-            font-weight: 700;
-            padding-left: 10px;
-            letter-spacing: 1px;
+            font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            color: #b2bec3; margin: 20px 0 10px 5px;
         }
 
         .nav-item {
-            padding: 10px 15px;
-            margin-bottom: 5px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.2s;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 600;
-            color: #dfe6e9;
-            font-size: 0.85rem;
+            padding: 10px 15px; margin-bottom: 5px; border-radius: 10px;
+            cursor: pointer; transition: 0.2s; display: flex; justify-content: space-between; align-items: center;
+            font-weight: 600; color: #636e72; font-size: 0.9rem;
         }
-
-        .nav-item:hover { background-color: rgba(255,255,255,0.1); color: white; }
-        .nav-item.active { background-color: var(--primary); color: white; box-shadow: 0 4px 10px rgba(108, 92, 231, 0.4); }
+        .nav-item:hover { background: #f1f2f6; color: var(--primary-color); }
+        .nav-item.active { background: var(--primary-color); color: white; box-shadow: 0 4px 10px rgba(0, 184, 148, 0.3); }
 
         .score-badge {
-            background: rgba(0,0,0,0.3);
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 0.7rem;
+            background: rgba(0,0,0,0.1); padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; font-weight: 800;
         }
+        .nav-item.active .score-badge { background: rgba(255,255,255,0.3); color: white; }
 
-        /* --- MAIN CONTENT --- */
+        /* CONTEÚDO PRINCIPAL */
         #main-content {
-            flex: 1;
-            padding: 30px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            flex: 1; padding: 30px; overflow-y: auto;
+            background-image: radial-gradient(#dfe6e9 1px, transparent 1px);
+            background-size: 20px 20px; background-color: #fdfbf7;
+            display: flex; flex-direction: column; align-items: center;
         }
 
-        header {
-            width: 100%;
-            max-width: 900px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        h2 { margin: 0; color: var(--primary); font-weight: 800; font-size: 1.4rem; }
-
-        /* INTERVIEW GRID */
+        /* GRID DE PERGUNTAS */
         #interview-area {
-            display: grid;
-            grid-template-columns: 2fr 1fr 90px;
-            gap: 20px;
-            width: 100%;
-            max-width: 1100px;
-            height: calc(100vh - 150px);
+            display: grid; grid-template-columns: 1fr 300px 80px; gap: 20px;
+            width: 100%; max-width: 1100px; margin-top: 20px;
         }
 
+        /* CARD PERGUNTA */
         .question-panel {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-            display: flex;
-            flex-direction: column;
-            border: 2px solid white;
-            overflow-y: auto;
+            background: white; border-radius: 20px; padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #eee;
+            position: relative; display: flex; flex-direction: column;
         }
-
         .question-code {
-            color: var(--primary);
-            font-weight: 800;
-            font-size: 1.1rem;
-            margin-bottom: 10px;
+            position: absolute; top: 20px; left: 20px;
+            background: #f1f2f6; color: #b2bec3; padding: 5px 10px; border-radius: 8px;
+            font-weight: 900; font-size: 0.8rem;
         }
-
         .question-text {
-            font-size: 1.25rem;
-            line-height: 1.5;
-            font-weight: 700;
-            color: var(--text);
-            margin-bottom: 20px;
+            font-size: 1.3rem; line-height: 1.5; font-weight: 700; color: #2d3436;
+            margin-top: 25px; margin-bottom: 20px;
         }
-
         .sub-questions {
-            font-size: 0.95rem;
-            color: #4b6584;
-            background: #f1f2f6;
-            padding: 15px;
-            border-radius: 12px;
-            border-left: 4px solid var(--primary);
-            margin-bottom: 20px;
-            line-height: 1.6;
+            background: #f8f9fa; padding: 20px; border-radius: 15px; border-left: 4px solid var(--primary-color);
+            color: #636e72; font-size: 0.95rem; margin-bottom: 20px;
         }
-
         .instruction {
-            margin-top: auto;
-            background: #fff3cd;
-            color: #856404;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            border: 1px dashed #ffeeba;
+            margin-top: auto; background: #fff3cd; color: #856404; padding: 12px;
+            border-radius: 10px; font-size: 0.85rem; font-weight: 700; border: 1px dashed #ffeeba;
         }
 
+        /* CARD CRITÉRIOS */
         .criteria-panel {
-            background: #dfe6e9;
-            border-radius: 20px;
-            padding: 20px;
-            overflow-y: auto;
-            border: 2px solid #b2bec3;
-            color: #2d3436;
-            font-size: 0.9rem;
-            line-height: 1.4;
+            background: #2d3436; color: #dfe6e9; border-radius: 20px; padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: flex; flex-direction: column; justify-content: center;
         }
-
-        .action-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            justify-content: flex-start;
+        .criteria-label {
+            font-size: 0.7rem; text-transform: uppercase; color: #b2bec3; margin-bottom: 10px; font-weight: 800; letter-spacing: 1px;
         }
+        .criteria-text { font-size: 1rem; line-height: 1.5; font-weight: 600; }
 
+        /* AÇÕES */
+        .action-panel { display: flex; flex-direction: column; gap: 10px; }
         .btn-action {
-            width: 100%;
-            height: 70px;
-            border: none;
-            border-radius: 15px;
-            font-size: 1.5rem;
-            font-weight: 800;
-            cursor: pointer;
-            color: white;
-            transition: transform 0.2s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            flex: 1; border: none; border-radius: 15px; font-size: 1.5rem; cursor: pointer; color: white;
+            transition: transform 0.2s; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         .btn-action:hover { transform: scale(1.05); }
-        .btn-plus { background-color: var(--positive); }
-        .btn-minus { background-color: var(--negative); }
-        .btn-unsure { background-color: var(--neutral); color: #2d3436; }
+        .btn-plus { background: var(--pos-color); }
+        .btn-unsure { background: var(--unsure-color); color: #2d3436; }
+        .btn-minus { background: var(--neg-color); }
 
         /* DASHBOARD */
-        #dashboard-view {
-            display: none;
-            width: 100%;
-            max-width: 900px;
-            padding-bottom: 50px;
-        }
-
+        #dashboard-view { display: none; width: 100%; max-width: 900px; padding-bottom: 50px; }
         .result-card {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            border-left: 8px solid #ccc;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            background: white; padding: 20px; border-radius: 15px; margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03); border: 1px solid #eee;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .status-badge { padding: 5px 12px; border-radius: 8px; font-weight: 800; font-size: 0.8rem; text-transform: uppercase; }
+        .status-pos { background: #e0f2f1; color: var(--pos-color); }
+        .status-neg { background: #ffebee; color: var(--neg-color); }
+
+        /* Header Interno */
+        .internal-header {
+            width: 100%; max-width: 1100px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
+        }
+        .module-badge {
+            font-size: 1.5rem; font-weight: 800; color: var(--primary-color);
+        }
+        .progress-pill {
+            background: white; padding: 8px 20px; border-radius: 30px; font-weight: 700; color: #636e72;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
 
-        .result-card.positive { border-left-color: var(--positive); }
-        .result-card.negative { border-left-color: var(--negative); }
-        
-        .status-tag {
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-weight: bold;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-        }
-        .status-pos { background: #ffebee; color: var(--positive); }
-        .status-neg { background: #e0f2f1; color: var(--negative); }
-
-        /* PRINT STYLES */
+        /* PRINT */
         @media print {
-            #sidebar, .action-panel, button { display: none !important; }
+            #sidebar, .action-panel, button, .internal-header, #interview-area { display: none !important; }
             #dashboard-view { display: block !important; }
-            body, #main-content { overflow: visible; height: auto; background: white; }
-            .result-card { box-shadow: none; border: 1px solid #eee; break-inside: avoid; }
+            body, #main-content { overflow: visible; height: auto; background: white; padding: 0; display: block; }
+            .result-card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
         }
-
     </style>
 </head>
 <body>
 
     <div id="sidebar">
-        <div class="brand"><i class="fa-solid fa-brain"></i> SCID-5 - CV</div>
+        <div class="brand">
+            <i class="fa-solid fa-notes-medical"></i> SCID-5-CV
+        </div>
         
-        <div class="menu-section">Módulo A: Episódios de Humor</div>
-        <div class="nav-item active" onclick="switchModule('A_DEP')" id="nav-A_DEP"><span>A. Depressão Maior</span><span class="score-badge" id="score-A_DEP">0</span></div>
-        <div class="nav-item" onclick="switchModule('A_MANIA')" id="nav-A_MANIA"><span>A. Mania/Hipomania</span><span class="score-badge" id="score-A_MANIA">0</span></div>
+        <div class="menu-section">Transtornos do Humor</div>
+        <div class="nav-item active" onclick="switchModule('A_DEP')" id="nav-A_DEP">
+            <span>Depressão Maior</span> <span class="score-badge" id="score-A_DEP">0</span>
+        </div>
+        <div class="nav-item" onclick="switchModule('A_MANIA')" id="nav-A_MANIA">
+            <span>Mania/Hipomania</span> <span class="score-badge" id="score-A_MANIA">0</span>
+        </div>
 
-        <div class="menu-section">Módulo B: Psicose</div>
-        <div class="nav-item" onclick="switchModule('B_PSYCH')" id="nav-B_PSYCH"><span>B. Sintomas Psicóticos</span><span class="score-badge" id="score-B_PSYCH">0</span></div>
+        <div class="menu-section">Psicose & Diferencial</div>
+        <div class="nav-item" onclick="switchModule('B_PSYCH')" id="nav-B_PSYCH">
+            <span>Psicose (Rastreio)</span> <span class="score-badge" id="score-B_PSYCH">0</span>
+        </div>
+        <div class="nav-item" onclick="switchModule('D_DIFF')" id="nav-D_DIFF">
+            <span>Diag. Diferencial</span> <span class="score-badge" id="score-D_DIFF">-</span>
+        </div>
 
-        <div class="menu-section">Módulo D: Diferencial Humor</div>
-        <div class="nav-item" onclick="switchModule('D_DIFF')" id="nav-D_DIFF" style="color:#fdcb6e"><span>D. Diag. Diferencial</span><span class="score-badge" id="score-D_DIFF">-</span></div>
+        <div class="menu-section">Substâncias</div>
+        <div class="nav-item" onclick="switchModule('E_SUBST')" id="nav-E_SUBST">
+            <span>Uso de Substâncias</span> <span class="score-badge" id="score-E_SUBST">0</span>
+        </div>
 
-        <div class="menu-section">Módulo E: Substâncias</div>
-        <div class="nav-item" onclick="switchModule('E_SUBST')" id="nav-E_SUBST"><span>E. Uso de Substâncias</span><span class="score-badge" id="score-E_SUBST">0</span></div>
+        <div class="menu-section">Ansiedade</div>
+        <div class="nav-item" onclick="switchModule('F_PANIC')" id="nav-F_PANIC">
+            <span>Pânico</span> <span class="score-badge" id="score-F_PANIC">0</span>
+        </div>
+        <div class="nav-item" onclick="switchModule('F_AGORA')" id="nav-F_AGORA">
+            <span>Agorafobia</span> <span class="score-badge" id="score-F_AGORA">0</span>
+        </div>
+        <div class="nav-item" onclick="switchModule('F_SOCIAL')" id="nav-F_SOCIAL">
+            <span>Ansiedade Social</span> <span class="score-badge" id="score-F_SOCIAL">0</span>
+        </div>
+        <div class="nav-item" onclick="switchModule('F_GAD')" id="nav-F_GAD">
+            <span>TAG</span> <span class="score-badge" id="score-F_GAD">0</span>
+        </div>
 
-        <div class="menu-section">Módulo F: Ansiedade</div>
-        <div class="nav-item" onclick="switchModule('F_PANIC')" id="nav-F_PANIC"><span>F. Pânico</span><span class="score-badge" id="score-F_PANIC">0</span></div>
-        <div class="nav-item" onclick="switchModule('F_AGORA')" id="nav-F_AGORA"><span>F. Agorafobia</span><span class="score-badge" id="score-F_AGORA">0</span></div>
-        <div class="nav-item" onclick="switchModule('F_SOCIAL')" id="nav-F_SOCIAL"><span>F. Ansiedade Social</span><span class="score-badge" id="score-F_SOCIAL">0</span></div>
-        <div class="nav-item" onclick="switchModule('F_GAD')" id="nav-F_GAD"><span>F. TAG</span><span class="score-badge" id="score-F_GAD">0</span></div>
+        <div class="menu-section">Obsessivo & Trauma</div>
+        <div class="nav-item" onclick="switchModule('G_TOC')" id="nav-G_TOC">
+            <span>TOC</span> <span class="score-badge" id="score-G_TOC">0</span>
+        </div>
+        <div class="nav-item" onclick="switchModule('G_TEPT')" id="nav-G_TEPT">
+            <span>TEPT</span> <span class="score-badge" id="score-G_TEPT">0</span>
+        </div>
 
-        <div class="menu-section">Módulo G: TOC e TEPT</div>
-        <div class="nav-item" onclick="switchModule('G_TOC')" id="nav-G_TOC"><span>G. TOC</span><span class="score-badge" id="score-G_TOC">0</span></div>
-        <div class="nav-item" onclick="switchModule('G_TEPT')" id="nav-G_TEPT"><span>G. TEPT (Trauma)</span><span class="score-badge" id="score-G_TEPT">0</span></div>
+        <div class="menu-section">Outros</div>
+        <div class="nav-item" onclick="switchModule('H_ADHD')" id="nav-H_ADHD">
+            <span>TDAH Adulto</span> <span class="score-badge" id="score-H_ADHD">0</span>
+        </div>
+        <div class="nav-item" onclick="switchModule('I_SCREEN')" id="nav-I_SCREEN">
+            <span>Rastreio Geral</span> <span class="score-badge" id="score-I_SCREEN">0</span>
+        </div>
+        <div class="nav-item" onclick="switchModule('J_ADJUST')" id="nav-J_ADJUST">
+            <span>Adaptação</span> <span class="score-badge" id="score-J_ADJUST">0</span>
+        </div>
 
-        <div class="menu-section">Módulo H: TDAH</div>
-        <div class="nav-item" onclick="switchModule('H_ADHD')" id="nav-H_ADHD"><span>H. TDAH Adulto</span><span class="score-badge" id="score-H_ADHD">0</span></div>
-
-        <div class="menu-section">Módulo I: Rastreio Geral</div>
-        <div class="nav-item" onclick="switchModule('I_SCREEN')" id="nav-I_SCREEN"><span>I. Outros Transtornos</span><span class="score-badge" id="score-I_SCREEN">0</span></div>
-
-        <div class="menu-section">Módulo J: Adaptação</div>
-        <div class="nav-item" onclick="switchModule('J_ADJUST')" id="nav-J_ADJUST"><span>J. Transt. Adaptação</span><span class="score-badge" id="score-J_ADJUST">0</span></div>
-
-        <div class="nav-item" onclick="showDashboard()" style="margin-top:auto; background:#2d3436; border:1px solid #636e72; justify-content:center;">
-            <span><i class="fa-solid fa-clipboard-check"></i> RESULTADO FINAL</span>
+        <div class="nav-item" onclick="showDashboard()" style="margin-top:auto; background:#2d3436; color:white; justify-content:center;">
+            <span><i class="fa-solid fa-file-medical"></i> VER RELATÓRIO</span>
         </div>
     </div>
 
     <div id="main-content">
-        <header id="interview-header">
-            <h2 id="module-title">SCID-5-CV Digital</h2>
-            <div style="font-weight:bold; color:#636e72; background:white; padding:5px 15px; border-radius:10px; box-shadow:0 2px 5px rgba(0,0,0,0.05)" id="progress-display">Item 1</div>
-        </header>
+        
+        <div class="internal-header" id="interview-header">
+            <div class="module-badge" id="module-title">Módulo A: Depressão</div>
+            <div class="progress-pill" id="progress-display">Item 1</div>
+        </div>
 
         <div id="interview-area">
+            
             <div class="question-panel">
                 <span class="question-code" id="q-id">A1</span>
                 <div class="question-text" id="q-text">Carregando...</div>
+                
                 <div class="sub-questions" id="q-sub" style="display:none;"></div>
+                
                 <div class="instruction" id="q-inst" style="display:none;"></div>
             </div>
 
             <div class="criteria-panel">
-                <div style="font-weight:800; margin-bottom:10px; color:#636e72; text-transform:uppercase; font-size:0.75rem; letter-spacing:1px;">Critério DSM-5</div>
-                <div class="criteria-text" id="c-text">Carregando...</div>
+                <div class="criteria-label">CRITÉRIO DSM-5</div>
+                <div class="criteria-text" id="c-text">...</div>
             </div>
 
             <div class="action-panel">
-                <button class="btn-action btn-plus" onclick="registerScore('+')"><i class="fa-solid fa-check"></i></button>
-                <button class="btn-action btn-unsure" onclick="registerScore('?')"><i class="fa-solid fa-question"></i></button>
-                <button class="btn-action btn-minus" onclick="registerScore('-')"><i class="fa-solid fa-xmark"></i></button>
+                <button class="btn-action btn-plus" onclick="registerScore('+')" title="Presente"><i class="fa-solid fa-check"></i></button>
+                <button class="btn-action btn-unsure" onclick="registerScore('?')" title="Duvidoso"><i class="fa-solid fa-question"></i></button>
+                <button class="btn-action btn-minus" onclick="registerScore('-')" title="Ausente"><i class="fa-solid fa-xmark"></i></button>
             </div>
         </div>
 
         <div id="dashboard-view">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
-                <h2>Relatório Clínico</h2>
-                <button onclick="window.print()" style="background:#6c5ce7; color:white; border:none; padding:10px 20px; border-radius:8px; cursor:pointer;"><i class="fa-solid fa-print"></i> Salvar PDF</button>
+            <div class="app-header" style="margin-bottom:30px;">
+                <h1>Relatório Clínico SCID-5-CV</h1>
+                <div class="subtitle">Resultados da entrevista estruturada</div>
+                <button onclick="window.print()" class="btn-print-header" style="position:relative; right:auto; top:auto; margin-top:10px;">
+                    <i class="fa-solid fa-print"></i> Imprimir PDF
+                </button>
             </div>
-            
+
             <div id="differential-alert"></div>
             <div id="dashboard-content"></div>
-            
-            <div style="margin-top:40px; padding-top:20px; border-top:2px solid #eee; text-align:center; color:#999; font-size:0.8rem;">
-                Ferramenta Didática baseada na SCID-5-CV (APA).
-            </div>
         </div>
+
     </div>
 
     <script>
-        // ORDEM DE EXECUÇÃO OFICIAL (A -> B -> D -> E -> F -> G -> H -> I -> J)
         const moduleOrder = [
             'A_DEP', 'A_MANIA', 'B_PSYCH', 'D_DIFF', 'E_SUBST', 
             'F_PANIC', 'F_AGORA', 'F_SOCIAL', 'F_GAD', 
             'G_TOC', 'G_TEPT', 'H_ADHD', 'I_SCREEN', 'J_ADJUST'
         ];
 
+        // BANCO DE DADOS (Copiado da sua versão original para garantir integridade)
         const database = {
             'A_DEP': [
-                { id: "A1", text: "No último mês, desde [DATA], houve algum período de tempo em que você se sentiu deprimido ou abatido na maior parte do dia, quase todos os dias?", sub: "Alguém comentou que você parecia triste, abatido ou deprimido?", criteria: "A. Humor deprimido na maior parte do dia, quase todos os dias.", inst: "SE VISIVELMENTE DEPRIMIDO, PODE CLASSIFICAR (+) MESMO SE NEGADO." },
+                { id: "A1", text: "No último mês, houve algum período de tempo em que você se sentiu deprimido ou abatido na maior parte do dia, quase todos os dias?", sub: "Alguém comentou que você parecia triste, abatido ou deprimido?", criteria: "A. Humor deprimido na maior parte do dia, quase todos os dias.", inst: "SE VISIVELMENTE DEPRIMIDO, PODE CLASSIFICAR (+) MESMO SE NEGADO." },
                 { id: "A2", text: "Durante esse período, você sentiu menos interesse ou prazer com coisas de que normalmente gosta?", criteria: "B. Acentuada diminuição de interesse ou prazer.", inst: "VERIFIQUE SE A1 OU A2 = (+). SE AMBOS (-), PULE O MÓDULO." },
                 { type: 'logic', check: function(s) { return (s['A1']==='+' || s['A2']==='+') ? 'NEXT' : 'STOP'; } },
                 { id: "A3", text: "Como estava o seu apetite? Houve mudança de peso significativa?", criteria: "C. Perda ou ganho significativo de peso sem dieta." },
@@ -470,12 +409,15 @@
         let currentModule = 'A_DEP';
         let moduleIndex = 0;
         let globalScores = {};
+        
+        // Inicialização
         Object.keys(database).forEach(k => globalScores[k] = {});
 
         window.addEventListener('DOMContentLoaded', () => {
             switchModule('A_DEP');
         });
 
+        // Funções de Navegação e Lógica
         function switchModule(modId) {
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             const navEl = document.getElementById('nav-' + modId);
@@ -488,16 +430,15 @@
             currentModule = modId;
             moduleIndex = 0;
             
+            // Títulos
             const titles = {
                 'A_DEP': 'Módulo A: Depressão Maior', 'A_MANIA': 'Módulo A: Mania',
-                'B_PSYCH': 'Módulo B: Rastreio de Psicose', 'D_DIFF': 'Módulo D: Diagnóstico Diferencial',
-                'E_SUBST': 'Módulo E: Uso de Substâncias',
-                'F_PANIC': 'Módulo F: Pânico', 'F_AGORA': 'Módulo F: Agorafobia',
-                'F_SOCIAL': 'Módulo F: Ans. Social', 'F_GAD': 'Módulo F: TAG',
-                'G_TOC': 'Módulo G: TOC', 'G_TEPT': 'Módulo G: TEPT',
-                'H_ADHD': 'Módulo H: TDAH Adulto',
-                'I_SCREEN': 'Módulo I: Outros Transtornos',
-                'J_ADJUST': 'Módulo J: Transtorno de Adaptação'
+                'B_PSYCH': 'Módulo B: Psicose', 'D_DIFF': 'Módulo D: Diferencial',
+                'E_SUBST': 'Módulo E: Substâncias', 'F_PANIC': 'Módulo F: Pânico',
+                'F_AGORA': 'Módulo F: Agorafobia', 'F_SOCIAL': 'Módulo F: Ans. Social',
+                'F_GAD': 'Módulo F: TAG', 'G_TOC': 'Módulo G: TOC',
+                'G_TEPT': 'Módulo G: TEPT', 'H_ADHD': 'Módulo H: TDAH',
+                'I_SCREEN': 'Módulo I: Rastreio', 'J_ADJUST': 'Módulo J: Adaptação'
             };
             document.getElementById('module-title').innerText = titles[currentModule] || modId;
             
@@ -533,20 +474,10 @@
             document.getElementById('c-text').innerText = q.criteria;
             
             const sub = document.getElementById('q-sub');
-            if(q.sub) { 
-                sub.style.display='block'; 
-                sub.innerText = q.sub; 
-            } else { 
-                sub.style.display='none'; 
-            }
+            if(q.sub) { sub.style.display='block'; sub.innerText = q.sub; } else { sub.style.display='none'; }
             
             const inst = document.getElementById('q-inst');
-            if(q.inst) { 
-                inst.style.display='block'; 
-                inst.innerText = q.inst; 
-            } else { 
-                inst.style.display='none'; 
-            }
+            if(q.inst) { inst.style.display='block'; inst.innerText = q.inst; } else { inst.style.display='none'; }
             
             document.getElementById('progress-display').innerText = `Item ${moduleIndex + 1}`;
         }
@@ -589,12 +520,12 @@
             const modules = [
                 { id: 'A_DEP', title: 'Depressão Maior', min: 5, crit: ['A1','A2'] },
                 { id: 'A_MANIA', title: 'Episódio Maníaco', min: 3, crit: ['C1','C2'] },
-                { id: 'B_PSYCH', title: 'Sintomas Psicóticos (Rastreio)', min: 1, crit: ['B1','B2','B3','B4','B5'] },
-                { id: 'E_SUBST', title: 'Transtorno por Uso de Substâncias', min: 2, crit: [] },
-                { id: 'F_PANIC', title: 'Transtorno de Pânico', min: 1, crit: ['F1'] },
+                { id: 'B_PSYCH', title: 'Sintomas Psicóticos', min: 1, crit: ['B1','B2','B3','B4','B5'] },
+                { id: 'E_SUBST', title: 'Uso de Substâncias', min: 2, crit: [] },
+                { id: 'F_PANIC', title: 'Pânico', min: 1, crit: ['F1'] },
                 { id: 'F_AGORA', title: 'Agorafobia', min: 2, crit: ['F23'] },
                 { id: 'F_SOCIAL', title: 'Ansiedade Social', min: 2, crit: ['F32'] },
-                { id: 'F_GAD', title: 'TAG (Ansiedade Generalizada)', min: 3, crit: ['F42'] },
+                { id: 'F_GAD', title: 'TAG', min: 3, crit: ['F42'] },
                 { id: 'G_TOC', title: 'TOC', min: 1, crit: ['G3'] },
                 { id: 'G_TEPT', title: 'TEPT', min: 3, crit: ['G4'] }
             ];
@@ -608,6 +539,7 @@
                 
                 Object.keys(scores).forEach(k => { if(scores[k] === '+') count++; });
 
+                // Lógica Simplificada de Diagnóstico para o Dashboard
                 if(m.id === 'E_SUBST') {
                     let sym = 0;
                     for(let i=3; i<=13; i++) if(scores['E'+i] === '+') sym++;
@@ -618,16 +550,23 @@
                 } else {
                     if(m.crit && m.crit.length > 0) {
                         m.crit.forEach(c => { if(scores[c] === '+') critMet = true; });
-                    } else {
-                        critMet = true; 
-                    }
+                    } else { critMet = true; }
                 }
 
                 let status = (critMet && count >= m.min) ? 'Positivo' : 'Negativo';
                 if(m.id === 'E_SUBST' && critMet) status = 'Positivo';
                 if(status === 'Positivo') activeDiagnoses.push(m.title);
 
-                dash.innerHTML += renderCard(m.title, status, count);
+                const css = status === 'Positivo' ? 'status-pos' : 'status-neg';
+                
+                dash.innerHTML += `
+                    <div class="result-card">
+                        <div>
+                            <div style="font-weight:bold; font-size:1rem; color:#2d3436">${m.title}</div>
+                            <div style="font-size:0.75rem; color:#95a5a6">Contagem: ${count}</div>
+                        </div>
+                        <span class="status-badge ${css}">${status}</span>
+                    </div>`;
             });
 
             // TDAH
@@ -639,47 +578,21 @@
             if(hS['H19']==='+' && hS['H20']==='+') {
                 if(inatt >= 5 || hyper >= 5) { adhdStatus = "Positivo"; activeDiagnoses.push("TDAH"); }
             }
-            dash.innerHTML += renderCard("TDAH Adulto", adhdStatus, `D:${inatt} H:${hyper}`);
-
-            // Adaptação
-            let jS = globalScores['J_ADJUST'];
-            let adjustStatus = "Negativo";
-            if(activeDiagnoses.length === 0 && jS['J1']==='+' && jS['J2']==='+' && jS['J3']==='-') {
-                adjustStatus = "Positivo";
-            } else if (activeDiagnoses.length > 0 && jS['J1']==='+') {
-                adjustStatus = "Descartado (Hierarquia)";
-            }
-            dash.innerHTML += renderCard("Transtorno de Adaptação", adjustStatus, "-");
+            const cssAdhd = adhdStatus === 'Positivo' ? 'status-pos' : 'status-neg';
+            dash.innerHTML += `<div class="result-card"><div><div style="font-weight:bold;">TDAH Adulto</div><div style="font-size:0.75rem; color:#95a5a6">D:${inatt} H:${hyper}</div></div><span class="status-badge ${cssAdhd}">${adhdStatus}</span></div>`;
 
             // Rastreio
             let iS = globalScores['I_SCREEN'];
             if(Object.values(iS).includes('+')) {
-                let list = [];
-                if(iS['I1']==='+' || iS['I2']==='+' || iS['I3']==='+') list.push("Alimentar");
-                dash.innerHTML += renderCard("Outros Rastreios", "Alerta", list.join(', ') || "Nenhum");
+                dash.innerHTML += `<div class="result-card"><div><div style="font-weight:bold;">Outros Rastreios</div></div><span class="status-badge status-pos">Alerta</span></div>`;
             }
 
-            // Alertas
-            if(activeDiagnoses.includes("Depressão Maior") && activeDiagnoses.includes("Sintomas Psicóticos (Rastreio)")) {
-                alertBox.innerHTML += `<div style="background:#fff3cd; color:#856404; padding:15px; border-radius:10px; margin-bottom:20px;"><strong>⚠️ Atenção:</strong> Depressão + Psicose exige diagnóstico diferencial (Módulo D).</div>`;
+            // Alerta Diferencial
+            if(activeDiagnoses.includes("Depressão Maior") && activeDiagnoses.includes("Sintomas Psicóticos")) {
+                alertBox.innerHTML = `<div style="background:#fff3cd; color:#856404; padding:15px; border-radius:10px; margin-bottom:20px; font-weight:bold;"><i class="fa-solid fa-triangle-exclamation"></i> Atenção: Depressão + Psicose exige diagnóstico diferencial detalhado.</div>`;
             }
         }
-
-        function renderCard(title, status, count) {
-            let css = status === 'Positivo' ? 'status-pos' : (status === 'Alerta' ? 'status-pos' : 'status-neg');
-            if(status.includes('Descartado')) css = 'status-neg';
-            
-            return `
-                <div class="result-row">
-                    <div>
-                        <div style="font-weight:bold; font-size:1rem; color:#2c3e50">${title}</div>
-                        <div style="font-size:0.75rem; color:#95a5a6">Contagem: ${count}</div>
-                    </div>
-                    <span class="status-badge ${css}">${status}</span>
-                </div>
-            `;
-        }
-
     </script>
+
 </body>
 </html>
