@@ -109,13 +109,23 @@
         }
         .chip-action:hover { background: var(--primary-color); color: white; border-color: var(--primary-color); }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Config IA Flutuante */
+        .ai-config-float { position: fixed; top: 100px; right: 20px; z-index: 100; }
+        .btn-config-ia {
+            background: #2d3436; color: white; padding: 8px 15px; border-radius: 30px;
+            font-size: 0.8rem; border: none; cursor: pointer; display: flex; align-items: center; gap: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #ff7675; }
+        .status-dot.active { background: #00b894; box-shadow: 0 0 5px #00b894; }
 
-        /* Responsividade */
-        @media (max-width: 800px) {
+        @media (max-width: 1200px) { 
+            .ai-config-float { top: auto; bottom: 20px; left: 20px; right: auto; } 
             .main-layout { flex-direction: column; }
             .context-panel { width: 100%; height: 150px; }
         }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -123,6 +133,12 @@
     <script>
         carregarHeader("Supervisor Clínico IA", "Discussão de Caso e Planejamento (Sigiloso)");
     </script>
+
+    <div class="ai-config-float">
+        <button class="btn-config-ia" onclick="configureKey()">
+            <div class="status-dot" id="status-dot"></div> Configurar IA
+        </button>
+    </div>
 
     <div class="main-layout">
         
@@ -172,7 +188,24 @@
     </div>
 
     <script>
-        // --- 1. RECONHECIMENTO DE VOZ (Web Speech API) ---
+        // --- 1. CONFIGURAÇÃO DA CHAVE IA ---
+        
+        // Verifica se já tem chave ao carregar
+        if (localStorage.getItem('gemini_api_key')) {
+            document.getElementById('status-dot').classList.add('active');
+        }
+
+        function configureKey() {
+            const currentKey = localStorage.getItem('gemini_api_key') || "";
+            const key = prompt("Configure sua API Key do Google Gemini:", currentKey);
+            if (key) {
+                localStorage.setItem('gemini_api_key', key.trim());
+                document.getElementById('status-dot').classList.add('active');
+                alert("Chave salva e pronta para uso!");
+            }
+        }
+
+        // --- 2. RECONHECIMENTO DE VOZ (Web Speech API) ---
         let recognition;
         let isListening = false;
 
@@ -200,7 +233,6 @@
             recognition.onresult = function(event) {
                 const transcript = event.results[0][0].transcript;
                 const input = document.getElementById('userCheck');
-                // Adiciona espaço se já tiver texto
                 input.value += (input.value ? ' ' : '') + transcript;
                 input.focus();
             };
@@ -211,9 +243,7 @@
                 document.getElementById('btn-mic').classList.remove('listening');
             };
         } else {
-            // Se o navegador não suportar
             document.getElementById('btn-mic').style.display = 'none';
-            console.warn("Navegador sem suporte a Web Speech API.");
         }
 
         function toggleVoice() {
@@ -225,23 +255,9 @@
             }
         }
 
-        // --- 2. CONFIGURAÇÃO DA CHAVE IA ---
-        const API_KEY = localStorage.getItem('gemini_api_key');
-        
-        if (!API_KEY) {
-            const key = prompt("Configure sua API Key do Google Gemini para usar o Supervisor:");
-            if (key) {
-                localStorage.setItem('gemini_api_key', key.trim());
-                location.reload();
-            } else {
-                alert("Sem a chave, a IA não funcionará.");
-            }
-        }
-
-        // Histórico da Conversa (Memória de Curto Prazo)
+        // --- 3. CHAT LOGIC ---
         let conversationHistory = [];
 
-        // ENTER para enviar
         document.getElementById('userCheck').addEventListener('keydown', function(e) {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
@@ -255,6 +271,14 @@
         }
 
         async function sendMessage() {
+            const API_KEY = localStorage.getItem('gemini_api_key');
+            
+            if (!API_KEY) {
+                alert("Por favor, configure sua API Key primeiro clicando no botão 'Configurar IA'.");
+                configureKey();
+                return;
+            }
+
             const input = document.getElementById('userCheck');
             const message = input.value.trim();
             const context = document.getElementById('contextText').value.trim();
@@ -262,17 +286,17 @@
 
             if (!message) return;
 
-            // 1. Mostrar mensagem do usuário
+            // Mostrar mensagem do usuário
             historyDiv.innerHTML += `<div class="message msg-user">${message.replace(/\n/g, '<br>')}</div>`;
             input.value = '';
             historyDiv.scrollTop = historyDiv.scrollHeight;
 
-            // 2. Mostrar Loading
+            // Mostrar Loading
             const loadingId = 'load-' + Date.now();
             historyDiv.innerHTML += `<div class="message msg-ai" id="${loadingId}"><i class="fa-solid fa-spinner fa-spin"></i> Pensando...</div>`;
             historyDiv.scrollTop = historyDiv.scrollHeight;
 
-            // 3. Montar Prompt
+            // Montar Prompt
             const fullPrompt = `
                 SISTEMA: Você é um Supervisor Clínico Sênior em Psicologia (TCC e Terapia do Esquema).
                 Seu objetivo é ajudar o psicólogo Bruno de Souza Gonçalves (CRP 07/44472) a planejar sessões e discutir casos.
@@ -298,16 +322,13 @@
                 const data = await response.json();
                 const aiResponse = data.candidates[0].content.parts[0].text;
 
-                // Converter Markdown básico para HTML
                 const formattedResponse = aiResponse
                     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                     .replace(/^\* (.*?)$/gm, '• $1<br>')
                     .replace(/\n/g, '<br>');
 
-                // 4. Substituir Loading pela Resposta
                 document.getElementById(loadingId).innerHTML = formattedResponse;
                 
-                // 5. Salvar no Histórico Local
                 conversationHistory.push({ role: 'user', content: message });
                 conversationHistory.push({ role: 'model', content: aiResponse });
 
