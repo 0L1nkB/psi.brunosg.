@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Declarações | CFP</title>
+    
+    <script>
+        if(localStorage.getItem('logado') !== 'sim') {
+            window.location.href = "../../../login.html"; 
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="../../../assets/style.css">
+    <script src="../../../assets/layout.js"></script>
+    <script src="../../../assets/print.js"></script>
+
+    <style>
+        /* Estilos específicos da ferramenta */
+        .doc-preview {
+            background: white;
+            border: 1px solid #ccc;
+            padding: 80px 60px; /* Margens de papel A4 */
+            min-height: 600px;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 14pt; /* Tamanho padrão de documento */
+            line-height: 1.6;
+            color: #000;
+            display: none;
+            text-align: justify;
+        }
+
+        .doc-title {
+            text-align: center;
+            font-weight: bold;
+            font-size: 16pt;
+            margin-bottom: 60px;
+            text-transform: uppercase;
+            text-decoration: underline;
+        }
+
+        .signature-section {
+            margin-top: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .signature-line {
+            border-top: 1px solid #000;
+            width: 400px;
+            padding-top: 10px;
+            font-size: 12pt;
+        }
+
+        /* IMPRESSÃO */
+        @media print {
+            .no-print, .app-header, .fab, .btn-back-home, .card-panel { display: none !important; }
+            body { background: white; margin: 0; padding: 0; }
+            
+            .doc-preview { 
+                display: block !important; 
+                box-shadow: none; border: none; 
+                padding: 0; margin: 0; 
+                width: 100%;
+            }
+            #editorArea { display: block !important; margin: 0 !important; width: 100% !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <script>
+        carregarHeader("Gerador de Declarações", "Modelo Padrão (Resolução CFP 06/2019)");
+    </script>
+
+    <div class="card-panel no-print" style="max-width: 800px; margin: 0 auto;">
+        
+        <div class="grid-2">
+            <div>
+                <label class="form-label">Nome do Paciente:</label>
+                <input type="text" id="pacienteNome" class="form-control" placeholder="Nome completo">
+            </div>
+            <div>
+                <label class="form-label">CPF (Opcional):</label>
+                <input type="text" id="pacienteCPF" class="form-control" placeholder="000.000.000-00">
+            </div>
+        </div>
+
+        <div class="grid-3" style="margin-top:15px;">
+            <div>
+                <label class="form-label">Data do Atendimento:</label>
+                <input type="date" id="dataAtend" class="form-control">
+            </div>
+            <div>
+                <label class="form-label">Hora Início:</label>
+                <input type="time" id="horaIni" class="form-control">
+            </div>
+            <div>
+                <label class="form-label">Hora Fim:</label>
+                <input type="time" id="horaFim" class="form-control">
+            </div>
+        </div>
+
+        <div style="margin-top:15px;">
+            <label class="form-label">Finalidade:</label>
+            <select id="finalidade" class="form-control">
+                <option value="fins de trabalho">Fins de trabalho</option>
+                <option value="fins escolares">Fins escolares</option>
+                <option value="os devidos fins">Os devidos fins</option>
+                <option value="fins de perícia">Fins de perícia</option>
+            </select>
+        </div>
+
+        <button class="btn-primary" onclick="gerarDocumento()" style="margin-top:25px; width:100%;">
+            <i class="fa-solid fa-file-signature"></i> Gerar Declaração
+        </button>
+
+    </div>
+
+    <div id="editorArea" style="max-width: 800px; margin: 0 auto; display:none;">
+        
+        <div class="card-panel no-print" style="background:#e3f2fd; border:1px solid #90caf9; margin-top:20px; text-align:center;">
+            <i class="fa-solid fa-check-circle"></i> Documento gerado. Revise e clique em imprimir.
+        </div>
+
+        <div id="documentContent" class="doc-preview" contenteditable="true">
+            </div>
+
+        <div class="no-print" style="text-align:center; margin-top:20px; margin-bottom:50px;">
+            <button class="btn-primary" onclick="window.print()" style="background:#2d3436; display:inline-block; width:auto; padding: 10px 40px;">
+                <i class="fa-solid fa-print"></i> Imprimir / PDF
+            </button>
+            <button class="btn-primary" onclick="voltarEdicao()" style="background:#fff; color:#2d3436; border:1px solid #ccc; display:inline-block; width:auto; padding: 10px 20px;">
+                Voltar
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function formatarDataExtenso() {
+            const meses = [
+                "janeiro", "fevereiro", "março", "abril", "maio", "junho",
+                "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"
+            ];
+            const data = new Date();
+            const dia = data.getDate();
+            const mes = meses[data.getMonth()];
+            const ano = data.getFullYear();
+            return `Pelotas, ${dia} de ${mes} de ${ano}`;
+        }
+
+        function formatarDataBr(dataUS) {
+            if(!dataUS) return "";
+            const [ano, mes, dia] = dataUS.split('-');
+            return `${dia}/${mes}/${ano}`;
+        }
+
+        function gerarDocumento() {
+            // 1. Coletar dados
+            const nome = document.getElementById('pacienteNome').value;
+            const cpf = document.getElementById('pacienteCPF').value;
+            const dataRaw = document.getElementById('dataAtend').value;
+            const horaIni = document.getElementById('horaIni').value;
+            const horaFim = document.getElementById('horaFim').value;
+            const finalidade = document.getElementById('finalidade').value;
+
+            // 2. Validação Simples
+            if(!nome || !dataRaw || !horaIni || !horaFim) {
+                alert("Por favor, preencha o Nome, Data e Horários.");
+                return;
+            }
+
+            // 3. Montar Texto (Template String Fixo)
+            const dataF = formatarDataBr(dataRaw);
+            const textoCpf = cpf ? `, inscrito(a) no CPF sob nº ${cpf},` : "";
+            const dataHojeExtenso = formatarDataExtenso();
+
+            const htmlDocumento = `
+                <div class="doc-title">DECLARAÇÃO</div>
+                
+                <p>
+                    Declaro para <strong>${finalidade}</strong> que a pessoa identificada como 
+                    <strong>${nome}</strong>${textoCpf} esteve em atendimento psicoterapêutico 
+                    sob meus cuidados profissionais nesta data (${dataF}), no período compreendido 
+                    entre as <strong>${horaIni}</strong> e as <strong>${horaFim}</strong>.
+                </p>
+
+                <p>
+                    Sendo verdade, firmo o presente.
+                </p>
+
+                <br><br>
+
+                <p style="text-align: right;">
+                    ${dataHojeExtenso}.
+                </p>
+
+                <div class="signature-section">
+                    <div class="signature-line">
+                        <b>Bruno de Souza Gonçalves</b><br>
+                        Psicólogo Clínico<br>
+                        CRP 07/44472
+                    </div>
+                </div>
+            `;
+
+            // 4. Inserir e Mostrar
+            document.getElementById('documentContent').innerHTML = htmlDocumento;
+            
+            document.querySelector('.card-panel').style.display = 'none';
+            document.getElementById('editorArea').style.display = 'block';
+        }
+
+        function voltarEdicao() {
+            document.querySelector('.card-panel').style.display = 'block';
+            document.getElementById('editorArea').style.display = 'none';
+        }
+
+        carregarFooter();
+    </script>
+
+</body>
+</html>
