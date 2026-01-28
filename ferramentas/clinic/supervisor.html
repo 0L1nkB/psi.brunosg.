@@ -62,7 +62,7 @@
 
         .msg-ai strong { color: var(--primary-color); }
 
-        /* Área de Input */
+        /* Área de Input e Botões */
         .input-area {
             padding: 20px; background: white; border-top: 1px solid #eee;
             display: flex; gap: 10px; align-items: flex-end;
@@ -74,13 +74,29 @@
         }
         textarea#userCheck:focus { border-color: var(--primary-color); }
 
-        .btn-send {
+        .btn-icon {
             width: 50px; height: 50px; border-radius: 50%; border: none;
-            background: var(--primary-color); color: white; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
-            transition: transform 0.2s;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+            transition: transform 0.2s, background 0.3s;
         }
-        .btn-send:hover { transform: scale(1.1); }
+        .btn-icon:hover { transform: scale(1.1); }
+
+        .btn-send { background: var(--primary-color); color: white; }
+        
+        .btn-mic { background: #f1f2f6; color: #636e72; margin-right: 5px; }
+        .btn-mic:hover { background: #e0e0e0; }
+        
+        /* Estado Ouvindo (Pulsando) */
+        .btn-mic.listening {
+            background: #ff7675; color: white;
+            animation: pulse-red 1.5s infinite;
+        }
+
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(255, 118, 117, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 118, 117, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 118, 117, 0); }
+        }
 
         /* Botões de Ação Rápida */
         .quick-actions {
@@ -136,20 +152,80 @@
             <div id="chat-history">
                 <div class="message msg-ai">
                     Olá, Bruno. Sou seu Supervisor Clínico IA. <br>
-                    Cole o resumo do caso ao lado e me diga: <strong>como posso te ajudar hoje?</strong>
+                    Cole o resumo do caso ao lado e me diga (escrevendo ou falando): <strong>como posso te ajudar hoje?</strong>
                 </div>
             </div>
 
             <div class="input-area">
-                <textarea id="userCheck" rows="1" placeholder="Digite sua dúvida clínica aqui..."></textarea>
-                <button class="btn-send" onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+                <textarea id="userCheck" rows="1" placeholder="Digite ou fale sua dúvida..."></textarea>
+                
+                <button class="btn-icon btn-mic" id="btn-mic" onclick="toggleVoice()" title="Falar">
+                    <i class="fa-solid fa-microphone"></i>
+                </button>
+
+                <button class="btn-icon btn-send" onclick="sendMessage()" title="Enviar">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
             </div>
         </div>
 
     </div>
 
     <script>
-        // CONFIGURAÇÃO DA CHAVE
+        // --- 1. RECONHECIMENTO DE VOZ (Web Speech API) ---
+        let recognition;
+        let isListening = false;
+
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.lang = 'pt-BR'; // Português do Brasil
+            recognition.continuous = false; // Para ao terminar de falar
+            recognition.interimResults = false;
+
+            recognition.onstart = function() {
+                isListening = true;
+                const btn = document.getElementById('btn-mic');
+                btn.classList.add('listening');
+                btn.innerHTML = '<i class="fa-solid fa-stop"></i>';
+            };
+
+            recognition.onend = function() {
+                isListening = false;
+                const btn = document.getElementById('btn-mic');
+                btn.classList.remove('listening');
+                btn.innerHTML = '<i class="fa-solid fa-microphone"></i>';
+            };
+
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                const input = document.getElementById('userCheck');
+                // Adiciona espaço se já tiver texto
+                input.value += (input.value ? ' ' : '') + transcript;
+                input.focus();
+            };
+
+            recognition.onerror = function(event) {
+                console.error("Erro no reconhecimento de voz:", event.error);
+                isListening = false;
+                document.getElementById('btn-mic').classList.remove('listening');
+            };
+        } else {
+            // Se o navegador não suportar
+            document.getElementById('btn-mic').style.display = 'none';
+            console.warn("Navegador sem suporte a Web Speech API.");
+        }
+
+        function toggleVoice() {
+            if (!recognition) return;
+            if (isListening) {
+                recognition.stop();
+            } else {
+                recognition.start();
+            }
+        }
+
+        // --- 2. CONFIGURAÇÃO DA CHAVE IA ---
         const API_KEY = localStorage.getItem('gemini_api_key');
         
         if (!API_KEY) {
@@ -196,8 +272,7 @@
             historyDiv.innerHTML += `<div class="message msg-ai" id="${loadingId}"><i class="fa-solid fa-spinner fa-spin"></i> Pensando...</div>`;
             historyDiv.scrollTop = historyDiv.scrollHeight;
 
-            // 3. Montar Prompt com Histórico e Contexto
-            // O contexto é enviado como instrução de sistema ou primeira parte
+            // 3. Montar Prompt
             const fullPrompt = `
                 SISTEMA: Você é um Supervisor Clínico Sênior em Psicologia (TCC e Terapia do Esquema).
                 Seu objetivo é ajudar o psicólogo Bruno de Souza Gonçalves (CRP 07/44472) a planejar sessões e discutir casos.
@@ -223,11 +298,11 @@
                 const data = await response.json();
                 const aiResponse = data.candidates[0].content.parts[0].text;
 
-                // Converter Markdown básico para HTML (Negrito e Quebras)
+                // Converter Markdown básico para HTML
                 const formattedResponse = aiResponse
-                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Negrito
-                    .replace(/\* (.*?)\n/g, '• $1<br>') // Listas
-                    .replace(/\n/g, '<br>'); // Quebras de linha
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/^\* (.*?)$/gm, '• $1<br>')
+                    .replace(/\n/g, '<br>');
 
                 // 4. Substituir Loading pela Resposta
                 document.getElementById(loadingId).innerHTML = formattedResponse;
